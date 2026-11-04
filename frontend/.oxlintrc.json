@@ -1,0 +1,42 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "unicorn", "oxc", "react", "jsx-a11y", "import", "vitest"],
+  "categories": {
+    "correctness": "error",
+    "suspicious": "warn"
+  },
+  "rules": {
+    "react/react-in-jsx-scope": "off",
+    "react/forbid-dom-props": [
+      "error",
+      {
+        "forbid": ["style"]
+      }
+    ],
+    "react/forbid-component-props": [
+      "error",
+      {
+        "forbid": ["style"]
+      }
+    ],
+    "import/no-unassigned-import": [
+      "warn",
+      {
+        "allow": ["**/*.css", "@testing-library/jest-dom/vitest"]
+      }
+    ]
+  },
+  "env": {
+    "builtin": true,
+    "browser": true
+  },
+  "ignorePatterns": ["dist", "coverage", "reports"],
+  "overrides": [
+    {
+      "files": ["tools/*-loader.mjs"],
+      "rules": {
+        "oxc/no-this-in-exported-function": "off"
+      }
+    }
+  ]
+}

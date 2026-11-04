@@ -1,0 +1,130 @@
+/* Registered so the palette swap on hover animates instead of snapping. */
+@property --ring-1 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #5ddccb;
+}
+@property --ring-2 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #69baf8;
+}
+@property --ring-3 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #9bf8b8;
+}
+@property --line-1 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #5ddccb;
+}
+@property --line-2 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #69baf8;
+}
+@property --line-3 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #9bf8b8;
+}
+
+.logo {
+  /* Default palette (tuned in logo/). */
+  --ring-1: #5ddccb;
+  --ring-2: #69baf8;
+  --ring-3: #9bf8b8;
+  --line-1: #5ddccb;
+  --line-2: #69baf8;
+  --line-3: #9bf8b8;
+  --ring-width: 0.6;
+  --ring-opacity: 0.88;
+  --line-width: 0.8;
+  --line-opacity: 0.25;
+  --glow-opacity: 0.3;
+  --logo-max: 380px;
+  --logo-size: clamp(160px, min(70vw, 55vh), var(--logo-max));
+
+  display: block;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  cursor: pointer;
+  transition:
+    --ring-1 0.4s ease,
+    --ring-2 0.4s ease,
+    --ring-3 0.4s ease,
+    --line-1 0.4s ease,
+    --line-2 0.4s ease,
+    --line-3 0.4s ease;
+}
+
+/* Hover palette: warm ring, warm middle tone on the line. */
+.logo:hover,
+.logo:focus-visible {
+  --ring-1: #f87269;
+  --ring-2: #f7f269;
+  --ring-3: #9bf8b8;
+  --line-1: #5ddccb;
+  --line-2: #f87269;
+  --line-3: #9bf8b8;
+}
+
+.logo:focus-visible {
+  outline: 2px solid var(--ring-2);
+  outline-offset: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logo {
+    transition: none;
+  }
+}
+
+.svg {
+  display: block;
+  width: var(--logo-size);
+  height: auto;
+  overflow: visible;
+}
+
+.glow {
+  opacity: var(--glow-opacity);
+}
+
+.weave path {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.ring path {
+  stroke-width: var(--ring-width);
+  opacity: var(--ring-opacity);
+}
+
+.line path {
+  stroke-width: var(--line-width);
+  opacity: var(--line-opacity);
+}
+
+.ring .w1 {
+  stroke: var(--ring-1);
+}
+.ring .w2 {
+  stroke: var(--ring-2);
+}
+.ring .w3 {
+  stroke: var(--ring-3);
+}
+.line .w1 {
+  stroke: var(--line-1);
+}
+.line .w2 {
+  stroke: var(--line-2);
+}
+.line .w3 {
+  stroke: var(--line-3);
+}
