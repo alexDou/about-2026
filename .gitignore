@@ -1,0 +1,26 @@
+# deps / builds
+node_modules/
+dist/
+.venv/
+__pycache__/
+*.pyc
+
+# test output
+reports/
+test-results/
+coverage/
+.pytest_cache/
+.ruff_cache/
+
+# env / local
+.env
+.env.*
+*.local
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+
+# local design references (not published)
+support_files/
