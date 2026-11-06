@@ -5,9 +5,9 @@ paths: ["frontend/**/*.{ts,tsx,tsrx,css,mjs}"]
 
 ## Components are TSRX (`.tsrx`)
 
-Syntax: https://tsrx.dev/features. Octane specifics: https://octanejs.dev/docs/tsrx-vs-tsx
+Syntax: https://tsrx.dev/features.
 
-- Every component file is `.tsrx`. Hooks, services, utils, types and tests stay `.ts`. Don't add `.tsx` components: Strong mode refuses them (`OCTANE_STRONG_TSX_MODULE`).
+- Every component file is `.tsrx`. Hooks, services, utils, types and tests stay `.ts`. Don't add `.tsx` components: they compile to element descriptors instead of templates, and Strong mode refuses them (`OCTANE_STRONG_TSX_MODULE`).
 - Body form: `export function Name(props: NameProps) @{ setup statements…; <one output node> }`. Setup first, then exactly one output node (element, fragment, or a control-flow block). Nothing after it.
 - Control flow uses blocks, not JSX tricks:
   - `@if (a) { … } @else if (b) { … } @else { … }` instead of `&&` / ternaries
@@ -17,19 +17,16 @@ Syntax: https://tsrx.dev/features. Octane specifics: https://octanejs.dev/docs/t
 - Comments between children are `//` or `/* */`, not `{/* */}`.
 - Import `.tsrx` modules with the extension: `export { Name } from "./Name.tsrx";`.
 
-## Octane is not React
+## Project specific choices:
 
-Octane gives the React API through a compiler. Differences that matter: https://octanejs.dev/docs/differences-from-react
-
-- Use `class`, not `className`. clsx-style arrays and objects are allowed.
-- Events are native DOM events. Use `onInput` for typing, not React's synthetic `onChange`.
-- No rules of hooks. Omit hook dependency arrays: the compiler derives them from the closure. An explicit array keeps React semantics; `null` means every render.
+- Write `class`, not `className`.
+- Omit dependency arrays on built-in hooks. Write one only when you need exact control over when it reruns.
 - Test with `@octanejs/testing-library` (`render(Component, { props })`).
 
 ## Styling
 
-- CSS Modules only (`styles.module.css`). No Tailwind, no CSS-in-JS.
-- No `style` props. Oxlint enforces this (`react/forbid-dom-props`). Pass dynamic values through CSS custom properties set on a class, or SVG attributes.
+- CSS Modules only (`styles.module.css`), not Octane's scoped `<style>` blocks or themes. No Tailwind, no CSS-in-JS.
+- Pass dynamic values through CSS custom properties set on a class, or SVG attributes.
 - Global tokens live in `src/styles/`.
 
 ## Toolchain (Oxc only)
