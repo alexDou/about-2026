@@ -24,3 +24,9 @@ coverage/
 
 # local design references (not published)
 support_files/
+
+# scripts/verify.sh logs + green stamp
+.verify/
+
+# Claude Code local overrides
+.claude/settings.local.json
