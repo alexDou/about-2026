@@ -6,7 +6,6 @@ Portfolio site representing my abilities.
 |-------------|-------|
 | `frontend/` | **Octane** SPA (React-style, compiled) · **TSRX** components (`.tsrx`) · TypeScript 7 checked by **tsrs** · **Rspack** bundler · Oxc for TS stripping + minify · CSS Modules · Vitest · Oxlint + Oxfmt via `@tsrx/oxc` · Playwright + Cucumber-js |
 | `backend/`  | Python 3.13 · FastAPI · uv · pytest · ruff |
-| `logo/`     | Animated logo prototype (to be ported into the landing page) |
 
 ## Run
 
