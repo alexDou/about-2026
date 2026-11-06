@@ -14,9 +14,9 @@ Decoupled frontend/backend architecture following Clean Architecture & Ousterhou
 - **Specification Driven Development (SDD)**: the units roadmap lives in `docs_src/specs/units.md`. Each unit becomes an epic bean with one child bean per stage.
 - **Contract-First Staged Architecture (Spec & Ticket Generation Protocol)**:
   Every unit or feature specification and bean breakdown strictly follows a 3-stage lifecycle:
-  1. **Stage 0: Domains, Interfaces & Contracts First (`Unit X.0`)**: Single source of truth. Backend and frontend maintain their own types that strictly match and serve as data contracts. Lock them with a contract test on each side before implementing features.
+  1. **Stage 0: Domains, Interfaces & Contracts First (`Unit X.0`)**: Single source of truth. Where data crosses HTTP, backend and frontend maintain their own types that strictly match and serve as data contracts, locked with a contract test on each side. Where content is static frontend JSON, its TS type plus a test validating the JSON is the contract. Lock contracts before implementing features.
   2. **Stage 1..N: Modules in Isolation (`Unit X.1`, `X.2`, `X.3`, ...)**: Develop each module of the scope (route, service, hook, component) against mocks built on the contracts. No running backend needed for frontend work, and vice versa. Verify each module with its unit/component tests (`pytest`, `vitest`).
-  3. **Stage Final: Connect Everything Together (`Unit X.N`)**: Cucumber + Playwright E2E against the real frontend build and running backend. Validates the full user flow and the response-time budget (<50ms per local API round trip).
+  3. **Stage Final: Connect Everything Together (`Unit X.N`)**: Cucumber + Playwright E2E against the real frontend build, plus the running backend for units that use it. Validates the full user flow and the response-time budget (<50ms per local API round trip).
 - **Test-Driven Development (TDD)**: Every task begins with a failing test (red → green → refactor).
   - Backend: `uv run --directory backend pytest`, `uv run --directory backend ruff check .`
   - Frontend: `pnpm --dir frontend test`, `pnpm --dir frontend lint`, `pnpm --dir frontend typecheck`
