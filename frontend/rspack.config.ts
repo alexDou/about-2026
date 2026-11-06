@@ -9,9 +9,9 @@ import { OxcMinifyRspackPlugin } from "./tools/oxc-minify-plugin.mjs";
 export default defineConfig((_env, argv) => {
   const isProd = argv.mode === "production";
   return {
-    entry: { main: "./src/main.tsx" },
+    entry: { main: "./src/main.ts" },
     output: { clean: true, publicPath: "/" },
-    resolve: { extensions: [".tsx", ".ts", ".js"] },
+    resolve: { extensions: [".tsrx", ".ts", ".tsx", ".js"] },
     optimization: {
       minimizer: [new OxcMinifyRspackPlugin(), new LightningCssMinimizerRspackPlugin()],
     },
@@ -25,6 +25,7 @@ export default defineConfig((_env, argv) => {
           use: [{ loader: "./tools/oxc-loader.mjs", options: { target: "es2023" } }],
         },
         { test: /\.css$/i, type: "css/auto" },
+        { test: /\.svg$/i, type: "asset/resource" },
       ],
       parser: {
         "css/auto": { namedExports: false },

@@ -1,0 +1,9 @@
+{
+  "name": "octane-tsrx-mapper",
+  "private": true,
+  "type": "module",
+  "main": "index.js",
+  "peerDependencies": {
+    "octane": "*"
+  }
+}

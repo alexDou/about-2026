@@ -1,6 +1,6 @@
 import { render, screen } from "@octanejs/testing-library";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { ApiStatus } from "./ApiStatus";
+import { ApiStatus } from "./ApiStatus.tsrx";
 
 describe("ApiStatus", () => {
   afterEach(() => vi.unstubAllGlobals());

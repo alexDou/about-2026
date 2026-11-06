@@ -7,11 +7,9 @@ function handleLogoClick() {
   console.log("logo clicked");
 }
 
-export function LandingPage() {
-  return (
-    <main class={styles["page"]}>
-      <AnimatedLogo label="Portfolio home" onClick={handleLogoClick} />
-      <ApiStatus />
-    </main>
-  );
+export function LandingPage() @{
+  <main class={styles["page"]}>
+    <AnimatedLogo label="Portfolio home" onClick={handleLogoClick} />
+    <ApiStatus />
+  </main>;
 }

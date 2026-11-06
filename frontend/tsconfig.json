@@ -19,5 +19,14 @@
     "skipLibCheck": true,
     "jsxImportSource": "octane"
   },
-  "include": ["src", "e2e", "tools", "rspack.config.ts", "vitest.config.ts", "cucumber.mjs"]
+  "include": ["src", "e2e", "tools", "rspack.config.ts", "vitest.config.ts", "cucumber.mjs"],
+  "tsrx": {
+    "compiler": "octane-tsrx-mapper"
+  },
+  "contentMappers": [
+    {
+      "package": "@tsrx/content-mapper",
+      "extensions": [".tsrx"]
+    }
+  ]
 }
