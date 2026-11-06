@@ -4,7 +4,7 @@ Portfolio site representing my abilities.
 
 | Part        | Stack |
 |-------------|-------|
-| `frontend/` | **Octane** SPA (React-style, compiled) · TypeScript 7 checked by **tsrs** · **Rspack** bundler · Oxc for TS stripping + minify · CSS Modules · Vitest · Oxlint · Oxfmt · Playwright + Cucumber-js |
+| `frontend/` | **Octane** SPA (React-style, compiled) · **TSRX** components (`.tsrx`) · TypeScript 7 checked by **tsrs** · **Rspack** bundler · Oxc for TS stripping + minify · CSS Modules · Vitest · Oxlint + Oxfmt via `@tsrx/oxc` · Playwright + Cucumber-js |
 | `backend/`  | Python 3.13 · FastAPI · uv · pytest · ruff |
 | `logo/`     | Animated logo prototype (to be ported into the landing page) |
 
@@ -37,5 +37,6 @@ src/
   styles/              global CSS (tokens)
 ```
 
-Every component folder has `<Name>.tsx`, `styles.module.css`, `types.ts`, `index.ts` (public exports), plus `<Name>.test.tsx` when it has tests.
+Every component folder has `<Name>.tsrx`, `styles.module.css`, `types.ts`, `index.ts` (public exports), plus `<Name>.test.ts` when it has tests.
+Components are TSRX (`@{ }` bodies, `@if`/`@for`/`@switch`), see https://tsrx.dev/features.
 Octane uses `class` (clsx-style arrays and objects are allowed) and native DOM events (`onInput` for typing). See https://octanejs.dev/docs/differences-from-react.

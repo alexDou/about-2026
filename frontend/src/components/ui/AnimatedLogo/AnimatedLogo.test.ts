@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from "@octanejs/testing-library";
 import { describe, expect, it, vi } from "vitest";
-import { AnimatedLogo } from "./AnimatedLogo";
+import { AnimatedLogo } from "./AnimatedLogo.tsrx";
 import { WEAVE_SETTINGS } from "./config";
 
 describe("AnimatedLogo", () => {
@@ -11,6 +11,13 @@ describe("AnimatedLogo", () => {
     expect(ring).toHaveLength(WEAVE_SETTINGS.ring.weave);
     expect(line).toHaveLength(WEAVE_SETTINGS.line.weave);
     expect(ring[0]?.getAttribute("d")).toMatch(/^M/);
+  });
+
+  it("shows the wordmark inside the O", () => {
+    const { container } = render(AnimatedLogo, { props: {} });
+    const wordmark = container.querySelector('[data-part="wordmark"]');
+    expect(wordmark?.getAttribute("href")).toMatch(/svg/);
+    expect(wordmark?.getAttribute("width")).toBe("80");
   });
 
   it("is a labelled button that calls onClick", () => {

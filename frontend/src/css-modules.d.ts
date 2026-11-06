@@ -4,3 +4,9 @@ declare module "*.module.css" {
 }
 
 declare module "*.css";
+
+/** SVG files are emitted as assets; the import is their URL. */
+declare module "*.svg" {
+  const url: string;
+  export default url;
+}

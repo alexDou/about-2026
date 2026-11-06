@@ -1,6 +1,7 @@
 import { useId, useLayoutEffect, useRef } from "octane";
 import { useAnimationFrame } from "../../../hooks/useAnimationFrame";
-import { GLOW_STD_DEVIATION, TONES, VIEW_BOX, WEAVE_SETTINGS } from "./config";
+import { GLOW_STD_DEVIATION, TONES, VIEW_BOX, WEAVE_SETTINGS, WORDMARK_BOX } from "./config";
+import wordmarkUrl from "./dooooo.svg";
 import { lineClipPath, linePath, ringClipPath, ringPath, toneOf } from "./geometry";
 import styles from "./styles.module.css";
 import type { AnimatedLogoProps, WeaveSettings } from "./types";
@@ -41,7 +42,7 @@ export function AnimatedLogo({
   label = "Home",
   onClick,
   settings = WEAVE_SETTINGS,
-}: AnimatedLogoProps) {
+}: AnimatedLogoProps) @{
   const id = useId().replace(/[^\w-]/g, "");
   const ringRef = useRef<SVGGElement>(null);
   const lineRef = useRef<SVGGElement>(null);
@@ -58,38 +59,37 @@ export function AnimatedLogo({
   const ringId = `${id}-ring`;
   const lineId = `${id}-line`;
 
-  return (
-    <button type="button" class={styles["logo"]} aria-label={label} onClick={onClick}>
-      <svg class={styles["svg"]} viewBox={VIEW_BOX} aria-hidden="true" focusable="false">
-        <defs>
-          <filter id={`${id}-glow`} x="-10%" y="-10%" width="120%" height="120%">
-            <feGaussianBlur stdDeviation={GLOW_STD_DEVIATION} />
-          </filter>
-          <clipPath id={`${id}-clip-ring`}>
-            <path clipRule="evenodd" d={ringClipPath(settings.ring.thickness)} />
-          </clipPath>
-          <clipPath id={`${id}-clip-line`}>
-            <path d={lineClipPath(settings.line.thickness)} />
-          </clipPath>
-        </defs>
-        {/* Glow copies reference the live weave groups. */}
-        <use href={`#${ringId}`} class={styles["glow"]} filter={`url(#${id}-glow)`} />
-        <use href={`#${lineId}`} class={styles["glow"]} filter={`url(#${id}-glow)`} />
-        <g id={ringId} clipPath={`url(#${id}-clip-ring)`}>
-          <g ref={ringRef} class={[styles["weave"], styles["ring"]]} data-part="ring">
-            {layers(settings.ring.weave).map((tone, i) => (
-              <path key={i} class={toneClass(tone)} />
-            ))}
-          </g>
+  <button type="button" class={styles["logo"]} aria-label={label} onClick={onClick}>
+    <svg class={styles["svg"]} viewBox={VIEW_BOX} aria-hidden="true" focusable="false">
+      <defs>
+        <filter id={`${id}-glow`} x="-10%" y="-10%" width="120%" height="120%">
+          <feGaussianBlur stdDeviation={GLOW_STD_DEVIATION} />
+        </filter>
+        <clipPath id={`${id}-clip-ring`}>
+          <path clipRule="evenodd" d={ringClipPath(settings.ring.thickness)} />
+        </clipPath>
+        <clipPath id={`${id}-clip-line`}>
+          <path d={lineClipPath(settings.line.thickness)} />
+        </clipPath>
+      </defs>
+      // Glow copies reference the live weave groups.
+      <use href={`#${ringId}`} class={styles["glow"]} filter={`url(#${id}-glow)`} />
+      <use href={`#${lineId}`} class={styles["glow"]} filter={`url(#${id}-glow)`} />
+      <g id={ringId} clipPath={`url(#${id}-clip-ring)`}>
+        <g ref={ringRef} class={[styles["weave"], styles["ring"]]} data-part="ring">
+          @for (const tone of layers(settings.ring.weave)) {
+            <path class={toneClass(tone)} />;
+          }
         </g>
-        <g id={lineId} clipPath={`url(#${id}-clip-line)`}>
-          <g ref={lineRef} class={[styles["weave"], styles["line"]]} data-part="line">
-            {layers(settings.line.weave).map((tone, i) => (
-              <path key={i} class={toneClass(tone)} />
-            ))}
-          </g>
+      </g>
+      <g id={lineId} clipPath={`url(#${id}-clip-line)`}>
+        <g ref={lineRef} class={[styles["weave"], styles["line"]]} data-part="line">
+          @for (const tone of layers(settings.line.weave)) {
+            <path class={toneClass(tone)} />;
+          }
         </g>
-      </svg>
-    </button>
-  );
+      </g>
+      <image href={wordmarkUrl} {...WORDMARK_BOX} data-part="wordmark" />
+    </svg>
+  </button>;
 }
