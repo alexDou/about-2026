@@ -7,7 +7,7 @@
 ## Work comes from beans
 
 - Every task is a bean. Its body is the spec: what to do, the acceptance criteria and the `- [ ]` checklist. Read it with `beans show --json <id>` before touching code, and do what it says, nothing more.
-- The user names a bean → work on that bean. The user asks for work that has no bean → search (`beans list --json -S "<keywords>"`), and if nothing matches, create one with the request as its body before starting.
+- The user names a bean → work on that bean. The user asks for work that has no bean → search (`beans list --json -S "<keywords>"`), and if nothing matches, report the case to a user.
 - No todo lists or TodoWrite. Progress lives in the bean: set `in-progress` when you start, tick checklist items as they're done, append findings and decisions to the body.
 - Scope that grows beyond the bean becomes a new bean (`--blocked-by` or `--parent` as fits), not extra work in this one.
 - Done = checklist fully ticked, `scripts/verify.sh` GREEN, `## Summary of Changes` appended, status `completed`, bean file committed with the code.
@@ -21,11 +21,8 @@
 ## Commands that aren't obvious
 
 - pnpm only, never npm/npx: `pnpm --dir frontend <script>`, `pnpm dlx`, `pnpm view`. Backend via `uv run --directory backend ...`.
-- Single tests:
-  - Frontend: `pnpm --dir frontend exec vitest run src/components/ui/AnimatedLogo/AnimatedLogo.test.ts`
-  - Backend: `uv run --directory backend pytest tests/test_health.py::test_name`
 - Frontend E2E is Cucumber + Playwright, not the Playwright runner: `pnpm --dir frontend e2e` (builds first). It is not part of `scripts/verify.sh`; run it for UI-visible changes.
-- Type checking is tsrs with `--runExternalCode` (`pnpm --dir frontend typecheck`): `.tsrx` files reach it through `@tsrx/content-mapper` (tsconfig `contentMappers`). There is no `tsc` in this project. Without the flag every `.tsrx` import fails with TS2307.
+- Type checking is tsrs with mandatory `--runExternalCode` (`pnpm --dir frontend typecheck`): `.tsrx` files reach it through `@tsrx/content-mapper` (tsconfig `contentMappers`). There is no `tsc` in this project.
 
 ## Rules (`.claude/rules/`)
 
