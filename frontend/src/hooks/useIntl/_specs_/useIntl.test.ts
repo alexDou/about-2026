@@ -1,7 +1,7 @@
 import { renderHook } from "@octanejs/testing-library";
 import { describe, expect, it } from "vitest";
-import { IntlProvider, intlWrapper } from "../../i18n";
-import { type IntlShape, useIntl } from ".";
+import { IntlProvider, intlWrapper } from "../../../i18n";
+import { type IntlShape, useIntl } from "..";
 
 // Checked by the typecheck (tsrs), not at run time.
 const formatUnknownId = (intl: IntlShape) =>

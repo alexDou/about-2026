@@ -1,7 +1,7 @@
 import { useId, useLayoutEffect, useRef } from "octane";
 import { useAnimationFrame } from "../../../hooks/useAnimationFrame";
 import { GLOW_STD_DEVIATION, TONES, VIEW_BOX, WEAVE_SETTINGS, WORDMARK_BOX } from "./config";
-import wordmarkUrl from "./dooooo.svg";
+import wordmarkUrl from "./media/dooooo.svg";
 import { lineClipPath, linePath, ringClipPath, ringPath, toneOf } from "./geometry";
 import styles from "./styles.module.css";
 import type { AnimatedLogoProps, WeaveSettings } from "./types";

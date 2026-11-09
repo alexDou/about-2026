@@ -1,7 +1,7 @@
 import { render, screen } from "@octanejs/testing-library";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { intlWrapper } from "../../i18n";
-import { LandingPage } from "./LandingPage.tsrx";
+import { intlWrapper } from "../../../i18n";
+import { LandingPage } from ".././LandingPage.tsrx";
 
 describe("LandingPage", () => {
   beforeEach(() => {
