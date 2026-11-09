@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import { createIntl } from "@formatjs/intl";
 import { render, screen } from "@octanejs/testing-library";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { enMessages } from "../i18n";
@@ -20,6 +21,7 @@ describe("App", () => {
   it("ships the site title in index.html for the time before JS runs", () => {
     // A path, not a URL: jsdom replaces the global `URL`, which `node:fs` then rejects.
     const html = readFileSync(join(import.meta.dirname, "../../index.html"), "utf8");
-    expect(html.match(/<title>(.*)<\/title>/)?.[1]).toBe(enMessages["site.title"]);
+    const intl = createIntl({ locale: "en", messages: enMessages });
+    expect(html.match(/<title>(.*)<\/title>/)?.[1]).toBe(intl.formatMessage({ id: "site.title" }));
   });
 });

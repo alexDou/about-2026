@@ -1,6 +1,26 @@
 {
-  "landing.logo.label": "Portfolio A.Durnev",
-  "landing.status.checking": "API: checking",
-  "landing.status.ok": "API: ok",
-  "landing.status.down": "API: down"
+  "landing.logo.label": [
+    {
+      "type": 0,
+      "value": "Portfolio A.Durnev"
+    }
+  ],
+  "landing.status.checking": [
+    {
+      "type": 0,
+      "value": "API: checking"
+    }
+  ],
+  "landing.status.down": [
+    {
+      "type": 0,
+      "value": "API: down"
+    }
+  ],
+  "landing.status.ok": [
+    {
+      "type": 0,
+      "value": "API: ok"
+    }
+  ]
 }

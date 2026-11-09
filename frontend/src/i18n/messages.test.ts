@@ -1,6 +1,7 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
-import { parse } from "@formatjs/icu-messageformat-parser";
+import { createIntl } from "@formatjs/intl";
+import { type MessageFormatElement, parse } from "@formatjs/icu-messageformat-parser";
 import { describe, expect, expectTypeOf, it } from "vitest";
 import { PANEL_IDS } from "../hooks/useRoute";
 import { enMessages, type MessageId } from ".";
@@ -9,21 +10,35 @@ import { enMessages, type MessageId } from ".";
 const EN_DIR = join(import.meta.dirname, "en");
 
 /** Every English message file on disk, keyed by its area (the file name). */
-const EN_FILES: ReadonlyArray<{ area: string; messages: Record<string, string> }> = readdirSync(
+const EN_FILES: ReadonlyArray<{ area: string; messages: Record<string, unknown> }> = readdirSync(
   EN_DIR,
 )
   .filter((name) => name.endsWith(".json"))
   .map((name) => ({
     area: name.replace(/\.json$/, ""),
-    messages: JSON.parse(readFileSync(join(EN_DIR, name), "utf8")) as Record<string, string>,
+    messages: JSON.parse(readFileSync(join(EN_DIR, name), "utf8")) as Record<string, unknown>,
   }));
 
-/** The ids whose message is not valid ICU, in file order. */
-function invalidMessages(messages: Record<string, string>): string[] {
+/** Formats one message as the site does; a formatting error throws instead of falling back. */
+function format(messages: Record<string, unknown>, id: string): string {
+  const intl = createIntl({
+    locale: "en",
+    defaultLocale: "en",
+    messages: messages as Record<string, MessageFormatElement[]>,
+    onError: (error) => {
+      throw error;
+    },
+  });
+  return intl.formatMessage({ id: id as MessageId });
+}
+
+/** The ids whose message is not a FormatJS AST that formats cleanly, in file order. */
+function unformattable(messages: Record<string, unknown>): string[] {
   return Object.entries(messages)
-    .filter(([, message]) => {
+    .filter(([id, message]) => {
+      if (!Array.isArray(message)) return true;
       try {
-        parse(message);
+        format(messages, id);
         return false;
       } catch {
         return true;
@@ -31,6 +46,8 @@ function invalidMessages(messages: Record<string, string>): string[] {
     })
     .map(([id]) => id);
 }
+
+const en = (id: string) => format(enMessages, id);
 
 describe("English message files", () => {
   it("include the site, the Landing and the Board", () => {
@@ -50,18 +67,18 @@ describe("English message files", () => {
 
 describe("English messages", () => {
   it("name the site", () => {
-    expect(enMessages["site.title"]).toBe("A.Durnev portfolio");
+    expect(en("site.title")).toBe("A.Durnev portfolio");
   });
 
   it("title every Panel and label its close button", () => {
-    expect(PANEL_IDS.map((panel) => enMessages[`board.panel.${panel}.title`])).toEqual([
+    expect(PANEL_IDS.map((panel) => en(`board.panel.${panel}.title`))).toEqual([
       "About",
       "What I do",
       "Skills",
       "Chat with me",
       "Contact",
     ]);
-    expect(PANEL_IDS.map((panel) => enMessages[`board.panel.${panel}.close`])).toEqual([
+    expect(PANEL_IDS.map((panel) => en(`board.panel.${panel}.close`))).toEqual([
       "Close About",
       "Close What I do",
       "Close Skills",
@@ -72,10 +89,10 @@ describe("English messages", () => {
 
   it("give Sublabels to What I do and Chat with me only", () => {
     const sublabels = Object.fromEntries(
-      PANEL_IDS.map((panel) => [
-        panel,
-        (enMessages as Record<string, string>)[`board.panel.${panel}.sublabel`],
-      ]),
+      PANEL_IDS.map((panel) => {
+        const id = `board.panel.${panel}.sublabel`;
+        return [panel, id in enMessages ? en(id) : undefined];
+      }),
     );
     expect(sublabels).toEqual({
       about: undefined,
@@ -87,12 +104,14 @@ describe("English messages", () => {
   });
 
   it("label the logo and the status badge on the Landing", () => {
-    expect(enMessages).toMatchObject({
-      "landing.logo.label": "Portfolio A.Durnev",
-      "landing.status.checking": "API: checking",
-      "landing.status.ok": "API: ok",
-      "landing.status.down": "API: down",
-    });
+    expect(
+      [
+        "landing.logo.label",
+        "landing.status.checking",
+        "landing.status.ok",
+        "landing.status.down",
+      ].map(en),
+    ).toEqual(["Portfolio A.Durnev", "API: checking", "API: ok", "API: down"]);
   });
 });
 
@@ -106,18 +125,18 @@ describe("MessageId", () => {
   });
 });
 
-describe("ICU check", () => {
-  it("flags a malformed message by id", () => {
+describe("AST check", () => {
+  it("flags a message that is not a formattable AST, by id", () => {
     expect(
-      invalidMessages({
-        "x.fine": "Hello {name}",
-        "x.unclosed": "Hello {name",
-        "x.badPlural": "{count, plural, one {# item}}",
+      unformattable({
+        "x.fine": parse("Hello"),
+        "x.string": "Hello",
+        "x.broken": [{ type: 99 }],
       }),
-    ).toEqual(["x.unclosed", "x.badPlural"]);
+    ).toEqual(["x.string", "x.broken"]);
   });
 
   it.each(EN_FILES)("passes every message in the $area file", ({ messages }) => {
-    expect(invalidMessages(messages)).toEqual([]);
+    expect(unformattable(messages)).toEqual([]);
   });
 });
