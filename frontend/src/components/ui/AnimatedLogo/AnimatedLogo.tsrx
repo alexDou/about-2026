@@ -39,7 +39,7 @@ function layers(weave: number) {
  * The weave is redrawn imperatively each frame; hover and focus swap the color palette in CSS.
  */
 export function AnimatedLogo({
-  label = "Home",
+  label,
   onClick,
   settings = WEAVE_SETTINGS,
 }: AnimatedLogoProps) @{

@@ -5,7 +5,7 @@ import { WEAVE_SETTINGS } from "./config";
 
 describe("AnimatedLogo", () => {
   it("renders one drawn path per weave line", () => {
-    const { container } = render(AnimatedLogo, { props: {} });
+    const { container } = render(AnimatedLogo, { props: { label: "Logo" } });
     const ring = container.querySelectorAll('[data-part="ring"] path');
     const line = container.querySelectorAll('[data-part="line"] path');
     expect(ring).toHaveLength(WEAVE_SETTINGS.ring.weave);
@@ -14,7 +14,7 @@ describe("AnimatedLogo", () => {
   });
 
   it("shows the wordmark inside the O", () => {
-    const { container } = render(AnimatedLogo, { props: {} });
+    const { container } = render(AnimatedLogo, { props: { label: "Logo" } });
     const wordmark = container.querySelector('[data-part="wordmark"]');
     expect(wordmark?.getAttribute("href")).toMatch(/svg/);
     expect(wordmark?.getAttribute("width")).toBe("80");
