@@ -7,7 +7,7 @@ Each unit is a complete, test-verified end-to-end slice: the Octane frontend (`f
 - **What**: the Owner's CV as an interactive site. An SPA: the Visitor lands on the animated logo, clicks, and the Board with five Panels is revealed.
 - **For whom**: hiring managers and recruiters for Senior Full Stack / Technical Lead roles. Not a business, not freelance.
 - **Focus**: the content and how the Visitor experiences it. The stack is the Owner's own practice, not a deliverable: when the two conflict, the Visitor's experience wins.
-- **Scope**: English only (content runs through react-intl, so other locales stay possible). No SEO; the site is bot-protected.
+- **Scope**: English only (content runs through FormatJS messages, ADR 0003, so other locales stay possible). No SEO; the site is bot-protected.
 - **Launch**: once a first version of every unit below exists. No deadline, but keep it short.
 
 ## Specification & Ticket Breakdown Protocol: Contract-First Staging
@@ -32,24 +32,55 @@ Order: Board → About → Skills → Contact → What I do → Interview → Ch
 
 ## Unit 1: Board
 
-**Objective**: the Landing → Board flow, with five Panels that expand and collapse, real URLs and the mobile layout. Panels are empty shells; later units fill them.
+**Objective**: the Landing → Board flow, with five Panels that expand and collapse, real URLs and the mobile layout. Panels are shells that show only their titles; later units fill them.
 
 **Design**
-- Clicking the Landing logo reveals the Board with a staggered Panel entrance. Reference: the expanded menu of codepen `fluxus/gPWvZm` (local copy in git-ignored `support_files/page/`); only the expanded menu is taken.
-- Default state: five full-height Panels sharing the width evenly, in order Skills, What I do, Chat with me, About, Contact. Optional Sublabels ("36 take overs", "AI agent trained on my data").
-- Clicking a Panel expands it with animation: Panels to its left slide left, Panels to its right slide right, and they condense into Stripes with vertical titles. Sublabels disappear. A close button at the top-right restores the default state. Clicking any Panel title in any state, Stripes included, expands that Panel.
-- Mobile: Panels stack as rows; expansion mirrors desktop (up/down, horizontal Stripes).
-- URLs: `/` Landing, `/explore` Board default, `/skills`, `/what-i-do`, `/chat`, `/about`, `/contact` per Expanded panel. Deep links work and skip the Landing; browser back works. No in-UI way back to the Landing.
-- Colors: the Landing palette stays as is; Panel colors are given per task.
+
+Reference: the expanded menu of codepen `fluxus/gPWvZm` (local copy in git-ignored `support_files/page/`). Only the expanded menu and its title style are taken.
+
+- **Layout**
+  - Panels, in order: About, What I do, Skills, Chat with me, Contact.
+  - Desktop: full-height columns sharing the width evenly. The Board is at least 32rem tall.
+  - Mobile (≤ 640px wide): full-width rows sharing the height evenly. The Board is at least 420px tall. Two flaws of the pen are fixed: rows never shrink to a sliver on narrow screens, and titles are centred on both axes by layout, not by an offset.
+  - Titles: the pen's style (uppercase, wide letter-spacing, the line that slides in on hover and focus), at least 1.5rem, in Overused Grotesk (self-hosted, used site-wide). In the default state only the title is clickable.
+  - Sublabels: optional, shown only in the default state. For now What I do ("36 Takeovers") and Chat with me ("AI agent trained on my data").
+- **Expanded panel**
+  - The page scrolls to show its full content.
+  - A small circle-× close button sits at the top right, stays in view while scrolling, and has `title="Close <Panel>"`. Escape also closes. Clicking the Expanded panel itself does nothing.
+  - Each page renders its own heading through a shared Heading component. In this unit a page is only its heading, which is enough to check the animation.
+- **Stripes**
+  - Desktop: the other Panels stand at the sides, as narrow as their title plus padding, title vertical top to bottom (English book spine), sticky while the page scrolls. The whole Stripe is clickable.
+  - Mobile: the other Panels shrink to rows of title height plus a little padding (at least 44px), without Sublabels, not sticky.
+- **Colors**
+  - Panel palette: About `#25363a`, What I do `#d1dcd9`, Skills `#67b3a8`, Chat with me `#4c839f`, Contact `#5c8b70`. Text comes from the palette too: `#d1dcd9` on About, `#25363a` on the other four. The Landing palette stays as is.
+  - The palette colors are global tokens; each component switches a tone class by prop (`classnames`).
+  - `#25363a` reaches only about 3:1 on the blue and green Panels: enough for titles, below AA for body text. Body text in Chat with me and Contact therefore sits on a `#d1dcd9` surface (Units 4 and 7).
+- **Motion**
+  - Transitions run only when a user action changes the route: the logo click, a Panel title, a Stripe, the close button, Escape. A direct visit (`/explore` included), a reload and browser Back/Forward render the target state at once.
+  - Entrance, only on the Landing → Board logo click, as in the pen: the Board slides in (300ms), the Panels follow 150ms apart, the titles fade in (140ms).
+  - Expanding on desktop: the other Panels' content fades out (120ms), the widths animate (500ms, ease-in-out), then the Stripes fade in (400ms) while the Expanded panel's content fades in faster (150ms). Collapsing runs the same steps backwards. Switching Panels: smooth scroll to the top (skipped when already there; the next step waits for the scroll to end), collapse, expand.
+  - Expanding on mobile: no fade-out and no collapse step. The other rows shrink and the chosen one expands. Switching scrolls smoothly to the top first.
+  - Each Panel keeps one stable slot on the Board. Only the slot's size animates; the Panel, Stripe and Expanded panel views fade into each other inside it. CSS only: the durations are CSS custom properties kept in one place, and the steps chain on `transitionend`.
+  - Clicks are ignored while a sequence runs, as in the pen. Back/Forward during a sequence drops it and renders the target state.
+  - Reduced motion: every step is instant. Focus: expanding moves it to the Expanded panel's heading; collapsing returns it to the Panel that was open.
+- **URLs and history**
+  - `/` Landing, `/explore` Board default, `/about`, `/what-i-do`, `/skills`, `/chat`, `/contact` per Expanded panel, through our own route hook over the History API.
+  - Panels and Stripes are real links, so opening one in a new tab works; normal clicks are handled in the app.
+  - Every state change adds a history entry, the logo click included, so Back from `/explore` shows the Landing. The site itself offers no way back to the Landing.
+  - An unknown path is replaced by `/`, and a trailing slash is dropped, both without a history entry.
+  - Browser scroll restoration is off; every Board state starts at the top.
+  - Document title: "A.Durnev portfolio" on `/` and `/explore`, "<Panel> · A.Durnev portfolio" per Expanded panel. `theme-color` follows the Expanded panel's color.
+- **Text**: all UI text is FormatJS (ICU) messages (ADR 0003). The setup and the message files (one per page or area, ids prefixed by area, e.g. `board.panel.skills.title`) live in `src/i18n/`; `useIntl()` is a shared hook. A Panel has a Sublabel when its Sublabel message exists. An unknown message id fails the type check, and a test checks that every message parses as ICU.
+- **Backend status**: the Landing keeps its status badge. One shared health check runs on page load and again whenever Chat with me or Contact opens. While the backend is down, both show an offline note.
+- **Search engines**: `<meta name="robots" content="noindex, nofollow">` (the matching `X-Robots-Tag` header comes with Unit 8). `robots.txt` lets ordinary crawlers in, so they read the `noindex`, and disallows AI-training crawlers (GPTBot, ClaudeBot, CCBot, Google-Extended, …).
+- **Code layout**: `App` renders `LandingPage` on `/` and otherwise the Board with the Expanded panel's page inside. The Board (`components/domain/Board/`) owns the Panel, Stripe and Expanded panel components and gives each Panel its tone by position. One page per Panel in `pages/`; `Heading` in `components/ui/`. The route hook holds the Panel ids and their order, id ↔ path, the Board state and the URL ↔ state mapping; there is no separate Panel config.
 
 **Sub-unit breakdown**
-- 1.0: Panel ids, route map and board state type (`default | expanded(panel)`), locked by tests.
-- 1.x: board state + routing hook; Panel and Stripe components; Landing → Board reveal; mobile layout; react-intl setup with `en` messages (Octane ships `octane/react`: verify react-intl runs via a `react` → `octane/react` alias, fall back to `@formatjs/intl` if not); `noindex` + `robots.txt`.
-- 1.N: E2E for deep links, back button, expanding from a Stripe, close restores the default.
+- 1.0: Panel ids and order, the id ↔ path map, the Board state type (`default | expanded(panel)`), the URL ↔ state mapping and the message-id type, locked by tests.
+- 1.x: FormatJS setup with `en` messages; font and palette tokens; route hook; Heading, Panel, Stripe and Expanded panel; Board layout with the desktop and mobile expand/collapse sequences; Landing → Board entrance; document title and `theme-color`; shared health check and offline notes; `noindex` + `robots.txt`; the stale `logo/` mentions in `AnimatedLogo` (the playground moved to `support_files/logo/`).
+- 1.N: E2E for deep links, Back/Forward, unknown paths, expanding from a Stripe, the close button and Escape restoring the default, and the mobile layout.
 
-**Definition of Done**: every URL renders the right state, transitions animate (and respect reduced motion), mobile mirrors desktop, E2E green.
-
-**Open**: Panel colors. Stale `logo/` mentions in the `AnimatedLogo` comments (the playground moved to `support_files/logo/`).
+**Definition of Done**: every URL renders the right state; user actions animate (respecting reduced motion) while direct visits and Back/Forward render at once; mobile follows its own layout; E2E green.
 
 ## Unit 2: About
 
@@ -76,6 +107,8 @@ Order: Board → About → Skills → Contact → What I do → Interview → Ch
 - Legal notice (name + postal address, §18 MStV) and Privacy policy beside or before the form.
 - The backend stores each Contact request and emails the Owner (phone push later).
 - Invisible human check on submit, plus per-IP rate limiting.
+- Body text (form, Legal notice, Privacy policy) sits on a `#d1dcd9` surface: on the Panel's `#5c8b70`, palette text reaches only about 3:1 (Unit 1).
+- While the backend is down, the form is disabled beside Unit 1's offline note. The Legal notice, the Privacy policy and the links stay available.
 
 **Sub-unit breakdown**: 4.0 `ContactRequest` Pydantic model ↔ TS type + contract tests; 4.x form, `POST /api/contact`, storage module over Firestore (emulator locally, ADR 0002), email notification, human check + rate limit, legal texts; 4.N E2E submitting a request against the running backend.
 
@@ -100,6 +133,8 @@ Order: Board → About → Skills → Contact → What I do → Interview → Ch
 ## Unit 7: Chat
 
 **Objective**: the Chat with me Panel: an Agent that answers Visitors about the Owner from its Knowledge (Panel content, Vault, Interview answers) and keeps a Memory of Visitors and their conversations. The browser talks only to the backend (`/api/chat`); the backend talks to the Agent, hosted on Google's agent platform (free tier).
+
+**Design**: the chat sits on a `#d1dcd9` surface, because palette text reaches only about 3:1 on the Panel's `#4c839f` (Unit 1). While the backend is down, Unit 1's offline note takes the chat's place.
 
 **Open** (all deferred to this unit): the Agent's voice (first person as the Owner, or a representative) and how it marks extrapolation; how it deflects beyond its Knowledge; Visitor identity and consent for Memory; retention; how the Owner reviews what Visitors ask; hand-off to Contact; off-limits topics; how Knowledge is stored (RAG, long context or combined).
 

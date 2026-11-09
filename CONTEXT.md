@@ -18,7 +18,7 @@ _Avoid_: user, recruiter, client
 ### Screens
 
 **Landing**:
-The first screen, showing only the animated logo. Clicking it reveals the Board.
+The first screen, showing the animated logo and whether the backend is reachable. Clicking the logo reveals the Board.
 _Avoid_: home, intro, splash
 
 **Board**:
@@ -26,7 +26,7 @@ The screen that holds the five Panels. It is the whole site after the Landing.
 _Avoid_: menu, overlay, hub
 
 **Panel**:
-One of the Board's five full-height areas: Skills, What I do, Chat with me, About, Contact.
+One of the Board's five areas, in order: About, What I do, Skills, Chat with me, Contact.
 _Avoid_: block, column, section, tile
 
 **Expanded panel**:
