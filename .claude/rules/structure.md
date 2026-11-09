@@ -10,6 +10,7 @@ Modular code, split on reasonable borders. No big modules: when a file or folder
 - Code used by two or more chunks moves up to the nearest shared level (see the layout below). Move it when the second consumer appears, not before.
 - When the last other consumer goes away, move the code back down into the one chunk that still uses it.
 - A chunk's `index.ts` is its public interface. Import another chunk only through its `index.ts`. Never deep-import another chunk's internal files.
+- UI text is the one exception: messages live in `i18n/`, one file per page or area, and the chunk reads them by id through `useIntl()`.
 
 ## Frontend layout (`frontend/src/`)
 
@@ -21,6 +22,7 @@ components/domain/<Name>/     feature components, may use hooks and services
 hooks/<useX>/                 shared hooks only (used by 2+ chunks)
 services/<area>/              API clients, no UI
 utils/                        shared pure helpers only (used by 2+ chunks)
+i18n/                         FormatJS setup and the message files (ADR 0003)
 styles/                       global CSS (tokens)
 ```
 
