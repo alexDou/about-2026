@@ -11,7 +11,13 @@ export default defineConfig((_env, argv) => {
   return {
     entry: { main: "./src/main.ts" },
     output: { clean: true, publicPath: "/" },
-    resolve: { extensions: [".tsrx", ".ts", ".tsx", ".js"] },
+    resolve: {
+      extensions: [".tsrx", ".ts", ".tsx", ".js"],
+      // The message files are FormatJS ASTs already, so the bundle needs no ICU parser.
+      alias: {
+        "@formatjs/icu-messageformat-parser$": "@formatjs/icu-messageformat-parser/no-parser.js",
+      },
+    },
     optimization: {
       minimizer: [new OxcMinifyRspackPlugin(), new LightningCssMinimizerRspackPlugin()],
     },

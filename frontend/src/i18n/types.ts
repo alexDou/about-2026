@@ -1,3 +1,4 @@
+import type { MessageFormatElement } from "@formatjs/icu-messageformat-parser";
 import type { OctaneNode } from "octane";
 import type { enMessages } from "./messages";
 
@@ -13,8 +14,8 @@ declare global {
   }
 }
 
-/** One ICU message per id. */
-export type Messages = Readonly<Record<MessageId, string>>;
+/** One message per id, as a FormatJS AST: the bundle has no ICU parser. */
+export type Messages = Readonly<Record<MessageId, MessageFormatElement[]>>;
 
 export type IntlProviderProps = {
   /** Replaces the English messages (tests). */

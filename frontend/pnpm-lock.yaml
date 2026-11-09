@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@formatjs/icu-messageformat-parser':
+        specifier: 3.5.22
+        version: 3.5.22
       '@formatjs/intl':
         specifier: 6.1.4
         version: 6.1.4
@@ -21,9 +24,6 @@ importers:
       '@cucumber/cucumber':
         specifier: ^13.3.0
         version: 13.3.0
-      '@formatjs/icu-messageformat-parser':
-        specifier: 3.5.22
-        version: 3.5.22
       '@octanejs/rspack-plugin':
         specifier: 0.2.8
         version: 0.2.8(@rspack/core@2.3.1)(octane@0.16.7(@tsrx/oxc@0.23.0)(vite@8.3.5(@types/node@26.6.6)(esbuild@0.28.2)(yaml@2.9.1)))
