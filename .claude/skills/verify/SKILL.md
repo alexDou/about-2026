@@ -1,6 +1,6 @@
 ---
 name: verify
-description: Run the full end-of-task quality gate (frontend oxfmt/oxlint/tsrs/vitest, backend ruff/pytest, semgrep when rules exist) and fix failures until green. Use at the end of every task that changed files, before reporting done or committing.
+description: Run the full end-of-task quality gate (frontend oxfmt/oxlint/import cycles/tsrs/vitest, backend ruff/pytest, semgrep when rules exist) and fix failures until green. Use at the end of every task that changed files, before reporting done or committing.
 ---
 
 # Verify

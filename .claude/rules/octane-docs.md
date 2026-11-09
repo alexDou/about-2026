@@ -9,7 +9,7 @@ Condensed from https://octanejs.dev/docs (fetched 2026-11-07, Octane 0.16.7). Oc
 
 - `createRoot(el).render(App, props)` and `hydrateRoot(el, App)` take the component and its props, not an element.
 - `createPortal(Component, target, props)` takes the same component + props shape. Events bubble through the logical tree (context crosses too), while listeners added with `addEventListener` follow the physical DOM.
-- A `<title>` rendered anywhere is hoisted into `<head>`, so no effect is needed for it.
+- A `<title>` rendered anywhere is hoisted into `<head>`, so no effect is needed for it. This project's static `<title>` in `index.html` changes that: see frontend.md.
 
 ## Hooks ([differences-from-react](https://octanejs.dev/docs/differences-from-react))
 
