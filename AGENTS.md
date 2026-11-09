@@ -28,7 +28,7 @@ Full rule: `.claude/rules/structure.md`.
 
 - **Modular, split on reasonable borders**: no big modules. A file or folder doing two jobs gets split.
 - **Colocation**: everything that belongs to a chunk (component, page, hook, service) lives inside that chunk. A hook, helper, type or sub-component used by one chunk only lives in that chunk, e.g. `components/domain/APage/{hooks/, utils.ts, types.ts, styles.module.css, APage.tsrx, index.ts}`.
-- **Shared levels are for shared code**: `hooks/`, `utils/` and `components/ui/` hold domain-agnostic code used by two or more chunks. Promote code up when a second consumer appears; move it back down when it's down to one. Domain code stays in its domain chunk, and imports form no cycles (`.claude/rules/frontend.md`).
+- **Shared levels are for shared code**: `hooks/`, `utils/` and `components/ui/` hold domain-agnostic or app-wide code used by two or more chunks. Promote code up when a second consumer appears; move it back down when it's down to one. Domain code stays in its domain chunk, and imports form no cycles (`.claude/rules/frontend.md`).
 - **Public interface**: import a chunk only through its `index.ts`, never its internal files.
 - **Frontend layout** (`frontend/src/`): `app/`, `pages/<Page>/`, `components/ui/<Name>/` (presentational, no data fetching), `components/domain/<Name>/` (feature parts), `hooks/<useX>/`, `services/<area>/`, `utils/`, `i18n/` (FormatJS setup and messages), `styles/`.
 - **Component folder**: `<Name>.tsrx`, `index.ts`, `types.ts`, `styles.module.css`, plus `<Name>.test.ts`. Props types never inline; components never share a stylesheet.

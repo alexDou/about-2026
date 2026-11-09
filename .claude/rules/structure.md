@@ -19,9 +19,9 @@ app/                          root component
 pages/<Page>/                 route-level screens
 components/ui/<Name>/         presentational building blocks, no data fetching
 components/domain/<Name>/     feature components, may use hooks and services
-hooks/<useX>/                 shared domain-agnostic hooks only (used by 2+ chunks)
+hooks/<useX>/                 shared domain-agnostic or app-wide hooks only (used by 2+ chunks)
 services/<area>/              API clients, no UI
-utils/                        shared domain-agnostic pure helpers only (used by 2+ chunks)
+utils/                        shared domain-agnostic or app-wide pure helpers only (used by 2+ chunks)
 i18n/                         FormatJS setup and the message files (ADR 0003)
 styles/                       global CSS (tokens)
 ```
