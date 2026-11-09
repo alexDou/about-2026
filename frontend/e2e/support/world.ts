@@ -22,6 +22,8 @@ export class PortfolioWorld extends World {
   context!: BrowserContext;
   page!: Page;
   consoleMessages: string[] = [];
+  /** Console errors and uncaught exceptions, in order. */
+  pageErrors: string[] = [];
 
   url(path = "/"): string {
     return new URL(path, baseUrl).href;
@@ -45,7 +47,11 @@ AfterAll(async function () {
 Before(async function (this: PortfolioWorld) {
   this.context = await browser.newContext();
   this.page = await this.context.newPage();
-  this.page.on("console", (message) => this.consoleMessages.push(message.text()));
+  this.page.on("console", (message) => {
+    this.consoleMessages.push(message.text());
+    if (message.type() === "error") this.pageErrors.push(message.text());
+  });
+  this.page.on("pageerror", (error) => this.pageErrors.push(error.message));
 });
 
 After(async function (this: PortfolioWorld) {
