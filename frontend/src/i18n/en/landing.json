@@ -1,0 +1,6 @@
+{
+  "landing.logo.label": "Portfolio home",
+  "landing.status.checking": "API: checking",
+  "landing.status.ok": "API: ok",
+  "landing.status.down": "API: down"
+}

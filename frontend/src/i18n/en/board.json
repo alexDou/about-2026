@@ -1,0 +1,14 @@
+{
+  "board.panel.about.title": "About",
+  "board.panel.about.close": "Close About",
+  "board.panel.whatIDo.title": "What I do",
+  "board.panel.whatIDo.sublabel": "36 Takeovers",
+  "board.panel.whatIDo.close": "Close What I do",
+  "board.panel.skills.title": "Skills",
+  "board.panel.skills.close": "Close Skills",
+  "board.panel.chatWithMe.title": "Chat with me",
+  "board.panel.chatWithMe.sublabel": "AI agent trained on my data",
+  "board.panel.chatWithMe.close": "Close Chat with me",
+  "board.panel.contact.title": "Contact",
+  "board.panel.contact.close": "Close Contact"
+}
