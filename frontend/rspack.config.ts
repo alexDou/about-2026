@@ -11,13 +11,7 @@ export default defineConfig((_env, argv) => {
   return {
     entry: { main: "./src/main.ts" },
     output: { clean: true, publicPath: "/" },
-    resolve: {
-      extensions: [".tsrx", ".ts", ".tsx", ".js"],
-      // The messages arrive precompiled (tools/messages-loader.ts), so FormatJS needs no ICU parser.
-      alias: {
-        "@formatjs/icu-messageformat-parser$": "@formatjs/icu-messageformat-parser/no-parser.js",
-      },
-    },
+    resolve: { extensions: [".tsrx", ".ts", ".tsx", ".js"] },
     optimization: {
       minimizer: [new OxcMinifyRspackPlugin(), new LightningCssMinimizerRspackPlugin()],
     },
@@ -29,10 +23,6 @@ export default defineConfig((_env, argv) => {
           exclude: /node_modules/,
           type: "javascript/auto",
           use: [{ loader: "./tools/oxc-loader.mjs", options: { target: "es2023" } }],
-        },
-        {
-          test: /[\\/]src[\\/]i18n[\\/].+\.json$/i,
-          use: [{ loader: "./tools/messages-loader.ts" }],
         },
         { test: /\.css$/i, type: "css/auto" },
         { test: /\.svg$/i, type: "asset/resource" },
