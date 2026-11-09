@@ -50,7 +50,7 @@ Syntax: https://tsrx.dev/features.
 - `tools/octane-tsrx-mapper` is a 2-line shim: the mapper calls `compile_to_volar_mappings`, octane exports `compileToVolarMappings`. Remove it once upstream agrees on the name.
 - Lint `oxlint`, format `oxfmt`, both from `@tsrx/oxc` (the only package that provides them). Never add the standalone `oxlint`/`oxfmt` packages: they shadow the `.tsrx`-aware binaries and skip every `.tsrx` file.
 - Never add SWC, Babel, esbuild or a second transpiler. Prefer an Oxc tool whenever one exists.
-- Messages ship precompiled: `tools/messages-loader.ts` compiles every message file in `src/i18n/` to FormatJS ASTs at build time, and `@formatjs/icu-messageformat-parser` is aliased to its `no-parser.js` build (`rspack.config.ts`). A message string that reaches FormatJS in the build, from a file outside `src/i18n/` or a `defaultMessage`, cannot be formatted: it logs a console error and renders verbatim. Tests run on the source strings, with the parser.
+- Messages stay in FormatJS's own flat JSON (`id → ICU string`) and FormatJS parses them at run time, parser included. The Owner chose this over a build-time compile step that would save about 29 KB (portfolio-7ub7, scrapped).
 
 ## Types
 

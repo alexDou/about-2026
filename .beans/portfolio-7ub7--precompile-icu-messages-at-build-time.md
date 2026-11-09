@@ -1,11 +1,11 @@
 ---
 # portfolio-7ub7
 title: Precompile ICU messages at build time
-status: completed
+status: scrapped
 type: task
 priority: normal
 created_at: 2026-11-09T15:32:00Z
-updated_at: 2026-11-09T15:35:06Z
+updated_at: 2026-11-09T16:19:24Z
 parent: portfolio-m9gt
 ---
 
@@ -41,3 +41,7 @@ The build compiles every ICU message file to FormatJS ASTs, so the bundle can sh
 - E2E: the world collects console errors and page errors, and the Landing scenario checks "the page logs no errors".
 - Bundle: `main.js` went from 258,838 B to 229,967 B (−28.9 KB), and gzipped from 83,926 B to 75,619 B (−8.3 KB). The source map lists `no-parser.js`, and the messages ship as ASTs. A development build also compiles the messages.
 - Docs: `frontend.md` notes the precompiled messages and the verbatim-fallback trap, and says app-wide code (`useRoute`, navigation) is global. `structure.md` and `AGENTS.md` now say "domain-agnostic or app-wide".
+
+## Reasons for Scrapping
+
+The Owner dropped the build-time compile step, preferring the i18n library's own setup: messages stay in FormatJS's flat JSON and FormatJS parses them at run time. About 29 KB is not worth a custom build step. The work was reverted, including its guards: `IntlProvider`'s always-on `onError` and the E2E "page logs no errors" step, both added only for the no-parser trap. `frontend.md` records the decision.
