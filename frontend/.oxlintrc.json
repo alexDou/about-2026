@@ -23,6 +23,12 @@
       {
         "allow": ["**/*.css", "@testing-library/jest-dom/vitest"]
       }
+    ],
+    "import/no-cycle": [
+      "error",
+      {
+        "ignoreTypes": false
+      }
     ]
   },
   "env": {

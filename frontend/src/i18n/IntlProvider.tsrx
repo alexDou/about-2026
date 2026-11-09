@@ -12,10 +12,9 @@ const cache = createIntlCache();
 
 /** Makes the site messages formattable below it through `useIntl()`. Wraps the app. */
 export function IntlProvider({ messages = enMessages, children }: IntlProviderProps) @{
-  // An explicit list, against the frontend rule: oxlint's react-hooks/exhaustive-deps rejects useMemo without one.
-  const intl = useMemo(
-    () => createIntl({ locale: LOCALE, defaultLocale: LOCALE, messages }, cache),
-    [messages],
+  // oxlint-disable-next-line react-hooks/exhaustive-deps -- Octane infers [messages]; a list would be redundant.
+  const intl = useMemo(() =>
+    createIntl({ locale: LOCALE, defaultLocale: LOCALE, messages }, cache),
   );
   <IntlContext value={intl}>{children}</IntlContext>;
 }

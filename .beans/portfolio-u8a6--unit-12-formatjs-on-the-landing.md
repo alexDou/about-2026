@@ -7,7 +7,7 @@ priority: normal
 tags:
     - ready-for-agent
 created_at: 2026-11-09T10:30:50Z
-updated_at: 2026-11-09T14:36:11Z
+updated_at: 2026-11-09T15:10:32Z
 parent: portfolio-m9gt
 blocked_by:
     - portfolio-lz1t
@@ -72,3 +72,11 @@ Site text comes from FormatJS messages through our own thin, react-intl-style bi
 - E2E: the landing scenario checks the document title "A.Durnev portfolio" (it was red before, on a heading that no longer exists). The logo steps find the button by its new name. `pnpm --dir frontend e2e`: 4 scenarios passed.
 - The bundle holds no React or react-intl. Its source map lists only `@formatjs/*`, `intl-messageformat` and `octane`.
 - portfolio-3n34 got an item for the Board's own document title.
+
+## Follow-up
+
+The Owner reviewed this ticket. portfolio-kqd8 revises three decisions above:
+
+- `index.html` gets its static title back: hard-coded "A.Durnev portfolio", which shows until JS runs and on `/explore`. The Landing now sets `document.title` in an effect and restores the static title on leaving.
+- `IntlProvider` omits its `useMemo` dependency list again, with a lint exception for that line only.
+- `useApiHealth` and `ApiHealth` move into the ApiStatus domain.

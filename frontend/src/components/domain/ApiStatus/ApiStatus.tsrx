@@ -1,8 +1,8 @@
-import { useApiHealth } from "../../../hooks/useApiHealth";
 import { useIntl } from "../../../hooks/useIntl";
 import { StatusBadge } from "../../ui/StatusBadge";
+import { LABEL_BY_HEALTH, TONE_BY_HEALTH } from "./config";
+import { useApiHealth } from "./hooks/useApiHealth";
 import styles from "./styles.module.css";
-import { LABEL_BY_HEALTH, TONE_BY_HEALTH } from "./types";
 
 /** Shows whether the FastAPI backend is reachable. */
 export function ApiStatus() @{

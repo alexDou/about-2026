@@ -9,12 +9,13 @@
     "preview": "rspack preview",
     "typecheck": "tsrs --noEmit --fast --runExternalCode",
     "lint": "oxlint",
+    "cycles": "node tools/import-cycles.ts src e2e tools",
     "fmt": "oxfmt",
     "fmt:check": "oxfmt --check",
     "test": "vitest run",
     "test:watch": "vitest",
     "e2e": "rspack build --mode production && cucumber-js",
-    "check": "pnpm typecheck && pnpm lint && pnpm fmt:check && pnpm test"
+    "check": "pnpm typecheck && pnpm lint && pnpm cycles && pnpm fmt:check && pnpm test"
   },
   "dependencies": {
     "@formatjs/intl": "6.1.4",

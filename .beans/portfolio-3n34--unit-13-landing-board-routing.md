@@ -7,7 +7,7 @@ priority: normal
 tags:
     - ready-for-agent
 created_at: 2026-11-09T10:30:50Z
-updated_at: 2026-11-09T14:35:47Z
+updated_at: 2026-11-09T15:10:32Z
 parent: portfolio-m9gt
 blocked_by:
     - portfolio-lz1t
@@ -31,7 +31,6 @@ URLs drive the site. Clicking the Landing logo opens `/explore` with a history e
 - [ ] The Board renders the five Panel titles in order as links to their URLs. A plain click is handled in the app without a reload; modifier and middle clicks keep browser behaviour (new tab). A Panel URL renders the Board for now; opening a Panel comes with Unit 1.5.
 - [ ] A route change caused by a click is marked as user-triggered; the initial load and Back/Forward are not.
 - [ ] The logo E2E scenario "Clicking the logo logs a message" becomes "Clicking the logo opens the Board"; `pnpm --dir frontend e2e` stays green.
-- [ ] The Board renders the document title "A.Durnev portfolio" from `site.title` through its own `<title>`, as the Landing does. Since Unit 1.2, `index.html` has no static title, so without this `/explore` has none.
 - [ ] `scripts/verify.sh` GREEN
 
 ## Blocked by

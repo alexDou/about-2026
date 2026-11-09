@@ -1,5 +1,8 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { render, screen } from "@octanejs/testing-library";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { enMessages } from "../i18n";
 import { App } from "./App.tsrx";
 
 describe("App", () => {
@@ -12,5 +15,11 @@ describe("App", () => {
     );
     render(App, { props: {} });
     expect(screen.getByRole("button", { name: "Portfolio A.Durnev" })).toBeInTheDocument();
+  });
+
+  it("ships the site title in index.html for the time before JS runs", () => {
+    // A path, not a URL: jsdom replaces the global `URL`, which `node:fs` then rejects.
+    const html = readFileSync(join(import.meta.dirname, "../../index.html"), "utf8");
+    expect(html.match(/<title>(.*)<\/title>/)?.[1]).toBe(enMessages["site.title"]);
   });
 });
