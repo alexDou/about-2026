@@ -1,0 +1,11 @@
+/** The Board's Panels, in Board order. */
+export const PANEL_IDS = ["about", "whatIDo", "skills", "chatWithMe", "contact"] as const;
+
+/** The URL of each Panel when it is the Expanded panel. */
+export const PANEL_PATHS = {
+  about: "/about",
+  whatIDo: "/what-i-do",
+  skills: "/skills",
+  chatWithMe: "/chat",
+  contact: "/contact",
+} as const satisfies Record<(typeof PANEL_IDS)[number], `/${string}`>;

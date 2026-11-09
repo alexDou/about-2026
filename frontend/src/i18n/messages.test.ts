@@ -1,0 +1,123 @@
+import { readdirSync, readFileSync } from "node:fs";
+import { join } from "node:path";
+import { parse } from "@formatjs/icu-messageformat-parser";
+import { describe, expect, expectTypeOf, it } from "vitest";
+import { PANEL_IDS } from "../hooks/useRoute";
+import { enMessages, type MessageId } from ".";
+
+// A path, not a URL: jsdom replaces the global `URL`, which `node:fs` then rejects.
+const EN_DIR = join(import.meta.dirname, "en");
+
+/** Every English message file on disk, keyed by its area (the file name). */
+const EN_FILES: ReadonlyArray<{ area: string; messages: Record<string, string> }> = readdirSync(
+  EN_DIR,
+)
+  .filter((name) => name.endsWith(".json"))
+  .map((name) => ({
+    area: name.replace(/\.json$/, ""),
+    messages: JSON.parse(readFileSync(join(EN_DIR, name), "utf8")) as Record<string, string>,
+  }));
+
+/** The ids whose message is not valid ICU, in file order. */
+function invalidMessages(messages: Record<string, string>): string[] {
+  return Object.entries(messages)
+    .filter(([, message]) => {
+      try {
+        parse(message);
+        return false;
+      } catch {
+        return true;
+      }
+    })
+    .map(([id]) => id);
+}
+
+describe("English message files", () => {
+  it("include the site, the Landing and the Board", () => {
+    expect(EN_FILES.map((file) => file.area)).toEqual(
+      expect.arrayContaining(["board", "landing", "site"]),
+    );
+  });
+
+  it.each(EN_FILES)("prefix every id in the $area file with its area", ({ area, messages }) => {
+    for (const id of Object.keys(messages)) expect(id).toMatch(new RegExp(`^${area}\\.`));
+  });
+
+  it.each(EN_FILES)("include every message of the $area file", ({ messages }) => {
+    expect(enMessages).toMatchObject(messages);
+  });
+});
+
+describe("English messages", () => {
+  it("name the site", () => {
+    expect(enMessages["site.title"]).toBe("A.Durnev portfolio");
+  });
+
+  it("title every Panel and label its close button", () => {
+    expect(PANEL_IDS.map((panel) => enMessages[`board.panel.${panel}.title`])).toEqual([
+      "About",
+      "What I do",
+      "Skills",
+      "Chat with me",
+      "Contact",
+    ]);
+    expect(PANEL_IDS.map((panel) => enMessages[`board.panel.${panel}.close`])).toEqual([
+      "Close About",
+      "Close What I do",
+      "Close Skills",
+      "Close Chat with me",
+      "Close Contact",
+    ]);
+  });
+
+  it("give Sublabels to What I do and Chat with me only", () => {
+    const sublabels = Object.fromEntries(
+      PANEL_IDS.map((panel) => [
+        panel,
+        (enMessages as Record<string, string>)[`board.panel.${panel}.sublabel`],
+      ]),
+    );
+    expect(sublabels).toEqual({
+      about: undefined,
+      whatIDo: "36 Takeovers",
+      skills: undefined,
+      chatWithMe: "AI agent trained on my data",
+      contact: undefined,
+    });
+  });
+
+  it("label the logo and the status badge on the Landing", () => {
+    expect(enMessages).toMatchObject({
+      "landing.logo.label": "Portfolio home",
+      "landing.status.checking": "API: checking",
+      "landing.status.ok": "API: ok",
+      "landing.status.down": "API: down",
+    });
+  });
+});
+
+describe("MessageId", () => {
+  it("accepts the ids of the English messages and rejects any other", () => {
+    // Checked by the typecheck (tsrs), not at run time.
+    expectTypeOf<
+      "site.title" | "landing.logo.label" | "board.panel.skills.title"
+    >().toExtend<MessageId>();
+    expectTypeOf<"board.panel.skills.subtitle">().not.toExtend<MessageId>();
+  });
+});
+
+describe("ICU check", () => {
+  it("flags a malformed message by id", () => {
+    expect(
+      invalidMessages({
+        "x.fine": "Hello {name}",
+        "x.unclosed": "Hello {name",
+        "x.badPlural": "{count, plural, one {# item}}",
+      }),
+    ).toEqual(["x.unclosed", "x.badPlural"]);
+  });
+
+  it.each(EN_FILES)("passes every message in the $area file", ({ messages }) => {
+    expect(invalidMessages(messages)).toEqual([]);
+  });
+});
