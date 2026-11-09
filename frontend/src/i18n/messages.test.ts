@@ -88,7 +88,7 @@ describe("English messages", () => {
 
   it("label the logo and the status badge on the Landing", () => {
     expect(enMessages).toMatchObject({
-      "landing.logo.label": "Portfolio home",
+      "landing.logo.label": "Portfolio A.Durnev",
       "landing.status.checking": "API: checking",
       "landing.status.ok": "API: ok",
       "landing.status.down": "API: down",

@@ -25,7 +25,7 @@ export type WeaveSettings = {
 
 export type AnimatedLogoProps = {
   /** Accessible name of the logo button. */
-  label?: string;
+  label: string;
   onClick?: (event: MouseEvent) => void;
   /** Overrides the tuned weave settings. */
   settings?: WeaveSettings;

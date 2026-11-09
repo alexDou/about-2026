@@ -2,7 +2,8 @@ import { Given, Then, When } from "@cucumber/cucumber";
 import { expect } from "@playwright/test";
 import type { PortfolioWorld } from "../support/world.ts";
 
-const logo = (world: PortfolioWorld) => world.page.getByRole("button", { name: "Portfolio home" });
+const logo = (world: PortfolioWorld) =>
+  world.page.getByRole("button", { name: "Portfolio A.Durnev" });
 
 const hexToRgb = (hex: string) => {
   const n = Number.parseInt(hex.slice(1), 16);

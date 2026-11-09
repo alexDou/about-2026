@@ -1,5 +1,6 @@
 import { ApiStatus } from "../../components/domain/ApiStatus";
 import { AnimatedLogo } from "../../components/ui/AnimatedLogo";
+import { useIntl } from "../../hooks/useIntl";
 import styles from "./styles.module.css";
 
 function handleLogoClick() {
@@ -8,8 +9,14 @@ function handleLogoClick() {
 }
 
 export function LandingPage() @{
+  const intl = useIntl();
   <main class={styles["page"]}>
-    <AnimatedLogo label="Portfolio home" onClick={handleLogoClick} />
+    // Octane hoists the title into <head>.
+    <title>{intl.formatMessage({ id: "site.title" })}</title>
+    <AnimatedLogo
+      label={intl.formatMessage({ id: "landing.logo.label" })}
+      onClick={handleLogoClick}
+    />
     <ApiStatus />
   </main>;
 }
