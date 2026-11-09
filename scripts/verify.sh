@@ -45,6 +45,7 @@ lane_frontend() {
   FAILS=()
   step "oxfmt" pnpm --dir frontend run -s fmt:check
   step "oxlint" pnpm --dir frontend run -s lint
+  step "import cycles" pnpm --dir frontend run -s cycles
   step "typecheck (tsrs)" pnpm --dir frontend run -s typecheck
   step "vitest" pnpm --dir frontend run -s test
   [[ ${#FAILS[@]} -eq 0 ]] || { echo "frontend failed: ${FAILS[*]}"; return 1; }

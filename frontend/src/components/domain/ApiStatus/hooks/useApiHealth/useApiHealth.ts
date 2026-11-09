@@ -1,6 +1,6 @@
 import { useEffect, useState } from "octane";
-import { fetchHealth } from "../../services/api";
-import type { ApiHealth } from "./types";
+import { fetchHealth } from "../../../../../services/api";
+import type { ApiHealth } from "../../types";
 
 /** Polls the backend health endpoint once on mount. */
 export function useApiHealth(): ApiHealth {
