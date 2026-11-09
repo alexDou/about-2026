@@ -22,6 +22,19 @@ Syntax: https://tsrx.dev/features.
 - Write `class`, not `className`.
 - Omit dependency arrays on built-in hooks. Write one only when you need exact control over when it reruns.
 - Test with `@octanejs/testing-library` (`render(Component, { props })`).
+- Document title: `index.html` carries the static site title, shown until JS runs and on every screen that sets none. A rendered `<title>` lands after it in `<head>` and never shows, so a screen sets `document.title` in an effect and restores the previous title on cleanup (see `LandingPage`).
+
+## Domain code stays in its domain
+
+- A hook, type, constant or helper that carries one domain's concepts lives in that domain's chunk, `components/domain/<Name>/` (`hooks/`, `types.ts`, `config.ts`), however many chunks use it. Example: `ApiStatus` owns `useApiHealth` and the `ApiHealth` type.
+- Other chunks reach domain code through the domain's `index.ts`.
+- The global `hooks/` and `utils/` hold domain-agnostic code only, such as `useIntl` and `useAnimationFrame`.
+
+## Imports form no cycles
+
+- The import graph is acyclic. Type-only imports and re-exports count.
+- `pnpm cycles` (`tools/import-cycles.ts`) checks `src`, `e2e` and `tools` in the gate. oxlint's `import/no-cycle` cannot follow `.tsrx` imports, so it covers `.ts` modules only.
+- Break a cycle by moving the shared piece into a module both sides import: types into `types.ts`, constants into `config.ts`.
 
 ## Styling
 
