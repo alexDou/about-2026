@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { WEAVE_SETTINGS } from "./config";
-import { lineClipPath, linePath, ringClipPath, ringPath, toneOf } from "./geometry";
+import { WEAVE_SETTINGS } from ".././config";
+import { lineClipPath, linePath, ringClipPath, ringPath, toneOf } from ".././geometry";
 
 const { ring, line } = WEAVE_SETTINGS;
 const coords = (d: string) => [...d.matchAll(/-?\d+\.?\d*/g)].map((m) => Number(m[0]));

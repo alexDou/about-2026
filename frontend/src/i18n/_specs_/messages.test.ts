@@ -3,11 +3,11 @@ import { join } from "node:path";
 import { createIntl } from "@formatjs/intl";
 import { type MessageFormatElement, parse } from "@formatjs/icu-messageformat-parser";
 import { describe, expect, expectTypeOf, it } from "vitest";
-import { PANEL_IDS } from "../hooks/useRoute";
-import { enMessages, type MessageId } from ".";
+import { PANEL_IDS } from "../../hooks/useRoute";
+import { enMessages, type MessageId } from "..";
 
 // A path, not a URL: jsdom replaces the global `URL`, which `node:fs` then rejects.
-const EN_DIR = join(import.meta.dirname, "en");
+const EN_DIR = join(import.meta.dirname, "../en");
 
 /** Every English message file on disk, keyed by its area (the file name). */
 const EN_FILES: ReadonlyArray<{ area: string; messages: Record<string, unknown> }> = readdirSync(

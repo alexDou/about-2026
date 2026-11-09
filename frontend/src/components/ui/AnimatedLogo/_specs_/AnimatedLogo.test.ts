@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from "@octanejs/testing-library";
 import { describe, expect, it, vi } from "vitest";
-import { AnimatedLogo } from "./AnimatedLogo.tsrx";
-import { WEAVE_SETTINGS } from "./config";
+import { AnimatedLogo } from ".././AnimatedLogo.tsrx";
+import { WEAVE_SETTINGS } from ".././config";
 
 describe("AnimatedLogo", () => {
   it("renders one drawn path per weave line", () => {

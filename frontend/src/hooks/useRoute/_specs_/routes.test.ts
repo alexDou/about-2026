@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { PANEL_IDS, pathOf, resolvePath, type Route } from ".";
+import { PANEL_IDS, pathOf, resolvePath, type Route } from "..";
 
 /** Every state the site can be in, with its URL (the spec's table). */
 const ROUTES: ReadonlyArray<{ route: Route; path: string }> = [

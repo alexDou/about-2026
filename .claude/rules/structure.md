@@ -31,12 +31,13 @@ A chunk folder, with the optional parts in brackets:
 ```
 components/domain/ProjectCard/
   ProjectCard.tsrx            the component (TSRX)
-  ProjectCard.test.ts         its tests, colocated
+  _specs_/                    its unit tests (ProjectCard.test.ts, …)
   index.ts                    public exports
   types.ts                    its props and private types
   styles.module.css           its styles
   [config.ts]                 its constants
-  [utils.ts | utils/]         its private helpers (+ utils.test.ts)
+  [utils.ts | utils/]         its private helpers (tests in _specs_/)
+  [media/]                    its media files: images, icons, fonts
   [hooks/useX/]               its own hooks: useX.ts, index.ts, [types.ts]
   [components/<Sub>/]         sub-components only it renders, same shape recursively
 ```
@@ -47,7 +48,8 @@ components/domain/ProjectCard/
 
 ## Tests
 
-- Unit tests sit next to the file they test: `<Name>.test.ts` or `<file>.test.ts` (`.test.tsx` only when the test itself needs JSX).
+- Unit tests sit in the chunk's `_specs_/` folder: `_specs_/<Name>.test.ts` or `_specs_/<file>.test.ts` (`.test.tsx` only when the test itself needs JSX). The same holds in `frontend/tools/`.
+- Media files (images, icons, fonts) sit in the chunk's `media/` folder.
 - Frontend E2E (Cucumber + Playwright) lives in `frontend/e2e/{features,steps,support}/`.
 - Backend tests live in `backend/tests/`, mirroring `backend/app/` (`app/routes/projects.py` → `tests/routes/test_projects.py`).
 

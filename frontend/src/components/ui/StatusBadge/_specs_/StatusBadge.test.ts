@@ -1,6 +1,6 @@
 import { render, screen } from "@octanejs/testing-library";
 import { describe, expect, it } from "vitest";
-import { StatusBadge } from "./StatusBadge.tsrx";
+import { StatusBadge } from ".././StatusBadge.tsrx";
 
 describe("StatusBadge", () => {
   it("renders the label with its tone", () => {

@@ -31,8 +31,8 @@ Full rule: `.claude/rules/structure.md`.
 - **Shared levels are for shared code**: `hooks/`, `utils/` and `components/ui/` hold domain-agnostic or app-wide code used by two or more chunks. Promote code up when a second consumer appears; move it back down when it's down to one. Domain code stays in its domain chunk, and imports form no cycles (`.claude/rules/frontend.md`).
 - **Public interface**: import a chunk only through its `index.ts`, never its internal files.
 - **Frontend layout** (`frontend/src/`): `app/`, `pages/<Page>/`, `components/ui/<Name>/` (presentational, no data fetching), `components/domain/<Name>/` (feature parts), `hooks/<useX>/`, `services/<area>/`, `utils/`, `i18n/` (FormatJS setup and messages), `styles/`.
-- **Component folder**: `<Name>.tsrx`, `index.ts`, `types.ts`, `styles.module.css`, plus `<Name>.test.ts`. Props types never inline; components never share a stylesheet.
-- **Tests**: unit tests colocated next to the code they test. Frontend E2E in `frontend/e2e/`. Backend tests in `backend/tests/`.
+- **Component folder**: `<Name>.tsrx`, `index.ts`, `types.ts`, `styles.module.css`, plus `_specs_/<Name>.test.ts` and, when it has media files, `media/`. Props types never inline; components never share a stylesheet.
+- **Tests**: unit tests in the chunk's `_specs_/` folder. Frontend E2E in `frontend/e2e/`. Backend tests in `backend/tests/`.
 - **Styling**: CSS Modules only. No Tailwind, no CSS-in-JS, no `style` props (oxlint enforces it).
 
 ## Tracking & Docs
