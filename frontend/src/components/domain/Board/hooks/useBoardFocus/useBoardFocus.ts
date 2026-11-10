@@ -1,12 +1,14 @@
 import { useEffect, useState } from "octane";
 import { expandedBoard, pathOf } from "../../../../../hooks/useRoute";
 import type { PanelId } from "../../../../../hooks/useRoute";
+import { STAGE_VIEWS } from "../../config";
 import type { BoardStage, RefObject } from "../../types";
+import { PAGE_HEADING } from "./config";
 
 /** The Panel the stage rests on (`null`: none, the Panels), or `undefined` while the Board is on its way. */
 function restingPanel(stage: BoardStage): PanelId | null | undefined {
-  if (stage.views === "expanded") return stage.layout;
-  return stage.views === "panels" ? null : undefined;
+  if (stage.views === STAGE_VIEWS.expanded) return stage.layout;
+  return stage.views === STAGE_VIEWS.panels ? null : undefined;
 }
 
 /**
@@ -29,7 +31,7 @@ export function useBoardFocus(stage: BoardStage, root: RefObject<HTMLElement>): 
     const { current, before } = rest;
     if (before === undefined || current === undefined) return;
     if (current) {
-      root.current?.querySelector<HTMLElement>("h1")?.focus();
+      root.current?.querySelector<HTMLElement>(PAGE_HEADING)?.focus();
     } else if (before) {
       root.current
         ?.querySelector<HTMLElement>(`a[href="${pathOf(expandedBoard(before))}"]`)

@@ -1,6 +1,6 @@
 export { Outlet, RouterProvider } from "@octanejs/tanstack-router";
 export { DEFAULT_BOARD, expandedBoard, pathOf } from "./board";
-export { PANEL_IDS } from "./config";
+export { BOARD_KIND, PANEL_IDS } from "./config";
 export { isPlainClick } from "./links";
 export { createAppRouter } from "./router";
 export type { AppRouter } from "./router";

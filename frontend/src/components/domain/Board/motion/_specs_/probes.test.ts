@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { isMobile, runningTransitions, scrollToTop } from "../probes";
+import { isMobile, prefersReducedMotion, scrollToTop } from "../probes";
 
 afterEach(() => {
   vi.restoreAllMocks();
@@ -21,44 +21,16 @@ describe("isMobile", () => {
   });
 });
 
-const transition = (target: Element, playState = "running") => ({
-  transitionProperty: "opacity",
-  playState,
-  effect: { target },
-});
-
-function rootWith(animations: object[]) {
-  const root = document.createElement("div");
-  root.getAnimations = (() => animations) as unknown as typeof root.getAnimations;
-  return root;
-}
-
-describe("runningTransitions", () => {
-  it("counts zero without the Web Animations API, or without a root", () => {
-    expect(runningTransitions(document.createElement("div"))).toBe(0);
-    expect(runningTransitions(null)).toBe(0);
+describe("prefersReducedMotion", () => {
+  it("is false without media queries", () => {
+    expect(prefersReducedMotion()).toBe(false);
   });
 
-  it("counts the transitions of the elements that carry the sequence attribute", () => {
-    const slot = document.createElement("li");
-    slot.setAttribute("data-seq", "");
-    const other = document.createElement("a");
-    expect(
-      runningTransitions(rootWith([transition(slot), transition(slot), transition(other)])),
-    ).toBe(2);
-  });
-
-  it("leaves out finished transitions and animations that are not transitions", () => {
-    const slot = document.createElement("li");
-    slot.setAttribute("data-seq", "");
-    expect(
-      runningTransitions(
-        rootWith([
-          transition(slot, "finished"),
-          { playState: "running", effect: { target: slot } },
-        ]),
-      ),
-    ).toBe(0);
+  it("follows the visitor's setting", () => {
+    window.matchMedia = vi.fn<(query: string) => { matches: boolean }>((query) => ({
+      matches: query === "(prefers-reduced-motion: reduce)",
+    })) as unknown as typeof window.matchMedia;
+    expect(prefersReducedMotion()).toBe(true);
   });
 });
 

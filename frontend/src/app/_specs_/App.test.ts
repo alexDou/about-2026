@@ -36,11 +36,20 @@ describe("App", () => {
       vi.fn<typeof fetch>(() => new Promise(() => {})),
     );
     vi.spyOn(window, "scrollTo").mockImplementation(() => {});
+    // jsdom animates nothing, so the Board's entrance and stages would wait for events that never
+    // come: these tests ask for no motion, as a visitor can. The unfold tests turn motion back on.
+    window.matchMedia = ((query: string) =>
+      ({
+        matches: query.includes("reduce"),
+        addEventListener: () => {},
+        removeEventListener: () => {},
+      }) as unknown as MediaQueryList) as typeof window.matchMedia;
     visit("/");
   });
   afterEach(() => {
     vi.unstubAllGlobals();
     vi.restoreAllMocks();
+    Reflect.deleteProperty(window, "matchMedia");
     // The site's routers are not made by `testRouter`; end their histories too.
     siteRouters.splice(0).forEach((router) => router.history.destroy());
     visit("/");
@@ -92,6 +101,10 @@ describe("App", () => {
   });
 
   describe("the Board's unfold", () => {
+    beforeEach(() => {
+      Reflect.deleteProperty(window, "matchMedia");
+    });
+
     it("plays when the logo click opens the Board", async () => {
       await renderAt("/");
       fireEvent.click(logo()!);

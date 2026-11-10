@@ -15,3 +15,6 @@ export const PANEL_PATHS = {
   chatWithMe: "/chat",
   contact: "/contact",
 } as const satisfies Record<(typeof PANEL_IDS)[number], `/${string}`>;
+
+/** The two states the Board is in: no Panel open, or one Expanded panel. */
+export const BOARD_KIND = { default: "default", expanded: "expanded" } as const;

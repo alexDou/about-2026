@@ -1,11 +1,11 @@
 import { useRouter, useRouterState } from "@octanejs/tanstack-router";
 import { isPlainClick } from "./links";
-import { pathOf } from "./board";
+import { DEFAULT_BOARD, expandedBoard, pathOf } from "./board";
 import type { BoardState, PanelId, UseRoute } from "./types";
 
 /** The Board state the matched routes name: the Expanded panel of the page route, if any. */
 function boardOf(panel: PanelId | undefined): BoardState {
-  return panel ? { kind: "expanded", panel } : { kind: "default" };
+  return panel ? expandedBoard(panel) : DEFAULT_BOARD;
 }
 
 /** The Board state from the URL, shared site-wide, with the ways to change the route. */

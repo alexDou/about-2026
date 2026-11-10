@@ -7,12 +7,29 @@ import { Board } from "../Board.tsrx";
 const page = () => createElement("p", null, "The page");
 const pages = Object.fromEntries(PANEL_IDS.map((panel) => [panel, page]));
 
-/** Shows the Board at `path`, as the site does: the route's page in the Board's `Outlet`. */
-export async function renderBoardAt(path: string, messages?: Parameters<typeof intlWrapper>[0]) {
+/** The browser ends every title's fade-in, the last step of the Board's entrance. */
+export async function endEntrance() {
+  await act(() => {
+    document.querySelectorAll("main a").forEach((title) => {
+      if (title.parentElement) fireEvent.animationEnd(title.parentElement);
+    });
+  });
+}
+
+/**
+ * Shows the Board at `path`, as the site does: the route's page in the Board's `Outlet`. The
+ * Board's entrance is over unless `entrance` is true, so clicks reach the Panels.
+ */
+export async function renderBoardAt(
+  path: string,
+  messages?: Parameters<typeof intlWrapper>[0],
+  { entrance = false }: { entrance?: boolean } = {},
+) {
   window.history.replaceState(null, "", path);
   const router = testRouter({ board: Board, pages });
   const view = render(RouterProvider, { props: { router }, wrapper: intlWrapper(messages) });
   await act(() => router.load());
+  if (!entrance) await endEntrance();
   return view;
 }
 
