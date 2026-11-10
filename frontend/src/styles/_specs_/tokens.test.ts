@@ -42,12 +42,12 @@ describe("fonts.css", () => {
     expect(fonts).toMatch(/font-family:\s*"Overused Grotesk"/);
     expect(fonts).toMatch(/font-weight:\s*200 900/);
     expect(fonts).toMatch(/font-display:\s*swap/);
-    expect(fonts).toMatch(/url\("\.\/media\/OverusedGrotesk-VF\.woff2"\)\s*format\("woff2"\)/);
+    expect(fonts).toMatch(/url\("\.\/fonts\/OverusedGrotesk-VF\.woff2"\)\s*format\("woff2"\)/);
   });
 
   it("ships the font file with its OFL license", () => {
-    expect(existsSync(styles("media/OverusedGrotesk-VF.woff2"))).toBe(true);
-    const license = readFileSync(styles("media/OFL.txt"), "utf8");
+    expect(existsSync(styles("fonts/OverusedGrotesk-VF.woff2"))).toBe(true);
+    const license = readFileSync(styles("fonts/OFL.txt"), "utf8");
     expect(license).toContain("Copyright (c) 2023-2026, Bao Nguyen (RandomMaerks)");
     expect(license).toContain("SIL OPEN FONT LICENSE Version 1.1");
   });
