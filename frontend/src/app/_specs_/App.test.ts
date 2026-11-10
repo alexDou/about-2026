@@ -6,6 +6,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { enMessages } from "../../i18n";
 import { App } from ".././App.tsrx";
 
+const board = () => screen.getByRole("main");
+const panels = () => screen.getAllByRole("listitem");
 const logo = () => screen.queryByRole("button", { name: "Portfolio A.Durnev" });
 
 /** Puts the address bar at `path` and tells the app, as Back/Forward does. */
@@ -71,6 +73,44 @@ describe("App", () => {
 
     window.history.forward();
     expect(await screen.findByRole("link", { name: "About" })).toBeInTheDocument();
+  });
+
+  describe("the Board's entrance", () => {
+    it("plays when the logo click opens the Board", async () => {
+      render(App, { props: {} });
+      fireEvent.click(logo()!);
+      await screen.findByRole("link", { name: "About" });
+      expect(board()).toHaveClass("entrance");
+      panels().forEach((panel) => expect(panel).toHaveClass("entering"));
+    });
+
+    it("keeps its class while a Panel link is followed from the Board", async () => {
+      render(App, { props: {} });
+      fireEvent.click(logo()!);
+      await screen.findByRole("link", { name: "About" });
+      fireEvent.click(screen.getByRole("link", { name: "Skills" }));
+      expect(window.location.pathname).toBe("/skills");
+      expect(board()).toHaveClass("entrance");
+    });
+
+    it("does not play on a direct visit", () => {
+      arriveAt("/explore");
+      render(App, { props: {} });
+      expect(board()).not.toHaveClass("entrance");
+      panels().forEach((panel) => expect(panel).not.toHaveClass("entering"));
+    });
+
+    it("does not play on Forward from the Landing", async () => {
+      arriveAt("/explore");
+      arriveAt("/");
+      render(App, { props: {} });
+      act(() => {
+        window.history.replaceState(null, "", "/explore");
+        window.dispatchEvent(new PopStateEvent("popstate"));
+      });
+      await screen.findByRole("link", { name: "About" });
+      expect(board()).not.toHaveClass("entrance");
+    });
   });
 
   it("ships the site title in index.html for the time before JS runs", () => {

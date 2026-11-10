@@ -35,6 +35,20 @@ describe("tokens.css", () => {
   });
 });
 
+describe("motion tokens", () => {
+  const tokens = rootTokens(css("tokens.css"));
+
+  it.each([
+    ["--enter-board", "300ms"],
+    ["--enter-stagger", "150ms"],
+    ["--enter-panel", "950ms"],
+    ["--enter-title", "140ms"],
+    ["--label-gap", "0.5rem"],
+  ])("defines %s as %s", (name, value) => {
+    expect(tokens[name]).toBe(value);
+  });
+});
+
 describe("fonts.css", () => {
   const fonts = css("fonts.css");
 

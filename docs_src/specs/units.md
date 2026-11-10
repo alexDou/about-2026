@@ -42,7 +42,7 @@ Reference: the expanded menu of codepen `fluxus/gPWvZm` (local copy in git-ignor
   - Panels, in order: About, What I do, Skills, Chat with me, Contact.
   - Desktop: full-height columns sharing the width evenly. The Board is at least 32rem tall.
   - Mobile (≤ 640px wide): full-width rows sharing the height evenly. The Board is at least 420px tall. Two flaws of the pen are fixed: rows never shrink to a sliver on narrow screens, and titles are centred on both axes by layout, not by an offset.
-  - Titles: the pen's style (uppercase, wide letter-spacing, the line that slides in on hover and focus), at least 1.5rem, in Overused Grotesk (self-hosted, used site-wide). In the default state only the title is clickable.
+  - Titles: the pen's style (uppercase, wide letter-spacing), 1rem (the pen: 0.9rem), in Overused Grotesk (self-hosted, used site-wide). In the default state only the title is clickable. On hover and focus a row of moving dots (CSS only) slides in above the title, the Panel's full width and just tall enough for the dots, as far above the title as the Sublabel is below it. No line ever crosses the title.
   - Sublabels: optional, shown only in the default state. For now What I do ("36 Takeovers") and Chat with me ("AI agent trained on my data").
 - **Expanded panel**
   - The page scrolls to show its full content.

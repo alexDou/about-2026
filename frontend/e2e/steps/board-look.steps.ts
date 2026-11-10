@@ -33,7 +33,7 @@ Then(
 );
 
 Then(
-  "every Panel title is uppercase, spaced wide, at least 24px and in {string}",
+  "every Panel title is uppercase, spaced wide, 16px and in {string}",
   async function (this: PortfolioWorld, family: string) {
     for (const link of await this.page.getByRole("link").all()) {
       await expect(link).toHaveCSS("text-transform", "uppercase");
@@ -42,7 +42,7 @@ Then(
         const style = getComputedStyle(el);
         return { size: parseFloat(style.fontSize), spacing: parseFloat(style.letterSpacing) };
       });
-      expect(size).toBeGreaterThanOrEqual(24);
+      expect(size).toBe(16);
       expect(spacing).toBeGreaterThanOrEqual(size * 0.1);
     }
   },
@@ -126,23 +126,120 @@ Then("every Sublabel fits inside its Panel", async function (this: PortfolioWorl
   }
 });
 
-/** The pen's line is the title's `::before`. */
-const lineOpacity = (link: Locator) =>
-  link.evaluate((el) => parseFloat(getComputedStyle(el, "::before").opacity));
+/** The dots row is the title's `::before`. */
+const dots = (link: Locator) =>
+  link.evaluate((el) => {
+    const style = getComputedStyle(el, "::before");
+    return {
+      opacity: parseFloat(style.opacity),
+      width: parseFloat(style.width),
+      height: parseFloat(style.height),
+      bottom: parseFloat(style.bottom),
+      left: parseFloat(style.left),
+      marginLeft: parseFloat(style.marginLeft),
+      transform: style.transform,
+      gap: parseFloat(style.marginBottom),
+      positionX: style.backgroundPositionX,
+      animated: style.animationName !== "none",
+    };
+  });
 
 Then(
-  "the line of the Panel title {string} is hidden",
+  "the dots above the Panel title {string} are hidden",
   async function (this: PortfolioWorld, name: string) {
-    await expect.poll(() => lineOpacity(title(this, name))).toBe(0);
+    await expect.poll(async () => (await dots(title(this, name))).opacity).toBe(0);
   },
 );
 
 Then(
-  "the line of the Panel title {string} is shown",
+  "the dots above the Panel title {string} are shown",
   async function (this: PortfolioWorld, name: string) {
-    await expect.poll(() => lineOpacity(title(this, name))).toBe(1);
+    await expect.poll(async () => (await dots(title(this, name))).opacity).toBe(1);
   },
 );
+
+Then(
+  "the dots above the Panel title {string} span the Panel and are at most {int}px tall",
+  async function (this: PortfolioWorld, name: string, max: number) {
+    const row = await dots(title(this, name));
+    const box = (await panel(this, name).boundingBox())!;
+    close(row.width, box.width);
+    // Left edge = title's left + `left` + margin: the Panel's left edge. Slid in: no transform left.
+    const titleBox = (await title(this, name).boundingBox())!;
+    close(titleBox.x + row.left + row.marginLeft, box.x);
+    expect(["none", "matrix(1, 0, 0, 1, 0, 0)"]).toContain(row.transform);
+    expect(row.height).toBeGreaterThan(0);
+    expect(row.height).toBeLessThanOrEqual(max);
+  },
+);
+
+Then(
+  "the dots above the Panel title {string} end above the title, as far as the Sublabel is below",
+  async function (this: PortfolioWorld, name: string) {
+    const row = await dots(title(this, name));
+    const titleHeight = (await title(this, name).boundingBox())!.height;
+    // The row's bottom edge is the title's top edge, lifted by the gap: it never reaches the title.
+    close(row.bottom, titleHeight);
+    expect(row.gap).toBeGreaterThan(0);
+    const sublabelGap = await this.page
+      .locator("p")
+      .first()
+      .evaluate((el) => parseFloat(getComputedStyle(el).marginTop));
+    close(row.gap, sublabelGap);
+  },
+);
+
+Then(
+  "the dots above the Panel title {string} are moving",
+  async function (this: PortfolioWorld, name: string) {
+    const before = await dots(title(this, name));
+    expect(before.animated).toBe(true);
+    await expect
+      .poll(async () => (await dots(title(this, name))).positionX)
+      .not.toBe(before.positionX);
+  },
+);
+
+const animating = (world: PortfolioWorld) =>
+  world.page.evaluate(() => document.getAnimations().some((a) => a.playState === "running"));
+
+/** What fades a title in is the wrapper around it and its Sublabel. */
+const titleOpacities = (world: PortfolioWorld) =>
+  world.page
+    .getByRole("link")
+    .evaluateAll((links) =>
+      links.map((el) => parseFloat(getComputedStyle(el.parentElement!).opacity)),
+    );
+
+Given("the visitor prefers reduced motion", async function (this: PortfolioWorld) {
+  await this.page.emulateMedia({ reducedMotion: "reduce" });
+});
+
+Then("the Board is unfolding", async function (this: PortfolioWorld) {
+  await expect.poll(() => animating(this)).toBe(true);
+});
+
+Then("the Board is not unfolding", async function (this: PortfolioWorld) {
+  await expect(this.page.getByRole("main")).toBeVisible();
+  expect(await animating(this)).toBe(false);
+});
+
+Then("the Panel titles are hidden while the Panels unfold", async function (this: PortfolioWorld) {
+  expect(await titleOpacities(this)).toEqual([0, 0, 0, 0, 0]);
+});
+
+When("the unfold has ended", async function (this: PortfolioWorld) {
+  // The whole entrance takes about 1.6s.
+  await expect.poll(() => animating(this), { timeout: 5000 }).toBe(false);
+});
+
+Then("every Panel and title is fully shown", async function (this: PortfolioWorld) {
+  expect(await titleOpacities(this)).toEqual([1, 1, 1, 1, 1]);
+  for (const item of await panels(this).all()) {
+    await expect(item).toHaveCSS("opacity", "1");
+    await expect(item).toHaveCSS("transform", "none");
+  }
+});
 
 When("I hover the Panel title {string}", async function (this: PortfolioWorld, name: string) {
   await title(this, name).hover();

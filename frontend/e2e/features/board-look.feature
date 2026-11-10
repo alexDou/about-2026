@@ -8,9 +8,9 @@ Feature: Default Board look
     And the Panel "Chat with me" is coloured "rgb(76, 131, 159)" with text "rgb(37, 54, 58)"
     And the Panel "Contact" is coloured "rgb(92, 139, 112)" with text "rgb(37, 54, 58)"
 
-  Scenario: Titles are uppercase, wide-spaced and at least 1.5rem in Overused Grotesk
+  Scenario: Titles are uppercase, wide-spaced, 1rem and in Overused Grotesk
     When I open "/explore"
-    Then every Panel title is uppercase, spaced wide, at least 24px and in "Overused Grotesk"
+    Then every Panel title is uppercase, spaced wide, 16px and in "Overused Grotesk"
 
   Scenario: Only What I do and Chat with me have a Sublabel
     When I open "/explore"
@@ -62,12 +62,51 @@ Feature: Default Board look
     When I open "/explore"
     Then every Sublabel fits inside its Panel
 
-  Scenario: The line slides in on a title when hovered or focused
+  Scenario: Moving dots slide in above the title on hover and focus
     Given the window is 1280 by 800
     When I open "/explore"
-    Then the line of the Panel title "Skills" is hidden
+    Then the dots above the Panel title "Skills" are hidden
     When I hover the Panel title "Skills"
-    Then the line of the Panel title "Skills" is shown
+    Then the dots above the Panel title "Skills" are shown
+    And the dots above the Panel title "Skills" span the Panel and are at most 8px tall
+    And the dots above the Panel title "Skills" end above the title, as far as the Sublabel is below
+    And the dots above the Panel title "Skills" are moving
     When I move the pointer away
     And I focus the Panel title "Contact" with the keyboard
-    Then the line of the Panel title "Contact" is shown
+    Then the dots above the Panel title "Contact" are shown
+
+  Scenario: No line crosses a title
+    Given the window is 1280 by 800
+    When I open "/explore"
+    And I hover the Panel title "Skills"
+    Then the dots above the Panel title "Skills" end above the title, as far as the Sublabel is below
+
+  Scenario: The Board unfolds when the logo opens it
+    Given I open the landing page
+    When I click the logo
+    Then the Board is unfolding
+    And the Panel titles are hidden while the Panels unfold
+    When the unfold has ended
+    Then every Panel and title is fully shown
+
+  Scenario: The Board does not unfold on a direct visit
+    When I open "/explore"
+    Then the Board is not unfolding
+    And every Panel and title is fully shown
+
+  Scenario: The Board does not unfold on Forward from the Landing
+    Given I open the landing page
+    When I click the logo
+    And the unfold has ended
+    And I go back
+    And I go forward
+    Then I am on "/explore"
+    And the Board is not unfolding
+    And every Panel and title is fully shown
+
+  Scenario: With reduced motion the Board appears at once
+    Given the visitor prefers reduced motion
+    And I open the landing page
+    When I click the logo
+    Then the Board is not unfolding
+    And every Panel and title is fully shown
