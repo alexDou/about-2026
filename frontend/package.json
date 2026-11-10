@@ -20,6 +20,8 @@
   "dependencies": {
     "@formatjs/icu-messageformat-parser": "3.5.22",
     "@formatjs/intl": "6.1.4",
+    "@octanejs/tanstack-router": "0.3.2",
+    "@tanstack/router-core": "1.171.34",
     "@tsrx/oxc": "0.23.0",
     "classnames": "2.5.1",
     "octane": "0.16.7"

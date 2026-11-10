@@ -1,5 +1,5 @@
 import { useEffect } from "octane";
-import { panelRoute, pathOf } from "../../../../../hooks/useRoute";
+import { expandedBoard, pathOf } from "../../../../../hooks/useRoute";
 import type { PanelId } from "../../../../../hooks/useRoute";
 import { usePrevious } from "../usePrevious";
 import type { RefObject } from "./types";
@@ -16,7 +16,9 @@ export function useBoardFocus(expanded: PanelId | null, root: RefObject<HTMLElem
     if (expanded) {
       root.current?.querySelector<HTMLElement>("h1")?.focus();
     } else if (before) {
-      root.current?.querySelector<HTMLElement>(`a[href="${pathOf(panelRoute(before))}"]`)?.focus();
+      root.current
+        ?.querySelector<HTMLElement>(`a[href="${pathOf(expandedBoard(before))}"]`)
+        ?.focus();
     }
   });
 }

@@ -1,7 +1,8 @@
 Feature: Animated logo
 
   Background:
-    Given I open the landing page
+    Given the visitor accepts motion
+    And I open the landing page
 
   Scenario: The logo is animated
     Then the logo weave moves over time

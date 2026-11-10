@@ -22,7 +22,19 @@ Syntax: https://tsrx.dev/features.
 - Write `class`, not `className`.
 - Omit dependency arrays on built-in hooks. Write one only when you need exact control over when it reruns.
 - Test with `@octanejs/testing-library` (`render(Component, { props })`).
+- E2E contexts run with reduced motion, so the Board's entrance does not disturb measurements. A scenario about motion starts with `Given the visitor accepts motion`.
 - Document title: `index.html` carries the static site title, shown until JS runs and on every screen that sets none. A rendered `<title>` lands after it in `<head>` and never shows, so a screen sets the title through `useDocumentTitle`, which restores the previous title on cleanup.
+
+## Routing
+
+- Routing runs on `@octanejs/tanstack-router` (ADR 0004) with code-defined routes. Do not add file-based routes or a route generator. The router matches the URL and renders the screen: no component switches on the route to pick what to show.
+- Route tree: the root route's component is `App` (messages and an `Outlet`); `/` is the Landing; the Board is a pathless layout route whose `Outlet` shows the Expanded panel's page; `/explore` and one route per Panel sit under it, and a Panel route carries `staticData: { panel }`. The tree lives in `hooks/useRoute/router.ts` (`createAppRouter`) and takes its components as required options, so it imports no page. `app/router.ts` (`createSiteRouter`) supplies the real ones.
+- `hooks/useRoute` is the one place that imports `@octanejs/tanstack-router`: `useRoute()` gives `{ board, navigate, link }` (`board` is the Board state of the matched route; the default Board where no Board shows), and the index re-exports `Outlet` and `RouterProvider`. Test helpers, exported like `intlWrapper`: `testRouter({ board, pages, … })` makes a router whose components render nothing unless named, and `routerWrapper` puts one in context.
+- A `BoardState` is what `navigate` and `link` take. Panel titles and Stripes are plain `<a href>` elements with `link(board)`'s `onClick` (a plain click navigates in the app, a modified click is left to the browser).
+- The site keeps no record of what caused a route change: every change plays the same transition. Do not bring back a `userTriggered` flag.
+- Navigation is asynchronous: tests that click a link or render a route tree wait for it (`await router.load()` inside `act`, `waitFor`, `findBy…`). A test of a routed component renders `RouterProvider` with a `testRouter` and stub pages.
+- `@tanstack/router-core` is a direct dependency, pinned to the version the binding pins, only so `StaticDataRouteOption` can be typed (`hooks/useRoute/types.ts`). Move both together.
+- A visit to a path with a trailing slash is replaced where the router is made, and an unknown path by a catch-all route, both without a history entry.
 
 ## Domain code stays in its domain
 
@@ -46,6 +58,7 @@ Syntax: https://tsrx.dev/features.
 
 - Package manager: **pnpm only** (`pnpm`, `pnpm exec`, `pnpm dlx`, `pnpm view`). Never `npm` or `npx`.
 - TS is stripped by `tools/oxc-loader.mjs` (oxc-transform), JS minified by `tools/oxc-minify-plugin.mjs` (oxc-minify), CSS by Lightning CSS.
+- `@octanejs/tanstack-router` ships TypeScript source, so the Oxc loader rule in `rspack.config.ts` includes it (every other package in `node_modules` is skipped), and tsconfig does not set `erasableSyntaxOnly` because tsrs type-checks that source too and it uses a parameter property. Oxc strips such syntax, so the build is unaffected. oxlint's `typescript/parameter-properties` keeps parameter properties out of our own code; enums and namespaces are not checked.
 - Type checking: `tsrs --noEmit --fast --runExternalCode` (`pnpm typecheck`). `.tsrx` reaches tsrs through `@tsrx/content-mapper` (tsconfig `contentMappers` + `tsrx.compiler`). There is no `tsc`.
 - `tools/octane-tsrx-mapper` is a 2-line shim: the mapper calls `compile_to_volar_mappings`, octane exports `compileToVolarMappings`. Remove it once upstream agrees on the name.
 - Lint `oxlint`, format `oxfmt`, both from `@tsrx/oxc` (the only package that provides them). Never add the standalone `oxlint`/`oxfmt` packages: they shadow the `.tsrx`-aware binaries and skip every `.tsrx` file.

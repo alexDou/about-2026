@@ -30,7 +30,8 @@ export default defineConfig((_env, argv) => {
       rules: [
         {
           test: /\.(?:tsrx|tsx|ts)$/i,
-          exclude: /node_modules/,
+          // Packages ship compiled JS, except the Octane router binding: it ships TypeScript source.
+          exclude: /node_modules(?!.*@octanejs[\\/]tanstack-router)/,
           type: "javascript/auto",
           use: [{ loader: "./tools/oxc-loader.mjs", options: { target: "es2023" } }],
         },

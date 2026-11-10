@@ -70,7 +70,8 @@ Feature: Default Board look
     Then every Sublabel fits inside its Panel
 
   Scenario: Moving dots slide in above the title on hover and focus
-    Given the window is 1280 by 800
+    Given the visitor accepts motion
+    And the window is 1280 by 800
     When I open "/explore"
     Then the dots above the Panel title "Skills" are hidden
     When I hover the Panel title "Skills"
@@ -107,7 +108,8 @@ Feature: Default Board look
     Then the dots above the Panel title "Skills" end above the title at the top label gap
 
   Scenario: The Board unfolds when the logo opens it
-    Given I open the landing page
+    Given the visitor accepts motion
+    And I open the landing page
     When I click the logo
     Then the Board is unfolding
     And the Panel titles are hidden while the Panels unfold
@@ -115,7 +117,8 @@ Feature: Default Board look
     Then every Panel and title is fully shown
 
   Scenario: The unfold never makes the page scroll, so nothing jumps when it ends
-    Given the window is 1280 by 800
+    Given the visitor accepts motion
+    And the window is 1280 by 800
     And I open the landing page
     And I watch the page size
     When I click the logo
@@ -123,27 +126,33 @@ Feature: Default Board look
     Then the page never grew beyond the window
 
   Scenario: The unfold never makes the page scroll on a phone
-    Given the window is 375 by 667
+    Given the visitor accepts motion
+    And the window is 375 by 667
     And I open the landing page
     And I watch the page size
     When I click the logo
     And the unfold has ended
     Then the page never grew beyond the window
 
-  Scenario: The Board does not unfold on a direct visit
+  Scenario: The Board unfolds on a direct visit
+    Given the visitor accepts motion
     When I open "/explore"
-    Then the Board is not unfolding
-    And every Panel and title is fully shown
+    Then the Board is unfolding
+    And the Panel titles are hidden while the Panels unfold
+    When the unfold has ended
+    Then every Panel and title is fully shown
 
-  Scenario: The Board does not unfold on Forward from the Landing
-    Given I open the landing page
+  Scenario: The Board unfolds on Forward from the Landing
+    Given the visitor accepts motion
+    And I open the landing page
     When I click the logo
     And the unfold has ended
     And I go back
     And I go forward
     Then I am on "/explore"
-    And the Board is not unfolding
-    And every Panel and title is fully shown
+    And the Board is unfolding
+    When the unfold has ended
+    Then every Panel and title is fully shown
 
   Scenario: With reduced motion the Board appears at once
     Given the visitor prefers reduced motion

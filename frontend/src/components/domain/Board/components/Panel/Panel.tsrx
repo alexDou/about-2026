@@ -1,5 +1,5 @@
 import cx from "classnames";
-import { panelRoute, useRoute } from "../../../../../hooks/useRoute";
+import { expandedBoard, useRoute } from "../../../../../hooks/useRoute";
 import { useIntl } from "../../../../../hooks/useIntl";
 import { Sublabel } from "./components/Sublabel";
 import { TITLE_BY_PANEL } from "../../config";
@@ -11,7 +11,7 @@ import type { PanelProps } from "./types";
 export function Panel({ panel, tone, entering }: PanelProps) @{
   const intl = useIntl();
   const { link } = useRoute();
-  const { href, onClick } = link(panelRoute(panel));
+  const { href, onClick } = link(expandedBoard(panel));
   const sublabelId = SUBLABEL_BY_PANEL[panel];
 
   <li class={cx(styles["panel"], styles[tone], entering && styles["entering"])}>
