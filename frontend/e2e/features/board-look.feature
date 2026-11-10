@@ -142,6 +142,15 @@ Feature: Default Board look
     When the unfold has ended
     Then every Panel and title is fully shown
 
+  Scenario: Clicks are ignored until the unfold ends
+    Given the visitor accepts motion
+    When I open "/explore"
+    And I click the Panel "Skills" while the Board unfolds
+    And the unfold has ended
+    Then I am on "/explore"
+    When I click the Panel "Skills"
+    Then I am on "/skills"
+
   Scenario: The Board unfolds on Forward from the Landing
     Given the visitor accepts motion
     And I open the landing page

@@ -22,3 +22,11 @@ describe("pathOf", () => {
     expect(pathOf(expandedBoard(panel))).toBe(path);
   });
 });
+
+describe("expandedBoard", () => {
+  it("gives the same object for the same Panel, so what compares Boards by identity can tell them apart", () => {
+    expect(expandedBoard("skills")).toBe(expandedBoard("skills"));
+    expect(expandedBoard("skills")).not.toBe(expandedBoard("about"));
+    expect(expandedBoard("skills")).toEqual({ kind: "expanded", panel: "skills" });
+  });
+});

@@ -1,6 +1,14 @@
 import type { PanelId } from "../../../hooks/useRoute";
 import type { MessageId } from "../../../i18n";
-import type { PanelTone } from "./types";
+
+/** The Panels' colour schemes, each named after its background in the palette. */
+export const PANEL_TONES = ["ink", "mist", "teal", "blue", "green"] as const;
+
+/**
+ * What stands in the slots at one moment of a sequence: the Panels, the Stripes and the Expanded
+ * panel, or nothing while a slot changes size.
+ */
+export const STAGE_VIEWS = { panels: "panels", none: "none", expanded: "expanded" } as const;
 
 /** The tone of each Panel: the palette in Board order, left to right and top to bottom. */
 export const TONE_BY_PANEL = {
@@ -9,7 +17,7 @@ export const TONE_BY_PANEL = {
   skills: "teal",
   chatWithMe: "blue",
   contact: "green",
-} as const satisfies Record<PanelId, PanelTone>;
+} as const satisfies Record<PanelId, (typeof PANEL_TONES)[number]>;
 
 /** The message that titles each Panel. */
 export const TITLE_BY_PANEL = {

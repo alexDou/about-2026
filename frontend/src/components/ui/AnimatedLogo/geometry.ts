@@ -1,10 +1,18 @@
 // Weave geometry for the animated "a" logo, adapted from Loop Lab's pathData().
 // All coordinates are in source-image px (see VIEW_BOX in config.ts).
+import { SEGMENT_TYPES } from "./config";
 import type { LineWeave, RingWeave } from "./types";
 
-type LineSegment = { type: "line"; x0: number; y0: number; x1: number; y1: number; len: number };
+type LineSegment = {
+  type: typeof SEGMENT_TYPES.line;
+  x0: number;
+  y0: number;
+  x1: number;
+  y1: number;
+  len: number;
+};
 type ArcSegment = {
-  type: "arc";
+  type: typeof SEGMENT_TYPES.arc;
   cx: number;
   cy: number;
   r: number;
@@ -19,7 +27,7 @@ type Point = { x: number; y: number; tx: number; ty: number };
 const O = { cx: 306, cy: 306, rMid: 84.5 } as const;
 
 const line = (x0: number, y0: number, x1: number, y1: number): LineSegment => ({
-  type: "line",
+  type: SEGMENT_TYPES.line,
   x0,
   y0,
   x1,
@@ -27,7 +35,7 @@ const line = (x0: number, y0: number, x1: number, y1: number): LineSegment => ({
   len: Math.hypot(x1 - x0, y1 - y0),
 });
 const arc = (cx: number, cy: number, r: number, a0: number, a1: number): ArcSegment => ({
-  type: "arc",
+  type: SEGMENT_TYPES.arc,
   cx,
   cy,
   r,
@@ -55,7 +63,7 @@ function centerline(s: number): Point {
   for (const seg of SEGMENTS) {
     if (rest <= seg.len || seg === LAST_SEGMENT) {
       let x: number, y: number, tx: number, ty: number;
-      if (seg.type === "line") {
+      if (seg.type === SEGMENT_TYPES.line) {
         tx = (seg.x1 - seg.x0) / seg.len;
         ty = (seg.y1 - seg.y0) / seg.len;
         x = seg.x0 + tx * rest;

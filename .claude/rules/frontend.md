@@ -25,6 +25,31 @@ Syntax: https://tsrx.dev/features.
 - E2E contexts run with reduced motion, so the Board's entrance does not disturb measurements. A scenario about motion starts with `Given the visitor accepts motion`.
 - Document title: `index.html` carries the static site title, shown until JS runs and on every screen that sets none. A rendered `<title>` lands after it in `<head>` and never shows, so a screen sets the title through `useDocumentTitle`, which restores the previous title on cleanup.
 
+## Declarative, conventional React
+
+- Write declarative React: state, props, context and JSX event props (`onAnimationEnd`, `onTransitionEnd`, `onClick`). State two or more components need lives in one place (a module of signals, see "Shared state: signals"), not in a hook that reads the DOM.
+- Do not reach for the DOM or the browser's animation state to learn what the UI is doing: no `addEventListener` on elements, `getAnimations`, `querySelector`, `requestAnimationFrame` loops or imperative `.focus()` calls. A component that knows something reports it through a prop or context.
+- Imperative code is the exception: it needs the user's agreement before it is written, each time. When a browser API leaves no declarative way (a `meta` tag, `scrollTo`, a global key listener), say so and ask first.
+- Where an effect is left, it only syncs state with something outside React, and cleans up after itself.
+
+## Shared state: signals
+
+- State several components read and change is an Octane signal, shared as a module: the module holds one scope (`createScope`), one signal whose value is the state, derived signals for what components read, and plain functions that change it. Components import the handles and the functions directly; no context, no props for it. Example: `components/domain/Board/motion/motion.ts`. Use it where the thing is one per document (one Board). Keep the rules of the state in plain pure functions next to it (`sequence.ts`), tested without the framework.
+- The route decides what shows at rest, as the router does for the page. The shared state holds only what is in flight, and the component falls back to the route while the state has not started (`stage$.get() ?? settledStage(board)`).
+- State that belongs to a mount resets when its owner unmounts (`useEffect(() => reset, [])`), so the next mount starts from scratch.
+- A handle, and any function that returns handles, has a name ending in `$` (`stage$`); the compiler refuses otherwise.
+- Every module that reads a handle while rendering has a runtime `import "octane/signals";` (allowed in `.oxlintrc.json`).
+- A signal is written from event handlers and effects, not while a component renders or commits: not in a layout effect, and signals cannot be created during a render either (module level is fine).
+- A `derived$` renders its readers again whenever one of its inputs changes, even when its own value does not. Cheap here; do not rely on it to skip renders.
+- Tests: the pure functions are unit-tested with plain values; a component test sets the signals through the module's own functions (`go(...)`) and asserts on the state or on what shows; a test file resets in `afterEach` where no Board unmounts. Integration tests check what a visitor sees (`BoardSequence.test.ts`).
+
+## No hardcoded values
+
+- Strong preference: a value with a meaning (a kind, a state, a stage, a tone, a CSS property a stage waits for) is a named constant in the chunk's `config.ts`, as an `as const` object, with its type derived from it (`(typeof BOARD_KIND)[keyof typeof BOARD_KIND]`). Code compares and assigns through the constant (`BOARD_KIND.expanded`), never through a string spelled out again.
+- Examples: `BOARD_KIND` (`hooks/useRoute/config.ts`), `STAGE_VIEWS` (Board), `SLOT_VIEWS` (Slot), `API_HEALTH` (ApiStatus), `STATUS_TONES` (StatusBadge), DOM selectors as named constants.
+- Fine as written: message ids (typed `MessageId`), CSS Module class keys (`styles["panel"]`), Web API names used once where the API is called (`"keydown"`), values that mirror the backend contract, and the expected values in tests (a test may also use the constants).
+- A constant module and its types module do not import each other both ways: the types derive from the constants, and the constants never import the types (see "Imports form no cycles").
+
 ## Routing
 
 - Routing runs on `@octanejs/tanstack-router` (ADR 0004) with code-defined routes. Do not add file-based routes or a route generator. The router matches the URL and renders the screen: no component switches on the route to pick what to show.
@@ -36,12 +61,16 @@ Syntax: https://tsrx.dev/features.
 - `@tanstack/router-core` is a direct dependency, pinned to the version the binding pins, only so `StaticDataRouteOption` can be typed (`hooks/useRoute/types.ts`). Move both together.
 - A visit to a path with a trailing slash is replaced where the router is made, and an unknown path by a catch-all route, both without a history entry.
 
-## The Board's sequence
+## The Board's motion
 
 - Every Panel has one `Slot` (`components/domain/Board/components/Slot/`): its `<li>` keeps the tone and the size, and only the size transitions. The view inside (Panel, Stripe or Expanded panel) is one wrapper that fades; the hidden view is `inert`.
-- `useBoardSequence(board, root)` turns route changes into stages (`sequence.ts` is the pure planner and reducer, tested without timers). A stage is a class change; it ends on `transitionend`/`transitioncancel` once `runningTransitions` (the browser's running CSS transitions on `data-seq` elements) is zero. No timers and no `animation` in JS. A stage with no transition ends at once, so reduced motion (`transition: none`) needs no special case.
-- The durations are the `--seq-*` custom properties in `styles/tokens.css`. `useBoardFocus` moves focus when the Board comes to rest, not on the route change.
-- Clicks, the close button and Escape are ignored while `busy` (`ignoredWhileBusy`). Tests fake the browser: a `getAnimations` that reports transitions while the DOM differs from the last ended stage, and `transitionend` fired by hand (`_specs_/BoardSequence.test.ts`).
+- The Board's motion is a module of signals (`components/domain/Board/motion/motion.ts`): `stage$`, `busy$`, `entering$` and the functions `go`, `slotResized`, `viewFaded`, `titleShown`, `scrollStarted`, `scrollEnded`, `reset`. `sequence.ts` is the pure planner and state functions. `useBoardSync(board)` is the Board's one hook for it: the route into `go`, `reset` on unmount.
+- Until the first route change `stage$` is `null` and the route decides what the Board shows; from then on it is the stage on screen. The stage the sequence plays towards is where the queue ends, so the motion keeps no copy of the route. A stage is a class change. It ends when everything it waits for has reported: a slot's `transitionend` on `flex-grow`, a view's on `opacity` (`onTransitionEnd` on the Slot), by Panel. The planner knows which (`awaitedBy`); a stage that waits for nothing is skipped. No timers, no `getAnimations`. With reduced motion every stage is skipped and there is no entrance.
+- The entrance is the titles' fade-in: each Panel reports `onAnimationEnd` of its title, and the entrance plays until all five have. Only a slot that shows the Panel unfolds. Opening a Panel ends it, so Panels that come back do not replay it.
+- A click on a Stripe from a scrolled page scrolls up first (`scrollingUpFirst`) and changes the route when the page has: the route change removes the page, and the browser would clamp the scroll with it. Back and Forward do not wait for a scroll.
+- The Board is `busy` while the entrance plays, a stage runs or the page scrolls up; clicks, the close button and Escape are ignored then (`ignoredWhileBusy`). The route reaches the motion in an effect, so the stage follows the route a frame later; the page shows in the slot the route names.
+- The durations are the `--seq-*` and `--enter-*` custom properties in `styles/tokens.css`. `useBoardFocus` moves focus when the Board comes to rest, not on the route change.
+- Tests fire the browser's events by hand: `transitionend` with a `propertyName` on the slots or views, `animationend` on the titles (`_specs_/BoardSequence.test.ts`, `BoardEntrance.test.ts`); jsdom animates nothing, so a test of something else asks for reduced motion.
 
 ## Domain code stays in its domain
 

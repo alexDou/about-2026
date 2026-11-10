@@ -48,6 +48,7 @@ Feature: Open and close a Panel
   Scenario: Escape returns to the default Board and focus to the Panel
     Given I open "/explore"
     And I click the Panel "Contact"
+    And the page heading reads "Contact"
     When I press Escape
     Then I am on "/explore"
     And the Panel "Contact" has focus
@@ -99,6 +100,17 @@ Feature: Open and close a Panel
     When I scroll down 100px
     And I click the close button "Close Skills"
     Then the page is at the top
+
+  Scenario: Switching from a scrolled page scrolls up smoothly before the Panels change
+    Given the visitor accepts motion
+    And the window is 1280 by 400
+    And I open "/about"
+    And the page content is 1500px tall
+    When I scroll down 600px
+    And I click the Panel "Contact"
+    Then the page is still scrolled down
+    And the page is at the top
+    And the page heading reads "Contact"
 
   Scenario: Mobile Stripes are rows of at least 44px without Sublabels, and scroll away
     Given the window is 375 by 667

@@ -22,7 +22,7 @@
     "import/no-unassigned-import": [
       "warn",
       {
-        "allow": ["**/*.css", "@testing-library/jest-dom/vitest"]
+        "allow": ["**/*.css", "@testing-library/jest-dom/vitest", "octane/signals"]
       }
     ],
     "import/no-cycle": [

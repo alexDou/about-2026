@@ -1,13 +1,13 @@
 import type { OctaneNode } from "octane";
-import type { BOARD_PATH, PANEL_IDS, PANEL_PATHS } from "./config";
+import type { BOARD_KIND, BOARD_PATH, PANEL_IDS, PANEL_PATHS } from "./config";
 
 /** One of the Board's five Panels. */
 export type PanelId = (typeof PANEL_IDS)[number];
 
 /** The Board with no Panel open, or with one Expanded panel. */
 export type BoardState =
-  | { readonly kind: "default" }
-  | { readonly kind: "expanded"; readonly panel: PanelId };
+  | { readonly kind: typeof BOARD_KIND.default }
+  | { readonly kind: typeof BOARD_KIND.expanded; readonly panel: PanelId };
 
 /** A URL a link or `navigate` leads to: the Board with no Panel open, or an Expanded panel. */
 export type RoutePath = typeof BOARD_PATH | (typeof PANEL_PATHS)[PanelId];

@@ -1,26 +1,13 @@
-import { MOBILE_QUERY, REDUCED_MOTION_QUERY, SEQUENCE_ATTRIBUTE, STILL_FRAMES } from "./config";
+import { MOBILE_QUERY, REDUCED_MOTION_QUERY, STILL_FRAMES } from "./config";
 
 /** The window is the phone layout's. */
 export function isMobile(): boolean {
   return window.matchMedia?.(MOBILE_QUERY).matches ?? false;
 }
 
-/**
- * How many CSS transitions of the slots and their views are still running under `root`. It reads
- * the browser's own animations, so a stage with no transition (reduced motion, or nothing that
- * changes size) counts zero and the sequence goes on without waiting for a `transitionend`.
- * Without the Web Animations API (jsdom) it counts zero.
- */
-export function runningTransitions(root: Element | null): number {
-  if (!root?.getAnimations) return 0;
-  return root.getAnimations({ subtree: true }).filter((animation) => {
-    const target = (animation.effect as KeyframeEffect | null)?.target;
-    return (
-      "transitionProperty" in animation &&
-      animation.playState !== "finished" &&
-      target?.hasAttribute(SEQUENCE_ATTRIBUTE)
-    );
-  }).length;
+/** The visitor asks for no motion. */
+export function prefersReducedMotion(): boolean {
+  return window.matchMedia?.(REDUCED_MOTION_QUERY).matches ?? false;
 }
 
 /**
@@ -30,7 +17,7 @@ export function runningTransitions(root: Element | null): number {
  */
 export function scrollToTop(signal?: AbortSignal): Promise<void> {
   if (window.scrollY <= 0) return Promise.resolve();
-  if (window.matchMedia?.(REDUCED_MOTION_QUERY).matches) {
+  if (prefersReducedMotion()) {
     window.scrollTo({ top: 0, behavior: "instant" });
     return Promise.resolve();
   }

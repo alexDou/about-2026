@@ -17,3 +17,6 @@ export const VIEW_BOX = "150 124 434 303";
 
 /** Each weave is split into three color tones (w1..w3). */
 export const TONES = 3;
+
+/** The two kinds of piece the curved line is made of. */
+export const SEGMENT_TYPES = { line: "line", arc: "arc" } as const;

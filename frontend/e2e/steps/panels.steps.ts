@@ -97,6 +97,11 @@ Then("the Stripes and the close button are still in view", async function (this:
   expect(close!.y + close!.height).toBeLessThanOrEqual(viewport.height);
 });
 
+Then("the page is still scrolled down", async function (this: PortfolioWorld) {
+  // Not polled: the smooth scroll has only just begun when the click returns.
+  expect(await this.page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
+});
+
 Then("the page is at the top", async function (this: PortfolioWorld) {
   await expect.poll(() => this.page.evaluate(() => window.scrollY)).toBe(0);
 });

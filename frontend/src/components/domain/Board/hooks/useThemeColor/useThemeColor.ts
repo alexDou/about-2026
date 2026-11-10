@@ -1,4 +1,5 @@
 import { useEffect } from "octane";
+import { THEME_COLOR_META } from "./config";
 
 /**
  * Shows the value of the CSS custom property `token` (a colour) as the browser's `theme-color`
@@ -6,7 +7,7 @@ import { useEffect } from "octane";
  */
 export function useThemeColor(token: string | null): void {
   useEffect(() => {
-    const meta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
+    const meta = document.querySelector<HTMLMetaElement>(THEME_COLOR_META);
     if (!token || !meta) return;
     const color = getComputedStyle(document.documentElement).getPropertyValue(token).trim();
     if (!color) return;
