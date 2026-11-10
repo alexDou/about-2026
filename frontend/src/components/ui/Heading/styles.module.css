@@ -1,0 +1,15 @@
+/* The title style of the Board's Panels, a step larger. */
+.heading {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 300;
+  letter-spacing: 0.2em;
+  text-align: center;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+/* Focus arrives from code, not from a click on the heading: no ring needed. */
+.heading:focus {
+  outline: none;
+}

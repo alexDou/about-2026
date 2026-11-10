@@ -16,10 +16,10 @@ Feature: Landing and Board routing
     Then I am on "/explore"
     And the Board lists the five Panels
 
-  Scenario: A Panel URL shows the Board for now
+  Scenario: A Panel URL shows that Panel opened
     When I open "/skills"
     Then I am on "/skills"
-    And the Board lists the five Panels
+    And the page heading reads "Skills"
 
   Scenario: An unknown path is replaced by the Landing without a history entry
     Given I open "/explore"

@@ -2,7 +2,8 @@ import cx from "classnames";
 import { panelRoute, useRoute } from "../../../../../hooks/useRoute";
 import { useIntl } from "../../../../../hooks/useIntl";
 import { Sublabel } from "./components/Sublabel";
-import { SUBLABEL_BY_PANEL, TITLE_BY_PANEL } from "./config";
+import { TITLE_BY_PANEL } from "../../config";
+import { SUBLABEL_BY_PANEL } from "./config";
 import styles from "./styles.module.css";
 import type { PanelProps } from "./types";
 

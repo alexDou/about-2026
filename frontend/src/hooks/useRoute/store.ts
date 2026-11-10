@@ -4,8 +4,12 @@ import type { Route, RouteState, RouteStore } from "./types";
 /**
  * The route store over the History API of `win`. It reads the URL lazily, on first use, and
  * replaces a non-canonical URL (unknown path, trailing slash) without a history entry.
+ * It also turns the browser's scroll restoration off.
  */
 export function createRouteStore(win: Window = window): RouteStore {
+  // Every Board state starts at the top, so the browser must not restore a scroll position on a
+  // reload or Back/Forward. Set here, at module load, because an effect would come too late.
+  win.history.scrollRestoration = "manual";
   const listeners = new Set<() => void>();
   let state: RouteState | undefined;
 

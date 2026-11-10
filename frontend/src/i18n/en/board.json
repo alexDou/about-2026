@@ -1,4 +1,18 @@
 {
+  "board.expanded.documentTitle": [
+    {
+      "type": 1,
+      "value": "panel"
+    },
+    {
+      "type": 0,
+      "value": " · "
+    },
+    {
+      "type": 1,
+      "value": "site"
+    }
+  ],
   "board.panel.about.close": [
     {
       "type": 0,

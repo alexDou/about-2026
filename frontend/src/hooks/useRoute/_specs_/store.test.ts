@@ -17,6 +17,12 @@ describe("createRouteStore", () => {
   beforeEach(() => visit("/"));
   afterEach(() => visit("/"));
 
+  it("turns the browser's scroll restoration off as soon as it exists, before any page renders", () => {
+    window.history.scrollRestoration = "auto";
+    createRouteStore();
+    expect(window.history.scrollRestoration).toBe("manual");
+  });
+
   describe("on load", () => {
     it("shows the Board for a direct visit to /explore, not user-triggered", () => {
       visit("/explore");

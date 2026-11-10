@@ -20,7 +20,11 @@ const EN_FILES: ReadonlyArray<{ area: string; messages: Record<string, unknown> 
   }));
 
 /** Formats one message as the site does; a formatting error throws instead of falling back. */
-function format(messages: Record<string, unknown>, id: string): string {
+function format(
+  messages: Record<string, unknown>,
+  id: string,
+  values: Record<string, string> = {},
+) {
   const intl = createIntl({
     locale: "en",
     defaultLocale: "en",
@@ -29,7 +33,18 @@ function format(messages: Record<string, unknown>, id: string): string {
       throw error;
     },
   });
-  return intl.formatMessage({ id: id as MessageId });
+  return intl.formatMessage({ id: id as MessageId }, values);
+}
+
+/**
+ * A placeholder for each argument a message takes, so that a message with arguments still formats.
+ * Only plain arguments (`{name}`) count: no message uses plurals or selects yet.
+ */
+function placeholders(message: unknown[]): Record<string, string> {
+  const names = (message as { type: number; value: string }[])
+    .filter((element) => element.type === 1)
+    .map((element) => element.value);
+  return Object.fromEntries(names.map((name) => [name, name]));
 }
 
 /** The ids whose message is not a FormatJS AST that formats cleanly, in file order. */
@@ -38,7 +53,7 @@ function unformattable(messages: Record<string, unknown>): string[] {
     .filter(([id, message]) => {
       if (!Array.isArray(message)) return true;
       try {
-        format(messages, id);
+        format(messages, id, placeholders(message));
         return false;
       } catch {
         return true;
@@ -85,6 +100,12 @@ describe("English messages", () => {
       "Close Chat with me",
       "Close Contact",
     ]);
+  });
+
+  it("title the document by Panel and site", () => {
+    expect(
+      format(enMessages, "board.expanded.documentTitle", { panel: "Skills", site: "Site" }),
+    ).toBe("Skills · Site");
   });
 
   it("give Sublabels to What I do and Chat with me only", () => {

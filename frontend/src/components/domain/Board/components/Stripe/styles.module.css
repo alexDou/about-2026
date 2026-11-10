@@ -1,0 +1,83 @@
+/*
+ * Desktop: a column as narrow as its title plus padding, the title running top to bottom (an
+ * English book spine). It stays in view while the page scrolls; the Board is a row of columns.
+ */
+.stripe {
+  position: sticky;
+  top: 0;
+  flex: none;
+  align-self: flex-start;
+  height: max(100dvh, 32rem);
+  background: var(--tone-bg);
+  color: var(--tone-fg);
+}
+
+.ink {
+  --tone-bg: var(--panel-about);
+  --tone-fg: var(--text-on-dark);
+}
+
+.mist {
+  --tone-bg: var(--panel-what-i-do);
+  --tone-fg: var(--text-on-light);
+}
+
+.teal {
+  --tone-bg: var(--panel-skills);
+  --tone-fg: var(--text-on-light);
+}
+
+.blue {
+  --tone-bg: var(--panel-chat);
+  --tone-fg: var(--text-on-light);
+}
+
+.green {
+  --tone-bg: var(--panel-contact);
+  --tone-fg: var(--text-on-light);
+}
+
+/* The whole Stripe is the link. */
+.link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  /* The trailing letter-space would pull the word off-centre. */
+  padding: 1.25rem 1rem 1.25rem;
+  padding-block-start: calc(1.25rem + 0.2em);
+  color: inherit;
+  font-size: 1rem;
+  font-weight: 300;
+  letter-spacing: 0.2em;
+  text-decoration: none;
+  text-transform: uppercase;
+  white-space: nowrap;
+  writing-mode: vertical-rl;
+}
+
+.link:hover {
+  background: color-mix(in srgb, currentColor 10%, transparent);
+}
+
+.link:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: -4px;
+}
+
+/* Mobile: a row of title height plus a little padding, at least 44px, scrolling with the page. */
+@media (width < 840px) {
+  .stripe {
+    position: static;
+    align-self: auto;
+    height: auto;
+    min-height: 44px;
+  }
+
+  .link {
+    padding: 0.75rem 1rem;
+    padding-inline-start: calc(1rem + 0.2em);
+    writing-mode: horizontal-tb;
+    text-align: center;
+  }
+}
