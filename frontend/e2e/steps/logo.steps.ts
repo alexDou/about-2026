@@ -37,7 +37,3 @@ Then("the logo weave moves over time", async function (this: PortfolioWorld) {
   const before = await path.getAttribute("d");
   await expect.poll(() => path.getAttribute("d")).not.toBe(before);
 });
-
-Then("the console logs {string}", async function (this: PortfolioWorld, message: string) {
-  await expect.poll(() => this.consoleMessages).toContain(message);
-});

@@ -1,4 +1,4 @@
-import { render, screen } from "@octanejs/testing-library";
+import { fireEvent, render, screen } from "@octanejs/testing-library";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { intlWrapper } from "../../../i18n";
 import { LandingPage } from ".././LandingPage.tsrx";
@@ -16,6 +16,7 @@ describe("LandingPage", () => {
   afterEach(() => {
     vi.unstubAllGlobals();
     document.head.innerHTML = "";
+    window.history.replaceState(null, "", "/");
   });
 
   it("names the logo, the status badge and the document in English", () => {
@@ -37,6 +38,14 @@ describe("LandingPage", () => {
     expect(screen.getByRole("button", { name: "Logo label" })).toBeInTheDocument();
     expect(screen.getByText("Badge text")).toBeInTheDocument();
     expect(document.title).toBe("Site title");
+  });
+
+  it("opens the Board as a new history entry when the logo is clicked", () => {
+    const entries = window.history.length;
+    render(LandingPage, { props: {}, wrapper: intlWrapper() });
+    fireEvent.click(screen.getByRole("button", { name: "Portfolio A.Durnev" }));
+    expect(window.location.pathname).toBe("/explore");
+    expect(window.history.length).toBe(entries + 1);
   });
 
   it("gives the static title back when it goes away", () => {
