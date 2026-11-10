@@ -5,10 +5,11 @@ import { describe, expect, it } from "vitest";
 const styles = (path: string) => new URL(`../${path}`, import.meta.url);
 const css = (path: string) => readFileSync(styles(path), "utf8");
 
-/** Custom properties declared in a `:root` block, name → value. */
+/** Custom properties declared in the first `:root` block (the defaults, not media overrides). */
 function rootTokens(text: string): Record<string, string> {
   const tokens: Record<string, string> = {};
-  for (const [, name, value] of text.matchAll(/(--[\w-]+)\s*:\s*([^;]+);/g))
+  const block = text.match(/:root\s*\{[^}]*\}/)?.[0] ?? "";
+  for (const [, name, value] of block.matchAll(/(--[\w-]+)\s*:\s*([^;]+);/g))
     if (name && value) tokens[name] = value;
   return tokens;
 }
@@ -43,7 +44,7 @@ describe("motion tokens", () => {
     ["--enter-stagger", "150ms"],
     ["--enter-panel", "950ms"],
     ["--enter-title", "140ms"],
-    ["--label-gap", "0.5rem"],
+    ["--label-gap", "1.2rem"],
   ])("defines %s as %s", (name, value) => {
     expect(tokens[name]).toBe(value);
   });

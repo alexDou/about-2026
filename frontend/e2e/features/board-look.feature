@@ -68,7 +68,7 @@ Feature: Default Board look
     Then the dots above the Panel title "Skills" are hidden
     When I hover the Panel title "Skills"
     Then the dots above the Panel title "Skills" are shown
-    And the dots above the Panel title "Skills" span the Panel and are at most 8px tall
+    And the dots above the Panel title "Skills" span the Panel, inset by 2% each side, and are at most 8px tall
     And the dots above the Panel title "Skills" end above the title, as far as the Sublabel is below
     And the dots above the Panel title "Skills" are moving
     When I move the pointer away
@@ -88,6 +88,22 @@ Feature: Default Board look
     And the Panel titles are hidden while the Panels unfold
     When the unfold has ended
     Then every Panel and title is fully shown
+
+  Scenario: The unfold never makes the page scroll, so nothing jumps when it ends
+    Given the window is 1280 by 800
+    And I open the landing page
+    And I watch the page size
+    When I click the logo
+    And the unfold has ended
+    Then the page never grew beyond the window
+
+  Scenario: The unfold never makes the page scroll on a phone
+    Given the window is 375 by 667
+    And I open the landing page
+    And I watch the page size
+    When I click the logo
+    And the unfold has ended
+    Then the page never grew beyond the window
 
   Scenario: The Board does not unfold on a direct visit
     When I open "/explore"
