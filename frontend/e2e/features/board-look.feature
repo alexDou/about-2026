@@ -39,6 +39,13 @@ Feature: Default Board look
       | 375   | 667    |
       | 360   | 640    |
       | 320   | 568    |
+      | 700   | 800    |
+      | 839   | 700    |
+
+  Scenario: Desktop starts at 840px: five equal columns
+    Given the window is 840 by 700
+    When I open "/explore"
+    Then the Panels are 5 equal columns filling the window
 
   Scenario: A short mobile window keeps the Board at least 420px tall and the rows readable
     Given the window is 375 by 300
@@ -52,7 +59,7 @@ Feature: Default Board look
     Then every Panel title fits inside its Panel
 
   Scenario: Narrow desktop columns keep the titles and Sublabels inside their Panels
-    Given the window is 641 by 800
+    Given the window is 840 by 800
     When I open "/explore"
     Then every Panel title fits inside its Panel
     And every Sublabel fits inside its Panel
@@ -75,22 +82,23 @@ Feature: Default Board look
     And I focus the Panel title "Contact" with the keyboard
     Then the dots above the Panel title "Contact" are shown
 
-  Scenario Outline: On a phone the dots sit left of the title, centred on it, with padding before it
+  Scenario Outline: On a phone the dots stand at the left border, before the title
     Given the window is <width> by <height>
     When I open "/explore"
     Then the dots beside the Panel title "Chat with me" are hidden
     When I hover the Panel title "Chat with me"
     Then the dots beside the Panel title "Chat with me" are shown
-    And the dots beside the Panel title "Chat with me" are a short row, at most 8px tall
+    And the dots beside the Panel title "Chat with me" are a row at most 8px tall, longer than 4 dots
+    And the dots beside the Panel title "Chat with me" start 4% in from the Panel's left border
     And the dots beside the Panel title "Chat with me" end 16px before the title
     And the dots beside the Panel title "Chat with me" are centred on the title's height
-    And the dots beside the Panel title "Chat with me" stay inside the Panel
     And the dots beside the Panel title "Chat with me" are moving
 
     Examples:
       | width | height |
       | 375   | 667    |
       | 320   | 568    |
+      | 700   | 800    |
 
   Scenario: No line crosses a title
     Given the window is 1280 by 800

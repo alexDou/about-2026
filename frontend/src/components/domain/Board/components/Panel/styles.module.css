@@ -104,21 +104,32 @@
 }
 
 /*
- * Phone: as in the pen, the dots stand left of the title, centred on it, with padding before it.
- * A short row (four dots) that slides in from the left; no full-width row above the title.
+ * Phone: as in the pen, the dots stand at the Panel's left border, before the title, on the
+ * title's height. The title becomes three columns, `1fr auto 1fr`: the text stays centred in the
+ * middle one, and the dots (the first grid item) fill the first one, from 4% in to a gap before the
+ * text, so they are as long as the space allows.
  */
-@media (max-width: 640px) {
+@media (width < 840px) {
   .panel {
     --dots-side-gap: 1rem;
   }
 
+  .content {
+    width: 100%;
+    margin-top: 0;
+  }
+
+  .title {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  }
+
   .title::before {
-    top: calc(50% - var(--dots-size) / 2);
-    right: 100%;
-    bottom: auto;
-    left: auto;
-    width: calc(4 * var(--dots-pitch));
-    margin: 0 var(--dots-side-gap) 0 0;
+    position: static;
+    align-self: center;
+    width: auto;
+    /* 4% of the Panel (`cqw`), less the title's own 0.2em padding. */
+    margin: 0 var(--dots-side-gap) 0 calc(4cqw - 0.2em);
   }
 }
 
