@@ -42,13 +42,19 @@
   max-width: 100%;
 }
 
+/* The dots row. */
+.panel {
+  --dots-size: 4px;
+  --dots-pitch: 12px;
+}
+
 .title {
   position: relative;
   display: block;
   /* The trailing letter-space would pull the word off-centre. */
-  padding: 0.25rem 0 0.25rem 0.2em;
+  padding: 0 0 0 0.2em;
   color: inherit;
-  font-size: 1.5rem;
+  font-size: 1rem;
   font-weight: 300;
   letter-spacing: 0.2em;
   text-align: center;
@@ -57,15 +63,26 @@
   text-wrap: balance;
 }
 
-/* The pen's line: slides in from the left on hover and focus. */
+/*
+ * A row of dots above the title, the Panel's full width: it slides in from the left on hover and
+ * focus. Its bottom edge sits `--label-gap` (tokens.css) above the title, as the Sublabel sits below it.
+ */
 .title::before {
   content: "";
   position: absolute;
-  top: 50%;
-  left: 0;
-  width: 70px;
-  height: 2px;
-  background: currentColor;
+  bottom: 100%;
+  left: 50%;
+  width: 100cqw;
+  height: var(--dots-size);
+  /* Centred on the title, which is centred in the Panel: so it reaches both Panel edges. */
+  margin: 0 0 var(--label-gap) -50cqw;
+  background-image: radial-gradient(
+    circle,
+    currentColor calc(var(--dots-size) / 2 - 0.5px),
+    transparent calc(var(--dots-size) / 2)
+  );
+  background-repeat: repeat-x;
+  background-size: var(--dots-pitch) var(--dots-size);
   opacity: 0;
   transform: translateX(-100%);
   transition:
@@ -77,18 +94,67 @@
 .title:focus-visible::before {
   opacity: 1;
   transform: translateX(0);
+  animation: drift 2s linear infinite;
 }
 
-/* Narrow desktop: five columns can be as narrow as 128px, and a word cannot wrap. */
-@media (min-width: 641px) and (max-width: 760px) {
-  .title {
-    padding-left: 0.1em;
-    letter-spacing: 0.1em;
+@keyframes drift {
+  to {
+    background-position-x: var(--dots-pitch);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .title::before {
     transition: none;
+  }
+
+  .title:hover::before,
+  .title:focus-visible::before {
+    animation: none;
+  }
+}
+
+/* The Board's unfold: this Panel's turn, then its title (and Sublabel) fade in. */
+@media (prefers-reduced-motion: no-preference) {
+  .entering {
+    --position: 0;
+
+    transform-origin: 0 0;
+    animation: unfold var(--enter-panel) var(--enter-ease) backwards;
+    animation-delay: calc(var(--position) * var(--enter-stagger));
+  }
+
+  .entering:nth-child(2) {
+    --position: 1;
+  }
+
+  .entering:nth-child(3) {
+    --position: 2;
+  }
+
+  .entering:nth-child(4) {
+    --position: 3;
+  }
+
+  .entering:nth-child(5) {
+    --position: 4;
+  }
+
+  .entering .content {
+    animation: fade-in var(--enter-title) linear backwards;
+    animation-delay: var(--enter-title-delay);
+  }
+}
+
+@keyframes unfold {
+  from {
+    opacity: 0;
+    transform: perspective(2000px) rotateY(-180deg);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
   }
 }

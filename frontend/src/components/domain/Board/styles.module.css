@@ -1,5 +1,5 @@
-/* Full screen height, never shorter than 32rem. The Panels share the Board evenly. */
 .board {
+  /* Full screen height, never shorter than 32rem. The Panels share the Board evenly. */
   height: 100dvh;
   min-height: 32rem;
 }
@@ -24,5 +24,22 @@
     grid-auto-flow: row;
     grid-auto-columns: auto;
     grid-auto-rows: minmax(0, 1fr);
+  }
+}
+
+/*
+ * The unfold of the pen (timings: `--enter-*` in tokens.css), on the Landing → Board logo click only: the Board slides in, the Panels
+ * unfold one after another, then the titles fade in (see `.entering` in Panel).
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .entrance {
+    animation: slide-in var(--enter-board) var(--enter-ease) backwards;
+  }
+}
+
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
   }
 }

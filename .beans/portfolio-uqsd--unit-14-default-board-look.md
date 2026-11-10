@@ -7,7 +7,7 @@ priority: normal
 tags:
     - ready-for-agent
 created_at: 2026-11-09T10:30:50Z
-updated_at: 2026-11-10T08:32:14Z
+updated_at: 2026-11-10T09:11:52Z
 parent: portfolio-m9gt
 blocked_by:
     - portfolio-dbxq
@@ -27,11 +27,14 @@ portfolio-m9gt (Unit 1: Board). Design: the Unit 1 section of `docs_src/specs/un
 - [x] Unit and integration tests written first and red, then green (TDD, per the rules)
 - [x] Panel and Sublabel components inside the Board chunk. The tone is a prop, switched as a class with `classnames`; each Panel's tone is its position.
 - [x] Text colours from the palette: `#d1dcd9` on About, `#25363a` on the other four.
-- [x] Titles in the pen's style (uppercase, wide letter-spacing, the line that slides in on hover and focus), at least 1.5rem, Overused Grotesk, centred on both axes by layout. In the default state only the title is clickable.
+- [x] Titles in the pen's style (uppercase, wide letter-spacing), 1rem (the pen: 0.9rem), Overused Grotesk, centred on both axes by layout. In the default state only the title is clickable.
 - [x] A Sublabel renders only for Panels whose Sublabel message exists (What I do, Chat with me).
 - [x] Desktop: columns share the width evenly at full screen height; the Board is at least 32rem tall.
 - [x] Mobile (≤ 640px wide): rows share the height evenly; the Board is at least 420px tall; rows stay readable at ≤ 550px wide (the pen's flaw).
 - [x] Checked in the browser at about 1280×800, 375×667 and 360px wide.
+- [x] Round 2 (user feedback): the title is 1rem, not 1.5rem. The spec, `docs_src/specs/units.md`, says 1rem too.
+- [x] Round 2: no line crosses the title. On hover and focus a row of moving dots (like `support_files/moving-dots`, CSS only) slides in above the title, the full Panel width and just tall enough for the dots, as far above the title as the Sublabel is below it (one shared gap).
+- [x] Round 2: the Board's gentle unfold from the pen plays when the Visitor goes Landing → Board with the logo click (Board slides in 300ms, Panels follow 150ms apart, titles fade in 140ms), and not on a direct visit, a reload or Back/Forward. Reduced motion: instant.
 - [x] `scripts/verify.sh` GREEN
 
 ## Blocked by
@@ -46,3 +49,11 @@ portfolio-m9gt (Unit 1: Board). Design: the Unit 1 section of `docs_src/specs/un
 - Layout: desktop equal-width full-height columns (Board min 32rem), mobile (<= 640px) equal-height rows (Board min 420px, 84px per row at least).
 - Review findings fixed: "CONTACT" clipped at 641-700px (tighter letter-spacing there), the Sublabel overflowed narrow columns and the shortest rows (capped to the Panel width via `cqw`, less title padding), removed a test-only `data-tone`.
 - E2E `board-look.feature` (28 scenarios in total): computed colours, title style, Sublabels, layouts at 1280x800, 375x667, 360x640, 320x568, short windows, 641px, hover/focus line. Screenshots checked at 1280x800, 375 and 360 wide.
+
+## Summary of Changes (round 2, user feedback)
+
+- Titles are 1rem (was 1.5rem; the pen: 0.9rem). The narrow-desktop letter-spacing workaround is gone, it is not needed at 1rem. `units.md` and this bean say 1rem.
+- The line that crossed the title is replaced by a row of moving dots (CSS only, a tiled radial gradient drifting sideways, after `support_files/moving-dots`): the Panel's full width, 4px tall, above the title. Its distance to the title and the Sublabel's distance below it are one token, `--label-gap`. It slides in on hover and `:focus-visible`; with reduced motion it stays still.
+- The pen's unfold plays on the Landing → Board logo click only: the Board slides in (300ms), the Panels unfold 150ms apart (perspective, rotateY -180deg to 0, 950ms), then the titles and Sublabels fade in (140ms). The Board reads `userTriggered` once at mount, so a direct visit, a reload and Back/Forward do not play it. Reduced motion: instant. Timings are `--enter-*` tokens in `tokens.css` (checked by `tokens.test.ts`).
+- Trap found: Lightning CSS hashes custom property names per CSS module, so a property defined in one `.module.css` is invisible in another. Shared ones live in `tokens.css`. It also lowers `translate` into `transform`, which a later `transform` overrides: the dots row is centred with margins instead.
+- Tests: App (entrance by route), Panel (`entering`), tokens, and E2E (1rem titles, dots position, size, gap, movement, no-line-across, entrance on logo click, none on direct visit or Forward, reduced motion): 33 scenarios.

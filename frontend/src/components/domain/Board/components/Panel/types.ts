@@ -6,4 +6,6 @@ export type PanelTone = "ink" | "mist" | "teal" | "blue" | "green";
 export type PanelProps = {
   panel: PanelId;
   tone: PanelTone;
+  /** Plays the Board's entrance: set only when the Visitor's logo click opened the Board. */
+  entering: boolean;
 };

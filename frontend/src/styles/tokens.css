@@ -17,5 +17,16 @@
   --text-on-dark: var(--panel-what-i-do);
   --text-on-light: var(--panel-about);
 
+  /* A Panel's dots row and Sublabel hang this far above and below its title. */
+  --label-gap: 0.5rem;
+
+  /* The Board's entrance, the unfold of the pen. Titles wait for the last of the five Panels. */
+  --enter-board: 300ms;
+  --enter-stagger: 150ms;
+  --enter-panel: 950ms;
+  --enter-title: 140ms;
+  --enter-title-delay: calc(4 * var(--enter-stagger) + var(--enter-panel) + 10ms);
+  --enter-ease: cubic-bezier(0.37, 0, 0.63, 1);
+
   --font-site: "Overused Grotesk", system-ui, sans-serif;
 }
