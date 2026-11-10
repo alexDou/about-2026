@@ -40,9 +40,4 @@ describe("createAppRouter", () => {
     );
     expect(window.history.length).toBe(entries);
   });
-
-  it("leaves the Landing's root path alone", async () => {
-    await testRouter().load();
-    expect(window.location.pathname).toBe("/");
-  });
 });

@@ -13,7 +13,7 @@ Unit 1.3 built its own route hook over the History API, for three reasons: the r
 ## Consequences
 
 - The binding is 0.x and pins `@tanstack/router-core` exactly. Upgrades are deliberate, one bean each.
-- `router-core` is larger than the hook it replaces. Measured on the migration (`pnpm --dir frontend build`, `main.js` gzip -9): 73,112 B before, 127,155 B after (+54,043 B, +74%). `main.css` is unchanged (3,194 B). The binding is not tree-shaken to what the site uses (the source map lists 45 modules from `@tanstack/router-core` and the binding).
+- `router-core` is larger than the hook it replaces. Measured on the migration (`pnpm --dir frontend build`, `main.js` gzip -9): 73,112 B before, 127,292 B after (+54,180 B, +74%). `main.css` is unchanged (3,194 B). The binding is not tree-shaken to what the site uses (the source map lists 45 modules from `@tanstack/router-core` and the binding).
 - The binding ships TypeScript source. The bundler's Oxc rule includes it, and the type check had to drop `erasableSyntaxOnly` because the binding uses a parameter property.
 - A trailing slash is not canonicalised by the router (it treats `/explore/` and `/explore` as one URL), so `createAppRouter` replaces it before the router starts.
 - Revisit this decision if the binding is abandoned or the bundle cost proves too high for the Landing's first paint.

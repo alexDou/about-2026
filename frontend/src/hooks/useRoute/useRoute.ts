@@ -16,6 +16,7 @@ export function useRoute(): UseRoute {
   });
 
   function navigate(target: BoardState) {
+    // Not awaited: the router reports a failed navigation in its own state, not by rejecting.
     void router.navigate({ to: pathOf(target) });
   }
 
