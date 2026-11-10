@@ -7,7 +7,7 @@ priority: normal
 tags:
     - ready-for-agent
 created_at: 2026-11-09T10:30:50Z
-updated_at: 2026-11-10T09:11:52Z
+updated_at: 2026-11-10T10:25:09Z
 parent: portfolio-m9gt
 blocked_by:
     - portfolio-dbxq
@@ -57,3 +57,10 @@ portfolio-m9gt (Unit 1: Board). Design: the Unit 1 section of `docs_src/specs/un
 - The pen's unfold plays on the Landing → Board logo click only: the Board slides in (300ms), the Panels unfold 150ms apart (perspective, rotateY -180deg to 0, 950ms), then the titles and Sublabels fade in (140ms). The Board reads `userTriggered` once at mount, so a direct visit, a reload and Back/Forward do not play it. Reduced motion: instant. Timings are `--enter-*` tokens in `tokens.css` (checked by `tokens.test.ts`).
 - Trap found: Lightning CSS hashes custom property names per CSS module, so a property defined in one `.module.css` is invisible in another. Shared ones live in `tokens.css`. It also lowers `translate` into `transform`, which a later `transform` overrides: the dots row is centred with margins instead.
 - Tests: App (entrance by route), Panel (`entering`), tokens, and E2E (1rem titles, dots position, size, gap, movement, no-line-across, entrance on logo click, none on direct visit or Forward, reduced motion): 33 scenarios.
+
+## Summary of Changes (round 3, user feedback)
+
+- The small jump at the end of the unfold: the Panels swing in 3D with perspective, which projects them past the window (863px tall in an 800px window). Transforms count as scrollable overflow, so the page grew a vertical scrollbar for the unfold and lost it when the animation ended: the Board shrank 15px, then jumped back (the title moved 1.5px, the columns 15px). The pen does not have it because its overlay is `position: fixed`. Fix: the Board clips overflow for exactly the length of the entrance (`clip-overflow` animation over `--enter-total`), so later states stay unclipped. Found by sampling `scrollHeight`, `clientWidth` and the title position each frame; E2E now checks the page never grows during the unfold (desktop and phone).
+- Kept the Owner's hand-tuned CSS: dots row 96% wide (2% inset each side), `--label-gap` 1.2rem. Tests follow. At 1.2rem the Sublabel no longer fit the 84px rows of the shortest phone windows, so below 460px tall the gap is 0.5rem again.
+- The tokens test reads only the first `:root` block (the defaults).
+- The wordmark removal is its own bean, portfolio-c1qs.

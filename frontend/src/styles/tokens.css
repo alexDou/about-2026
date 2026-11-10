@@ -18,7 +18,7 @@
   --text-on-light: var(--panel-about);
 
   /* A Panel's dots row and Sublabel hang this far above and below its title. */
-  --label-gap: 0.5rem;
+  --label-gap: 1.2rem;
 
   /* The Board's entrance, the unfold of the pen. Titles wait for the last of the five Panels. */
   --enter-board: 300ms;
@@ -26,7 +26,15 @@
   --enter-panel: 950ms;
   --enter-title: 140ms;
   --enter-title-delay: calc(4 * var(--enter-stagger) + var(--enter-panel) + 10ms);
+  --enter-total: calc(var(--enter-title-delay) + var(--enter-title));
   --enter-ease: cubic-bezier(0.37, 0, 0.63, 1);
 
   --font-site: "Overused Grotesk", system-ui, sans-serif;
+}
+
+/* A phone window as short as the Board's 420px minimum leaves rows of 84px: keep the Sublabel in. */
+@media (max-width: 640px) and (max-height: 460px) {
+  :root {
+    --label-gap: 0.5rem;
+  }
 }

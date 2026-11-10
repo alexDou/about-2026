@@ -72,10 +72,10 @@
   position: absolute;
   bottom: 100%;
   left: 50%;
-  width: 100cqw;
+  width: 96cqw;
   height: var(--dots-size);
   /* Centred on the title, which is centred in the Panel: so it reaches both Panel edges. */
-  margin: 0 0 var(--label-gap) -50cqw;
+  margin: 0 0 var(--label-gap) -48cqw;
   background-image: radial-gradient(
     circle,
     currentColor calc(var(--dots-size) / 2 - 0.5px),

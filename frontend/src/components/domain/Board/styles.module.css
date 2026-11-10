@@ -33,7 +33,23 @@
  */
 @media (prefers-reduced-motion: no-preference) {
   .entrance {
-    animation: slide-in var(--enter-board) var(--enter-ease) backwards;
+    animation:
+      slide-in var(--enter-board) var(--enter-ease) backwards,
+      clip-overflow var(--enter-total) step-end;
+  }
+}
+
+/*
+ * The Panels swing in 3D, and perspective throws their projection past the window (863px tall in
+ * an 800px one). Transforms count as scrollable overflow, so the page would grow a scrollbar for
+ * the unfold and lose it at the end: the Board would shrink 15px, then jump back. The pen has no
+ * such jump, its overlay is fixed. Clipping for exactly as long as the entrance plays fixes it
+ * without clipping later states, which may be taller than the window.
+ */
+@keyframes clip-overflow {
+  from,
+  to {
+    overflow: clip;
   }
 }
 

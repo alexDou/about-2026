@@ -159,14 +159,14 @@ Then(
 );
 
 Then(
-  "the dots above the Panel title {string} span the Panel and are at most {int}px tall",
+  "the dots above the Panel title {string} span the Panel, inset by 2% each side, and are at most {int}px tall",
   async function (this: PortfolioWorld, name: string, max: number) {
     const row = await dots(title(this, name));
     const box = (await panel(this, name).boundingBox())!;
-    close(row.width, box.width);
-    // Left edge = title's left + `left` + margin: the Panel's left edge. Slid in: no transform left.
+    close(row.width, box.width * 0.96);
+    // Left edge = title's left + `left` + margin: the Panel's left edge plus its 2% inset. Slid in: no transform left.
     const titleBox = (await title(this, name).boundingBox())!;
-    close(titleBox.x + row.left + row.marginLeft, box.x);
+    close(titleBox.x + row.left + row.marginLeft, box.x + box.width * 0.02);
     expect(["none", "matrix(1, 0, 0, 1, 0, 0)"]).toContain(row.transform);
     expect(row.height).toBeGreaterThan(0);
     expect(row.height).toBeLessThanOrEqual(max);
@@ -210,6 +210,33 @@ const titleOpacities = (world: PortfolioWorld) =>
     .evaluateAll((links) =>
       links.map((el) => parseFloat(getComputedStyle(el.parentElement!).opacity)),
     );
+
+/**
+ * The Panels' 3D unfold reaches past the window while it plays. If the page could scroll then, a
+ * scrollbar would appear and vanish, and the whole Board would jump by its width.
+ */
+Given("I watch the page size", async function (this: PortfolioWorld) {
+  await this.page.evaluate(() => {
+    const watch = window as unknown as { overflow: number };
+    watch.overflow = 0;
+    const tick = () => {
+      const page = document.documentElement;
+      watch.overflow = Math.max(
+        watch.overflow,
+        page.scrollHeight - page.clientHeight,
+        page.scrollWidth - page.clientWidth,
+      );
+      requestAnimationFrame(tick);
+    };
+    tick();
+  });
+});
+
+Then("the page never grew beyond the window", async function (this: PortfolioWorld) {
+  expect(await this.page.evaluate(() => (window as unknown as { overflow: number }).overflow)).toBe(
+    0,
+  );
+});
 
 Given("the visitor prefers reduced motion", async function (this: PortfolioWorld) {
   await this.page.emulateMedia({ reducedMotion: "reduce" });
