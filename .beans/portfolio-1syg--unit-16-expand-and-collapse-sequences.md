@@ -27,7 +27,7 @@ Every Board state change animates as designed, whatever caused it (click, direct
 - [x] Unit and integration tests written first and red, then green (TDD, per the rules). The sequencing logic (step order, scroll skipped at the top, clicks ignored mid-sequence, drop on Back/Forward, reduced motion) is tested without depending on real timers.
 - [x] One stable slot per Panel; only the slot's size animates, and the Panel, Stripe and Expanded panel views fade into each other inside it.
 - [x] Desktop opening: the other Panels' content fades out (120ms), the widths animate (500ms, ease-in-out), then the Stripes fade in (400ms) while the Expanded panel's content fades in (150ms). Closing runs the same steps backwards.
-- [x] Desktop switching: smooth scroll to the top (skipped when already there; the next step waits for the scroll to end), then close, then open.
+- [x] Desktop switching: smooth scroll to the top (skipped when already there; the next step waits for the scroll to end), then one step like mobile (revised after a visual check: no fade-out and fade-in between two Expanded panels, only the widths animate).
 - [x] Mobile: no fade-out and no closing step. The other rows shrink to Stripes and the chosen one expands; switching scrolls smoothly to the top first.
 - [x] CSS only: the durations are CSS custom properties kept in one place, and the steps chain on `transitionend`.
 - [x] Clicks are ignored while a sequence runs. A Back/Forward during a sequence drops it; decide here what the new state plays, without tracking the cause of the change or what was open before.
@@ -42,7 +42,7 @@ Every Board state change animates as designed, whatever caused it (click, direct
 
 ## Decisions
 
-- Stages, not timers: the Board is a tree of stages (`useBoardSequence/sequence.ts`, pure planner + reducer). Desktop open = Panels fade out, slots resize, Stripes and page fade in; close backwards; switch = scroll to top (if scrolled), close, open, **without** the Panels fading in only to fade out (that pair cancels). Mobile plays the target stage in one step.
+- Stages, not timers: the Board is a tree of stages (`useBoardSequence/sequence.ts`, pure planner + reducer). Desktop open = Panels fade out, slots resize, Stripes and page fade in; close backwards; switch = scroll to top (if scrolled), then one step with the views kept and only the widths animating (like mobile; a first version closed and reopened, which a visual check showed as a redundant fade). Mobile plays the target stage in one step.
 - Back/Forward (any route change) mid-sequence: the stages still to play are dropped and the planner walks from the stage on screen to the new route's stage. No cause tracking, no memory of what was open.
 - A direct visit/reload of an Expanded panel shows it at once (the Board entrance still plays); only route changes while the Board is mounted play stages.
 - A stage ends when `getAnimations()` reports no running transition on `data-seq` elements, re-checked on `transitionend`/`transitioncancel`. Zero transitions (reduced motion) = instant. Safari without `scrollend`: the scroll-to-top wait falls back to a rAF check for a page that stops moving.
