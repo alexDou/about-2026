@@ -31,7 +31,7 @@
 }
 
 .logo {
-  /* Default palette (tuned in logo/). */
+  /* Default palette (tuned in support_files/logo/). */
   --ring-1: #5ddccb;
   --ring-2: #69baf8;
   --ring-3: #9bf8b8;

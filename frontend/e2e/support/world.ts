@@ -22,6 +22,7 @@ export class PortfolioWorld extends World {
   context!: BrowserContext;
   page!: Page;
   consoleMessages: string[] = [];
+  fetchedText = "";
 
   url(path = "/"): string {
     return new URL(path, baseUrl).href;

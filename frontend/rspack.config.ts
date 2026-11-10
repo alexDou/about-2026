@@ -1,6 +1,10 @@
 import { OctaneRspackPlugin } from "@octanejs/rspack-plugin";
 import { defineConfig } from "@rspack/cli";
-import { HtmlRspackPlugin, LightningCssMinimizerRspackPlugin } from "@rspack/core";
+import {
+  CopyRspackPlugin,
+  HtmlRspackPlugin,
+  LightningCssMinimizerRspackPlugin,
+} from "@rspack/core";
 import { OxcMinifyRspackPlugin } from "./tools/oxc-minify-plugin.mjs";
 
 // Toolchain: Octane compiler (@tsrx/oxc) -> Oxc TS stripping (tools/oxc-loader.mjs) -> Rspack.
@@ -31,7 +35,7 @@ export default defineConfig((_env, argv) => {
           use: [{ loader: "./tools/oxc-loader.mjs", options: { target: "es2023" } }],
         },
         { test: /\.css$/i, type: "css/auto" },
-        { test: /\.svg$/i, type: "asset/resource" },
+        { test: /\.(?:svg|woff2)$/i, type: "asset/resource" },
       ],
       parser: {
         "css/auto": { namedExports: false },
@@ -46,6 +50,14 @@ export default defineConfig((_env, argv) => {
     plugins: [
       new OctaneRspackPlugin({ transpile: false }),
       new HtmlRspackPlugin({ template: "./index.html" }),
+      // public/ (robots.txt) is served from the site root.
+      new CopyRspackPlugin({
+        patterns: [
+          { from: "public" },
+          // The font is bundled, so its OFL license travels with it.
+          { from: "src/styles/media/OFL.txt", to: "licenses/OverusedGrotesk-OFL.txt" },
+        ],
+      }),
     ],
     devServer: {
       port: 5173,

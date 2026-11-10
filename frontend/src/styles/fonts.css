@@ -1,0 +1,8 @@
+/* License: media/OFL.txt (shipped to /licenses/ by rspack.config.ts). */
+@font-face {
+  font-family: "Overused Grotesk";
+  src: url("./media/OverusedGrotesk-VF.woff2") format("woff2");
+  font-weight: 200 900;
+  font-style: normal;
+  font-display: swap;
+}
