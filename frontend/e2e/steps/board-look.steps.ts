@@ -297,8 +297,15 @@ Then(
   },
 );
 
+/** Whether an entrance animation plays. The Panels' endless dot drift is not one. */
 const animating = (world: PortfolioWorld) =>
-  world.page.evaluate(() => document.getAnimations().some((a) => a.playState === "running"));
+  world.page.evaluate(() =>
+    document
+      .getAnimations()
+      .some(
+        (a) => a.playState === "running" && a.effect?.getComputedTiming().iterations !== Infinity,
+      ),
+  );
 
 /** What fades a title in is the wrapper around it and its Sublabel. */
 const titleOpacities = (world: PortfolioWorld) =>
@@ -337,6 +344,10 @@ Then("the page never grew beyond the window", async function (this: PortfolioWor
 
 Given("the visitor prefers reduced motion", async function (this: PortfolioWorld) {
   await this.page.emulateMedia({ reducedMotion: "reduce" });
+});
+
+Given("the visitor accepts motion", async function (this: PortfolioWorld) {
+  await this.page.emulateMedia({ reducedMotion: "no-preference" });
 });
 
 Then("the Board is unfolding", async function (this: PortfolioWorld) {

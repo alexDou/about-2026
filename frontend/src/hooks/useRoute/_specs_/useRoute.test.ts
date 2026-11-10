@@ -1,69 +1,62 @@
 import { act, renderHook } from "@octanejs/testing-library";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { useRoute } from "..";
+import { DEFAULT_BOARD, expandedBoard, routerWrapper, testRouter, useRoute } from "..";
 
-/** Puts the address bar at `path` and tells the hook, as Back/Forward does. */
-function arriveAt(path: string) {
-  act(() => {
-    window.history.replaceState(null, "", path);
-    window.dispatchEvent(new PopStateEvent("popstate"));
-  });
+const about = expandedBoard("about");
+
+/** A router at `path`, loaded, with a `useRoute()` under it. */
+async function hookAt(path: string) {
+  window.history.replaceState(null, "", path);
+  const router = testRouter();
+  await router.load();
+  return { router, ...renderHook(() => useRoute(), { wrapper: routerWrapper(undefined, router) }) };
 }
 
 describe("useRoute", () => {
-  beforeEach(() => arriveAt("/"));
-  afterEach(() => arriveAt("/"));
+  beforeEach(() => window.history.replaceState(null, "", "/"));
+  afterEach(() => window.history.replaceState(null, "", "/"));
 
-  it("reads the route from the URL", () => {
-    arriveAt("/skills");
-    const { result } = renderHook(() => useRoute());
-    expect(result.current.route).toEqual({
-      screen: "board",
-      board: { kind: "expanded", panel: "skills" },
-    });
+  it.each([
+    ["/", DEFAULT_BOARD],
+    ["/explore", DEFAULT_BOARD],
+    ["/about", { kind: "expanded", panel: "about" }],
+    ["/what-i-do", { kind: "expanded", panel: "whatIDo" }],
+    ["/skills", { kind: "expanded", panel: "skills" }],
+    ["/chat", { kind: "expanded", panel: "chatWithMe" }],
+    ["/contact", { kind: "expanded", panel: "contact" }],
+  ])("reads the Board state of %s from the matched route", async (path, expected) => {
+    const { result } = await hookAt(path);
+    expect(result.current.board).toEqual(expected);
   });
 
-  it("shares one route between every user of the hook", () => {
-    const first = renderHook(() => useRoute());
-    const second = renderHook(() => useRoute());
-    act(() => first.result.current.navigate({ screen: "board", board: { kind: "default" } }));
-    expect(second.result.current.route).toEqual({ screen: "board", board: { kind: "default" } });
-  });
-
-  it("marks a navigate() as user-triggered and the next Back/Forward as not", () => {
-    const { result } = renderHook(() => useRoute());
-    expect(result.current.userTriggered).toBe(false);
-    act(() => result.current.navigate({ screen: "board", board: { kind: "default" } }));
-    expect(result.current.userTriggered).toBe(true);
-    arriveAt("/");
-    expect(result.current.userTriggered).toBe(false);
-    expect(result.current.route).toEqual({ screen: "landing" });
+  it("follows navigate(), as a new history entry", async () => {
+    const { result } = await hookAt("/");
+    const entries = window.history.length;
+    await act(() => result.current.navigate(DEFAULT_BOARD));
+    expect(result.current.board).toEqual(DEFAULT_BOARD);
+    expect(window.location.pathname).toBe("/explore");
+    expect(window.history.length).toBe(entries + 1);
   });
 
   describe("link()", () => {
-    const aboutRoute = {
-      screen: "board",
-      board: { kind: "expanded", panel: "about" },
-    } as const;
-
-    it("gives the real URL for the browser's own handling", () => {
-      const { result } = renderHook(() => useRoute());
-      expect(result.current.link(aboutRoute).href).toBe("/about");
+    it("gives the real URL for the browser's own handling", async () => {
+      const { result } = await hookAt("/");
+      expect(result.current.link(about).href).toBe("/about");
     });
 
-    it("handles a plain click in the app, without a reload", () => {
-      const { result } = renderHook(() => useRoute());
+    it("handles a plain click in the app, without a reload", async () => {
+      const { result } = await hookAt("/");
       const event = new MouseEvent("click", { button: 0, cancelable: true });
-      act(() => result.current.link(aboutRoute).onClick(event));
+      await act(() => result.current.link(about).onClick(event));
       expect(event.defaultPrevented).toBe(true);
       expect(window.location.pathname).toBe("/about");
-      expect(result.current.userTriggered).toBe(true);
+      expect(result.current.board).toEqual(about);
     });
 
-    it("leaves a modified click to the browser (new tab)", () => {
-      const { result } = renderHook(() => useRoute());
+    it("leaves a modified click to the browser (new tab)", async () => {
+      const { result } = await hookAt("/");
       const event = new MouseEvent("click", { button: 0, ctrlKey: true, cancelable: true });
-      act(() => result.current.link(aboutRoute).onClick(event));
+      await act(() => result.current.link(about).onClick(event));
       expect(event.defaultPrevented).toBe(false);
       expect(window.location.pathname).toBe("/");
     });

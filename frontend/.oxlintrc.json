@@ -5,6 +5,7 @@
     "suspicious": "warn"
   },
   "rules": {
+    "typescript/parameter-properties": "error",
     "react/react-in-jsx-scope": "off",
     "react/forbid-dom-props": [
       "error",

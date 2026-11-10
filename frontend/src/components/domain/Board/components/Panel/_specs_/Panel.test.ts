@@ -1,7 +1,7 @@
 import { render, screen } from "@octanejs/testing-library";
 import { beforeEach, describe, expect, it } from "vitest";
 import { enMessages, intlWrapper } from "../../../../../../i18n";
-import { PANEL_IDS } from "../../../../../../hooks/useRoute";
+import { PANEL_IDS, routerWrapper } from "../../../../../../hooks/useRoute";
 import { SUBLABEL_BY_PANEL } from "../config";
 import { Panel } from "../Panel.tsrx";
 
@@ -11,7 +11,7 @@ describe("Panel", () => {
   it("is a list item with its title as a link to its URL", () => {
     render(Panel, {
       props: { panel: "skills", tone: "teal", entering: false },
-      wrapper: intlWrapper(),
+      wrapper: routerWrapper(intlWrapper()),
     });
     expect(screen.getByRole("listitem")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Skills" })).toHaveAttribute("href", "/skills");
@@ -20,7 +20,7 @@ describe("Panel", () => {
   it("switches its tone as a class", () => {
     render(Panel, {
       props: { panel: "skills", tone: "teal", entering: false },
-      wrapper: intlWrapper(),
+      wrapper: routerWrapper(intlWrapper()),
     });
     expect(screen.getByRole("listitem")).toHaveClass("teal");
     expect(screen.getByRole("listitem")).not.toHaveClass("ink");
@@ -32,7 +32,7 @@ describe("Panel", () => {
   ])("entering=%s: it %s the Board's entrance", (entering) => {
     render(Panel, {
       props: { panel: "skills", tone: "teal", entering },
-      wrapper: intlWrapper(),
+      wrapper: routerWrapper(intlWrapper()),
     });
     expect(screen.getByRole("listitem").classList.contains("entering")).toBe(entering);
   });
@@ -40,7 +40,7 @@ describe("Panel", () => {
   it("shows a Sublabel where its message exists, outside the link", () => {
     render(Panel, {
       props: { panel: "whatIDo", tone: "mist", entering: false },
-      wrapper: intlWrapper(),
+      wrapper: routerWrapper(intlWrapper()),
     });
     expect(screen.getByText("36 Takeovers")).toBeInTheDocument();
     expect(screen.getByRole("link")).toHaveAccessibleName("What I do");
@@ -50,7 +50,7 @@ describe("Panel", () => {
   it("shows no Sublabel where there is no message", () => {
     render(Panel, {
       props: { panel: "about", tone: "ink", entering: false },
-      wrapper: intlWrapper(),
+      wrapper: routerWrapper(intlWrapper()),
     });
     expect(screen.getByRole("listitem")).toHaveTextContent(/^About$/);
   });
@@ -58,7 +58,7 @@ describe("Panel", () => {
   it("takes the Sublabel from the messages", () => {
     render(Panel, {
       props: { panel: "chatWithMe", tone: "blue", entering: false },
-      wrapper: intlWrapper({ "board.panel.chatWithMe.sublabel": "KI-Agent" }),
+      wrapper: routerWrapper(intlWrapper({ "board.panel.chatWithMe.sublabel": "KI-Agent" })),
     });
     expect(screen.getByText("KI-Agent")).toBeInTheDocument();
   });

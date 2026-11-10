@@ -1,6 +1,7 @@
-import { fireEvent, render, screen } from "@octanejs/testing-library";
+import { fireEvent, render, screen, waitFor } from "@octanejs/testing-library";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { intlWrapper } from "../../../i18n";
+import { routerWrapper } from "../../../hooks/useRoute";
 import { LandingPage } from ".././LandingPage.tsrx";
 
 describe("LandingPage", () => {
@@ -20,7 +21,7 @@ describe("LandingPage", () => {
   });
 
   it("names the logo, the status badge and the document in English", () => {
-    render(LandingPage, { props: {}, wrapper: intlWrapper() });
+    render(LandingPage, { props: {}, wrapper: routerWrapper(intlWrapper()) });
     expect(screen.getByRole("button", { name: "Portfolio A.Durnev" })).toBeInTheDocument();
     expect(screen.getByText("API: checking")).toBeInTheDocument();
     expect(document.title).toBe("A.Durnev portfolio");
@@ -29,27 +30,29 @@ describe("LandingPage", () => {
   it("takes all its text from the messages", () => {
     render(LandingPage, {
       props: {},
-      wrapper: intlWrapper({
-        "site.title": "Site title",
-        "landing.logo.label": "Logo label",
-        "landing.status.checking": "Badge text",
-      }),
+      wrapper: routerWrapper(
+        intlWrapper({
+          "site.title": "Site title",
+          "landing.logo.label": "Logo label",
+          "landing.status.checking": "Badge text",
+        }),
+      ),
     });
     expect(screen.getByRole("button", { name: "Logo label" })).toBeInTheDocument();
     expect(screen.getByText("Badge text")).toBeInTheDocument();
     expect(document.title).toBe("Site title");
   });
 
-  it("opens the Board as a new history entry when the logo is clicked", () => {
+  it("opens the Board as a new history entry when the logo is clicked", async () => {
     const entries = window.history.length;
-    render(LandingPage, { props: {}, wrapper: intlWrapper() });
+    render(LandingPage, { props: {}, wrapper: routerWrapper(intlWrapper()) });
     fireEvent.click(screen.getByRole("button", { name: "Portfolio A.Durnev" }));
-    expect(window.location.pathname).toBe("/explore");
+    await waitFor(() => expect(window.location.pathname).toBe("/explore"));
     expect(window.history.length).toBe(entries + 1);
   });
 
   it("gives the static title back when it goes away", () => {
-    const { unmount } = render(LandingPage, { props: {}, wrapper: intlWrapper() });
+    const { unmount } = render(LandingPage, { props: {}, wrapper: routerWrapper(intlWrapper()) });
     unmount();
     expect(document.title).toBe("Static title");
   });

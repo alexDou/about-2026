@@ -25,8 +25,15 @@ When("the page content is {int}px tall", async function (this: PortfolioWorld, h
 });
 
 When("I scroll down {int}px", async function (this: PortfolioWorld, pixels: number) {
-  await this.page.evaluate((y) => window.scrollTo(0, y), pixels);
-  await expect.poll(() => this.page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
+  // Retried: while the Board's entrance plays the page is clipped and cannot scroll yet.
+  await expect
+    .poll(() =>
+      this.page.evaluate((y) => {
+        window.scrollTo(0, y);
+        return window.scrollY;
+      }, pixels),
+    )
+    .toBeGreaterThan(0);
 });
 
 Then("the page heading reads {string}", async function (this: PortfolioWorld, text: string) {

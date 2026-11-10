@@ -1,3 +1,9 @@
+/** The Landing's URL. */
+export const LANDING_PATH = "/";
+
+/** The URL of the Board with no Panel open. */
+export const BOARD_PATH = "/explore";
+
 /** The Board's Panels, in Board order. */
 export const PANEL_IDS = ["about", "whatIDo", "skills", "chatWithMe", "contact"] as const;
 

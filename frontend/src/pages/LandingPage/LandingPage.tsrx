@@ -2,7 +2,7 @@ import { ApiStatus } from "../../components/domain/ApiStatus";
 import { AnimatedLogo } from "../../components/ui/AnimatedLogo";
 import { useDocumentTitle } from "../../hooks/useDocumentTitle";
 import { useIntl } from "../../hooks/useIntl";
-import { BOARD_ROUTE, useRoute } from "../../hooks/useRoute";
+import { DEFAULT_BOARD, useRoute } from "../../hooks/useRoute";
 import styles from "./styles.module.css";
 
 export function LandingPage() @{
@@ -14,7 +14,7 @@ export function LandingPage() @{
   <main class={styles["page"]}>
     <AnimatedLogo
       label={intl.formatMessage({ id: "landing.logo.label" })}
-      onClick={() => navigate(BOARD_ROUTE)}
+      onClick={() => navigate(DEFAULT_BOARD)}
     />
     <ApiStatus />
   </main>;

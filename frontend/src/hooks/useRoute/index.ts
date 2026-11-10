@@ -1,13 +1,8 @@
+export { Outlet, RouterProvider } from "@octanejs/tanstack-router";
+export { DEFAULT_BOARD, expandedBoard, pathOf } from "./board";
 export { PANEL_IDS } from "./config";
-export { BOARD_ROUTE, panelRoute, pathOf, resolvePath } from "./routes";
-export type {
-  BoardState,
-  PanelId,
-  ResolvedPath,
-  Route,
-  RouteLink,
-  RoutePath,
-  RouteState,
-  UseRoute,
-} from "./types";
+export { createAppRouter } from "./router";
+export type { AppRouter } from "./router";
+export { routerWrapper, testRouter } from "./testing";
+export type { PanelId } from "./types";
 export { useRoute } from "./useRoute";

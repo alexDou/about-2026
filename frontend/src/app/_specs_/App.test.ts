@@ -1,22 +1,29 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { createIntl } from "@formatjs/intl";
-import { act, fireEvent, render, screen } from "@octanejs/testing-library";
+import { act, fireEvent, render, screen, waitFor } from "@octanejs/testing-library";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { RouterProvider } from "../../hooks/useRoute";
 import { enMessages } from "../../i18n";
-import { App } from ".././App.tsrx";
+import { createSiteRouter } from "../router";
 
 const board = () => screen.getByRole("main");
 const panels = () => screen.getAllByRole("listitem");
 const heading = () => screen.getByRole("heading", { level: 1 });
 const logo = () => screen.queryByRole("button", { name: "Portfolio A.Durnev" });
 
-/** Puts the address bar at `path` and tells the app, as Back/Forward does. */
-function arriveAt(path: string) {
-  act(() => {
-    window.history.replaceState(null, "", path);
-    window.dispatchEvent(new PopStateEvent("popstate"));
-  });
+/** Puts the address bar at `path`, as a visit to it does. */
+function visit(path: string) {
+  window.history.replaceState(null, "", path);
+}
+
+/** Shows the site at `path` and waits until the router has loaded it. */
+async function renderAt(path: string) {
+  visit(path);
+  const router = createSiteRouter();
+  render(RouterProvider, { props: { router } });
+  await act(() => router.load());
+  return router;
 }
 
 describe("App", () => {
@@ -25,45 +32,48 @@ describe("App", () => {
       "fetch",
       vi.fn<typeof fetch>(() => new Promise(() => {})),
     );
-    arriveAt("/");
+    vi.spyOn(window, "scrollTo").mockImplementation(() => {});
+    visit("/");
   });
   afterEach(() => {
     vi.unstubAllGlobals();
-    arriveAt("/");
+    vi.restoreAllMocks();
+    visit("/");
   });
 
-  it("renders the Landing with the English messages", () => {
-    render(App, { props: {} });
+  it("renders the Landing with the English messages", async () => {
+    await renderAt("/");
     expect(logo()).toBeInTheDocument();
     expect(screen.queryByRole("link", { name: "About" })).not.toBeInTheDocument();
   });
 
   it.each(["/explore", "/about", "/what-i-do", "/skills", "/chat", "/contact"])(
     "renders the Board for a direct visit to %s",
-    (path) => {
-      arriveAt(path);
-      render(App, { props: {} });
+    async (path) => {
+      await renderAt(path);
       expect(board()).toBeInTheDocument();
       expect(logo()).not.toBeInTheDocument();
     },
   );
 
-  it("replaces an unknown path by / and shows the Landing", () => {
-    arriveAt("/nope");
-    render(App, { props: {} });
-    expect(window.location.pathname).toBe("/");
+  it("replaces an unknown path by / and shows the Landing, without a history entry", async () => {
+    const entries = window.history.length;
+    await renderAt("/nope");
+    await waitFor(() => expect(window.location.pathname).toBe("/"));
     expect(logo()).toBeInTheDocument();
+    expect(window.history.length).toBe(entries);
   });
 
-  it("replaces /explore/ by /explore and shows the Board", () => {
-    arriveAt("/explore/");
-    render(App, { props: {} });
-    expect(window.location.pathname).toBe("/explore");
+  it("replaces /explore/ by /explore and shows the Board, without a history entry", async () => {
+    const entries = window.history.length;
+    await renderAt("/explore/");
+    await waitFor(() => expect(window.location.pathname).toBe("/explore"));
     expect(screen.getByRole("link", { name: "About" })).toBeInTheDocument();
+    expect(window.history.length).toBe(entries);
   });
 
   it("goes Landing → Board on the logo click, back on Back and forward on Forward", async () => {
-    render(App, { props: {} });
+    await renderAt("/");
     fireEvent.click(logo()!);
     expect(await screen.findByRole("link", { name: "About" })).toBeInTheDocument();
     expect(window.location.pathname).toBe("/explore");
@@ -76,49 +86,32 @@ describe("App", () => {
     expect(await screen.findByRole("link", { name: "About" })).toBeInTheDocument();
   });
 
-  describe("the Board's entrance", () => {
+  describe("the Board's unfold", () => {
     it("plays when the logo click opens the Board", async () => {
-      render(App, { props: {} });
+      await renderAt("/");
       fireEvent.click(logo()!);
       await screen.findByRole("link", { name: "About" });
-      expect(board()).toHaveClass("entrance");
       panels().forEach((panel) => expect(panel).toHaveClass("entering"));
     });
 
-    it("keeps its class while a Panel link is followed from the Board", async () => {
-      render(App, { props: {} });
+    it("plays on a direct visit, whatever caused the change", async () => {
+      await renderAt("/explore");
+      panels().forEach((panel) => expect(panel).toHaveClass("entering"));
+    });
+
+    it("plays on Forward from the Landing", async () => {
+      await renderAt("/");
       fireEvent.click(logo()!);
       await screen.findByRole("link", { name: "About" });
-      fireEvent.click(screen.getByRole("link", { name: "Skills" }));
-      expect(window.location.pathname).toBe("/skills");
-      expect(board()).toHaveClass("entrance");
-    });
-
-    it("does not play on a direct visit", () => {
-      arriveAt("/explore");
-      render(App, { props: {} });
-      expect(board()).not.toHaveClass("entrance");
-      panels().forEach((panel) => expect(panel).not.toHaveClass("entering"));
-    });
-
-    it("does not play on Forward from the Landing", async () => {
-      arriveAt("/explore");
-      arriveAt("/");
-      render(App, { props: {} });
-      act(() => {
-        window.history.replaceState(null, "", "/explore");
-        window.dispatchEvent(new PopStateEvent("popstate"));
-      });
+      window.history.back();
+      await screen.findByRole("button", { name: "Portfolio A.Durnev" });
+      window.history.forward();
       await screen.findByRole("link", { name: "About" });
-      expect(board()).not.toHaveClass("entrance");
+      panels().forEach((panel) => expect(panel).toHaveClass("entering"));
     });
   });
 
   describe("opening and closing a Panel", () => {
-    beforeEach(() => {
-      vi.spyOn(window, "scrollTo").mockImplementation(() => {});
-    });
-
     it.each([
       ["/about", "About"],
       ["/what-i-do", "What I do"],
@@ -127,9 +120,8 @@ describe("App", () => {
       ["/contact", "Contact"],
     ])(
       "renders %s as that Panel opened, with its page and the other four as Stripes",
-      (path, title) => {
-        arriveAt(path);
-        render(App, { props: {} });
+      async (path, title) => {
+        await renderAt(path);
         expect(heading()).toHaveTextContent(title);
         expect(screen.getAllByRole("link")).toHaveLength(4);
         expect(screen.queryByRole("link", { name: title })).not.toBeInTheDocument();
@@ -137,22 +129,20 @@ describe("App", () => {
       },
     );
 
-    it("shows no page on the default Board", () => {
-      arriveAt("/explore");
-      render(App, { props: {} });
+    it("shows no page on the default Board", async () => {
+      await renderAt("/explore");
       expect(screen.queryByRole("heading")).not.toBeInTheDocument();
     });
 
     it("opens a Panel from its title, then switches by Stripe, then closes, with Back/Forward through them", async () => {
-      arriveAt("/explore");
-      render(App, { props: {} });
+      await renderAt("/explore");
       fireEvent.click(screen.getByRole("link", { name: "Skills" }));
-      expect(heading()).toHaveTextContent("Skills");
+      expect(await screen.findByRole("heading", { name: "Skills" })).toBeInTheDocument();
       fireEvent.click(screen.getByRole("link", { name: "Contact" }));
-      expect(heading()).toHaveTextContent("Contact");
+      expect(await screen.findByRole("heading", { name: "Contact" })).toBeInTheDocument();
       fireEvent.click(screen.getByRole("button", { name: "Close Contact" }));
-      expect(window.location.pathname).toBe("/explore");
-      expect(screen.queryByRole("heading")).not.toBeInTheDocument();
+      await waitFor(() => expect(window.location.pathname).toBe("/explore"));
+      await waitFor(() => expect(screen.queryByRole("heading")).not.toBeInTheDocument());
 
       window.history.back();
       expect(await screen.findByRole("heading", { name: "Contact" })).toBeInTheDocument();
@@ -162,61 +152,67 @@ describe("App", () => {
       expect(await screen.findByRole("heading", { name: "Contact" })).toBeInTheDocument();
     });
 
-    it("moves focus to the Expanded panel's heading on opening and on switching", () => {
-      arriveAt("/explore");
-      render(App, { props: {} });
+    it("moves focus to the Expanded panel's heading on opening and on switching", async () => {
+      await renderAt("/explore");
       fireEvent.click(screen.getByRole("link", { name: "Skills" }));
-      expect(heading()).toHaveFocus();
+      await screen.findByRole("heading", { name: "Skills" });
+      await waitFor(() => expect(heading()).toHaveFocus());
       fireEvent.click(screen.getByRole("link", { name: "Contact" }));
-      expect(heading()).toHaveTextContent("Contact");
-      expect(heading()).toHaveFocus();
+      await screen.findByRole("heading", { name: "Contact" });
+      await waitFor(() => expect(heading()).toHaveFocus());
     });
 
-    it("returns focus to the Panel that was open on closing, with the button and with Escape", () => {
-      arriveAt("/explore");
-      render(App, { props: {} });
+    it("returns focus to the Panel that was open on closing, with the button and with Escape", async () => {
+      await renderAt("/explore");
       fireEvent.click(screen.getByRole("link", { name: "Skills" }));
+      await screen.findByRole("heading", { name: "Skills" });
       fireEvent.click(screen.getByRole("button", { name: "Close Skills" }));
-      expect(screen.getByRole("link", { name: "Skills" })).toHaveFocus();
+      await waitFor(() => expect(screen.getByRole("link", { name: "Skills" })).toHaveFocus());
 
       fireEvent.click(screen.getByRole("link", { name: "Contact" }));
+      await screen.findByRole("heading", { name: "Contact" });
       fireEvent.keyDown(document, { key: "Escape" });
-      expect(screen.getByRole("link", { name: "Contact" })).toHaveFocus();
+      await waitFor(() => expect(screen.getByRole("link", { name: "Contact" })).toHaveFocus());
     });
 
-    it("does not steal focus on a deep link", () => {
-      arriveAt("/skills");
-      render(App, { props: {} });
+    it("does not steal focus on a deep link", async () => {
+      await renderAt("/skills");
       expect(heading()).not.toHaveFocus();
     });
 
-    it("scrolls to the top on every change of Board state, with scroll restoration off", () => {
-      arriveAt("/explore");
-      render(App, { props: {} });
+    it("scrolls to the top on every change of Board state, with scroll restoration off", async () => {
+      await renderAt("/explore");
       expect(window.history.scrollRestoration).toBe("manual");
-      expect(window.scrollTo).not.toHaveBeenCalled();
+      vi.mocked(window.scrollTo).mockClear();
       fireEvent.click(screen.getByRole("link", { name: "Skills" }));
-      expect(window.scrollTo).toHaveBeenCalledTimes(1);
+      await waitFor(() => expect(window.scrollTo).toHaveBeenCalledTimes(1));
       fireEvent.click(screen.getByRole("link", { name: "Contact" }));
-      expect(window.scrollTo).toHaveBeenCalledTimes(2);
-      expect(window.scrollTo).toHaveBeenLastCalledWith(0, 0);
+      await waitFor(() => expect(window.scrollTo).toHaveBeenCalledTimes(2));
+      expect(window.scrollTo).toHaveBeenLastCalledWith(
+        expect.objectContaining({ top: 0, left: 0 }),
+      );
+
+      vi.mocked(window.scrollTo).mockClear();
+      window.history.back();
+      await waitFor(() => expect(window.scrollTo).toHaveBeenCalledTimes(1));
     });
 
     it("does not replay the Board's unfold on the Panels that come back when a Panel closes", async () => {
-      render(App, { props: {} });
+      await renderAt("/");
       fireEvent.click(logo()!);
       await screen.findByRole("link", { name: "Skills" });
       fireEvent.click(screen.getByRole("link", { name: "Skills" }));
+      await screen.findByRole("heading", { name: "Skills" });
       fireEvent.click(screen.getByRole("button", { name: "Close Skills" }));
+      await waitFor(() => expect(screen.getAllByRole("listitem")).toHaveLength(5));
       panels().forEach((panel) => expect(panel).not.toHaveClass("entering"));
     });
 
-    it("sets the document title per Expanded panel", () => {
-      arriveAt("/skills");
-      render(App, { props: {} });
+    it("sets the document title per Expanded panel", async () => {
+      await renderAt("/skills");
       expect(document.title).toBe("Skills · A.Durnev portfolio");
       fireEvent.click(screen.getByRole("button", { name: "Close Skills" }));
-      expect(document.title).toBe("A.Durnev portfolio");
+      await waitFor(() => expect(document.title).toBe("A.Durnev portfolio"));
     });
   });
 
