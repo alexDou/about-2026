@@ -21,7 +21,6 @@ let baseUrl: string;
 export class PortfolioWorld extends World {
   context!: BrowserContext;
   page!: Page;
-  consoleMessages: string[] = [];
   fetchedText = "";
 
   url(path = "/"): string {
@@ -46,7 +45,6 @@ AfterAll(async function () {
 Before(async function (this: PortfolioWorld) {
   this.context = await browser.newContext();
   this.page = await this.context.newPage();
-  this.page.on("console", (message) => this.consoleMessages.push(message.text()));
 });
 
 After(async function (this: PortfolioWorld) {

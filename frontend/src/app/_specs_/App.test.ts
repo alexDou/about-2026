@@ -1,21 +1,76 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { createIntl } from "@formatjs/intl";
-import { render, screen } from "@octanejs/testing-library";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { act, fireEvent, render, screen } from "@octanejs/testing-library";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { enMessages } from "../../i18n";
 import { App } from ".././App.tsrx";
 
-describe("App", () => {
-  afterEach(() => vi.unstubAllGlobals());
+const logo = () => screen.queryByRole("button", { name: "Portfolio A.Durnev" });
 
-  it("renders the Landing with the English messages", () => {
+/** Puts the address bar at `path` and tells the app, as Back/Forward does. */
+function arriveAt(path: string) {
+  act(() => {
+    window.history.replaceState(null, "", path);
+    window.dispatchEvent(new PopStateEvent("popstate"));
+  });
+}
+
+describe("App", () => {
+  beforeEach(() => {
     vi.stubGlobal(
       "fetch",
       vi.fn<typeof fetch>(() => new Promise(() => {})),
     );
+    arriveAt("/");
+  });
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    arriveAt("/");
+  });
+
+  it("renders the Landing with the English messages", () => {
     render(App, { props: {} });
-    expect(screen.getByRole("button", { name: "Portfolio A.Durnev" })).toBeInTheDocument();
+    expect(logo()).toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "About" })).not.toBeInTheDocument();
+  });
+
+  it.each(["/explore", "/about", "/what-i-do", "/skills", "/chat", "/contact"])(
+    "renders the Board for a direct visit to %s",
+    (path) => {
+      arriveAt(path);
+      render(App, { props: {} });
+      expect(screen.getByRole("link", { name: "About" })).toBeInTheDocument();
+      expect(logo()).not.toBeInTheDocument();
+    },
+  );
+
+  it("replaces an unknown path by / and shows the Landing", () => {
+    arriveAt("/nope");
+    render(App, { props: {} });
+    expect(window.location.pathname).toBe("/");
+    expect(logo()).toBeInTheDocument();
+  });
+
+  it("replaces /explore/ by /explore and shows the Board", () => {
+    arriveAt("/explore/");
+    render(App, { props: {} });
+    expect(window.location.pathname).toBe("/explore");
+    expect(screen.getByRole("link", { name: "About" })).toBeInTheDocument();
+  });
+
+  it("goes Landing → Board on the logo click, back on Back and forward on Forward", async () => {
+    render(App, { props: {} });
+    fireEvent.click(logo()!);
+    expect(await screen.findByRole("link", { name: "About" })).toBeInTheDocument();
+    expect(window.location.pathname).toBe("/explore");
+
+    window.history.back();
+    expect(await screen.findByRole("button", { name: "Portfolio A.Durnev" })).toBeInTheDocument();
+    expect(window.location.pathname).toBe("/");
+
+    window.history.forward();
+    expect(await screen.findByRole("link", { name: "About" })).toBeInTheDocument();
   });
 
   it("ships the site title in index.html for the time before JS runs", () => {

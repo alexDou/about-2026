@@ -1,0 +1,44 @@
+.board {
+  display: grid;
+  min-height: 100dvh;
+}
+
+.panels {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.panel {
+  display: grid;
+  min-height: 32rem;
+}
+
+.title {
+  display: grid;
+  place-content: center;
+  font-size: 1.5rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: inherit;
+}
+
+@media (max-width: 640px) {
+  .panels {
+    grid-auto-flow: row;
+    grid-auto-columns: auto;
+    grid-auto-rows: 1fr;
+  }
+
+  .panel {
+    min-height: 0;
+  }
+
+  .board {
+    min-height: 420px;
+  }
+}
