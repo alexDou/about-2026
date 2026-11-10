@@ -10,6 +10,18 @@ type Wrapper = (props: { children?: OctaneNode }) => OctaneNode;
 
 const nothing: RouteComponent = () => null;
 
+/** The routers `testRouter` made, until `destroyTestRouters`. */
+const made = new Set<AppRouter>();
+
+/**
+ * Ends the history of every router `testRouter` made: a browser history patches `pushState`, and
+ * its `popstate` listener stays until it is destroyed. The test setup calls this after each test.
+ */
+export function destroyTestRouters(): void {
+  made.forEach((router) => router.history.destroy());
+  made.clear();
+}
+
 /**
  * A router for a test, at the address bar's URL: every component renders nothing (the shell just its
  * `Outlet`) unless `components` names one, and `pages` replaces the page of the Panels it lists.
@@ -24,13 +36,15 @@ export function testRouter({
     PanelId,
     RouteComponent
   >;
-  return createAppRouter({
+  const router = createAppRouter({
     shell: Outlet,
     landing: nothing,
     board: nothing,
     ...components,
     pages: { ...none, ...pages },
   });
+  made.add(router);
+  return router;
 }
 
 /**

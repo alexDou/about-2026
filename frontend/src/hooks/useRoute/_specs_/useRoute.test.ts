@@ -1,5 +1,5 @@
 import { act, renderHook } from "@octanejs/testing-library";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { DEFAULT_BOARD, expandedBoard, routerWrapper, testRouter, useRoute } from "..";
 
 const about = expandedBoard("about");
@@ -54,11 +54,12 @@ describe("useRoute", () => {
     });
 
     it("leaves a modified click to the browser (new tab)", async () => {
-      const { result } = await hookAt("/");
+      const { result, router } = await hookAt("/");
+      const navigate = vi.spyOn(router, "navigate");
       const event = new MouseEvent("click", { button: 0, ctrlKey: true, cancelable: true });
       await act(() => result.current.link(about).onClick(event));
       expect(event.defaultPrevented).toBe(false);
-      expect(window.location.pathname).toBe("/");
+      expect(navigate).not.toHaveBeenCalled();
     });
   });
 });

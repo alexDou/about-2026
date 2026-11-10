@@ -35,7 +35,7 @@ Routing runs on `@octanejs/tanstack-router` with code-defined routes (no file-ba
 - **History**: every state change adds an entry, the logo click included. Back from `/explore` shows the Landing.
 - **Scroll**: browser scroll restoration is off and every Board state starts at the top. Use the router's own scroll options if the binding supports them; otherwise keep `useScrollReset` and the one-line `scrollRestoration = "manual"`, now set where the router is created. Either way it applies before any page renders (an effect is too late on a reload).
 - **No more `userTriggered`**: remove it from the route state, from `useRoute()` and from its tests. In `Board`, the `entrance` class is always on and `unfolding` starts `true` (the unfold plays whenever the Board mounts); opening a Panel still ends `unfolding`, so Panels that return on close do not replay it (Unit 1.6 replaces this with stable slots).
-- **Delete** what the router makes redundant: `hooks/useRoute/store.ts`, `links.ts`, `routes.ts` (`resolvePath`, `pathOf` where the router covers them), their `_specs_`, and any dead types. Move the tests that still describe behaviour (URL ↔ state, canonical URLs, links, history) to run against the router-backed hook.
+- **Delete** what the router makes redundant: `hooks/useRoute/store.ts`, `resolvePath` and the URL ↔ state table (`routes.ts` shrank to `pathOf` and the Board state helpers, renamed `board.ts`), their `_specs_`, and any dead types. `links.ts` (`isPlainClick`) stays: Panel titles and Stripes are plain `<a>` elements, not the router's `Link`. Move the tests that still describe behaviour (URL ↔ state, canonical URLs, links, history) to run against the router-backed hook.
 - **Unchanged**: `useDocumentTitle`, `useThemeColor`, `useBoardFocus`, `useScrollReset` (unless the router replaces it), `Heading`, the pages, messages.
 
 ## Acceptance criteria
@@ -50,7 +50,7 @@ Routing runs on `@octanejs/tanstack-router` with code-defined routes (no file-ba
 - [x] E2E: `board-look.feature` scenarios "does not unfold on a direct visit" and "does not unfold on Forward from the Landing" now assert the unfold plays; the "reload marker" scenario in `routing.feature` still proves a plain click does not reload the document.
 - [x] The production bundle size (gzip, from `pnpm --dir frontend build`) is measured before and after and both numbers are written in the bean's summary and in ADR 0004's Consequences. If the increase is large for a Landing first paint, stop and report it before committing.
 - [x] `.claude/rules/frontend.md` and `docs/adr/0004-…` are consistent with the result (no mention of the own route hook as the routing layer); `docs_src/specs/units.md` already describes the new rule.
-- [x] `pnpm --dir frontend e2e` run; failures outside this diff are reported by name (7 `board-look` scenarios fail on `main` already: the phone dots, centred titles and "unfold has ended").
+- [x] `pnpm --dir frontend e2e` run; failures outside this diff are reported by name (7 `board-look` scenarios fail on `main` already: the phone dots, centred titles and "unfold has ended"; 4 remain, the "unfold has ended" ones now pass because the step ignores the endless dot drift).
 - [x] `scripts/verify.sh` GREEN
 
 ## Out of scope
@@ -80,16 +80,17 @@ Routing runs on `@octanejs/tanstack-router` with code-defined routes (no file-ba
 - **Canonical URLs**: an unknown path goes through the `$` catch-all `beforeLoad` redirect (`replace`). A trailing slash is NOT canonicalised by the router (it trims both sides when comparing, and a root `beforeLoad` redirect loops forever), so `createAppRouter` replaces it on the history before the router starts. `caseSensitive: true` so `/Skills` stays unknown. `trailingSlash: "never"` has no effect on this tree and is not set.
 - **Scroll**: the router scrolls to the top on every navigation itself (`scrollRestoration: false` keeps it from restoring), so `useScrollReset` is deleted. `history.scrollRestoration = "manual"` is set in `createAppRouter`.
 - **Removed**: `store.ts`, `resolvePath`, `routeOfPath`, the `Route` type, `RouteState`/`RouteStore`/`ResolvedPath`, `userTriggered`, `useScrollReset`, `BoardProps`.
+- **Test hygiene**: a browser history patches `pushState` and keeps a `popstate` listener until destroyed, so `test-setup.ts` runs `destroyTestRouters` after each test (routers from `testRouter`), and `App.test.ts` destroys the site routers it makes.
 - **Lint**: with `erasableSyntaxOnly` gone, `typescript/parameter-properties` is an error in `.oxlintrc.json`. oxlint has no enum rule, and `no-namespace` trips on the existing `declare namespace` in `i18n/types.ts`, so those two are not enforced.
 - **Build**: the binding ships TypeScript source. The Oxc loader rule now includes it, and tsconfig dropped `erasableSyntaxOnly` (the binding has a parameter property and tsrs checks it).
 - **E2E**: the Board now unfolds on every mount, so measuring scenarios caught Panels mid-flight. Contexts run with reduced motion; scenarios about motion say `Given the visitor accepts motion`. `animating` ignores the endless dot drift, which also fixes the old "unfold has ended" failures. The "Every Board state starts at the top" scroll step retries while the entrance clips the page.
-- **Bundle (gzip -9)**: `main.js` 73,112 B before, 127,155 B after (+54,043 B, +74%); `main.css` unchanged 3,194 B. `isbot` is not in the bundle. Large for the Landing's first paint: reported to the user before committing, as the criteria say.
+- **Bundle (gzip -9)**: `main.js` 73,112 B before, 127,292 B after (+54,180 B, +74%); `main.css` unchanged 3,194 B. `isbot` and the test helpers (`testRouter`, `routerWrapper`) are not in the bundle. Large for the Landing's first paint: reported to the user before committing, as the criteria say.
 
 ## Summary of Changes
 
 - Routing runs on `@octanejs/tanstack-router` (0.3.2, pinned) with code-defined routes: `/` is the Landing, a pathless `board` layout route renders the Board with an `Outlet`, and `/explore` plus one page route per Panel sit under it (`staticData.panel`). `App` is the intl provider and an `Outlet`; nothing switches on the route. `hooks/useRoute` keeps the Panel ids, paths and `BoardState` helpers, the router factory (components passed in) and `useRoute()` (`board`, `navigate`, `link`); `app/router.ts` supplies the real components.
 - Removed: the own route store, `resolvePath`/`routeOfPath`, the `Route` type, `userTriggered`, `useScrollReset`, `BoardProps`, `AppProps`. The Board unfolds on every mount.
 - Build and tooling: Oxc loader rule includes the binding (it ships TS source); `erasableSyntaxOnly` dropped, `typescript/parameter-properties` lint rule added; `@tanstack/router-core` is a pinned direct dependency for the `staticData` typing.
-- Bundle (`main.js`, gzip -9): 73,112 B before, 127,155 B after (+54,043 B, +74%); recorded in ADR 0004.
+- Bundle (`main.js`, gzip -9): 73,112 B before, 127,292 B after (+54,180 B, +74%); recorded in ADR 0004.
 - E2E: 54 of 58 pass; the 4 failures were already failing on `main` (board-look.feature:20 columns, :100-102 phone dots). Contexts run with reduced motion; motion scenarios opt in.
 - Docs: `.claude/rules/frontend.md` (Routing, Toolchain, testing), ADR 0004, the Unit 1 spec (code layout).

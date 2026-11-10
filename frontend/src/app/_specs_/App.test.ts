@@ -17,10 +17,13 @@ function visit(path: string) {
   window.history.replaceState(null, "", path);
 }
 
+const siteRouters: ReturnType<typeof createSiteRouter>[] = [];
+
 /** Shows the site at `path` and waits until the router has loaded it. */
 async function renderAt(path: string) {
   visit(path);
   const router = createSiteRouter();
+  siteRouters.push(router);
   render(RouterProvider, { props: { router } });
   await act(() => router.load());
   return router;
@@ -38,6 +41,8 @@ describe("App", () => {
   afterEach(() => {
     vi.unstubAllGlobals();
     vi.restoreAllMocks();
+    // The site's routers are not made by `testRouter`; end their histories too.
+    siteRouters.splice(0).forEach((router) => router.history.destroy());
     visit("/");
   });
 
@@ -94,7 +99,7 @@ describe("App", () => {
       panels().forEach((panel) => expect(panel).toHaveClass("entering"));
     });
 
-    it("plays on a direct visit, whatever caused the change", async () => {
+    it("plays on a direct visit to the Board", async () => {
       await renderAt("/explore");
       panels().forEach((panel) => expect(panel).toHaveClass("entering"));
     });

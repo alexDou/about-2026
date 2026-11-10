@@ -195,7 +195,14 @@ describe("Board", () => {
       expect(document.title).toBe("A.Durnev portfolio / Skills");
     });
 
-    it("gives the title and colour back when the Panel closes", async () => {
+    it("gives the title and colour back when the Panel closes, the Board staying on screen", async () => {
+      await renderBoardAt("/skills");
+      fireEvent.click(screen.getByRole("button", { name: "Close Skills" }));
+      await waitFor(() => expect(document.title).toBe("A.Durnev portfolio"));
+      expect(themeColor()).toBe("#182223");
+    });
+
+    it("gives the title and colour back when the Board goes away", async () => {
       const { unmount } = await renderBoardAt("/skills");
       unmount();
       expect(document.title).toBe("A.Durnev portfolio");

@@ -39,7 +39,7 @@ export function Board() @{
       : intl.formatMessage({ id: "site.title" }),
   );
 
-  <main ref={root} class={cx(styles["board"], styles["entrance"], expanded && styles["open"])}>
+  <main ref={root} class={cx(styles["board"], expanded && styles["open"])}>
     <ul class={cx(styles["panels"], expanded && styles["open"])}>
       @for (const panel of PANEL_IDS; key panel) {
         @if (panel === expanded) {
@@ -51,11 +51,12 @@ export function Board() @{
             <Outlet />
           </ExpandedPanel>;
         } @else if (expanded) {
+          const { href, onClick } = link(expandedBoard(panel));
           <Stripe
             tone={TONE_BY_PANEL[panel]}
             title={intl.formatMessage({ id: TITLE_BY_PANEL[panel] })}
-            href={link(expandedBoard(panel)).href}
-            onClick={link(expandedBoard(panel)).onClick}
+            href={href}
+            onClick={onClick}
           />;
         } @else {
           <Panel panel={panel} tone={TONE_BY_PANEL[panel]} entering={unfolding} />;
