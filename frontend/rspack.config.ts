@@ -25,6 +25,14 @@ export default defineConfig((_env, argv) => {
     optimization: {
       minimizer: [new OxcMinifyRspackPlugin(), new LightningCssMinimizerRspackPlugin()],
     },
+    // The router binding spells out dependency arrays the compiler could infer, and the compiler
+    // hints at every one. That source is not ours to edit: hide this hint for that package only.
+    ignoreWarnings: [
+      {
+        module: /@octanejs[\\/]tanstack-router/,
+        message: /dependency array is redundant/,
+      },
+    ],
     devtool: isProd ? "source-map" : "eval-cheap-module-source-map",
     module: {
       rules: [
