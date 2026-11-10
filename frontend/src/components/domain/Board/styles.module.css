@@ -15,7 +15,7 @@
 }
 
 /* Mobile: rows share the height. 420px over five rows leaves 84px each, so none shrinks to a sliver. */
-@media (max-width: 640px) {
+@media (width < 840px) {
   .board {
     min-height: 420px;
   }

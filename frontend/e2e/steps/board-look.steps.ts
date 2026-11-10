@@ -139,6 +139,17 @@ const dots = (link: Locator) =>
       left: parseFloat(style.left),
       marginLeft: parseFloat(style.marginLeft),
       transform: style.transform,
+      position: style.position,
+      alignSelf: style.alignSelf,
+      marginRight: parseFloat(style.marginRight),
+      // The dots stand in the title's first grid column on a phone: measure from the title.
+      titleLeft: el.getBoundingClientRect().left,
+      paddingLeft: parseFloat(getComputedStyle(el).paddingLeft),
+      textLeft: (() => {
+        const range = document.createRange();
+        range.selectNodeContents(el);
+        return range.getBoundingClientRect().left;
+      })(),
       gap: parseFloat(style.marginBottom),
       positionX: style.backgroundPositionX,
       animated: style.animationName !== "none",
@@ -223,14 +234,26 @@ Then(
 );
 
 Then(
-  "the dots beside the Panel title {string} are a short row, at most {int}px tall",
-  async function (this: PortfolioWorld, name: string, max: number) {
+  "the dots beside the Panel title {string} are a row at most {int}px tall, longer than {int} dots",
+  async function (this: PortfolioWorld, name: string, max: number, dotCount: number) {
     const row = await dots(title(this, name));
-    const box = (await panel(this, name).boundingBox())!;
     expect(row.height).toBeGreaterThan(0);
     expect(row.height).toBeLessThanOrEqual(max);
-    expect(row.width).toBeGreaterThan(row.height * 4);
-    expect(row.width).toBeLessThan(box.width / 3);
+    // One dot per 12px tile.
+    expect(row.width).toBeGreaterThan(dotCount * 12);
+  },
+);
+
+/** Where the dots begin on a phone: the title's left, its padding, then the row's own margin. */
+const rowStart = (row: Awaited<ReturnType<typeof dots>>) =>
+  row.titleLeft + row.paddingLeft + row.marginLeft;
+
+Then(
+  "the dots beside the Panel title {string} start {int}% in from the Panel's left border",
+  async function (this: PortfolioWorld, name: string, percent: number) {
+    const row = await dots(title(this, name));
+    const box = (await panel(this, name).boundingBox())!;
+    close(rowStart(row), box.x + (box.width * percent) / 100);
   },
 );
 
@@ -238,27 +261,17 @@ Then(
   "the dots beside the Panel title {string} end {int}px before the title",
   async function (this: PortfolioWorld, name: string, gap: number) {
     const row = await dots(title(this, name));
-    const titleBox = (await title(this, name).boundingBox())!;
-    close(titleBox.x - (titleBox.x + row.left + row.width), gap);
+    close(row.textLeft - (rowStart(row) + row.width), gap);
   },
 );
 
 Then(
   "the dots beside the Panel title {string} are centred on the title's height",
   async function (this: PortfolioWorld, name: string) {
+    // A pseudo-element has no box to measure: it is a grid item beside the title's text, centred.
     const row = await dots(title(this, name));
-    const titleBox = (await title(this, name).boundingBox())!;
-    close(row.top + row.height / 2, titleBox.height / 2);
-  },
-);
-
-Then(
-  "the dots beside the Panel title {string} stay inside the Panel",
-  async function (this: PortfolioWorld, name: string) {
-    const row = await dots(title(this, name));
-    const titleBox = (await title(this, name).boundingBox())!;
-    const box = (await panel(this, name).boundingBox())!;
-    expect(titleBox.x + row.left).toBeGreaterThanOrEqual(box.x);
+    expect(row.position).not.toBe("absolute");
+    expect(row.alignSelf).toBe("center");
   },
 );
 

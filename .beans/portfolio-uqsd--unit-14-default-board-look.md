@@ -7,7 +7,7 @@ priority: normal
 tags:
     - ready-for-agent
 created_at: 2026-11-09T10:30:50Z
-updated_at: 2026-11-10T10:58:08Z
+updated_at: 2026-11-10T11:17:18Z
 parent: portfolio-m9gt
 blocked_by:
     - portfolio-dbxq
@@ -30,7 +30,7 @@ portfolio-m9gt (Unit 1: Board). Design: the Unit 1 section of `docs_src/specs/un
 - [x] Titles in the pen's style (uppercase, wide letter-spacing), 1rem (the pen: 0.9rem), Overused Grotesk, centred on both axes by layout. In the default state only the title is clickable.
 - [x] A Sublabel renders only for Panels whose Sublabel message exists (What I do, Chat with me).
 - [x] Desktop: columns share the width evenly at full screen height; the Board is at least 32rem tall.
-- [x] Mobile (≤ 640px wide): rows share the height evenly; the Board is at least 420px tall; rows stay readable at ≤ 550px wide (the pen's flaw).
+- [x] Mobile (below 840px wide; was 640px): rows share the height evenly; the Board is at least 420px tall; rows stay readable at ≤ 550px wide (the pen's flaw).
 - [x] Checked in the browser at about 1280×800, 375×667 and 360px wide.
 - [x] Round 2 (user feedback): the title is 1rem, not 1.5rem. The spec, `docs_src/specs/units.md`, says 1rem too.
 - [x] Round 2: no line crosses the title. On hover and focus a row of moving dots (like `support_files/moving-dots`, CSS only) slides in above the title, the full Panel width and just tall enough for the dots, as far above the title as the Sublabel is below it (one shared gap).
@@ -69,3 +69,9 @@ portfolio-m9gt (Unit 1: Board). Design: the Unit 1 section of `docs_src/specs/un
 
 - On a phone (<= 640px) the moving dots are no longer a full-width row above the title: as in the pen they are a short row (four dots) left of the title, centred on its height, 1rem before it, sliding in from the left on hover and focus. Desktop is unchanged.
 - Kept the Owner's split of the gap into `--label-gap-top` (1.2rem, the dots) and `--label-gap-bottom` (0.6rem, the Sublabel); the "one shared gap" wording in this bean and in `units.md` is superseded. Tests resolve the tokens instead of comparing the two distances.
+
+## Summary of Changes (round 5, user feedback)
+
+- Mobile now starts below 840px (was 640px): Board rows, the dots layout and the short-window gap tokens all use `(width < 840px)`. Desktop starts at 840px; E2E checks 839 and 840.
+- On a phone the moving dots stand at the Panel's left border as in the pen: 4% in from it, on the title's height, ending 1rem before the title text, as long as the space allows (about 60px at 320 wide, 230px at 700). Done as suggested (`.content` 100% wide, the dots start 4% in), with the title as a grid of three columns `1fr auto 1fr`, so the dots (first grid item) fill the first column and the text stays centred.
+- Accepted the Owner's `.content { margin-top: 0 }` on mobile.
