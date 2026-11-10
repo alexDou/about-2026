@@ -23,7 +23,8 @@ hooks/<useX>/                 shared domain-agnostic or app-wide hooks only (use
 services/<area>/              API clients, no UI
 utils/                        shared domain-agnostic or app-wide pure helpers only (used by 2+ chunks)
 i18n/                         FormatJS setup and the message files (ADR 0003)
-styles/                       global CSS (tokens)
+styles/                       global CSS (tokens, fonts and their license in media/)
+public/                       files served as-is from the site root (robots.txt); sibling of src/, not a chunk
 ```
 
 A chunk folder, with the optional parts in brackets:

@@ -1,11 +1,5 @@
-:root {
-  --color-bg: #182223;
-  --color-fg: #e6e6f0;
-  --color-ok: #3ccf91;
-  --color-down: #ef5f6b;
-  --color-muted: #8a8aa3;
-  color-scheme: dark;
-}
+@import "./fonts.css";
+@import "./tokens.css";
 
 *,
 *::before,
@@ -18,5 +12,5 @@ body {
   min-height: 100dvh;
   background: var(--color-bg);
   color: var(--color-fg);
-  font-family: system-ui, sans-serif;
+  font-family: var(--font-site);
 }

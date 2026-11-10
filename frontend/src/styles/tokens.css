@@ -1,0 +1,21 @@
+:root {
+  --color-bg: #182223;
+  --color-fg: #e6e6f0;
+  --color-ok: #3ccf91;
+  --color-down: #ef5f6b;
+  --color-muted: #8a8aa3;
+  color-scheme: dark;
+
+  /* Panel palette (Board). */
+  --panel-about: #25363a;
+  --panel-what-i-do: #d1dcd9;
+  --panel-skills: #67b3a8;
+  --panel-chat: #4c839f;
+  --panel-contact: #5c8b70;
+
+  /* Text colours: on dark and on light backgrounds. */
+  --text-on-dark: var(--panel-what-i-do);
+  --text-on-light: var(--panel-about);
+
+  --font-site: "Overused Grotesk", system-ui, sans-serif;
+}
