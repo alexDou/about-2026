@@ -1,46 +1,19 @@
-.board {
-  /* Full screen height, never shorter than 32rem. The Panels share the Board evenly. */
-  height: 100dvh;
-  min-height: 32rem;
-}
-
+/*
+ * The Panels' slots, in a row on desktop and a column on mobile: the Board is as tall as the
+ * window (at least 32rem), and as tall as the Expanded panel's page when that is taller. The
+ * slots' own sizes are set in Slot.
+ */
 .panels {
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: minmax(0, 1fr);
-  height: 100%;
+  display: flex;
+  min-height: max(100dvh, 32rem);
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-/*
- * A Panel open: the Board is as tall as the page needs, at least the window. The Panels become a row
- * of columns, Stripes at their title's width and the Expanded panel taking the rest.
- */
-.board.open {
-  height: auto;
-}
-
-.panels.open {
-  display: flex;
-  min-height: max(100dvh, 32rem);
-}
-
 /* Mobile: rows share the height. 420px over five rows leaves 84px each, so none shrinks to a sliver. */
 @media (width < 840px) {
-  .board {
-    min-height: 420px;
-  }
-
   .panels {
-    grid-auto-flow: row;
-    grid-auto-columns: auto;
-    grid-auto-rows: minmax(0, 1fr);
-  }
-
-  /* Open: Stripes are rows above and below the Expanded panel, which takes the rest of the window. */
-  .panels.open {
     flex-direction: column;
     min-height: max(100dvh, 420px);
   }
@@ -48,8 +21,8 @@
 
 /*
  * The unfold of the pen (timings: `--enter-*` in tokens.css), whenever the Board mounts: the Board
- * slides in, the Panels unfold one after another, then the titles fade in (see `.entering` in
- * Panel).
+ * slides in, the Panels unfold one after another (see Slot), then the titles fade in (see
+ * `.entering` in Panel).
  */
 @media (prefers-reduced-motion: no-preference) {
   .board {

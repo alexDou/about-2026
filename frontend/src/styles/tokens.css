@@ -30,6 +30,17 @@
   --enter-total: calc(var(--enter-title-delay) + var(--enter-title));
   --enter-ease: cubic-bezier(0.37, 0, 0.63, 1);
 
+  /*
+   * The expand and collapse sequence (Board): the Panels' content fades (120ms), the slots change
+   * size (500ms), then the Stripes (400ms) and the Expanded panel's content (150ms) fade in.
+   * Every step is instant under reduced motion (the Slot's CSS switches the transitions off).
+   */
+  --seq-panel-fade: 120ms;
+  --seq-resize: 500ms;
+  --seq-ease: ease-in-out;
+  --seq-stripe-fade: 400ms;
+  --seq-expanded-fade: 150ms;
+
   --font-site: "Overused Grotesk", system-ui, sans-serif;
 }
 

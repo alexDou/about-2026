@@ -3,15 +3,14 @@ import { describe, expect, it, vi } from "vitest";
 import { createElement } from "octane";
 import { ExpandedPanel } from ".././ExpandedPanel.tsrx";
 
-const props = { tone: "teal", closeLabel: "Close Skills" } as const;
+const props = { closeLabel: "Close Skills" } as const;
 
 describe("ExpandedPanel", () => {
-  it("is a list item in its tone that shows the page", () => {
+  it("shows the page", () => {
     render(ExpandedPanel, {
       props: { ...props, onClose: () => {}, children: createElement("p", null, "The page") },
     });
-    expect(screen.getByRole("listitem")).toHaveClass("teal");
-    expect(screen.getByRole("listitem")).toContainElement(screen.getByText("The page"));
+    expect(screen.getByText("The page")).toBeInTheDocument();
   });
 
   it("has a close button titled by its label, with its icon hidden from screen readers", () => {
@@ -52,8 +51,8 @@ describe("ExpandedPanel", () => {
 
   it("does nothing when the panel itself is clicked", () => {
     const onClose = vi.fn<() => void>();
-    render(ExpandedPanel, { props: { ...props, onClose } });
-    fireEvent.click(screen.getByRole("listitem"));
+    const { container } = render(ExpandedPanel, { props: { ...props, onClose } });
+    fireEvent.click(container.querySelector(".expanded")!);
     expect(onClose).not.toHaveBeenCalled();
   });
 });
