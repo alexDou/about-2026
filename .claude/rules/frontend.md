@@ -22,7 +22,7 @@ Syntax: https://tsrx.dev/features.
 - Write `class`, not `className`.
 - Omit dependency arrays on built-in hooks. Write one only when you need exact control over when it reruns.
 - Test with `@octanejs/testing-library` (`render(Component, { props })`).
-- Document title: `index.html` carries the static site title, shown until JS runs and on every screen that sets none. A rendered `<title>` lands after it in `<head>` and never shows, so a screen sets `document.title` in an effect and restores the previous title on cleanup (see `LandingPage`).
+- Document title: `index.html` carries the static site title, shown until JS runs and on every screen that sets none. A rendered `<title>` lands after it in `<head>` and never shows, so a screen sets the title through `useDocumentTitle`, which restores the previous title on cleanup.
 
 ## Domain code stays in its domain
 

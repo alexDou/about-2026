@@ -14,6 +14,19 @@
   list-style: none;
 }
 
+/*
+ * A Panel open: the Board is as tall as the page needs, at least the window. The Panels become a row
+ * of columns, Stripes at their title's width and the Expanded panel taking the rest.
+ */
+.board.open {
+  height: auto;
+}
+
+.panels.open {
+  display: flex;
+  min-height: max(100dvh, 32rem);
+}
+
 /* Mobile: rows share the height. 420px over five rows leaves 84px each, so none shrinks to a sliver. */
 @media (width < 840px) {
   .board {
@@ -24,6 +37,12 @@
     grid-auto-flow: row;
     grid-auto-columns: auto;
     grid-auto-rows: minmax(0, 1fr);
+  }
+
+  /* Open: Stripes are rows above and below the Expanded panel, which takes the rest of the window. */
+  .panels.open {
+    flex-direction: column;
+    min-height: max(100dvh, 420px);
   }
 }
 

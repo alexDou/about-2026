@@ -1,0 +1,71 @@
+/* Fills what the Stripes leave; its page scrolls with the document. */
+.expanded {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  background: var(--tone-bg);
+  color: var(--tone-fg);
+}
+
+.ink {
+  --tone-bg: var(--panel-about);
+  --tone-fg: var(--text-on-dark);
+}
+
+.mist {
+  --tone-bg: var(--panel-what-i-do);
+  --tone-fg: var(--text-on-light);
+}
+
+.teal {
+  --tone-bg: var(--panel-skills);
+  --tone-fg: var(--text-on-light);
+}
+
+.blue {
+  --tone-bg: var(--panel-chat);
+  --tone-fg: var(--text-on-light);
+}
+
+.green {
+  --tone-bg: var(--panel-contact);
+  --tone-fg: var(--text-on-light);
+}
+
+.closeBar {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  justify-content: flex-end;
+  height: 0;
+}
+
+.close {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  margin: 1rem;
+  padding: 0;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.close:hover,
+.close:focus-visible {
+  background: color-mix(in srgb, currentColor 15%, transparent);
+}
+
+.close svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+}
