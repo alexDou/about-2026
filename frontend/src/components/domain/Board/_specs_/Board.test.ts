@@ -31,6 +31,26 @@ describe("Board", () => {
     ]);
   });
 
+  it("gives each Panel its tone by position", () => {
+    render(Board, { props: {}, wrapper: intlWrapper() });
+    const items = screen.getAllByRole("listitem");
+    ["ink", "mist", "teal", "blue", "green"].forEach((tone, i) =>
+      expect(items[i]).toHaveClass(tone),
+    );
+  });
+
+  it("shows Sublabels on What I do and Chat with me only", () => {
+    render(Board, { props: {}, wrapper: intlWrapper() });
+    const items = screen.getAllByRole("listitem").map((item) => item.textContent);
+    expect(items).toEqual([
+      "About",
+      "What I do36 Takeovers",
+      "Skills",
+      "Chat with meAI agent trained on my data",
+      "Contact",
+    ]);
+  });
+
   it("takes the titles from the messages", () => {
     render(Board, {
       props: {},
