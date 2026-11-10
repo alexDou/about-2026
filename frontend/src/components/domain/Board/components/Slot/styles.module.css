@@ -1,0 +1,134 @@
+/*
+ * One slot per Panel. Its size is what animates (`--seq-*` in tokens.css): the slots share the
+ * Board evenly, or one fills it and the others are Stripes. Desktop sizes are widths, mobile
+ * sizes heights; the Board is a row on desktop and a column on mobile.
+ */
+.slot {
+  position: relative;
+  flex: 1 1 0px;
+  /* No `min-height: 0`: on mobile the Expanded panel's page gives the slot (and the Board) its height. */
+  min-width: 0;
+  /* Clips without a scroll container, so the sticky Stripes and close button keep working. */
+  overflow: clip;
+  background: var(--tone-bg);
+  color: var(--tone-fg);
+  transition:
+    flex-grow var(--seq-resize) var(--seq-ease),
+    flex-basis var(--seq-resize) var(--seq-ease);
+}
+
+/* Palette text: light on the dark About Panel, dark on the other four. */
+.ink {
+  --tone-bg: var(--panel-about);
+  --tone-fg: var(--text-on-dark);
+}
+
+.mist {
+  --tone-bg: var(--panel-what-i-do);
+  --tone-fg: var(--text-on-light);
+}
+
+.teal {
+  --tone-bg: var(--panel-skills);
+  --tone-fg: var(--text-on-light);
+}
+
+.blue {
+  --tone-bg: var(--panel-chat);
+  --tone-fg: var(--text-on-light);
+}
+
+.green {
+  --tone-bg: var(--panel-contact);
+  --tone-fg: var(--text-on-light);
+}
+
+/*
+ * A Stripe's slot is as narrow as its title plus padding, and stays in view while the page
+ * scrolls: the height of the window, and sticky.
+ */
+.stripe {
+  position: sticky;
+  top: 0;
+  flex: 0 0 calc(1lh + 2rem);
+  align-self: flex-start;
+  height: max(100dvh, 32rem);
+}
+
+/* The view fills the slot, except the Expanded panel's: its page gives the slot (and the Board) its height. */
+.view {
+  position: absolute;
+  inset: 0;
+  transition: opacity var(--view-fade) linear;
+}
+
+.panel .view {
+  --view-fade: var(--seq-panel-fade);
+}
+
+.stripe .view {
+  --view-fade: var(--seq-stripe-fade);
+}
+
+.expanded .view {
+  --view-fade: var(--seq-expanded-fade);
+
+  position: relative;
+  inset: auto;
+}
+
+.hidden {
+  opacity: 0;
+}
+
+/* Mobile: Stripes are rows of title height plus a little padding, at least 44px, scrolling with the page. */
+@media (width < 840px) {
+  .stripe {
+    /* Not sticky, but still the view's containing block. */
+    position: relative;
+    flex-basis: max(44px, calc(1lh + 1.5rem));
+    align-self: auto;
+    height: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slot,
+  .view {
+    transition: none;
+  }
+}
+
+/* The Board's unfold: this Panel's turn (its title fades in after the last one, see Panel). */
+@media (prefers-reduced-motion: no-preference) {
+  .entering {
+    --position: 0;
+
+    transform-origin: 0 0;
+    animation: unfold var(--enter-panel) var(--enter-ease) backwards;
+    animation-delay: calc(var(--position) * var(--enter-stagger));
+  }
+
+  .entering:nth-child(2) {
+    --position: 1;
+  }
+
+  .entering:nth-child(3) {
+    --position: 2;
+  }
+
+  .entering:nth-child(4) {
+    --position: 3;
+  }
+
+  .entering:nth-child(5) {
+    --position: 4;
+  }
+}
+
+@keyframes unfold {
+  from {
+    opacity: 0;
+    transform: perspective(2000px) rotateY(-180deg);
+  }
+}

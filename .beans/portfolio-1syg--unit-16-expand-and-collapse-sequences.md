@@ -1,13 +1,13 @@
 ---
 # portfolio-1syg
 title: 'Unit 1.6: Expand and collapse sequences'
-status: todo
+status: completed
 type: task
 priority: normal
 tags:
     - ready-for-agent
 created_at: 2026-11-09T10:30:50Z
-updated_at: 2026-11-10T12:18:16Z
+updated_at: 2026-11-10T15:21:49Z
 parent: portfolio-m9gt
 blocked_by:
     - portfolio-4zpt
@@ -24,18 +24,48 @@ Every Board state change animates as designed, whatever caused it (click, direct
 
 ## Acceptance criteria
 
-- [ ] Unit and integration tests written first and red, then green (TDD, per the rules). The sequencing logic (step order, scroll skipped at the top, clicks ignored mid-sequence, drop on Back/Forward, reduced motion) is tested without depending on real timers.
-- [ ] One stable slot per Panel; only the slot's size animates, and the Panel, Stripe and Expanded panel views fade into each other inside it.
-- [ ] Desktop opening: the other Panels' content fades out (120ms), the widths animate (500ms, ease-in-out), then the Stripes fade in (400ms) while the Expanded panel's content fades in (150ms). Closing runs the same steps backwards.
-- [ ] Desktop switching: smooth scroll to the top (skipped when already there; the next step waits for the scroll to end), then close, then open.
-- [ ] Mobile: no fade-out and no closing step. The other rows shrink to Stripes and the chosen one expands; switching scrolls smoothly to the top first.
-- [ ] CSS only: the durations are CSS custom properties kept in one place, and the steps chain on `transitionend`.
-- [ ] Clicks are ignored while a sequence runs. A Back/Forward during a sequence drops it; decide here what the new state plays, without tracking the cause of the change or what was open before.
-- [ ] Every route change animates the same way; there is no `userTriggered` flag (removed by the router bean).
-- [ ] With reduced motion, every step is instant.
-- [ ] `scripts/verify.sh` GREEN
+- [x] Unit and integration tests written first and red, then green (TDD, per the rules). The sequencing logic (step order, scroll skipped at the top, clicks ignored mid-sequence, drop on Back/Forward, reduced motion) is tested without depending on real timers.
+- [x] One stable slot per Panel; only the slot's size animates, and the Panel, Stripe and Expanded panel views fade into each other inside it.
+- [x] Desktop opening: the other Panels' content fades out (120ms), the widths animate (500ms, ease-in-out), then the Stripes fade in (400ms) while the Expanded panel's content fades in (150ms). Closing runs the same steps backwards.
+- [x] Desktop switching: smooth scroll to the top (skipped when already there; the next step waits for the scroll to end), then close, then open.
+- [x] Mobile: no fade-out and no closing step. The other rows shrink to Stripes and the chosen one expands; switching scrolls smoothly to the top first.
+- [x] CSS only: the durations are CSS custom properties kept in one place, and the steps chain on `transitionend`.
+- [x] Clicks are ignored while a sequence runs. A Back/Forward during a sequence drops it; decide here what the new state plays, without tracking the cause of the change or what was open before.
+- [x] Every route change animates the same way; there is no `userTriggered` flag (removed by the router bean).
+- [x] With reduced motion, every step is instant.
+- [x] `scripts/verify.sh` GREEN
 
 ## Blocked by
 
 - portfolio-4zpt (Unit 1.5: Open and close a Panel)
 - portfolio-8o1w (Move routing to @octanejs/tanstack-router)
+
+## Decisions
+
+- Stages, not timers: the Board is a tree of stages (`useBoardSequence/sequence.ts`, pure planner + reducer). Desktop open = Panels fade out, slots resize, Stripes and page fade in; close backwards; switch = scroll to top (if scrolled), close, open, **without** the Panels fading in only to fade out (that pair cancels). Mobile plays the target stage in one step.
+- Back/Forward (any route change) mid-sequence: the stages still to play are dropped and the planner walks from the stage on screen to the new route's stage. No cause tracking, no memory of what was open.
+- A direct visit/reload of an Expanded panel shows it at once (the Board entrance still plays); only route changes while the Board is mounted play stages.
+- A stage ends when `getAnimations()` reports no running transition on `data-seq` elements, re-checked on `transitionend`/`transitioncancel`. Zero transitions (reduced motion) = instant. Safari without `scrollend`: the scroll-to-top wait falls back to a rAF check for a page that stops moving.
+- Panel, Stripe and Expanded panel no longer own the `<li>` or the tone; `Slot` does. Panel and Stripe take `href`/`onClick` (Board wraps them in `ignoredWhileBusy`).
+
+## Known limitation (follow-up)
+
+The route's `Outlet` swaps the page at once, so on close and on switch the outgoing Expanded panel fades out without its page (or, when switching, showing the new page). Fine for heading-only pages; once real content lands a unit should keep the outgoing page for the fade-out.
+
+## Summary of Changes
+
+- New `Slot` (one stable `<li>` per Panel, only its size transitions; view wrapper fades, `inert` when hidden) and `useBoardSequence` (planner/reducer in `sequence.ts`, DOM probes in `probes.ts`).
+- Board renders slots from the stage; clicks, close button and Escape are ignored while busy; `useBoardFocus` follows the resting stage; `usePrevious` removed.
+- `--seq-*` durations in `tokens.css`; sizes animate via `flex-grow`/`flex-basis`.
+- Tests: sequence planner/reducer, probes, Board sequence integration (faked transitions), Slot; Panel/Stripe/ExpandedPanel tests adapted. Docs: `units.md` Motion, `.claude/rules/frontend.md`.
+- E2E suite at baseline (4 pre-existing failures, unchanged); checked the real sequence by hand in Chromium (desktop and 375px).
+
+
+## Review follow-ups (not fixed here)
+
+- Direct visit/reload of an Expanded panel shows it at once (no stages); `units.md` says so. Say if you want the open sequence to play on mount instead.
+- Mobile views swap instantly while the slot resizes (single stage), no cross-fade: the "simpler shrink and expand".
+- Focus is not restored when Back interrupts an open that never rested on another Panel (the activated link went `inert`).
+- Closing from a scrolled tall page snaps the Board height when the page view unmounts; only switching scrolls to the top first. Matters once pages are tall.
+- A click during the entrance unfold ends `.entering` at the resize stage and snaps the unfold.
+- No E2E scenario for the sequence yet (Unit 1.N).

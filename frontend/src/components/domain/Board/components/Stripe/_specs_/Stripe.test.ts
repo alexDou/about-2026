@@ -3,20 +3,12 @@ import { describe, expect, it, vi } from "vitest";
 import { Stripe } from ".././Stripe.tsrx";
 
 describe("Stripe", () => {
-  const props = { tone: "teal", title: "Skills", href: "/skills" } as const;
+  const props = { title: "Skills", href: "/skills" } as const;
 
-  it("is a list item whose whole body is a link to the Panel's URL", () => {
-    render(Stripe, { props: { ...props, onClick: () => {} } });
-    expect(screen.getByRole("listitem")).toContainElement(
-      screen.getByRole("link", { name: "Skills" }),
-    );
-    expect(screen.getByRole("link")).toHaveAttribute("href", "/skills");
-    expect(screen.getByRole("listitem")).toHaveTextContent(/^Skills$/);
-  });
-
-  it("switches its tone as a class", () => {
-    render(Stripe, { props: { ...props, onClick: () => {} } });
-    expect(screen.getByRole("listitem")).toHaveClass("teal");
+  it("is one link to the Panel's URL that is the whole Stripe", () => {
+    const { container } = render(Stripe, { props: { ...props, onClick: () => {} } });
+    expect(screen.getByRole("link", { name: "Skills" })).toHaveAttribute("href", "/skills");
+    expect(container.textContent).toBe("Skills");
   });
 
   it("hands the click to its handler", () => {

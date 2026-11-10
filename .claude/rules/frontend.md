@@ -36,6 +36,13 @@ Syntax: https://tsrx.dev/features.
 - `@tanstack/router-core` is a direct dependency, pinned to the version the binding pins, only so `StaticDataRouteOption` can be typed (`hooks/useRoute/types.ts`). Move both together.
 - A visit to a path with a trailing slash is replaced where the router is made, and an unknown path by a catch-all route, both without a history entry.
 
+## The Board's sequence
+
+- Every Panel has one `Slot` (`components/domain/Board/components/Slot/`): its `<li>` keeps the tone and the size, and only the size transitions. The view inside (Panel, Stripe or Expanded panel) is one wrapper that fades; the hidden view is `inert`.
+- `useBoardSequence(board, root)` turns route changes into stages (`sequence.ts` is the pure planner and reducer, tested without timers). A stage is a class change; it ends on `transitionend`/`transitioncancel` once `runningTransitions` (the browser's running CSS transitions on `data-seq` elements) is zero. No timers and no `animation` in JS. A stage with no transition ends at once, so reduced motion (`transition: none`) needs no special case.
+- The durations are the `--seq-*` custom properties in `styles/tokens.css`. `useBoardFocus` moves focus when the Board comes to rest, not on the route change.
+- Clicks, the close button and Escape are ignored while `busy` (`ignoredWhileBusy`). Tests fake the browser: a `getAnimations` that reports transitions while the DOM differs from the last ended stage, and `transitionend` fired by hand (`_specs_/BoardSequence.test.ts`).
+
 ## Domain code stays in its domain
 
 - A hook, type, constant or helper that carries one domain's concepts lives in that domain's chunk, `components/domain/<Name>/` (`hooks/`, `types.ts`, `config.ts`), however many chunks use it. Example: `ApiStatus` owns `useApiHealth` and the `ApiHealth` type.

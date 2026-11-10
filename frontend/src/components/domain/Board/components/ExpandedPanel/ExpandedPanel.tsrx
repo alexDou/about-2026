@@ -1,18 +1,12 @@
-import cx from "classnames";
 import { useEscapeKey } from "./hooks/useEscapeKey";
 import styles from "./styles.module.css";
 import type { ExpandedPanelProps } from "./types";
 
 /** The one Panel opened to fill the Board: its page, a close button, and Escape to close. */
-export function ExpandedPanel({
-  tone,
-  closeLabel,
-  onClose,
-  children,
-}: ExpandedPanelProps) @{
+export function ExpandedPanel({ closeLabel, onClose, children }: ExpandedPanelProps) @{
   useEscapeKey(onClose);
 
-  <li class={cx(styles["expanded"], styles[tone])}>
+  <div class={styles["expanded"]}>
     // Zero height, so it takes no room, and sticky, so the button stays at the top right in view.
     <div class={styles["closeBar"]}>
       <button
@@ -28,5 +22,5 @@ export function ExpandedPanel({
       </button>
     </div>
     {children}
-  </li>;
+  </div>;
 }
