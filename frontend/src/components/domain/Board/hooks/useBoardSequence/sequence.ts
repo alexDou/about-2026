@@ -29,12 +29,13 @@ const sameStage = (a: BoardStage, b: BoardStage) => a.layout === b.layout && a.v
 
 /**
  * The stages to play to get from `from` to `to`, `from` not included. Desktop walks the tree of
- * stages (opening is closing backwards; switching closes, then opens, without the Panels fading in
- * only to fade out again); mobile has no fade-out and no closing step, so it plays `to` at once.
+ * stages (opening is closing backwards). Switching from one Expanded panel to another, and all of
+ * mobile, has nothing to fade out and no closing step: `to` plays at once and only the sizes
+ * animate.
  */
 export function planStages(from: BoardStage, to: BoardStage, mobile: boolean): BoardStage[] {
   if (sameStage(from, to)) return [];
-  if (mobile) return [to];
+  if (mobile || (from.views === "expanded" && to.views === "expanded")) return [to];
 
   const up = stagesToDefault(from);
   const down = stagesToDefault(to);

@@ -149,21 +149,13 @@ describe("the Board's sequence", () => {
       expect(stage()).toEqual({ views: "panels", fade: "in", expanded: -1 });
     });
 
-    it("switches by closing, then opening", async () => {
+    it("switches in one step: no fade, only the widths animate", async () => {
       await renderBoardAt("/about");
       animate();
       await click("Contact");
-      const seen = [stage()];
-      for (let i = 0; i < 3; i++) {
-        await endStage();
-        seen.push(stage());
-      }
-      expect(seen).toEqual([
-        { views: "side", fade: "out", expanded: 0 },
-        { views: "panels", fade: "out", expanded: -1 },
-        { views: "side", fade: "out", expanded: 4 },
-        { views: "side", fade: "in", expanded: 4 },
-      ]);
+      expect(stage()).toEqual({ views: "side", fade: "in", expanded: 4 });
+      await endStage();
+      expect(stage()).toEqual({ views: "side", fade: "in", expanded: 4 });
     });
 
     it("plays every stage at once where nothing runs, as with reduced motion", async () => {
@@ -274,7 +266,7 @@ describe("the Board's sequence", () => {
   });
 
   describe("switching from a scrolled page", () => {
-    it("scrolls to the top first, and starts closing when the scroll ends", async () => {
+    it("scrolls to the top first, and switches when the scroll ends", async () => {
       await renderBoardAt("/about");
       animate();
       Object.defineProperty(window, "scrollY", { configurable: true, value: 300 });
@@ -291,7 +283,7 @@ describe("the Board's sequence", () => {
       expect(path()).toBe("/contact");
 
       await act(async () => scroll.arrive());
-      expect(stage()).toEqual({ views: "side", fade: "out", expanded: 0 });
+      expect(stage()).toEqual({ views: "side", fade: "in", expanded: 4 });
     });
 
     it("does not scroll from the top", async () => {

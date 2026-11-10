@@ -39,11 +39,8 @@ describe("planStages on desktop", () => {
     ]);
   });
 
-  it("switches: closes, then opens, without the Panels fading in only to fade out", () => {
+  it("switches in one step: the views stay, only the widths animate", () => {
     expect(planStages(EXPANDED("about"), EXPANDED("contact"), false)).toEqual([
-      resized("about"),
-      EVEN,
-      resized("contact"),
       EXPANDED("contact"),
     ]);
   });
@@ -142,7 +139,7 @@ describe("sequenceReducer", () => {
     it("scrolls to the top first, with the stage on screen unchanged", () => {
       expect(go(open, expandedBoard("contact"), { scrolled: true })).toMatchObject({
         stage: EXPANDED("about"),
-        queue: [resized("about"), EVEN, resized("contact"), EXPANDED("contact")],
+        queue: [EXPANDED("contact")],
         running: true,
         scrolling: true,
       });
@@ -151,8 +148,8 @@ describe("sequenceReducer", () => {
     it("starts the first stage when the scroll ends", () => {
       const scrolling = go(open, expandedBoard("contact"), { scrolled: true });
       expect(sequenceReducer(scrolling, { type: "scrolled", step: scrolling.step })).toMatchObject({
-        stage: resized("about"),
-        queue: [EVEN, resized("contact"), EXPANDED("contact")],
+        stage: EXPANDED("contact"),
+        queue: [],
         running: true,
         scrolling: false,
       });
@@ -166,7 +163,7 @@ describe("sequenceReducer", () => {
 
     it("skips the scroll at the top", () => {
       expect(go(open, expandedBoard("contact"))).toMatchObject({
-        stage: resized("about"),
+        stage: EXPANDED("contact"),
         scrolling: false,
       });
     });
