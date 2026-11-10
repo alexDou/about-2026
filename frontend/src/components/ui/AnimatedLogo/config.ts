@@ -17,9 +17,3 @@ export const VIEW_BOX = "150 124 434 303";
 
 /** Each weave is split into three color tones (w1..w3). */
 export const TONES = 3;
-
-/**
- * Box of the "Dooooo.." wordmark (dooooo.svg), centered in the O's hole.
- * The hole is centered at (306, 306) with radius 84.5 - 66 / 2 = 51.5; the box keeps a clear margin.
- */
-export const WORDMARK_BOX = { x: 266, y: 295.5, width: 80, height: 21 } as const;

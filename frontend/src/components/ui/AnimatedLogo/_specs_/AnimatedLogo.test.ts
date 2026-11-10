@@ -13,11 +13,10 @@ describe("AnimatedLogo", () => {
     expect(ring[0]?.getAttribute("d")).toMatch(/^M/);
   });
 
-  it("shows the wordmark inside the O", () => {
+  it("shows only the weave: no wordmark or other image inside the O", () => {
     const { container } = render(AnimatedLogo, { props: { label: "Logo" } });
-    const wordmark = container.querySelector('[data-part="wordmark"]');
-    expect(wordmark?.getAttribute("href")).toMatch(/svg/);
-    expect(wordmark?.getAttribute("width")).toBe("80");
+    expect(container.querySelector("image")).toBeNull();
+    expect(container.querySelector('[data-part="wordmark"]')).toBeNull();
   });
 
   it("is a labelled button that calls onClick", () => {
