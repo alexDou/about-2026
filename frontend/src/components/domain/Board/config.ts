@@ -1,11 +1,11 @@
-import type { MessageId } from "../../../i18n";
 import type { PanelId } from "../../../hooks/useRoute";
+import type { PanelTone } from "./components/Panel";
 
-/** The message that titles each Panel. */
-export const TITLE_BY_PANEL = {
-  about: "board.panel.about.title",
-  whatIDo: "board.panel.whatIDo.title",
-  skills: "board.panel.skills.title",
-  chatWithMe: "board.panel.chatWithMe.title",
-  contact: "board.panel.contact.title",
-} as const satisfies Record<PanelId, MessageId>;
+/** The tone of each Panel: the palette in Board order, left to right and top to bottom. */
+export const TONE_BY_PANEL = {
+  about: "ink",
+  whatIDo: "mist",
+  skills: "teal",
+  chatWithMe: "blue",
+  contact: "green",
+} as const satisfies Record<PanelId, PanelTone>;

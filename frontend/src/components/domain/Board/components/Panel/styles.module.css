@@ -1,0 +1,94 @@
+.panel {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  container-type: inline-size;
+  background: var(--tone-bg);
+  color: var(--tone-fg);
+}
+
+/* Palette text: light on the dark About Panel, dark on the other four. */
+.ink {
+  --tone-bg: var(--panel-about);
+  --tone-fg: var(--text-on-dark);
+}
+
+.mist {
+  --tone-bg: var(--panel-what-i-do);
+  --tone-fg: var(--text-on-light);
+}
+
+.teal {
+  --tone-bg: var(--panel-skills);
+  --tone-fg: var(--text-on-light);
+}
+
+.blue {
+  --tone-bg: var(--panel-chat);
+  --tone-fg: var(--text-on-light);
+}
+
+.green {
+  --tone-bg: var(--panel-contact);
+  --tone-fg: var(--text-on-light);
+}
+
+/* The title is the only in-flow child, so the grid centres it on both axes. */
+.content {
+  position: relative;
+  max-width: 100%;
+}
+
+.title {
+  position: relative;
+  display: block;
+  /* The trailing letter-space would pull the word off-centre. */
+  padding: 0.25rem 0 0.25rem 0.2em;
+  color: inherit;
+  font-size: 1.5rem;
+  font-weight: 300;
+  letter-spacing: 0.2em;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+/* The pen's line: slides in from the left on hover and focus. */
+.title::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 70px;
+  height: 2px;
+  background: currentColor;
+  opacity: 0;
+  transform: translateX(-100%);
+  transition:
+    transform 0.2s linear,
+    opacity 0.2s linear;
+}
+
+.title:hover::before,
+.title:focus-visible::before {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Narrow desktop: five columns can be as narrow as 128px, and a word cannot wrap. */
+@media (min-width: 641px) and (max-width: 760px) {
+  .title {
+    padding-left: 0.1em;
+    letter-spacing: 0.1em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .title::before {
+    transition: none;
+  }
+}

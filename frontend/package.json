@@ -21,6 +21,7 @@
     "@formatjs/icu-messageformat-parser": "3.5.22",
     "@formatjs/intl": "6.1.4",
     "@tsrx/oxc": "0.23.0",
+    "classnames": "2.5.1",
     "octane": "0.16.7"
   },
   "devDependencies": {
