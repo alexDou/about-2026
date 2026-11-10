@@ -5,11 +5,11 @@ status: todo
 type: epic
 priority: normal
 created_at: 2026-11-06T20:27:21Z
-updated_at: 2026-11-09T10:33:06Z
+updated_at: 2026-11-10T12:18:17Z
 parent: portfolio-4ur0
 ---
 
-Landing → Board reveal and five Panels (About, What I do, Skills, Chat with me, Contact) that expand into an Expanded panel with Stripes. The close button and Escape restore the default Board. Real URLs, a mobile layout of its own, user-triggered transitions only, FormatJS messages (ADR 0003), a shared backend health check with offline notes in Chat with me and Contact, `noindex` + `robots.txt`.
+Landing → Board reveal and five Panels (About, What I do, Skills, Chat with me, Contact) that expand into an Expanded panel with Stripes. The close button and Escape restore the default Board. Real URLs, a mobile layout of its own, transitions on every route change (no cause tracking, ADR 0004), routing on TanStack Router, FormatJS messages (ADR 0003), a shared backend health check with offline notes in Chat with me and Contact, `noindex` + `robots.txt`.
 
 Spec, fully decided: the Unit 1 section of `docs_src/specs/units.md`. Vocabulary: `CONTEXT.md`.
 

@@ -56,15 +56,15 @@ Reference: the expanded menu of codepen `fluxus/gPWvZm` (local copy in git-ignor
   - The palette colors are global tokens; each component switches a tone class by prop (`classnames`).
   - `#25363a` reaches only about 3:1 on the blue and green Panels: enough for titles, below AA for body text. Body text in Chat with me and Contact therefore sits on a `#d1dcd9` surface (Units 4 and 7).
 - **Motion**
-  - Transitions run only when a user action changes the route: the logo click, a Panel title, a Stripe, the close button, Escape. A direct visit (`/explore` included), a reload and browser Back/Forward render the target state at once.
-  - Entrance, only on the Landing → Board logo click, as in the pen: the Board slides in (300ms), the Panels follow 150ms apart, the titles fade in (140ms).
+  - Every route change plays its transition, whatever caused it: the logo click, a Panel title, a Stripe, the close button, Escape, a direct visit (`/explore` included), a reload and browser Back/Forward alike. The site does not track the cause of a change or what was open before (ADR 0004).
+  - Entrance, whenever the Board appears (the logo click, a direct visit, a reload, Back/Forward from the Landing), as in the pen: the Board slides in (300ms), the Panels follow 150ms apart, the titles fade in (140ms).
   - Expanding on desktop: the other Panels' content fades out (120ms), the widths animate (500ms, ease-in-out), then the Stripes fade in (400ms) while the Expanded panel's content fades in faster (150ms). Collapsing runs the same steps backwards. Switching Panels: smooth scroll to the top (skipped when already there; the next step waits for the scroll to end), collapse, expand.
   - Expanding on mobile: no fade-out and no collapse step. The other rows shrink and the chosen one expands. Switching scrolls smoothly to the top first.
   - Each Panel keeps one stable slot on the Board. Only the slot's size animates; the Panel, Stripe and Expanded panel views fade into each other inside it. CSS only: the durations are CSS custom properties kept in one place, and the steps chain on `transitionend`.
-  - Clicks are ignored while a sequence runs, as in the pen. Back/Forward during a sequence drops it and renders the target state.
+  - Clicks are ignored while a sequence runs, as in the pen. A route change by Back/Forward during a sequence drops the sequence; Unit 1.6 settles what the new state then plays.
   - Reduced motion: every step is instant. Focus: expanding moves it to the Expanded panel's heading; collapsing returns it to the Panel that was open.
 - **URLs and history**
-  - `/` Landing, `/explore` Board default, `/about`, `/what-i-do`, `/skills`, `/chat`, `/contact` per Expanded panel, through our own route hook over the History API.
+  - `/` Landing, `/explore` Board default, `/about`, `/what-i-do`, `/skills`, `/chat`, `/contact` per Expanded panel, through TanStack Router (`@octanejs/tanstack-router`, code-defined routes, ADR 0004).
   - Panels and Stripes are real links, so opening one in a new tab works; normal clicks are handled in the app.
   - Every state change adds a history entry, the logo click included, so Back from `/explore` shows the Landing. The site itself offers no way back to the Landing.
   - An unknown path is replaced by `/`, and a trailing slash is dropped, both without a history entry.
@@ -73,14 +73,14 @@ Reference: the expanded menu of codepen `fluxus/gPWvZm` (local copy in git-ignor
 - **Text**: all UI text is FormatJS (ICU) messages (ADR 0003). The setup and the message files (one per page or area, ids prefixed by area, e.g. `board.panel.skills.title`) live in `src/i18n/`; `useIntl()` is a shared hook. A Panel has a Sublabel when its Sublabel message exists. An unknown message id fails the type check, and a test checks that every message parses as ICU.
 - **Backend status**: the Landing keeps its status badge. One shared health check runs on page load and again whenever Chat with me or Contact opens. While the backend is down, both show an offline note.
 - **Search engines**: `<meta name="robots" content="noindex, nofollow">` (the matching `X-Robots-Tag` header comes with Unit 8). `robots.txt` lets ordinary crawlers in, so they read the `noindex`, and disallows AI-training crawlers (GPTBot, ClaudeBot, CCBot, Google-Extended, …).
-- **Code layout**: `App` renders `LandingPage` on `/` and otherwise the Board with the Expanded panel's page inside. The Board (`components/domain/Board/`) owns the Panel, Stripe and Expanded panel components and gives each Panel its tone by position. One page per Panel in `pages/`; `Heading` in `components/ui/`. The route hook holds the Panel ids and their order, id ↔ path, the Board state and the URL ↔ state mapping; there is no separate Panel config.
+- **Code layout**: `App` renders `LandingPage` on `/` and otherwise the Board with the Expanded panel's page inside. The Board (`components/domain/Board/`) owns the Panel, Stripe and Expanded panel components and gives each Panel its tone by position. One page per Panel in `pages/`; `Heading` in `components/ui/`. The route definitions hold the Panel ids and their order, id ↔ path, the Board state and the URL ↔ state mapping (`hooks/useRoute`, a thin layer over the router); there is no separate Panel config.
 
 **Sub-unit breakdown**
 - 1.0: Panel ids and order, the id ↔ path map, the Board state type (`default | expanded(panel)`), the URL ↔ state mapping and the message-id type, locked by tests.
-- 1.x: FormatJS setup with `en` messages; font and palette tokens; route hook; Heading, Panel, Stripe and Expanded panel; Board layout with the desktop and mobile expand/collapse sequences; Landing → Board entrance; document title and `theme-color`; shared health check and offline notes; `noindex` + `robots.txt`; the stale `logo/` mentions in `AnimatedLogo` (the playground moved to `support_files/logo/`).
+- 1.x: FormatJS setup with `en` messages; font and palette tokens; routing on TanStack Router (replacing the own route hook of 1.3); Heading, Panel, Stripe and Expanded panel; Board layout with the desktop and mobile expand/collapse sequences; Landing → Board entrance; document title and `theme-color`; shared health check and offline notes; `noindex` + `robots.txt`; the stale `logo/` mentions in `AnimatedLogo` (the playground moved to `support_files/logo/`).
 - 1.N: E2E for deep links, Back/Forward, unknown paths, expanding from a Stripe, the close button and Escape restoring the default, and the mobile layout.
 
-**Definition of Done**: every URL renders the right state; user actions animate (respecting reduced motion) while direct visits and Back/Forward render at once; mobile follows its own layout; E2E green.
+**Definition of Done**: every URL renders the right state; every route change animates the same way (respecting reduced motion); mobile follows its own layout; E2E green.
 
 ## Unit 2: About
 

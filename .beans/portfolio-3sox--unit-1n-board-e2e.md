@@ -3,10 +3,11 @@
 title: 'Unit 1.N: Board E2E'
 status: todo
 type: task
+priority: normal
 tags:
     - ready-for-agent
 created_at: 2026-11-09T10:30:50Z
-updated_at: 2026-11-09T10:30:50Z
+updated_at: 2026-11-10T12:18:17Z
 parent: portfolio-m9gt
 blocked_by:
     - portfolio-1syg
@@ -27,7 +28,7 @@ Cucumber + Playwright scenarios against the production build prove the Unit 1 fl
 - [ ] Each of the seven URLs renders the right state on a direct visit.
 - [ ] Back/Forward walk through Landing → Board → Panel → another Panel → close.
 - [ ] An unknown path lands on `/`; a trailing slash is dropped.
-- [ ] The entrance runs after the logo click and not on a direct `/explore` visit.
+- [ ] The entrance runs whenever the Board appears: after the logo click, on a direct `/explore` visit, after a reload.
 - [ ] Expanding from a Stripe works; the close button and Escape restore the default Board.
 - [ ] On a mobile viewport the Panels are rows and the Stripes are title-height rows.
 - [ ] With the backend unreachable, Chat with me and Contact show the offline note.
