@@ -40,6 +40,7 @@
 .content {
   position: relative;
   max-width: 100%;
+  margin-top: -20%;
 }
 
 /* The dots row. */
@@ -127,8 +128,7 @@
   .title::before {
     position: static;
     align-self: center;
-    width: auto;
-    /* 4% of the Panel (`cqw`), less the title's own 0.2em padding. */
+    width: 40%;
     margin: 0 var(--dots-side-gap) 0 calc(4cqw - 0.2em);
   }
 }
