@@ -69,17 +69,34 @@ Feature: Default Board look
     When I hover the Panel title "Skills"
     Then the dots above the Panel title "Skills" are shown
     And the dots above the Panel title "Skills" span the Panel, inset by 2% each side, and are at most 8px tall
-    And the dots above the Panel title "Skills" end above the title, as far as the Sublabel is below
+    And the dots above the Panel title "Skills" end above the title at the top label gap
     And the dots above the Panel title "Skills" are moving
     When I move the pointer away
     And I focus the Panel title "Contact" with the keyboard
     Then the dots above the Panel title "Contact" are shown
 
+  Scenario Outline: On a phone the dots sit left of the title, centred on it, with padding before it
+    Given the window is <width> by <height>
+    When I open "/explore"
+    Then the dots beside the Panel title "Chat with me" are hidden
+    When I hover the Panel title "Chat with me"
+    Then the dots beside the Panel title "Chat with me" are shown
+    And the dots beside the Panel title "Chat with me" are a short row, at most 8px tall
+    And the dots beside the Panel title "Chat with me" end 16px before the title
+    And the dots beside the Panel title "Chat with me" are centred on the title's height
+    And the dots beside the Panel title "Chat with me" stay inside the Panel
+    And the dots beside the Panel title "Chat with me" are moving
+
+    Examples:
+      | width | height |
+      | 375   | 667    |
+      | 320   | 568    |
+
   Scenario: No line crosses a title
     Given the window is 1280 by 800
     When I open "/explore"
     And I hover the Panel title "Skills"
-    Then the dots above the Panel title "Skills" end above the title, as far as the Sublabel is below
+    Then the dots above the Panel title "Skills" end above the title at the top label gap
 
   Scenario: The Board unfolds when the logo opens it
     Given I open the landing page

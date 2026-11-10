@@ -8,7 +8,7 @@
   left: 50%;
   width: max-content;
   max-width: min(14rem, 90cqw);
-  margin: var(--label-gap) 0 0;
+  margin: var(--label-gap-bottom) 0 0;
   transform: translateX(-50%);
   font-size: 0.875rem;
   font-style: italic;

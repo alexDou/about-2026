@@ -7,7 +7,7 @@ priority: normal
 tags:
     - ready-for-agent
 created_at: 2026-11-09T10:30:50Z
-updated_at: 2026-11-10T10:25:09Z
+updated_at: 2026-11-10T10:58:08Z
 parent: portfolio-m9gt
 blocked_by:
     - portfolio-dbxq
@@ -64,3 +64,8 @@ portfolio-m9gt (Unit 1: Board). Design: the Unit 1 section of `docs_src/specs/un
 - Kept the Owner's hand-tuned CSS: dots row 96% wide (2% inset each side), `--label-gap` 1.2rem. Tests follow. At 1.2rem the Sublabel no longer fit the 84px rows of the shortest phone windows, so below 460px tall the gap is 0.5rem again.
 - The tokens test reads only the first `:root` block (the defaults).
 - The wordmark removal is its own bean, portfolio-c1qs.
+
+## Summary of Changes (round 4, user feedback)
+
+- On a phone (<= 640px) the moving dots are no longer a full-width row above the title: as in the pen they are a short row (four dots) left of the title, centred on its height, 1rem before it, sliding in from the left on hover and focus. Desktop is unchanged.
+- Kept the Owner's split of the gap into `--label-gap-top` (1.2rem, the dots) and `--label-gap-bottom` (0.6rem, the Sublabel); the "one shared gap" wording in this bean and in `units.md` is superseded. Tests resolve the tokens instead of comparing the two distances.

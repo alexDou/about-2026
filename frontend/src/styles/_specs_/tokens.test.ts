@@ -44,7 +44,8 @@ describe("motion tokens", () => {
     ["--enter-stagger", "150ms"],
     ["--enter-panel", "950ms"],
     ["--enter-title", "140ms"],
-    ["--label-gap", "1.2rem"],
+    ["--label-gap-top", "1.2rem"],
+    ["--label-gap-bottom", "0.6rem"],
   ])("defines %s as %s", (name, value) => {
     expect(tokens[name]).toBe(value);
   });

@@ -135,6 +135,7 @@ const dots = (link: Locator) =>
       width: parseFloat(style.width),
       height: parseFloat(style.height),
       bottom: parseFloat(style.bottom),
+      top: parseFloat(style.top),
       left: parseFloat(style.left),
       marginLeft: parseFloat(style.marginLeft),
       transform: style.transform,
@@ -173,19 +174,102 @@ Then(
   },
 );
 
+/** A token's value in px: what `var(--token)` resolves to as a length. */
+const tokenPx = (world: PortfolioWorld, token: string) =>
+  world.page.evaluate((name) => {
+    const probe = document.createElement("div");
+    probe.style.marginTop = `var(${name})`;
+    document.body.append(probe);
+    const px = parseFloat(getComputedStyle(probe).marginTop);
+    probe.remove();
+    return px;
+  }, token);
+
 Then(
-  "the dots above the Panel title {string} end above the title, as far as the Sublabel is below",
+  "the dots above the Panel title {string} end above the title at the top label gap",
   async function (this: PortfolioWorld, name: string) {
     const row = await dots(title(this, name));
     const titleHeight = (await title(this, name).boundingBox())!.height;
     // The row's bottom edge is the title's top edge, lifted by the gap: it never reaches the title.
     close(row.bottom, titleHeight);
     expect(row.gap).toBeGreaterThan(0);
-    const sublabelGap = await this.page
+    close(row.gap, await tokenPx(this, "--label-gap-top"));
+  },
+);
+
+Then(
+  "the Sublabel under {string} hangs at the bottom label gap",
+  async function (this: PortfolioWorld, name: string) {
+    const gap = await panel(this, name)
       .locator("p")
-      .first()
       .evaluate((el) => parseFloat(getComputedStyle(el).marginTop));
-    close(row.gap, sublabelGap);
+    close(gap, await tokenPx(this, "--label-gap-bottom"));
+  },
+);
+
+// On a phone the dots row stands left of the title instead of above it.
+Then(
+  "the dots beside the Panel title {string} are hidden",
+  async function (this: PortfolioWorld, name: string) {
+    await expect.poll(async () => (await dots(title(this, name))).opacity).toBe(0);
+  },
+);
+
+Then(
+  "the dots beside the Panel title {string} are shown",
+  async function (this: PortfolioWorld, name: string) {
+    await expect.poll(async () => (await dots(title(this, name))).opacity).toBe(1);
+  },
+);
+
+Then(
+  "the dots beside the Panel title {string} are a short row, at most {int}px tall",
+  async function (this: PortfolioWorld, name: string, max: number) {
+    const row = await dots(title(this, name));
+    const box = (await panel(this, name).boundingBox())!;
+    expect(row.height).toBeGreaterThan(0);
+    expect(row.height).toBeLessThanOrEqual(max);
+    expect(row.width).toBeGreaterThan(row.height * 4);
+    expect(row.width).toBeLessThan(box.width / 3);
+  },
+);
+
+Then(
+  "the dots beside the Panel title {string} end {int}px before the title",
+  async function (this: PortfolioWorld, name: string, gap: number) {
+    const row = await dots(title(this, name));
+    const titleBox = (await title(this, name).boundingBox())!;
+    close(titleBox.x - (titleBox.x + row.left + row.width), gap);
+  },
+);
+
+Then(
+  "the dots beside the Panel title {string} are centred on the title's height",
+  async function (this: PortfolioWorld, name: string) {
+    const row = await dots(title(this, name));
+    const titleBox = (await title(this, name).boundingBox())!;
+    close(row.top + row.height / 2, titleBox.height / 2);
+  },
+);
+
+Then(
+  "the dots beside the Panel title {string} stay inside the Panel",
+  async function (this: PortfolioWorld, name: string) {
+    const row = await dots(title(this, name));
+    const titleBox = (await title(this, name).boundingBox())!;
+    const box = (await panel(this, name).boundingBox())!;
+    expect(titleBox.x + row.left).toBeGreaterThanOrEqual(box.x);
+  },
+);
+
+Then(
+  "the dots beside the Panel title {string} are moving",
+  async function (this: PortfolioWorld, name: string) {
+    const before = await dots(title(this, name));
+    expect(before.animated).toBe(true);
+    await expect
+      .poll(async () => (await dots(title(this, name))).positionX)
+      .not.toBe(before.positionX);
   },
 );
 
