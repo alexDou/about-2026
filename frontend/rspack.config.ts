@@ -55,7 +55,7 @@ export default defineConfig((_env, argv) => {
         patterns: [
           { from: "public" },
           // The font is bundled, so its OFL license travels with it.
-          { from: "src/styles/media/OFL.txt", to: "licenses/OverusedGrotesk-OFL.txt" },
+          { from: "src/styles/fonts/OFL.txt", to: "licenses/OverusedGrotesk-OFL.txt" },
         ],
       }),
     ],

@@ -23,7 +23,7 @@ hooks/<useX>/                 shared domain-agnostic or app-wide hooks only (use
 services/<area>/              API clients, no UI
 utils/                        shared domain-agnostic or app-wide pure helpers only (used by 2+ chunks)
 i18n/                         FormatJS setup and the message files (ADR 0003)
-styles/                       global CSS (tokens, fonts and their license in media/)
+styles/                       global CSS (tokens, fonts/ with the font files and their license)
 public/                       files served as-is from the site root (robots.txt); sibling of src/, not a chunk
 ```
 
@@ -38,7 +38,8 @@ components/domain/ProjectCard/
   styles.module.css           its styles
   [config.ts]                 its constants
   [utils.ts | utils/]         its private helpers (tests in _specs_/)
-  [media/]                    its media files: images, icons, fonts
+  [media/]                    its media files: images, icons, video
+  [fonts/]                    its font files (woff2, ttf, …) and their licenses
   [hooks/useX/]               its own hooks: useX.ts, index.ts, [types.ts]
   [components/<Sub>/]         sub-components only it renders, same shape recursively
 ```
@@ -50,7 +51,7 @@ components/domain/ProjectCard/
 ## Tests
 
 - Unit tests sit in the chunk's `_specs_/` folder: `_specs_/<Name>.test.ts` or `_specs_/<file>.test.ts` (`.test.tsx` only when the test itself needs JSX). The same holds in `frontend/tools/`.
-- Media files (images, icons, fonts) sit in the chunk's `media/` folder.
+- Media files (images, icons, videos) sit in the chunk's `media/` folder.
 - Frontend E2E (Cucumber + Playwright) lives in `frontend/e2e/{features,steps,support}/`.
 - Backend tests live in `backend/tests/`, mirroring `backend/app/` (`app/routes/projects.py` → `tests/routes/test_projects.py`).
 
