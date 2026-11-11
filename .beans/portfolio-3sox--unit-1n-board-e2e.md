@@ -1,13 +1,13 @@
 ---
 # portfolio-3sox
 title: 'Unit 1.N: Board E2E'
-status: in-progress
+status: completed
 type: task
 priority: normal
 tags:
     - ready-for-agent
 created_at: 2026-11-09T10:30:50Z
-updated_at: 2026-11-11T14:55:13Z
+updated_at: 2026-11-11T17:58:05Z
 parent: portfolio-m9gt
 blocked_by:
     - portfolio-1syg
@@ -35,7 +35,7 @@ Cucumber + Playwright scenarios against the production build prove the Unit 1 fl
 - [x] With the backend unreachable, Chat with me and Contact show the offline note.
 - [x] With reduced motion emulated, state changes render instantly.
 - [x] With motion on, open, close and switch run as View Transitions: the transition types and the animation timings per pseudo-element (moved from portfolio-2dsc).
-- [ ] `pnpm --dir frontend e2e` green
+- [x] `pnpm --dir frontend e2e` green
 - [x] `scripts/verify.sh` GREEN
 
 ## Blocked by
@@ -53,3 +53,8 @@ Cucumber + Playwright scenarios against the production build prove the Unit 1 fl
 - `the unfold has ended` now waits for the Board first: the route renders after `load`, so the poll could pass before the entrance began and the next click fell into it (seen as flaky motion scenarios).
 - `pnpm e2e`: 71/75. The 4 failures are the pre-existing `board-look.feature` ones (portfolio-2dsc saw them before this bean); moved to portfolio-2r8j, which blocks the last checklist item.
 - Root group (`::view-transition-group(root)`) keeps the UA's 250ms animation; it is not asserted (identical geometry, nothing visible).
+
+
+## Summary of Changes
+
+Built in eecc459: `motion.feature` (View Transition types and per-pseudo-element timings, with motion on and reduced), `offline.feature` (the offline note with `/api` stubbed), the full Back/Forward walk, a direct visit to `/`, the entrance after a reload, the default Board after Escape and the mobile Stripe height; `the unfold has ended` waits for the Board first. The last item, `pnpm e2e` green, came with portfolio-2r8j (75/75).
