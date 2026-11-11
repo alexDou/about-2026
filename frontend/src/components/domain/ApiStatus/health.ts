@@ -1,6 +1,6 @@
 import { createScope } from "octane/signals";
 import { fetchHealth } from "../../../services/api";
-import { API_HEALTH } from "./config";
+import { API_HEALTH, HEALTH_TIMEOUT_MS } from "./config";
 import type { ApiHealth } from "./types";
 
 /**
@@ -24,13 +24,16 @@ function answer(request: AbortController, health: ApiHealth) {
   state$.set(health);
 }
 
-/** Asks the backend now. A request still in flight is dropped; the last health stays until the answer. */
+/**
+ * Asks the backend now. A request still in flight is dropped; the last health stays until the
+ * answer. A request that takes longer than `HEALTH_TIMEOUT_MS` fails, so the backend counts as down.
+ */
 export function checkHealth() {
   pageLoadAsked = true;
   pending?.abort();
   const request = new AbortController();
   pending = request;
-  fetchHealth(request.signal).then(
+  fetchHealth(AbortSignal.any([request.signal, AbortSignal.timeout(HEALTH_TIMEOUT_MS)])).then(
     () => answer(request, API_HEALTH.ok),
     () => answer(request, API_HEALTH.down),
   );

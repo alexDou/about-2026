@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { fetchHealth } from "../../../../services/api";
-import { API_HEALTH } from "../config";
+import { API_HEALTH, HEALTH_TIMEOUT_MS } from "../config";
 import { checkHealth, checkHealthOnce, health$, resetHealth } from "../health";
 
 vi.mock("../../../../services/api", () => ({ fetchHealth: vi.fn<typeof fetchHealth>() }));
@@ -87,6 +87,29 @@ describe("the shared health check", () => {
     first.fail();
     await settled();
     expect(health$.get()).toBe(API_HEALTH.ok);
+  });
+
+  it("gives up after the timeout and counts a request that never answers as down", async () => {
+    const timeout = new AbortController();
+    const timeoutSpy = vi.spyOn(AbortSignal, "timeout").mockReturnValue(timeout.signal);
+    fetchHealthMock.mockImplementation(
+      (signal) =>
+        new Promise((_resolve, reject) => {
+          signal?.addEventListener("abort", () => reject(signal.reason));
+        }),
+    );
+    checkHealth();
+    expect(timeoutSpy).toHaveBeenCalledWith(HEALTH_TIMEOUT_MS);
+    expect(health$.get()).toBe(API_HEALTH.checking);
+
+    timeout.abort(new DOMException("timed out", "TimeoutError"));
+    await settled();
+    expect(health$.get()).toBe(API_HEALTH.down);
+    timeoutSpy.mockRestore();
+  });
+
+  it("waits 6 seconds before it gives up", () => {
+    expect(HEALTH_TIMEOUT_MS).toBe(6000);
   });
 
   it("starts over after a reset", async () => {
