@@ -1,0 +1,13 @@
+/* An <output> is the status region; it holds phrasing content only, so the note is a block span. */
+.offline-note {
+  display: block;
+}
+
+.offline-note__text {
+  display: block;
+  margin-top: 1.5rem;
+  padding: 0.75rem 1rem;
+  border-left: 0.25rem solid var(--color-down);
+  font-size: 0.875rem;
+  background: color-mix(in srgb, var(--color-down) 12%, transparent);
+}

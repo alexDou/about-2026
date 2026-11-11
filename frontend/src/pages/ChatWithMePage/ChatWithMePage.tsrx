@@ -1,3 +1,4 @@
+import { OfflineNote } from "../../components/domain/OfflineNote";
 import { Heading } from "../../components/ui/Heading";
 import { useIntl } from "../../hooks/useIntl";
 import styles from "./styles.module.css";
@@ -8,5 +9,6 @@ export function ChatWithMePage() @{
 
   <section class={styles["chat-with-me-page"]}>
     <Heading text={intl.formatMessage({ id: "board.panel.chatWithMe.title" })} />
+    <OfflineNote />
   </section>;
 }

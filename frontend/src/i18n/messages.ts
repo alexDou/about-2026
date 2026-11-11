@@ -1,9 +1,10 @@
 import type { MessageFormatElement } from "@formatjs/icu-messageformat-parser";
 import board from "./en/board.json";
 import landing from "./en/landing.json";
+import offline from "./en/offline.json";
 import site from "./en/site.json";
 
-const files = { ...site, ...landing, ...board };
+const files = { ...site, ...landing, ...board, ...offline };
 
 /**
  * The English messages, one file per area, as FormatJS ASTs (`formatjs compile --ast`). They are the
