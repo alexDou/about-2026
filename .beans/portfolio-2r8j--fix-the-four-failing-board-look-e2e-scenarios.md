@@ -1,12 +1,13 @@
 ---
 # portfolio-2r8j
 title: Fix the four failing board-look E2E scenarios
-status: todo
+status: completed
 type: bug
+priority: normal
 tags:
     - needs-triage
 created_at: 2026-11-11T14:54:57Z
-updated_at: 2026-11-11T14:54:57Z
+updated_at: 2026-11-11T17:58:04Z
 parent: portfolio-m9gt
 ---
 
@@ -22,6 +23,20 @@ Likely from the CSS layout refactor (portfolio-9od8) or the View Transitions ado
 
 ## Acceptance criteria
 
-- [ ] Each failure diagnosed: layout bug or stale test
-- [ ] Fixed; `pnpm --dir frontend e2e` green
-- [ ] `scripts/verify.sh` GREEN
+- [x] Each failure diagnosed: layout bug or stale test
+- [x] Fixed; `pnpm --dir frontend e2e` green
+- [x] `scripts/verify.sh` GREEN
+
+
+## Decisions (owner, 2026-11-11)
+
+- Desktop title offset: by design (the Panel's `padding-bottom: 20%` lifts the title a tenth of its width above the middle). The test was stale.
+- Phone dots: removed.
+- Phone dots gap: moot once the dots are gone.
+
+## Summary of Changes
+
+- `Panel/styles.module.css`: the phone dots (`.panel__title::before`, its three-column title grid, `--dots-side-gap`) are gone; on a phone the title spans the row and there are no dots.
+- `board-look.feature`: the desktop scenario checks that titles are centred across and sit a tenth of the Panel's width above the middle; the phone outline now checks there are no dots on hover. The phone-only dots steps and helper fields are removed.
+- `docs_src/specs/units.md`: the Unit 1 layout text says the same.
+- `pnpm --dir frontend e2e`: 75/75.
