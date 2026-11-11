@@ -142,6 +142,15 @@ Feature: Default Board look
     When the unfold has ended
     Then every Panel and title is fully shown
 
+  Scenario: The Board unfolds after a reload
+    Given the visitor accepts motion
+    And I open "/explore"
+    And the unfold has ended
+    When I reload the page
+    Then the Board is unfolding
+    When the unfold has ended
+    Then every Panel and title is fully shown
+
   Scenario: Clicks are ignored until the unfold ends
     Given the visitor accepts motion
     When I open "/explore"

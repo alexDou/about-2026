@@ -375,6 +375,8 @@ Then("the Panel titles are hidden while the Panels unfold", async function (this
 });
 
 When("the unfold has ended", async function (this: PortfolioWorld) {
+  // The route renders the Board after the page's `load`: before that no entrance plays yet.
+  await expect(this.page.getByRole("main")).toBeVisible();
   // The whole entrance takes about 1.6s.
   await expect.poll(() => animating(this), { timeout: 5000 }).toBe(false);
 });

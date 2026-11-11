@@ -18,10 +18,29 @@ let server: StaticServer;
 let browser: Browser;
 let baseUrl: string;
 
+/** A View Transition as `motion.steps.ts` records it in the page. */
+export type RecordedTransition = {
+  types: string[];
+  animations: { pseudo: string; duration: number; delay: number; easing: string }[];
+  /** The opacity of every old snapshot, while the transition plays. */
+  oldOpacities: number[];
+  /** Set once `ready` settled: recorded, or skipped. */
+  ready?: boolean;
+  /** Why the browser skipped it, when it did. */
+  skipped?: string;
+  /** Why recording it threw, when it did. */
+  failed?: string;
+};
+
 export class PortfolioWorld extends World {
   context!: BrowserContext;
   page!: Page;
   fetchedText = "";
+  /** How many recorded View Transitions the scenario has checked, and the last one. */
+  transitionsSeen = 0;
+  transition?: RecordedTransition;
+  /** How many times the stubbed backend has answered (`offline.steps.ts`). */
+  apiAnswers = 0;
 
   url(path = "/"): string {
     return new URL(path, baseUrl).href;
