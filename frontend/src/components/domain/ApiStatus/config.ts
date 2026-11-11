@@ -5,6 +5,9 @@ import type { StatusTone } from "../../ui/StatusBadge";
 /** Whether the FastAPI backend is reachable, as far as the last health check knows. */
 export const API_HEALTH = { checking: "checking", ok: "ok", down: "down" } as const;
 
+/** How long a health request may take before the backend counts as down. */
+export const HEALTH_TIMEOUT_MS = 6000;
+
 export const TONE_BY_HEALTH: Readonly<Record<keyof typeof API_HEALTH, StatusTone>> = {
   [API_HEALTH.checking]: STATUS_TONES.neutral,
   [API_HEALTH.ok]: STATUS_TONES.ok,
