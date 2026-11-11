@@ -34,7 +34,7 @@ Move the prototype into the Board for real, tests first:
 
 ## Acceptance criteria
 
-- [ ] Owner confirmed: no blink in their browser
+- [x] Owner confirmed: no blink in their browser
 - [x] Unit tests first for what stays; the dead sequence code and its tests removed
 - [x] Constants, not hardcoded strings; declarative code only (ask before any imperative code)
 - [x] `.claude/rules/frontend.md` describes the new motion
@@ -46,4 +46,4 @@ Move the prototype into the Board for real, tests first:
 - The owner decided to adopt (2026-11-11) and asked for the clean-up of the old helpers.
 - Removed: `planStages`, `awaitedBy`, `advance`, `transitionEnded`, `settledStage`, the `stage`/`queue`/`awaiting` state, `stage$`, `slotResized`, `viewFaded`, `isMobile`, `Surroundings`, `BoardStage`, `STAGE_VIEWS`, `SlotProps.shown`, `slot__view--hidden`, the unused `closing-<panel>` type, and their tests. `motion/sequence.ts` is now `motion/state.ts` (entrance and scroll only); `go(board, reducedMotion)`. The Board renders from the route; `useBoardFocus` takes the Expanded panel.
 - `BoardSequence.test.ts` is now `BoardNavigation.test.ts`. E2E 56/60, the same 4 `board-look.feature` failures as before the change.
-- Still open: the owner's check of the blink in their own Brave, and an E2E scenario with motion on.
+- The owner confirmed the blink is gone (2026-11-11). Still open: an E2E scenario with motion on.
