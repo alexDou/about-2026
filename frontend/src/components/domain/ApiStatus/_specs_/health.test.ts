@@ -6,13 +6,16 @@ import { checkHealth, checkHealthOnce, health$, resetHealth } from "../health";
 vi.mock("../../../../services/api", () => ({ fetchHealth: vi.fn<typeof fetchHealth>() }));
 const fetchHealthMock = vi.mocked(fetchHealth);
 
-/** A health request that the test answers by hand. */
+/** A health request that the test responds to by hand. */
 function pendingRequest() {
-  let answer!: { ok: () => void; fail: () => void };
+  let response!: { ok: () => void; fail: () => void };
   const promise = new Promise<{ status: "ok" }>((resolve, reject) => {
-    answer = { ok: () => resolve({ status: "ok" }), fail: () => reject(new TypeError("network")) };
+    response = {
+      ok: () => resolve({ status: "ok" }),
+      fail: () => reject(new TypeError("network")),
+    };
   });
-  return { promise, ...answer };
+  return { promise, ...response };
 }
 
 const settled = () => new Promise((resolve) => setTimeout(resolve, 0));
@@ -59,7 +62,7 @@ describe("the shared health check", () => {
     expect(fetchHealthMock).toHaveBeenCalledTimes(2);
   });
 
-  it("keeps what it knew while it asks again, and takes the new answer", async () => {
+  it("keeps what it knew while it asks again, and takes the new response", async () => {
     fetchHealthMock.mockRejectedValueOnce(new TypeError("network"));
     checkHealth();
     await settled();
@@ -74,7 +77,7 @@ describe("the shared health check", () => {
     expect(health$.get()).toBe(API_HEALTH.ok);
   });
 
-  it("drops the answer of a request that a newer one replaced", async () => {
+  it("drops the response to a request that a newer one replaced", async () => {
     const first = pendingRequest();
     const second = pendingRequest();
     fetchHealthMock.mockReturnValueOnce(first.promise).mockReturnValueOnce(second.promise);
