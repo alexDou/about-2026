@@ -16,15 +16,15 @@ export function Panel({ panel, href, onClick }: PanelProps) @{
   const intl = useIntl();
   const sublabelId = SUBLABEL_BY_PANEL[panel];
 
-  <div class={cx(styles["panel"], entering$.get() && styles["entering"])}>
+  <div class={cx(styles["panel"], entering$.get() && styles["panel--entering"])}>
     <div
-      class={styles["content"]}
+      class={styles["panel__content"]}
       onAnimationEnd={(event) => {
         // The title's fade-in is the last step of the entrance; animations inside it are not.
         if (event.target === event.currentTarget) titleShown(panel);
       }}
     >
-      <a class={styles["title"]} href={href} onClick={onClick}>
+      <a class={styles["panel__title"]} href={href} onClick={onClick}>
         {intl.formatMessage({ id: TITLE_BY_PANEL[panel] })}
       </a>
       @if (sublabelId) {

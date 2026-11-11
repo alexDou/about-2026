@@ -1,24 +1,11 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { isMobile, prefersReducedMotion, scrollToTop } from "../probes";
+import { prefersReducedMotion, scrollToTop } from "../probes";
 
 afterEach(() => {
   vi.restoreAllMocks();
   vi.unstubAllGlobals();
   Object.defineProperty(window, "scrollY", { configurable: true, writable: true, value: 0 });
   Reflect.deleteProperty(window, "matchMedia");
-});
-
-describe("isMobile", () => {
-  it("is false without media queries", () => {
-    expect(isMobile()).toBe(false);
-  });
-
-  it("follows the phone layout's media query", () => {
-    window.matchMedia = vi.fn<(query: string) => { matches: boolean }>((query) => ({
-      matches: query === "(width < 840px)",
-    })) as unknown as typeof window.matchMedia;
-    expect(isMobile()).toBe(true);
-  });
 });
 
 describe("prefersReducedMotion", () => {

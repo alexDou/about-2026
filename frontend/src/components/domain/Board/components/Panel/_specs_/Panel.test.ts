@@ -8,7 +8,6 @@ import { Panel } from "../Panel.tsrx";
 
 const noop = () => {};
 const wrapper = intlWrapper();
-const around = { mobile: false, reducedMotion: false };
 
 afterEach(reset);
 
@@ -32,25 +31,25 @@ describe("Panel", () => {
   });
 
   it("takes part in the Board's entrance while it plays: its title fades in", () => {
-    go(DEFAULT_BOARD, around);
+    go(DEFAULT_BOARD, false);
     const { container } = render(Panel, {
       props: { panel: "skills", href: "/skills", onClick: noop },
       wrapper,
     });
-    expect(container.querySelector(".panel")).toHaveClass("entering");
+    expect(container.querySelector(".panel")).toHaveClass("panel--entering");
   });
 
   it("stays out of the entrance where it is over", () => {
-    go(DEFAULT_BOARD, { ...around, reducedMotion: true });
+    go(DEFAULT_BOARD, true);
     const { container } = render(Panel, {
       props: { panel: "skills", href: "/skills", onClick: noop },
       wrapper,
     });
-    expect(container.querySelector(".panel")).not.toHaveClass("entering");
+    expect(container.querySelector(".panel")).not.toHaveClass("panel--entering");
   });
 
   it("ends the Board's entrance when every title has faded in", () => {
-    go(DEFAULT_BOARD, around);
+    go(DEFAULT_BOARD, false);
     PANEL_IDS.forEach((panel) =>
       render(Panel, { props: { panel, href: `/${panel}`, onClick: noop }, wrapper }),
     );

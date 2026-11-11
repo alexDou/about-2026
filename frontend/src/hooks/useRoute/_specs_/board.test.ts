@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { DEFAULT_BOARD, expandedBoard, PANEL_IDS, pathOf } from "..";
+import { boardAt, DEFAULT_BOARD, expandedBoard, PANEL_IDS, pathOf } from "..";
 
 describe("PANEL_IDS", () => {
   it("lists the five Panels in Board order", () => {
@@ -28,5 +28,17 @@ describe("expandedBoard", () => {
     expect(expandedBoard("skills")).toBe(expandedBoard("skills"));
     expect(expandedBoard("skills")).not.toBe(expandedBoard("about"));
     expect(expandedBoard("skills")).toEqual({ kind: "expanded", panel: "skills" });
+  });
+});
+
+describe("boardAt", () => {
+  it("is the Board state a Board URL shows", () => {
+    expect(boardAt("/explore")).toBe(DEFAULT_BOARD);
+    expect(boardAt("/what-i-do")).toBe(expandedBoard("whatIDo"));
+  });
+
+  it("is null for a URL that shows no Board, or none at all", () => {
+    expect(boardAt("/")).toBeNull();
+    expect(boardAt(undefined)).toBeNull();
   });
 });

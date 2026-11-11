@@ -27,27 +27,27 @@ Syntax: https://tsrx.dev/features.
 
 ## Declarative, conventional React
 
-- Write declarative React: state, props, context and JSX event props (`onAnimationEnd`, `onTransitionEnd`, `onClick`). State two or more components need lives in one place (a module of signals, see "Shared state: signals"), not in a hook that reads the DOM.
+- Write declarative React: state, props, context and JSX event props (`onAnimationEnd`, `onClick`). State two or more components need lives in one place (a module of signals, see "Shared state: signals"), not in a hook that reads the DOM.
 - Do not reach for the DOM or the browser's animation state to learn what the UI is doing: no `addEventListener` on elements, `getAnimations`, `querySelector`, `requestAnimationFrame` loops or imperative `.focus()` calls. A component that knows something reports it through a prop or context.
 - Imperative code is the exception: it needs the user's agreement before it is written, each time. When a browser API leaves no declarative way (a `meta` tag, `scrollTo`, a global key listener), say so and ask first.
 - Where an effect is left, it only syncs state with something outside React, and cleans up after itself.
 
 ## Shared state: signals
 
-- State several components read and change is an Octane signal, shared as a module: the module holds one scope (`createScope`), one signal whose value is the state, derived signals for what components read, and plain functions that change it. Components import the handles and the functions directly; no context, no props for it. Example: `components/domain/Board/motion/motion.ts`. Use it where the thing is one per document (one Board). Keep the rules of the state in plain pure functions next to it (`sequence.ts`), tested without the framework.
-- The route decides what shows at rest, as the router does for the page. The shared state holds only what is in flight, and the component falls back to the route while the state has not started (`stage$.get() ?? settledStage(board)`).
+- State several components read and change is an Octane signal, shared as a module: the module holds one scope (`createScope`), one signal whose value is the state, derived signals for what components read, and plain functions that change it. Components import the handles and the functions directly; no context, no props for it. Example: `components/domain/Board/motion/motion.ts`. Use it where the thing is one per document (one Board). Keep the rules of the state in plain pure functions next to it (`state.ts`), tested without the framework.
+- The route decides what shows, as the router does for the page: the Board renders from `useRoute().board`. The shared state holds only what the route does not know (the entrance still playing, the scroll before a switch).
 - State that belongs to a mount resets when its owner unmounts (`useEffect(() => reset, [])`), so the next mount starts from scratch.
-- A handle, and any function that returns handles, has a name ending in `$` (`stage$`); the compiler refuses otherwise.
+- A handle, and any function that returns handles, has a name ending in `$` (`busy$`); the compiler refuses otherwise.
 - Every module that reads a handle while rendering has a runtime `import "octane/signals";` (allowed in `.oxlintrc.json`).
 - A signal is written from event handlers and effects, not while a component renders or commits: not in a layout effect, and signals cannot be created during a render either (module level is fine).
 - A `derived$` renders its readers again whenever one of its inputs changes, even when its own value does not. Cheap here; do not rely on it to skip renders.
-- Tests: the pure functions are unit-tested with plain values; a component test sets the signals through the module's own functions (`go(...)`) and asserts on the state or on what shows; a test file resets in `afterEach` where no Board unmounts. Integration tests check what a visitor sees (`BoardSequence.test.ts`).
+- Tests: the pure functions are unit-tested with plain values; a component test sets the signals through the module's own functions (`go(...)`) and asserts on the state or on what shows; a test file resets in `afterEach` where no Board unmounts. Integration tests check what a visitor sees (`BoardNavigation.test.ts`).
 
 ## No hardcoded values
 
-- Strong preference: a value with a meaning (a kind, a state, a stage, a tone, a CSS property a stage waits for) is a named constant in the chunk's `config.ts`, as an `as const` object, with its type derived from it (`(typeof BOARD_KIND)[keyof typeof BOARD_KIND]`). Code compares and assigns through the constant (`BOARD_KIND.expanded`), never through a string spelled out again.
-- Examples: `BOARD_KIND` (`hooks/useRoute/config.ts`), `STAGE_VIEWS` (Board), `SLOT_VIEWS` (Slot), `API_HEALTH` (ApiStatus), `STATUS_TONES` (StatusBadge), DOM selectors as named constants.
-- Fine as written: message ids (typed `MessageId`), CSS Module class keys (`styles["panel"]`), Web API names used once where the API is called (`"keydown"`), values that mirror the backend contract, and the expected values in tests (a test may also use the constants).
+- Strong preference: a value with a meaning (a kind, a state, a tone) is a named constant in the chunk's `config.ts`, as an `as const` object, with its type derived from it (`(typeof BOARD_KIND)[keyof typeof BOARD_KIND]`). Code compares and assigns through the constant (`BOARD_KIND.expanded`), never through a string spelled out again.
+- Examples: `BOARD_KIND` (`hooks/useRoute/config.ts`), `CHANGE_KINDS` (Board), `SLOT_VIEWS` (Slot), `API_HEALTH` (ApiStatus), `STATUS_TONES` (StatusBadge), DOM selectors as named constants.
+- Fine as written: message ids (typed `MessageId`), CSS Module class keys (`styles["panel__title"]`), Web API names used once where the API is called (`"keydown"`), values that mirror the backend contract, and the expected values in tests (a test may also use the constants).
 - A constant module and its types module do not import each other both ways: the types derive from the constants, and the constants never import the types (see "Imports form no cycles").
 
 ## Routing
@@ -63,14 +63,15 @@ Syntax: https://tsrx.dev/features.
 
 ## The Board's motion
 
-- Every Panel has one `Slot` (`components/domain/Board/components/Slot/`): its `<li>` keeps the tone and the size, and only the size transitions. The view inside (Panel, Stripe or Expanded panel) is one wrapper that fades; the hidden view is `inert`.
-- The Board's motion is a module of signals (`components/domain/Board/motion/motion.ts`): `stage$`, `busy$`, `entering$` and the functions `go`, `slotResized`, `viewFaded`, `titleShown`, `scrollStarted`, `scrollEnded`, `reset`. `sequence.ts` is the pure planner and state functions. `useBoardSync(board)` is the Board's one hook for it: the route into `go`, `reset` on unmount.
-- Until the first route change `stage$` is `null` and the route decides what the Board shows; from then on it is the stage on screen. The stage the sequence plays towards is where the queue ends, so the motion keeps no copy of the route. A stage is a class change. It ends when everything it waits for has reported: a slot's `transitionend` on `flex-grow`, a view's on `opacity` (`onTransitionEnd` on the Slot), by Panel. The planner knows which (`awaitedBy`); a stage that waits for nothing is skipped. No timers, no `getAnimations`. With reduced motion every stage is skipped and there is no entrance.
-- The entrance is the titles' fade-in: each Panel reports `onAnimationEnd` of its title, and the entrance plays until all five have. Only a slot that shows the Panel unfolds. Opening a Panel ends it, so Panels that come back do not replay it.
+- Every Panel has one `Slot` (`components/domain/Board/components/Slot/`): its `<li>` keeps the tone and the size, and the view inside (Panel, Stripe or Expanded panel) is one wrapper. The Board renders what the route says, at once.
+- A change of route plays as a browser View Transition. The router starts it (`defaultViewTransition`, passed as `viewTransition` to `createAppRouter`) with a type from `boardViewTransition` (Board `utils.ts`): `open`, `close` or `switch` (`CHANGE_KINDS`), none to or from a screen with no Board. No JS follows the animation: no stages, no `transitionend` reporting, no timers, no `getAnimations`.
+- All View Transition CSS is in the Slot's stylesheet. Each slot and its view have a `view-transition-name` by tone and a `view-transition-class` (`slot`, `slot__view`). The slot's colour box stretches with its group; the old views are never shown (a native-Wayland Brave painted fading old snapshots as white boxes), the new views fade in after the resize on desktop. Switch and all of mobile only resize. Rules by type are `:root:active-view-transition-type(open)::view-transition-*`. Reduced motion sets `animation: none` on every pseudo-element. Without the API the change is instant.
+- The Board's motion is a module of signals (`components/domain/Board/motion/motion.ts`): `busy$`, `entering$` and the functions `go`, `titleShown`, `scrollStarted`, `scrollEnded`, `reset`. `state.ts` holds the pure state functions. `useBoardSync(board)` is the Board's one hook for it: the route into `go`, `reset` on unmount.
+- The entrance is the titles' fade-in: each Panel reports `onAnimationEnd` of its title, and the entrance plays until all five have. Only a slot that shows the Panel unfolds. Opening a Panel ends it, so Panels that come back do not replay it. With reduced motion there is no entrance.
 - A click on a Stripe from a scrolled page scrolls up first (`scrollingUpFirst`) and changes the route when the page has: the route change removes the page, and the browser would clamp the scroll with it. Back and Forward do not wait for a scroll.
-- The Board is `busy` while the entrance plays, a stage runs or the page scrolls up; clicks, the close button and Escape are ignored then (`ignoredWhileBusy`). The route reaches the motion in an effect, so the stage follows the route a frame later; the page shows in the slot the route names.
-- The durations are the `--seq-*` and `--enter-*` custom properties in `styles/tokens.css`. `useBoardFocus` moves focus when the Board comes to rest, not on the route change.
-- Tests fire the browser's events by hand: `transitionend` with a `propertyName` on the slots or views, `animationend` on the titles (`_specs_/BoardSequence.test.ts`, `BoardEntrance.test.ts`); jsdom animates nothing, so a test of something else asks for reduced motion.
+- The Board is `busy` while the entrance plays or the page scrolls up; clicks, the close button and Escape are ignored then (`ignoredWhileBusy`). During a View Transition the browser's overlay takes the mouse clicks; the keyboard is not blocked, so Escape mid-open closes.
+- The durations are the `--seq-*` and `--enter-*` custom properties in `styles/tokens.css`. `useBoardFocus` moves focus when the route shows another Expanded panel.
+- Tests: jsdom has no View Transitions, so unit tests check what shows after a change of route (`_specs_/BoardNavigation.test.ts`), the transition types (`transitionTypes.test.ts`) and the entrance, firing `animationend` on the titles by hand (`BoardEntrance.test.ts`). The animation itself can only be checked in a real browser with motion on.
 
 ## Domain code stays in its domain
 
@@ -89,6 +90,24 @@ Syntax: https://tsrx.dev/features.
 - CSS Modules only (`styles.module.css`), not Octane's scoped `<style>` blocks or themes. No Tailwind, no CSS-in-JS.
 - Pass dynamic values through CSS custom properties set on a class, or SVG attributes.
 - Global tokens live in `src/styles/`.
+
+### Layout
+
+- Layout is flex or grid. A child fills its parent by being a stretched grid or flex item, not with `position: absolute; inset: 0` or `width/height: 100%`.
+- `position: relative | absolute | fixed`, with its offsets and `z-index`, only where flex and grid cannot do the job. A comment says why.
+  - To stack two things on top of each other, put them in one grid cell (`grid-area: 1 / 1`).
+  - To hang something above or below an element without moving it, make them grid rows around it (`grid-template-rows: 1fr auto 1fr`, the element in the middle row).
+  - Allowed: `position: sticky` for what must stay in view while the page scrolls (the Stripes, the close button), and the `::view-transition-*` pseudo-elements, which the browser positions itself.
+- Never `height: 0` (or `width: 0`) on a visible element to take it out of the flow. Give it its room and change its neighbours' spacing.
+
+### Class names
+
+- A class name is lowercase chunks: the module's name, then what the class does. The module's name is its folder in kebab-case: `Slot` → `slot`, `ExpandedPanel` → `expanded-panel`, `AboutPage` → `about-page`.
+- Nesting and variants follow BEM. The module's root element is the block (`.expanded-panel`). A part inside it is an element, `block__part` (`.expanded-panel__close-bar`). A variant is a modifier, `block--variant` or `block__part--variant` (`.slot--stripe`, `.slot__view--hidden`). Words inside a chunk are joined by `-`.
+- An element hangs off the block, never off another element: `.stripe__link`, not `.stripe__title__link`.
+- Every class of a module starts with its block, so a class read alone says where it lives. A modifier is always used next to its base class (`class={cx(styles["slot"], styles["slot--stripe"])}`).
+- The CSS Module keys are the class names as written: `styles["slot__view--hidden"]`. Rspack and Vitest export them as-is, no camelCase. A variant picked at runtime builds the key from its constant: ``styles[`slot--${tone}`]``.
+- The same names serve as `view-transition-class` values, which stay global: write them `:global(.slot__view)` inside `::view-transition-*()`.
 
 ## Toolchain (Oxc only)
 

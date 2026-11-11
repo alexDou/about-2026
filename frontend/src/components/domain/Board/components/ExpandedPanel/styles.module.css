@@ -1,24 +1,28 @@
-/* The page, in the Expanded panel's slot (and its tone, see Slot); it scrolls with the document. */
-.expanded {
-  position: relative;
+/*
+ * The page under its close bar, in the Expanded panel's slot (and its tone, see Slot); it scrolls
+ * with the document.
+ */
+.expanded-panel {
+  display: grid;
+  align-content: start;
 }
 
-.closeBar {
+/* Sticky, so the button stays at the top right in view while the page scrolls. */
+.expanded-panel__close-bar {
   position: sticky;
   top: 0;
-  z-index: 1;
   display: flex;
   justify-content: flex-end;
-  height: 0;
 }
 
-.close {
+.expanded-panel__close {
   display: grid;
   flex: none;
   place-items: center;
   width: 2.25rem;
   height: 2.25rem;
-  margin: 1rem;
+  /* 4rem in all with the button: the room the pages leave at their top. */
+  margin: 1rem 1rem 0.75rem;
   padding: 0;
   border: 1px solid currentColor;
   border-radius: 50%;
@@ -27,12 +31,12 @@
   cursor: pointer;
 }
 
-.close:hover,
-.close:focus-visible {
+.expanded-panel__close:hover,
+.expanded-panel__close:focus-visible {
   background: color-mix(in srgb, currentColor 15%, transparent);
 }
 
-.close svg {
+.expanded-panel__close svg {
   width: 1.25rem;
   height: 1.25rem;
   fill: none;

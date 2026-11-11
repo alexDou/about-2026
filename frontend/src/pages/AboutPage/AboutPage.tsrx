@@ -6,7 +6,7 @@ import styles from "./styles.module.css";
 export function AboutPage() @{
   const intl = useIntl();
 
-  <section class={styles["page"]}>
+  <section class={styles["about-page"]}>
     <Heading text={intl.formatMessage({ id: "board.panel.about.title" })} />
   </section>;
 }

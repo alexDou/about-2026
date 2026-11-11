@@ -6,12 +6,12 @@ import type { ExpandedPanelProps } from "./types";
 export function ExpandedPanel({ closeLabel, onClose, children }: ExpandedPanelProps) @{
   useEscapeKey(onClose);
 
-  <div class={styles["expanded"]}>
-    // Zero height, so it takes no room, and sticky, so the button stays at the top right in view.
-    <div class={styles["closeBar"]}>
+  <div class={styles["expanded-panel"]}>
+    // Sticky, so the button stays at the top right in view while the page scrolls.
+    <div class={styles["expanded-panel__close-bar"]}>
       <button
         type="button"
-        class={styles["close"]}
+        class={styles["expanded-panel__close"]}
         title={closeLabel}
         aria-label={closeLabel}
         onClick={onClose}

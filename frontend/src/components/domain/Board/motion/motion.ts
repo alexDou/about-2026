@@ -1,37 +1,23 @@
 import { createScope } from "octane/signals";
-import {
-  NOT_STARTED,
-  isBusy,
-  routeChanged,
-  scrollingUp,
-  titleFaded,
-  transitionEnded,
-} from "./sequence";
+import { NOT_STARTED, isBusy, routeChanged, scrollingUp, titleFaded } from "./state";
 import type { BoardState, PanelId } from "../../../../hooks/useRoute";
-import type { BoardMotionState, Surroundings } from "./types";
+import type { BoardMotionState } from "./types";
 
 /**
  * The Board's motion, shared by its components: there is one Board in the document. The state is
- * a value in one signal; the rules for changing it are in `sequence.ts`.
+ * a value in one signal; the rules for changing it are in `state.ts`. A change of route is played
+ * by the browser as a View Transition (the Slot's stylesheet), so none of it is kept here.
  */
 const scope = createScope({ scopeKey: "board-motion" });
 const state$ = scope.signal$<BoardMotionState>("state", NOT_STARTED);
 
-/** What the Board shows while it is on its way; `null` before it starts, when the route decides. */
-export const stage$ = scope.derived$("stage", () => state$.get().stage);
-/** The entrance or a sequence is playing: the Board ignores clicks. */
+/** The entrance is playing or the page scrolls up: the Board ignores clicks. */
 export const busy$ = scope.derived$("busy", () => isBusy(state$.get()));
 /** The Board's entrance is playing. */
 export const entering$ = scope.derived$("entering", () => state$.get().titles.length > 0);
-/** The route changed: play whatever leads from the stage on screen to `board`. */
-export const go = (board: BoardState, around: Surroundings) =>
-  state$.set((state) => routeChanged(state, board, around));
-/** The slot of `panel` ended its resize. */
-export const slotResized = (panel: PanelId) =>
-  state$.set((state) => transitionEnded(state, "slots", panel));
-/** The view of `panel` ended its fade. */
-export const viewFaded = (panel: PanelId) =>
-  state$.set((state) => transitionEnded(state, "views", panel));
+/** The route changed to `board`; the first one starts the Board. */
+export const go = (board: BoardState, reducedMotion: boolean) =>
+  state$.set((state) => routeChanged(state, board, reducedMotion));
 /** The page starts scrolling up before a switch: the Board ignores clicks until it has. */
 export const scrollStarted = () => state$.set((state) => scrollingUp(state, true));
 /** The page has scrolled up. */

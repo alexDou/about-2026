@@ -30,7 +30,7 @@
   initial-value: #9bf8b8;
 }
 
-.logo {
+.animated-logo {
   /* Default palette (tuned in support_files/logo/). */
   --ring-1: #5ddccb;
   --ring-2: #69baf8;
@@ -62,8 +62,8 @@
 }
 
 /* Hover palette: warm ring, warm middle tone on the line. */
-.logo:hover,
-.logo:focus-visible {
+.animated-logo:hover,
+.animated-logo:focus-visible {
   --ring-1: #f87269;
   --ring-2: #f7f269;
   --ring-3: #9bf8b8;
@@ -72,59 +72,59 @@
   --line-3: #9bf8b8;
 }
 
-.logo:focus-visible {
+.animated-logo:focus-visible {
   outline: 2px solid var(--ring-2);
   outline-offset: 4px;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .logo {
+  .animated-logo {
     transition: none;
   }
 }
 
-.svg {
+.animated-logo__svg {
   display: block;
   width: var(--logo-size);
   height: auto;
   overflow: visible;
 }
 
-.glow {
+.animated-logo__glow {
   opacity: var(--glow-opacity);
 }
 
-.weave path {
+.animated-logo__strand {
   fill: none;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
 
-.ring path {
+.animated-logo__ring .animated-logo__strand {
   stroke-width: var(--ring-width);
   opacity: var(--ring-opacity);
 }
 
-.line path {
+.animated-logo__line .animated-logo__strand {
   stroke-width: var(--line-width);
   opacity: var(--line-opacity);
 }
 
-.ring .w1 {
+.animated-logo__ring .animated-logo__strand--tone-1 {
   stroke: var(--ring-1);
 }
-.ring .w2 {
+.animated-logo__ring .animated-logo__strand--tone-2 {
   stroke: var(--ring-2);
 }
-.ring .w3 {
+.animated-logo__ring .animated-logo__strand--tone-3 {
   stroke: var(--ring-3);
 }
-.line .w1 {
+.animated-logo__line .animated-logo__strand--tone-1 {
   stroke: var(--line-1);
 }
-.line .w2 {
+.animated-logo__line .animated-logo__strand--tone-2 {
   stroke: var(--line-2);
 }
-.line .w3 {
+.animated-logo__line .animated-logo__strand--tone-3 {
   stroke: var(--line-3);
 }

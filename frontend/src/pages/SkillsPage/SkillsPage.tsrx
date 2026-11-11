@@ -6,7 +6,7 @@ import styles from "./styles.module.css";
 export function SkillsPage() @{
   const intl = useIntl();
 
-  <section class={styles["page"]}>
+  <section class={styles["skills-page"]}>
     <Heading text={intl.formatMessage({ id: "board.panel.skills.title" })} />
   </section>;
 }

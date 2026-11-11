@@ -1,15 +1,14 @@
 /*
- * Hangs under the title without moving it: the title stays centred on both axes.
- * Wraps within the Panel (`cqw`: the Panel is its size container).
+ * Hangs under the title, in the row below it (see Panel), centred: the title stays centred on
+ * both axes. Wraps within the Panel (`cqw`: the Panel is its size container).
  */
 .sublabel {
-  position: absolute;
-  top: 100%;
-  left: 50%;
+  grid-row: 3;
+  align-self: start;
+  justify-self: center;
   width: max-content;
   max-width: min(14rem, 90cqw);
   margin: var(--label-gap-bottom) 0 0;
-  transform: translateX(-50%);
   font-size: 0.875rem;
   font-style: italic;
   font-weight: 300;

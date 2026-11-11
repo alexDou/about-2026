@@ -1,9 +1,4 @@
-import { MOBILE_QUERY, REDUCED_MOTION_QUERY, STILL_FRAMES } from "./config";
-
-/** The window is the phone layout's. */
-export function isMobile(): boolean {
-  return window.matchMedia?.(MOBILE_QUERY).matches ?? false;
-}
+import { REDUCED_MOTION_QUERY, STILL_FRAMES } from "./config";
 
 /** The visitor asks for no motion. */
 export function prefersReducedMotion(): boolean {

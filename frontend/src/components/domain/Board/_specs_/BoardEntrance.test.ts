@@ -95,15 +95,12 @@ describe("the Board's entrance", () => {
     await waitFor(() => expect(path()).toBe("/skills"));
   });
 
-  it("shows an Expanded panel at once on a mount at its URL: no stages, no unfold", async () => {
+  it("shows an Expanded panel at once on a mount at its URL: no unfold", async () => {
     await renderBoardAt("/skills", undefined, { entrance: true });
     const slots = screen.getAllByRole("listitem");
-    expect(slots[2]).toHaveClass("expanded");
+    expect(slots[2]).toHaveClass("slot--expanded");
     expect(screen.getByText("The page")).toBeInTheDocument();
-    slots.forEach((slot) => {
-      expect(slot).not.toHaveClass("entering");
-      expect(slot.firstElementChild).not.toHaveClass("hidden");
-    });
+    slots.forEach((slot) => expect(slot).not.toHaveClass("slot--entering"));
   });
 
   it("plays again when the Board mounts again", async () => {
@@ -114,7 +111,7 @@ describe("the Board's entrance", () => {
     first.unmount();
 
     await renderBoardAt("/explore", undefined, { entrance: true });
-    screen.getAllByRole("listitem").forEach((slot) => expect(slot).toHaveClass("entering"));
+    screen.getAllByRole("listitem").forEach((slot) => expect(slot).toHaveClass("slot--entering"));
     await click("Skills");
     expect(path()).toBe("/explore");
   });

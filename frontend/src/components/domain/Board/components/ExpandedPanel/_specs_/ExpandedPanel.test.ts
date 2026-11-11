@@ -52,7 +52,7 @@ describe("ExpandedPanel", () => {
   it("does nothing when the panel itself is clicked", () => {
     const onClose = vi.fn<() => void>();
     const { container } = render(ExpandedPanel, { props: { ...props, onClose } });
-    fireEvent.click(container.querySelector(".expanded")!);
+    fireEvent.click(container.querySelector(".expanded-panel")!);
     expect(onClose).not.toHaveBeenCalled();
   });
 });

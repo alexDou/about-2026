@@ -6,7 +6,7 @@ import styles from "./styles.module.css";
 export function WhatIDoPage() @{
   const intl = useIntl();
 
-  <section class={styles["page"]}>
+  <section class={styles["what-i-do-page"]}>
     <Heading text={intl.formatMessage({ id: "board.panel.whatIDo.title" })} />
   </section>;
 }

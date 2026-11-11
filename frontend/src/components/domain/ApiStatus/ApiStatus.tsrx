@@ -8,7 +8,7 @@ import styles from "./styles.module.css";
 export function ApiStatus() @{
   const health = useApiHealth();
   const intl = useIntl();
-  <div class={styles["status"]} data-testid="api-status">
+  <div class={styles["api-status"]} data-testid="api-status">
     <StatusBadge
       label={intl.formatMessage({ id: LABEL_BY_HEALTH[health] })}
       tone={TONE_BY_HEALTH[health]}

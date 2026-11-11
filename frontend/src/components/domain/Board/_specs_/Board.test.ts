@@ -30,7 +30,7 @@ describe("Board", () => {
       await renderBoardAt("/explore");
       const items = screen.getAllByRole("listitem");
       ["ink", "mist", "teal", "blue", "green"].forEach((tone, i) =>
-        expect(items[i]).toHaveClass(tone),
+        expect(items[i]).toHaveClass(`slot--${tone}`),
       );
     });
 
@@ -83,8 +83,8 @@ describe("Board", () => {
         "Chat with me",
         "Contact",
       ]);
-      expect(items[2]).toHaveClass("expanded", "teal");
-      expect(items[0]).toHaveClass("stripe", "ink");
+      expect(items[2]).toHaveClass("slot--expanded", "slot--teal");
+      expect(items[0]).toHaveClass("slot--stripe", "slot--ink");
       expect(
         screen.getAllByRole("link").map((a) => [a.textContent, a.getAttribute("href")]),
       ).toEqual([

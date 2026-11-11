@@ -1,4 +1,4 @@
-.page {
+.landing-page {
   display: grid;
   place-content: center;
   justify-items: center;
@@ -8,7 +8,7 @@
   text-align: center;
 }
 
-.title {
+.landing-page__title {
   margin: 0;
   font-size: clamp(2rem, 6vw, 4rem);
 }

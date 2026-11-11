@@ -7,6 +7,6 @@ describe("StatusBadge", () => {
     render(StatusBadge, { props: { label: "API: ok", tone: "ok" } });
     const badge = screen.getByText("API: ok");
     expect(badge).toHaveAttribute("data-tone", "ok");
-    expect(badge).toHaveClass("badge", "ok");
+    expect(badge).toHaveClass("status-badge", "status-badge--ok");
   });
 });
