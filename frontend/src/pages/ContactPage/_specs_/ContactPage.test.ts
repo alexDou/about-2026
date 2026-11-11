@@ -1,7 +1,19 @@
 import { render, screen } from "@octanejs/testing-library";
-import { describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { resetHealth } from "../../../components/domain/ApiStatus";
 import { intlWrapper } from "../../../i18n";
+import { fetchHealth } from "../../../services/api";
 import { ContactPage } from ".././ContactPage.tsrx";
+
+vi.mock("../../../services/api", () => ({ fetchHealth: vi.fn<typeof fetchHealth>() }));
+const fetchHealthMock = vi.mocked(fetchHealth);
+
+const NOTE = /backend is not reachable/i;
+
+beforeEach(() => {
+  fetchHealthMock.mockReturnValue(new Promise(() => {}));
+});
+afterEach(resetHealth);
 
 describe("ContactPage", () => {
   it("shows only its heading, titled by the Panel's message", () => {
@@ -16,5 +28,14 @@ describe("ContactPage", () => {
       wrapper: intlWrapper({ "board.panel.contact.title": "Titel" }),
     });
     expect(screen.getByRole("heading", { name: "Titel" })).toBeInTheDocument();
+  });
+
+  it("shows the offline note while the backend is down, below the heading", async () => {
+    fetchHealthMock.mockRejectedValue(new TypeError("network"));
+    render(ContactPage, { props: {}, wrapper: intlWrapper() });
+    const note = await screen.findByRole("status");
+    expect(note).toHaveTextContent(NOTE);
+    const heading = screen.getByRole("heading", { level: 1 });
+    expect(heading.compareDocumentPosition(note)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
   });
 });

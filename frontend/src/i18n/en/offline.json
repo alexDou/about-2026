@@ -1,0 +1,8 @@
+{
+  "offline.note": [
+    {
+      "type": 0,
+      "value": "The backend is not reachable right now. This page still opens, but it cannot talk to the backend until it is back."
+    }
+  ]
+}

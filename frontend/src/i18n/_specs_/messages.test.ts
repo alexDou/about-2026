@@ -65,9 +65,9 @@ function unformattable(messages: Record<string, unknown>): string[] {
 const en = (id: string) => format(enMessages, id);
 
 describe("English message files", () => {
-  it("include the site, the Landing and the Board", () => {
+  it("include the site, the Landing, the Board and the offline note", () => {
     expect(EN_FILES.map((file) => file.area)).toEqual(
-      expect.arrayContaining(["board", "landing", "site"]),
+      expect.arrayContaining(["board", "landing", "offline", "site"]),
     );
   });
 
@@ -133,6 +133,10 @@ describe("English messages", () => {
         "landing.status.down",
       ].map(en),
     ).toEqual(["Portfolio A.Durnev", "API: checking", "API: ok", "API: down"]);
+  });
+
+  it("explain the offline note", () => {
+    expect(en("offline.note")).toMatch(/^The backend is not reachable/);
   });
 });
 
