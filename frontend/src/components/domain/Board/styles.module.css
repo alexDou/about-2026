@@ -3,7 +3,7 @@
  * window (at least 32rem), and as tall as the Expanded panel's page when that is taller. The
  * slots' own sizes are set in Slot.
  */
-.panels {
+.board__panels {
   display: flex;
   min-height: max(100dvh, 32rem);
   margin: 0;
@@ -13,7 +13,7 @@
 
 /* Mobile: rows share the height. 420px over five rows leaves 84px each, so none shrinks to a sliver. */
 @media (width < 840px) {
-  .panels {
+  .board__panels {
     flex-direction: column;
     min-height: max(100dvh, 420px);
   }
@@ -22,7 +22,7 @@
 /*
  * The unfold of the pen (timings: `--enter-*` in tokens.css), whenever the Board mounts: the Board
  * slides in, the Panels unfold one after another (see Slot), then the titles fade in (see
- * `.entering` in Panel).
+ * `.panel--entering` in Panel).
  */
 @media (prefers-reduced-motion: no-preference) {
   .board {

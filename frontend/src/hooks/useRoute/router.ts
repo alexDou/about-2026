@@ -24,7 +24,13 @@ function dropTrailingSlash(history: RouterHistory) {
  * route under it for each Panel. Any other path is replaced by `/` without a history entry, and
  * so is a trailing slash. The components come in as options, so this module imports none.
  */
-export function createAppRouter({ shell, landing, board, pages }: AppRouterOptions) {
+export function createAppRouter({
+  shell,
+  landing,
+  board,
+  pages,
+  viewTransition,
+}: AppRouterOptions) {
   // Every Board state starts at the top, so the browser must not restore a scroll position on a
   // reload or Back/Forward. Set when the router is made, because an effect would come too late.
   window.history.scrollRestoration = "manual";
@@ -64,6 +70,7 @@ export function createAppRouter({ shell, landing, board, pages }: AppRouterOptio
     history,
     caseSensitive: true,
     scrollRestoration: false,
+    defaultViewTransition: viewTransition,
   });
 }
 

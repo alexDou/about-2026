@@ -1,4 +1,5 @@
 import type { OctaneNode } from "octane";
+import type { ViewTransitionOptions } from "@tanstack/router-core";
 import type { BOARD_KIND, BOARD_PATH, PANEL_IDS, PANEL_PATHS } from "./config";
 
 /** One of the Board's five Panels. */
@@ -39,7 +40,15 @@ export type AppRouterOptions = {
   board: RouteComponent;
   /** The page of each Panel, shown in the Board's `Outlet` while that Panel is Expanded. */
   pages: Record<PanelId, RouteComponent>;
+  /**
+   * The View Transition every navigation starts, with the types it
+   * gets from where it leads (`false`: none). None when left out.
+   */
+  viewTransition?: BoardViewTransition;
 };
+
+/** A navigation's View Transition: its types, from the URL it leaves and the one it reaches. */
+export type BoardViewTransition = ViewTransitionOptions;
 
 declare module "@tanstack/router-core" {
   /** The Panel a route opens: how the Board knows which one is Expanded. */

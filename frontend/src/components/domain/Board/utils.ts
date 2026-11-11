@@ -1,18 +1,44 @@
-import { isPlainClick } from "../../../hooks/useRoute";
-import type { PanelId } from "../../../hooks/useRoute";
+import { BOARD_KIND, boardAt, isPlainClick } from "../../../hooks/useRoute";
+import type { BoardState, BoardViewTransition, PanelId } from "../../../hooks/useRoute";
 import { SLOT_VIEWS } from "./components/Slot";
 import type { SlotView } from "./components/Slot";
+import { CHANGE_KINDS } from "./config";
 import { scrollEnded, scrollStarted, scrollToTop } from "./motion";
-import type { BoardStage } from "./types";
+import type { ChangeKind } from "./types";
 
-/** What stands in `panel`'s slot at `stage`. */
-export function viewOf(stage: BoardStage, panel: PanelId): SlotView {
-  if (stage.layout === null) return SLOT_VIEWS.panel;
-  return stage.layout === panel ? SLOT_VIEWS.expanded : SLOT_VIEWS.stripe;
+/** How the Board moves from `from` to `to`; `null` when it stays. */
+export function changeKind(from: BoardState, to: BoardState): ChangeKind | null {
+  if (from === to) return null;
+  if (to.kind === BOARD_KIND.default) return CHANGE_KINDS.close;
+  return from.kind === BOARD_KIND.default ? CHANGE_KINDS.open : CHANGE_KINDS.switch;
 }
 
 /**
- * A click handler that does nothing while a sequence runs. A plain click is also kept from
+ * The View Transition types of a change of route from `from` to `to`, which the Slot's stylesheet
+ * plays: the kind of change. `false` starts no View Transition: to or from a screen with no Board
+ * (`null`), or when the Board stays.
+ */
+export function transitionTypes(from: BoardState | null, to: BoardState | null): string[] | false {
+  if (from === null || to === null) return false;
+  const kind = changeKind(from, to);
+  if (kind === null) return false;
+  return [kind];
+}
+
+/** The router's View Transition for every navigation (`createAppRouter`). */
+export const boardViewTransition: BoardViewTransition = {
+  types: ({ fromLocation, toLocation }) =>
+    transitionTypes(boardAt(fromLocation?.pathname), boardAt(toLocation.pathname)),
+};
+
+/** What stands in `panel`'s slot while `expanded` is the Expanded panel (`null`: none is). */
+export function viewOf(expanded: PanelId | null, panel: PanelId): SlotView {
+  if (expanded === null) return SLOT_VIEWS.panel;
+  return expanded === panel ? SLOT_VIEWS.expanded : SLOT_VIEWS.stripe;
+}
+
+/**
+ * A click handler that does nothing while the Board is busy. A plain click is also kept from
  * following its link; a modified one (a new tab) is left to the browser.
  */
 export function ignoredWhileBusy(

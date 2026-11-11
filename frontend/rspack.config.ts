@@ -51,7 +51,7 @@ export default defineConfig((_env, argv) => {
       },
       generator: {
         "css/auto": {
-          exportsConvention: "camel-case-only",
+          exportsConvention: "as-is",
           localIdentName: isProd ? "[hash:base64:6]" : "[folder]__[local]__[hash:base64:4]",
         },
       },

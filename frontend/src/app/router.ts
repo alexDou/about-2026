@@ -1,4 +1,4 @@
-import { Board } from "../components/domain/Board";
+import { Board, boardViewTransition } from "../components/domain/Board";
 import { createAppRouter } from "../hooks/useRoute";
 import type { AppRouter } from "../hooks/useRoute";
 import { AboutPage } from "../pages/AboutPage";
@@ -22,5 +22,6 @@ export function createSiteRouter(): AppRouter {
       chatWithMe: ChatWithMePage,
       contact: ContactPage,
     },
+    viewTransition: boardViewTransition,
   });
 }

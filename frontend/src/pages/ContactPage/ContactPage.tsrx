@@ -6,7 +6,7 @@ import styles from "./styles.module.css";
 export function ContactPage() @{
   const intl = useIntl();
 
-  <section class={styles["page"]}>
+  <section class={styles["contact-page"]}>
     <Heading text={intl.formatMessage({ id: "board.panel.contact.title" })} />
   </section>;
 }

@@ -17,3 +17,10 @@ const EXPANDED_BOARDS = Object.fromEntries(
 export function expandedBoard(panel: PanelId): BoardState {
   return EXPANDED_BOARDS[panel];
 }
+
+/** The Board state `pathname` shows; `null` for a URL that shows no Board (the Landing), or none. */
+export function boardAt(pathname: string | undefined): BoardState | null {
+  if (pathname === BOARD_PATH) return DEFAULT_BOARD;
+  const panel = PANEL_IDS.find((id) => PANEL_PATHS[id] === pathname);
+  return panel ? expandedBoard(panel) : null;
+}

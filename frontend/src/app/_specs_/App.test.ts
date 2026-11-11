@@ -109,12 +109,12 @@ describe("App", () => {
       await renderAt("/");
       fireEvent.click(logo()!);
       await screen.findByRole("link", { name: "About" });
-      panels().forEach((panel) => expect(panel).toHaveClass("entering"));
+      panels().forEach((panel) => expect(panel).toHaveClass("slot--entering"));
     });
 
     it("plays on a direct visit to the Board", async () => {
       await renderAt("/explore");
-      panels().forEach((panel) => expect(panel).toHaveClass("entering"));
+      panels().forEach((panel) => expect(panel).toHaveClass("slot--entering"));
     });
 
     it("plays on Forward from the Landing", async () => {
@@ -125,7 +125,7 @@ describe("App", () => {
       await screen.findByRole("button", { name: "Portfolio A.Durnev" });
       window.history.forward();
       await screen.findByRole("link", { name: "About" });
-      panels().forEach((panel) => expect(panel).toHaveClass("entering"));
+      panels().forEach((panel) => expect(panel).toHaveClass("slot--entering"));
     });
   });
 
@@ -223,7 +223,7 @@ describe("App", () => {
       await screen.findByRole("heading", { name: "Skills" });
       fireEvent.click(screen.getByRole("button", { name: "Close Skills" }));
       await waitFor(() => expect(screen.getAllByRole("listitem")).toHaveLength(5));
-      panels().forEach((panel) => expect(panel).not.toHaveClass("entering"));
+      panels().forEach((panel) => expect(panel).not.toHaveClass("slot--entering"));
     });
 
     it("sets the document title per Expanded panel", async () => {

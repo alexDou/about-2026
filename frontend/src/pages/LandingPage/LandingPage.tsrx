@@ -11,7 +11,7 @@ export function LandingPage() @{
 
   useDocumentTitle(intl.formatMessage({ id: "site.title" }));
 
-  <main class={styles["page"]}>
+  <main class={styles["landing-page"]}>
     <AnimatedLogo
       label={intl.formatMessage({ id: "landing.logo.label" })}
       onClick={() => navigate(DEFAULT_BOARD)}

@@ -4,11 +4,8 @@ import type { MessageId } from "../../../i18n";
 /** The Panels' colour schemes, each named after its background in the palette. */
 export const PANEL_TONES = ["ink", "mist", "teal", "blue", "green"] as const;
 
-/**
- * What stands in the slots at one moment of a sequence: the Panels, the Stripes and the Expanded
- * panel, or nothing while a slot changes size.
- */
-export const STAGE_VIEWS = { panels: "panels", none: "none", expanded: "expanded" } as const;
+/** The ways a change of route moves the Board: a Panel opens, closes, or another one takes its place. */
+export const CHANGE_KINDS = { open: "open", close: "close", switch: "switch" } as const;
 
 /** The tone of each Panel: the palette in Board order, left to right and top to bottom. */
 export const TONE_BY_PANEL = {

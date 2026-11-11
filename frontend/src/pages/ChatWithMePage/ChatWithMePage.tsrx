@@ -6,7 +6,7 @@ import styles from "./styles.module.css";
 export function ChatWithMePage() @{
   const intl = useIntl();
 
-  <section class={styles["page"]}>
+  <section class={styles["chat-with-me-page"]}>
     <Heading text={intl.formatMessage({ id: "board.panel.chatWithMe.title" })} />
   </section>;
 }
