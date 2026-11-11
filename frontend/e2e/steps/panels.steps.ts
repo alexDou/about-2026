@@ -132,3 +132,28 @@ Then("the Expanded panel fills the rest of the window", async function (this: Po
   const stripeHeight = rows.reduce((sum, box) => sum + box!.height, 0);
   expect(panel!.height + stripeHeight).toBeGreaterThanOrEqual(viewport.height - 1);
 });
+
+Then(
+  "the Stripes are as tall as their title plus {float}rem",
+  async function (this: PortfolioWorld, rem: number) {
+    const rows = await stripes(this).evaluateAll((links) =>
+      links.map((link) => {
+        // `line-height: normal` has no number to read: measure the slot's line box (`1lh`, which
+        // sizes it), and read the root's rem.
+        const slot = link.closest("li")!;
+        const probe = document.createElement("span");
+        probe.style.cssText = "display: block; height: 1lh";
+        slot.append(probe);
+        const line = probe.getBoundingClientRect().height;
+        probe.remove();
+        return {
+          height: slot.getBoundingClientRect().height,
+          line,
+          rootRem: parseFloat(getComputedStyle(document.documentElement).fontSize),
+        };
+      }),
+    );
+    for (const { height, line, rootRem } of rows)
+      expect(Math.abs(height - Math.max(44, line + rem * rootRem))).toBeLessThan(1);
+  },
+);

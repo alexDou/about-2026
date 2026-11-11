@@ -59,3 +59,7 @@ Then("the document was not reloaded", async function (this: PortfolioWorld) {
     await this.page.evaluate(() => (window as unknown as { reloadMarker?: boolean }).reloadMarker),
   ).toBe(true);
 });
+
+When("I reload the page", async function (this: PortfolioWorld) {
+  await this.page.reload();
+});

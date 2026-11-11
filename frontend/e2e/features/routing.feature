@@ -11,6 +11,40 @@ Feature: Landing and Board routing
     Then I am on "/explore"
     And the Board lists the five Panels
 
+  Scenario: A direct visit to / shows the Landing
+    When I open "/"
+    Then I am on "/"
+    And the logo is shown
+    And the document title is "A.Durnev portfolio"
+
+  Scenario: Back and Forward walk from the Landing through two Panels to the default Board
+    Given I open the landing page
+    When I click the logo
+    And I click the Panel "Skills"
+    And I click the Panel "Contact"
+    And I click the close button "Close Contact"
+    Then I am on "/explore"
+    When I go back
+    Then I am on "/contact"
+    And the page heading reads "Contact"
+    When I go back
+    Then I am on "/skills"
+    And the page heading reads "Skills"
+    When I go back
+    Then I am on "/explore"
+    And the Board lists the five Panels
+    When I go back
+    Then I am on "/"
+    And the logo is shown
+    When I go forward
+    And I go forward
+    Then I am on "/skills"
+    And the page heading reads "Skills"
+    When I go forward
+    And I go forward
+    Then I am on "/explore"
+    And there is no page heading
+
   Scenario: A direct visit to /explore shows the Board
     When I open "/explore"
     Then I am on "/explore"
