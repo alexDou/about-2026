@@ -1,13 +1,11 @@
 ---
 # portfolio-2dsc
 title: Adopt View Transitions for the Board sequence
-status: in-progress
+status: completed
 type: task
 priority: normal
-tags:
-    - needs-info
 created_at: 2026-11-11T10:45:26Z
-updated_at: 2026-11-11T10:55:47Z
+updated_at: 2026-11-11T11:11:53Z
 parent: portfolio-m9gt
 blocked_by:
     - portfolio-u2li
@@ -47,3 +45,9 @@ Move the prototype into the Board for real, tests first:
 - Removed: `planStages`, `awaitedBy`, `advance`, `transitionEnded`, `settledStage`, the `stage`/`queue`/`awaiting` state, `stage$`, `slotResized`, `viewFaded`, `isMobile`, `Surroundings`, `BoardStage`, `STAGE_VIEWS`, `SlotProps.shown`, `slot__view--hidden`, the unused `closing-<panel>` type, and their tests. `motion/sequence.ts` is now `motion/state.ts` (entrance and scroll only); `go(board, reducedMotion)`. The Board renders from the route; `useBoardFocus` takes the Expanded panel.
 - `BoardSequence.test.ts` is now `BoardNavigation.test.ts`. E2E 56/60, the same 4 `board-look.feature` failures as before the change.
 - The owner confirmed the blink is gone (2026-11-11). Still open: an E2E scenario with motion on.
+
+## Summary of Changes
+
+Built in 6d6d13f and 9612ecf: the View Transitions route changes (boardAt, changeKind, transitionTypes, boardViewTransition, the viewTransition option of createAppRouter, the rules in the Slot stylesheet), the staged-sequence helpers and their tests removed (motion/sequence.ts is now motion/state.ts), frontend.md rewritten. The owner confirmed the white blink is gone.
+
+The one open item, the E2E scenario for open, close and switch with motion on, moved to portfolio-3sox (Board E2E); jsdom has no View Transitions, so it needs the real build. Closed on the owner's call.
