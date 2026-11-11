@@ -83,7 +83,25 @@ Feature: Default Board look
     And I focus the Panel title "Contact" with the keyboard
     Then the dots above the Panel title "Contact" are shown
 
-  Scenario Outline: On a phone there are no dots
+  Scenario Outline: On a phone the dots stand at the left border, before the title
+    Given the visitor accepts motion
+    And the window is <width> by <height>
+    When I open "/explore"
+    And the unfold has ended
+    Then the dots beside the Panel title "Chat with me" are hidden
+    When I hover the Panel title "Chat with me"
+    Then the dots beside the Panel title "Chat with me" are shown
+    And the dots beside the Panel title "Chat with me" are a row at most 8px tall, longer than 4 dots
+    And the dots beside the Panel title "Chat with me" start 4% in from the Panel's left border
+    And the dots beside the Panel title "Chat with me" are centred on the title's height
+    And the dots beside the Panel title "Chat with me" are moving
+
+    Examples:
+      | width | height |
+      | 441   | 800    |
+      | 700   | 800    |
+
+  Scenario Outline: A small phone, 440px wide or less, has no dots
     Given the visitor accepts motion
     And the window is <width> by <height>
     When I open "/explore"
@@ -93,9 +111,9 @@ Feature: Default Board look
 
     Examples:
       | width | height |
+      | 440   | 800    |
       | 375   | 667    |
       | 320   | 568    |
-      | 700   | 800    |
 
   Scenario: No line crosses a title
     Given the window is 1280 by 800
