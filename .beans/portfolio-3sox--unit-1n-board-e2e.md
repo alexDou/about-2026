@@ -7,7 +7,7 @@ priority: normal
 tags:
     - ready-for-agent
 created_at: 2026-11-09T10:30:50Z
-updated_at: 2026-11-10T12:18:17Z
+updated_at: 2026-11-11T11:11:53Z
 parent: portfolio-m9gt
 blocked_by:
     - portfolio-1syg
@@ -33,6 +33,7 @@ Cucumber + Playwright scenarios against the production build prove the Unit 1 fl
 - [ ] On a mobile viewport the Panels are rows and the Stripes are title-height rows.
 - [ ] With the backend unreachable, Chat with me and Contact show the offline note.
 - [ ] With reduced motion emulated, state changes render instantly.
+- [ ] With motion on, open, close and switch run as View Transitions: the transition types and the animation timings per pseudo-element (moved from portfolio-2dsc).
 - [ ] `pnpm --dir frontend e2e` green
 - [ ] `scripts/verify.sh` GREEN
 
