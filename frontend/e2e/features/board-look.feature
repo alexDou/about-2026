@@ -21,7 +21,7 @@ Feature: Default Board look
     Given the window is 1280 by 800
     When I open "/explore"
     Then the Panels are 5 equal columns filling the window
-    And every Panel title is centred in its Panel
+    And every Panel title is centred across its Panel, a tenth of its width above the middle
 
   Scenario: A short desktop window keeps the Board at least 32rem tall
     Given the window is 1280 by 400
@@ -83,17 +83,13 @@ Feature: Default Board look
     And I focus the Panel title "Contact" with the keyboard
     Then the dots above the Panel title "Contact" are shown
 
-  Scenario Outline: On a phone the dots stand at the left border, before the title
-    Given the window is <width> by <height>
+  Scenario Outline: On a phone there are no dots
+    Given the visitor accepts motion
+    And the window is <width> by <height>
     When I open "/explore"
-    Then the dots beside the Panel title "Chat with me" are hidden
-    When I hover the Panel title "Chat with me"
-    Then the dots beside the Panel title "Chat with me" are shown
-    And the dots beside the Panel title "Chat with me" are a row at most 8px tall, longer than 4 dots
-    And the dots beside the Panel title "Chat with me" start 4% in from the Panel's left border
-    And the dots beside the Panel title "Chat with me" end 16px before the title
-    And the dots beside the Panel title "Chat with me" are centred on the title's height
-    And the dots beside the Panel title "Chat with me" are moving
+    And the unfold has ended
+    And I hover the Panel title "Chat with me"
+    Then there are no dots by the Panel title "Chat with me"
 
     Examples:
       | width | height |

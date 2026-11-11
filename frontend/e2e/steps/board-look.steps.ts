@@ -96,6 +96,20 @@ Then("every Panel title is centred in its Panel", async function (this: Portfoli
   }
 });
 
+Then(
+  "every Panel title is centred across its Panel, a tenth of its width above the middle",
+  async function (this: PortfolioWorld) {
+    // By design (as in the pen): the Panel's bottom padding, 20% of its width, lifts the title.
+    for (const item of await panels(this).all()) {
+      const outer = (await item.boundingBox())!;
+      const inner = (await item.getByRole("link").boundingBox())!;
+      expect(Math.abs(inner.x + inner.width / 2 - (outer.x + outer.width / 2))).toBeLessThan(2);
+      const lift = outer.y + outer.height / 2 - (inner.y + inner.height / 2);
+      expect(Math.abs(lift - outer.width / 10)).toBeLessThan(2);
+    }
+  },
+);
+
 Then("the Board is at least {int}px tall", async function (this: PortfolioWorld, min: number) {
   const box = (await this.page.getByRole("main").boundingBox())!;
   expect(box.height).toBeGreaterThanOrEqual(min);
@@ -126,39 +140,24 @@ Then("every Sublabel fits inside its Panel", async function (this: PortfolioWorl
   }
 });
 
-/**
- * The dots row: above the title (desktop) it is the `::before` of the title's container, a grid
- * row of its own; beside the title (phone) it is the title's own `::before`, its first grid column.
- */
+/** The dots row above the title: the `::before` of the title's container, a grid row of its own. */
 const dots = (link: Locator) =>
   link.evaluate((el) => {
     const content = el.parentElement as HTMLElement;
-    const above = getComputedStyle(content, "::before").content !== "none";
-    const style = getComputedStyle(above ? content : el, "::before");
+    const style = getComputedStyle(content, "::before");
     const width = parseFloat(style.width);
     const box = content.getBoundingClientRect();
     return {
-      above,
+      above: style.content !== "none",
       opacity: parseFloat(style.opacity),
       width,
       height: parseFloat(style.height),
-      // A pseudo-element has no box to measure. Above the title the row is centred in the
-      // container, which spans the Panel.
+      // A pseudo-element has no box to measure. The row is centred in the container, which spans
+      // the Panel.
       left: box.left + (box.width - width) / 2,
       justifyItems: getComputedStyle(content).justifyItems,
-      marginLeft: parseFloat(style.marginLeft),
       transform: style.transform,
-      position: style.position,
       alignSelf: style.alignSelf,
-      marginRight: parseFloat(style.marginRight),
-      // The dots stand in the title's first grid column on a phone: measure from the title.
-      titleLeft: el.getBoundingClientRect().left,
-      paddingLeft: parseFloat(getComputedStyle(el).paddingLeft),
-      textLeft: (() => {
-        const range = document.createRange();
-        range.selectNodeContents(el);
-        return range.getBoundingClientRect().left;
-      })(),
       gap: parseFloat(style.marginBottom),
       positionX: style.backgroundPositionX,
       animated: style.animationName !== "none",
@@ -229,71 +228,15 @@ Then(
   },
 );
 
-// On a phone the dots row stands left of the title instead of above it.
 Then(
-  "the dots beside the Panel title {string} are hidden",
+  "there are no dots by the Panel title {string}",
   async function (this: PortfolioWorld, name: string) {
-    await expect.poll(async () => (await dots(title(this, name))).opacity).toBe(0);
-  },
-);
-
-Then(
-  "the dots beside the Panel title {string} are shown",
-  async function (this: PortfolioWorld, name: string) {
-    await expect.poll(async () => (await dots(title(this, name))).opacity).toBe(1);
-  },
-);
-
-Then(
-  "the dots beside the Panel title {string} are a row at most {int}px tall, longer than {int} dots",
-  async function (this: PortfolioWorld, name: string, max: number, dotCount: number) {
-    const row = await dots(title(this, name));
-    expect(row.height).toBeGreaterThan(0);
-    expect(row.height).toBeLessThanOrEqual(max);
-    // One dot per 12px tile.
-    expect(row.width).toBeGreaterThan(dotCount * 12);
-  },
-);
-
-/** Where the dots begin on a phone: the title's left, its padding, then the row's own margin. */
-const rowStart = (row: Awaited<ReturnType<typeof dots>>) =>
-  row.titleLeft + row.paddingLeft + row.marginLeft;
-
-Then(
-  "the dots beside the Panel title {string} start {int}% in from the Panel's left border",
-  async function (this: PortfolioWorld, name: string, percent: number) {
-    const row = await dots(title(this, name));
-    const box = (await panel(this, name).boundingBox())!;
-    close(rowStart(row), box.x + (box.width * percent) / 100);
-  },
-);
-
-Then(
-  "the dots beside the Panel title {string} end {int}px before the title",
-  async function (this: PortfolioWorld, name: string, gap: number) {
-    const row = await dots(title(this, name));
-    close(row.textLeft - (rowStart(row) + row.width), gap);
-  },
-);
-
-Then(
-  "the dots beside the Panel title {string} are centred on the title's height",
-  async function (this: PortfolioWorld, name: string) {
-    // A pseudo-element has no box to measure: it is a grid item beside the title's text, centred.
-    const row = await dots(title(this, name));
-    expect(row.position).not.toBe("absolute");
-    expect(row.alignSelf).toBe("center");
-  },
-);
-
-Then(
-  "the dots beside the Panel title {string} are moving",
-  async function (this: PortfolioWorld, name: string) {
-    const before = await dots(title(this, name));
-    expect(before.animated).toBe(true);
-    await expect
-      .poll(async () => (await dots(title(this, name))).positionX)
-      .not.toBe(before.positionX);
+    // Neither above the title (its container's `::before`) nor beside it (its own).
+    const contents = await title(this, name).evaluate((el) => [
+      getComputedStyle(el.parentElement!, "::before").content,
+      getComputedStyle(el, "::before").content,
+    ]);
+    expect(contents).toEqual(["none", "none"]);
   },
 );
 
