@@ -1,11 +1,11 @@
 ---
 # portfolio-18oz
 title: 'Unit 2: About'
-status: in-progress
+status: todo
 type: epic
 priority: normal
 created_at: 2026-11-06T20:27:21Z
-updated_at: 2026-11-12T16:14:25Z
+updated_at: 2026-11-12T16:19:50Z
 parent: portfolio-4ur0
 blocked_by:
     - portfolio-m9gt
@@ -61,3 +61,18 @@ Round 5 (2026-11-12): node burst draft approved, to be greyed and dimmed, one on
 
 
 Round 6 (2026-11-12), recorded in the Unit 2 spec section: Bio text approved; badge labels and titles; Hobbies with a few words each; questionnaires (headline, credo, roles, hobbies, education) grilled in a dedicated content bean after 2.0; stages 2.0 to 2.N as in the spec; the 60×60 node burst goes to the logo (own bean); the 2026 PDF ships with the phone number stripped.
+
+## Stages
+
+Child beans, in dependency order (each lists its blockers):
+
+- portfolio-3wkt Unit 2.0: About content contract
+- portfolio-ajvs Unit 2.1: About content from questionnaires (ready-for-human; grilling with the Owner)
+- portfolio-viuq Unit 2.2: About assets
+- portfolio-ftdn Unit 2.3: Availability badges
+- portfolio-fbzp Unit 2.4: About top card
+- portfolio-xjur Unit 2.5: About lower cards
+- portfolio-6x9j Unit 2.6: CV link
+- portfolio-04f9 Unit 2.N: About E2E
+
+The epic is done when every child bean is completed. Outside it: portfolio-yhih (the new CV, replaces 2.6's file at the same path) and portfolio-z9ns (node burst in the logo, draft).
