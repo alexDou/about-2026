@@ -1,6 +1,5 @@
 .about-page {
   max-width: 60rem;
   margin: 0 auto;
-  /* No top padding: the Expanded panel's close bar above the page gives that room. */
   padding: 0 1.5rem 4rem;
 }
