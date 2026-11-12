@@ -18,7 +18,6 @@ declare global {
 export type Messages = Readonly<Record<MessageId, MessageFormatElement[]>>;
 
 export type IntlProviderProps = {
-  /** Replaces the English messages (tests). */
   messages?: Messages;
   children?: OctaneNode;
 };

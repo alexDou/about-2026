@@ -4,7 +4,7 @@ import { intlWrapper } from "../../../i18n";
 import { AboutPage } from ".././AboutPage.tsrx";
 
 describe("AboutPage", () => {
-  it("shows only its heading, titled by the Panel's message", () => {
+  it("shows its heading, titled by the Panel's message", () => {
     const { container } = render(AboutPage, { props: {}, wrapper: intlWrapper() });
     expect(screen.getByRole("heading", { level: 1, name: "About" })).toBeInTheDocument();
     expect(container).toHaveTextContent(/^About$/);
