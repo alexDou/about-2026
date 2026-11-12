@@ -1,11 +1,11 @@
 ---
 # portfolio-m9gt
 title: 'Unit 1: Board'
-status: todo
+status: completed
 type: epic
 priority: normal
 created_at: 2026-11-06T20:27:21Z
-updated_at: 2026-11-10T12:18:17Z
+updated_at: 2026-11-12T11:09:54Z
 parent: portfolio-4ur0
 ---
 
@@ -29,3 +29,8 @@ Child beans, in dependency order (each lists its blockers):
 - portfolio-3sox Unit 1.N: Board E2E
 
 The epic is done when every child bean is completed.
+
+
+## Summary of Changes
+
+All Unit 1 stages (1.0 to 1.N) and their follow-ups are completed: Landing → Board reveal, five Panels with Expanded panel and Stripes, real URLs on TanStack Router, View Transitions on every route change, FormatJS messages, the shared health check with offline notes, Board E2E. Closed to unblock Unit 2.
