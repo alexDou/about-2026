@@ -89,19 +89,23 @@ Reference: the expanded menu of codepen `fluxus/gPWvZm` (local copy in git-ignor
 
 **Decided**:
 - Source: the 2026 CV (`support_files/about/`, git-ignored). The site text is rewritten, not copied: condensed, first person, the CV's typos fixed.
-- Kept off About: the CV's expertise blocks and "Core expertise" (Skills, Unit 3); phone, email, LinkedIn, GitHub (Contact, Unit 4).
+- Kept off About: the CV's expertise blocks and "Core expertise" (Skills, Unit 3); phone and email (Contact, Unit 4). LinkedIn and GitHub appear on both.
 - Headline, Bio, Roles and Hobbies are written together with the Owner: each gets a questionnaire, then a draft the Owner approves.
-- Roles: all five from the CV, each with a condensed text of its own.
-- Roles: newest first, each with its technologies.
+- Roles: all five from the CV, newest first, each with a condensed text of its own and its technologies.
 - Education: the degree as in the CV, plus one business-level sentence on the product and business thinking it built.
 - Languages: Russian (native), English: fluent (C1), German: good working knowledge (B2), Spanish: basic (A2); word plus CEFR level. Ukrainian is left out.
 - Citizenship: "Permanent EU resident, no visa sponsorship required".
-- Location: Berlin, Germany; open to relocation. Availability (available now) and the kinds of work the Owner is open to must be seen loud and clear.
-- Look: the top (name, Headline, Bio, photo) takes its inspiration from `support_files/about/about-design.jpg`, a greeting sentence beside the photo with a brush-stroke mask (which also hides the photo's black corner). The other sections follow the same style, made dark on the About Panel's `#25363a` with `#d1dcd9` text.
+- Kinds of work: permanent full-time or contract; remote preferred, some hybrid possible; open to relocation anywhere on good conditions (no place named). The target roles go into the Headline.
+- Top card, after `support_files/about/about-design.jpg` (no scroll arrow):
+  - Left: the greeting "Hello, I'm Alexander Durnev. I'm a {Headline}." (no location) in a serif (self-hosted, OFL; About's greeting and section headings only, an exception to Overused Grotesk site-wide). Under it, one smaller line (a bit bigger than the sample's) combining experience, passion for technology, team spirit and love of experimentation. LinkedIn and GitHub icons.
+  - Right, centred vertically: the Owner's face cut out of the CV photo, over an SVG brush sketch.
+  - Availability badges where the sample's "N" logo sits (or just above the card), large enough to read: "Available Now" (round, green, the text following the circle, "Available" on the top arc, "Now" on the bottom), remote/hybrid, "Open for Relocation".
+  - Phone: badges, then the photo, then the rest.
+- The other sections follow the same style, made dark on the About Panel's `#25363a` with `#d1dcd9` text.
 - Photo: the one embedded in the CV (512×512 JPEG).
-- CV download: English only while the site has one locale. The downloadable file is a new CV made for the site, not the 2026 PDF. It is its own bean, made after What I do, Skills and Contact and before Chat.
+- CV download: English only while the site has one locale. Until portfolio-yhih ships the new CV, About links the 2026 PDF (`support_files/about/A.Durnev-CV_2026.pdf`).
 
-**Open**: the details of the look, the kinds of work, the questionnaires and drafts.
+**Open**: whether the card's short line is the Bio; the rest of the look; the questionnaires and drafts.
 
 **Sub-unit breakdown**: 2.0 About content type + JSON validation test; 2.x content sections and the CV download; 2.N E2E opening `/about` and downloading the CV.
 
