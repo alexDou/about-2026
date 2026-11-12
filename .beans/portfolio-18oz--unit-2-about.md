@@ -5,7 +5,7 @@ status: in-progress
 type: epic
 priority: normal
 created_at: 2026-11-06T20:27:21Z
-updated_at: 2026-11-12T15:22:17Z
+updated_at: 2026-11-12T15:54:24Z
 parent: portfolio-4ur0
 blocked_by:
     - portfolio-m9gt
@@ -52,3 +52,6 @@ Round 4 (2026-11-12), recorded in the Unit 2 spec section:
 - Cards on `--panel-what-i-do`; top card with a rounded palette-colour border. Card order: top, Bio, Roles, Education, Languages + Hobbies.
 - Grey squares out; a faded node burst after `IMG_7255.jpg` instead (draft in `support_files/about/nodes-draft/`), also as a 60×60 SVG.
 - Playfair Display confirmed.
+
+
+Round 5 (2026-11-12): node burst draft approved, to be greyed and dimmed, one only, below the icons on the left. Badges: own SVGs after the references (colours kept, slightly muted), rem-sized, wrapping flex row, one row on desktop clear of the close button, expressive `title` each. Brush `#25363a` ~10

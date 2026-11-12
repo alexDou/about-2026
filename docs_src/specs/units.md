@@ -95,17 +95,18 @@ Reference: the expanded menu of codepen `fluxus/gPWvZm` (local copy in git-ignor
 - Languages: Russian (native), English: fluent (C1), German: good working knowledge (B2), Spanish: basic (A2); word plus CEFR level. Ukrainian is left out.
 - Citizenship: "Permanent EU resident, no visa sponsorship required", said in the Bio (not a badge).
 - Kinds of work: permanent full-time or contract; remote preferred, hybrid possible (said in the Bio); open to relocation anywhere on good conditions (no place named). The target roles go into the Headline.
-- Availability badges: a row of six, big and readable, at the top left, level with the Expanded panel's close button: Available Now (starburst, green only), Full-time, Contract, Relocation, Remote work, AI ready. Shape references in `support_files/about/*_badge.*`.
-- Cards, in order: the top card; the Bio; Roles; Education; Languages and Hobbies together. Cards have a light `--panel-what-i-do` background. The top card also has a rounded border in a palette colour.
+- Availability badges: six, big and readable, sized in rem, in a wrapping flex row at the top left, level with the Expanded panel's close button; on desktop one row with a good margin to the button. Available Now (starburst, green only), Full-time, Contract, Relocation, Remote work, AI ready. Each is our own inline SVG drawn after the shape and colours of its reference (`support_files/about/*_badge.*`, watermarked stock: reference only), its text from the messages, and an expressive `title`.
+- Cards, in order: the top card; the Bio; Roles; Education; Languages and Hobbies (two columns on desktop, stacked on phones; both short lists). Cards have a light `--panel-what-i-do` background. The top card also has a rounded border in a palette colour (colour picked when built), radius as in the reference.
+- Bio: short. A passionate software engineer in web development; over 20 years, still making time for experiments and discoveries; born January 1972 in Moscow, living in Germany since 2019; permanent EU resident, no visa sponsorship required; remote preferred, hybrid possible.
 - Top card, after `support_files/about/about-design.jpg` (no scroll arrow, no grey squares):
   - Left: the greeting "Hello, I'm Alexander Durnev. I'm a {Headline}." (no location) in Playfair Display (self-hosted, OFL; About's greeting and section headings only, an exception to Overused Grotesk site-wide). Under it, one smaller line in the spirit of the sample's quote (a bit bigger than the sample's), combining experience, passion for technology, team spirit and love of experimentation. It is not the Bio. LinkedIn and GitHub icons and the CV download button.
-  - Right, centred vertically: the Owner's cut-out photo (`support_files/about/me.png`) over an SVG brush sketch (CC0/OFL asset, licence kept beside it).
-  - Background: a faded node burst (a centre disc with radiating coloured lines ending in dots), generated after `support_files/about/IMG_7255.jpg`; also needed as a 60×60 SVG.
+  - Right, centred vertically: the Owner's cut-out photo (`support_files/about/me.png`) over an SVG brush sketch (CC0/OFL asset, licence kept beside it) in `#25363a` at about 10%. Both responsive, taking about the same share of the card as in the reference.
+  - Background: one node burst (a centre disc with radiating lines ending in dots, generated after `support_files/about/IMG_7255.jpg`; draft in `support_files/about/nodes-draft/`), greyed out and dimmed, where the reference's second-lowest square sits (below the icons, left), a little bigger than that square. Also needed as a 60×60 SVG.
   - Phone: badges, then the photo, then the rest.
 - Roles: all five from the CV, newest first, each with a condensed text of its own and its technologies.
 - CV download: English only while the site has one locale. Until portfolio-yhih ships the new CV, About links the 2026 PDF (`support_files/about/A.Durnev-CV_2026.pdf`).
 
-**Open**: badge drawing and colours, card border and brush colours, the node burst's look and the 60×60 use; the questionnaires and drafts.
+**Open**: the 60×60 node burst's use; the phone look of the node burst; the questionnaires and drafts.
 
 **Sub-unit breakdown**: 2.0 About content type + JSON validation test; 2.x content sections and the CV download; 2.N E2E opening `/about` and downloading the CV.
 
