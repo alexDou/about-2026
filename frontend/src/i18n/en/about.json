@@ -1,0 +1,428 @@
+{
+  "about.badge.aiReady.text": [
+    {
+      "type": 0,
+      "value": "AI READY"
+    }
+  ],
+  "about.badge.aiReady.title": [
+    {
+      "type": 0,
+      "value": "I build AI features into products and work with agentic, AI-assisted development."
+    }
+  ],
+  "about.badge.availableNow.text": [
+    {
+      "type": 0,
+      "value": "AVAILABLE NOW"
+    }
+  ],
+  "about.badge.availableNow.title": [
+    {
+      "type": 0,
+      "value": "Available now, can start right away."
+    }
+  ],
+  "about.badge.contract.text": [
+    {
+      "type": 0,
+      "value": "CONTRACT"
+    }
+  ],
+  "about.badge.contract.title": [
+    {
+      "type": 0,
+      "value": "Open to contract work."
+    }
+  ],
+  "about.badge.fullTime.text": [
+    {
+      "type": 0,
+      "value": "FULL-TIME"
+    }
+  ],
+  "about.badge.fullTime.title": [
+    {
+      "type": 0,
+      "value": "Open to a permanent, full-time position."
+    }
+  ],
+  "about.badge.relocation.text": [
+    {
+      "type": 0,
+      "value": "RELOCATION"
+    }
+  ],
+  "about.badge.relocation.title": [
+    {
+      "type": 0,
+      "value": "Ready to relocate on good conditions, anywhere."
+    }
+  ],
+  "about.badge.remoteWork.text": [
+    {
+      "type": 0,
+      "value": "REMOTE WORK / READY"
+    }
+  ],
+  "about.badge.remoteWork.title": [
+    {
+      "type": 0,
+      "value": "Remote first, with years in distributed international teams."
+    }
+  ],
+  "about.bio": [
+    {
+      "type": 0,
+      "value": "A software engineer who fell for the web 20 years ago and never left. I still set time aside for experiments and discoveries: that's where the better solutions keep coming from. Born in Moscow in January 1972, living in Germany since 2019. A permanent EU resident. I prefer remote work and am open to hybrid."
+    }
+  ],
+  "about.credo": [
+    {
+      "type": 0,
+      "value": "[Credo placeholder: one line on experience, passion, team spirit and experiments.]"
+    }
+  ],
+  "about.cv.label": [
+    {
+      "type": 0,
+      "value": "Download my CV"
+    }
+  ],
+  "about.education.business": [
+    {
+      "type": 0,
+      "value": "[Education placeholder: business]"
+    }
+  ],
+  "about.education.degree": [
+    {
+      "type": 0,
+      "value": "[Education placeholder: degree]"
+    }
+  ],
+  "about.education.place": [
+    {
+      "type": 0,
+      "value": "[Education placeholder: place]"
+    }
+  ],
+  "about.education.school": [
+    {
+      "type": 0,
+      "value": "[Education placeholder: school]"
+    }
+  ],
+  "about.education.year": [
+    {
+      "type": 0,
+      "value": "[Education placeholder: year]"
+    }
+  ],
+  "about.headline": [
+    {
+      "type": 0,
+      "value": "[Headline placeholder: target role]"
+    }
+  ],
+  "about.hobby.1.name": [
+    {
+      "type": 0,
+      "value": "[Hobby 1 placeholder]"
+    }
+  ],
+  "about.hobby.1.text": [
+    {
+      "type": 0,
+      "value": "[Hobby 1 placeholder: a few words]"
+    }
+  ],
+  "about.hobby.2.name": [
+    {
+      "type": 0,
+      "value": "[Hobby 2 placeholder]"
+    }
+  ],
+  "about.hobby.2.text": [
+    {
+      "type": 0,
+      "value": "[Hobby 2 placeholder: a few words]"
+    }
+  ],
+  "about.hobby.3.name": [
+    {
+      "type": 0,
+      "value": "[Hobby 3 placeholder]"
+    }
+  ],
+  "about.hobby.3.text": [
+    {
+      "type": 0,
+      "value": "[Hobby 3 placeholder: a few words]"
+    }
+  ],
+  "about.hobby.4.name": [
+    {
+      "type": 0,
+      "value": "[Hobby 4 placeholder]"
+    }
+  ],
+  "about.hobby.4.text": [
+    {
+      "type": 0,
+      "value": "[Hobby 4 placeholder: a few words]"
+    }
+  ],
+  "about.language.english.cefr": [
+    {
+      "type": 0,
+      "value": "C1"
+    }
+  ],
+  "about.language.english.level": [
+    {
+      "type": 0,
+      "value": "Fluent"
+    }
+  ],
+  "about.language.english.name": [
+    {
+      "type": 0,
+      "value": "English"
+    }
+  ],
+  "about.language.german.cefr": [
+    {
+      "type": 0,
+      "value": "B2"
+    }
+  ],
+  "about.language.german.level": [
+    {
+      "type": 0,
+      "value": "Good working knowledge"
+    }
+  ],
+  "about.language.german.name": [
+    {
+      "type": 0,
+      "value": "German"
+    }
+  ],
+  "about.language.russian.level": [
+    {
+      "type": 0,
+      "value": "Native"
+    }
+  ],
+  "about.language.russian.name": [
+    {
+      "type": 0,
+      "value": "Russian"
+    }
+  ],
+  "about.language.spanish.cefr": [
+    {
+      "type": 0,
+      "value": "A2"
+    }
+  ],
+  "about.language.spanish.level": [
+    {
+      "type": 0,
+      "value": "Basic"
+    }
+  ],
+  "about.language.spanish.name": [
+    {
+      "type": 0,
+      "value": "Spanish"
+    }
+  ],
+  "about.name": [
+    {
+      "type": 0,
+      "value": "Alexander Durnev"
+    }
+  ],
+  "about.role.1.company": [
+    {
+      "type": 0,
+      "value": "[Role 1 placeholder: Company]"
+    }
+  ],
+  "about.role.1.period": [
+    {
+      "type": 0,
+      "value": "[Role 1 placeholder: Period]"
+    }
+  ],
+  "about.role.1.place": [
+    {
+      "type": 0,
+      "value": "[Role 1 placeholder: Place]"
+    }
+  ],
+  "about.role.1.technologies": [
+    {
+      "type": 0,
+      "value": "[Role 1 placeholder: Technology, Technology, Technology]"
+    }
+  ],
+  "about.role.1.text": [
+    {
+      "type": 0,
+      "value": "[Role 1 placeholder: What I did there.]"
+    }
+  ],
+  "about.role.1.title": [
+    {
+      "type": 0,
+      "value": "[Role 1 placeholder: Role title]"
+    }
+  ],
+  "about.role.2.company": [
+    {
+      "type": 0,
+      "value": "[Role 2 placeholder: Company]"
+    }
+  ],
+  "about.role.2.period": [
+    {
+      "type": 0,
+      "value": "[Role 2 placeholder: Period]"
+    }
+  ],
+  "about.role.2.place": [
+    {
+      "type": 0,
+      "value": "[Role 2 placeholder: Place]"
+    }
+  ],
+  "about.role.2.technologies": [
+    {
+      "type": 0,
+      "value": "[Role 2 placeholder: Technology, Technology, Technology]"
+    }
+  ],
+  "about.role.2.text": [
+    {
+      "type": 0,
+      "value": "[Role 2 placeholder: What I did there.]"
+    }
+  ],
+  "about.role.2.title": [
+    {
+      "type": 0,
+      "value": "[Role 2 placeholder: Role title]"
+    }
+  ],
+  "about.role.3.company": [
+    {
+      "type": 0,
+      "value": "[Role 3 placeholder: Company]"
+    }
+  ],
+  "about.role.3.period": [
+    {
+      "type": 0,
+      "value": "[Role 3 placeholder: Period]"
+    }
+  ],
+  "about.role.3.place": [
+    {
+      "type": 0,
+      "value": "[Role 3 placeholder: Place]"
+    }
+  ],
+  "about.role.3.technologies": [
+    {
+      "type": 0,
+      "value": "[Role 3 placeholder: Technology, Technology, Technology]"
+    }
+  ],
+  "about.role.3.text": [
+    {
+      "type": 0,
+      "value": "[Role 3 placeholder: What I did there.]"
+    }
+  ],
+  "about.role.3.title": [
+    {
+      "type": 0,
+      "value": "[Role 3 placeholder: Role title]"
+    }
+  ],
+  "about.role.4.company": [
+    {
+      "type": 0,
+      "value": "[Role 4 placeholder: Company]"
+    }
+  ],
+  "about.role.4.period": [
+    {
+      "type": 0,
+      "value": "[Role 4 placeholder: Period]"
+    }
+  ],
+  "about.role.4.place": [
+    {
+      "type": 0,
+      "value": "[Role 4 placeholder: Place]"
+    }
+  ],
+  "about.role.4.technologies": [
+    {
+      "type": 0,
+      "value": "[Role 4 placeholder: Technology, Technology, Technology]"
+    }
+  ],
+  "about.role.4.text": [
+    {
+      "type": 0,
+      "value": "[Role 4 placeholder: What I did there.]"
+    }
+  ],
+  "about.role.4.title": [
+    {
+      "type": 0,
+      "value": "[Role 4 placeholder: Role title]"
+    }
+  ],
+  "about.role.5.company": [
+    {
+      "type": 0,
+      "value": "[Role 5 placeholder: Company]"
+    }
+  ],
+  "about.role.5.period": [
+    {
+      "type": 0,
+      "value": "[Role 5 placeholder: Period]"
+    }
+  ],
+  "about.role.5.place": [
+    {
+      "type": 0,
+      "value": "[Role 5 placeholder: Place]"
+    }
+  ],
+  "about.role.5.technologies": [
+    {
+      "type": 0,
+      "value": "[Role 5 placeholder: Technology, Technology, Technology]"
+    }
+  ],
+  "about.role.5.text": [
+    {
+      "type": 0,
+      "value": "[Role 5 placeholder: What I did there.]"
+    }
+  ],
+  "about.role.5.title": [
+    {
+      "type": 0,
+      "value": "[Role 5 placeholder: Role title]"
+    }
+  ]
+}
