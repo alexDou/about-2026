@@ -91,21 +91,21 @@ Reference: the expanded menu of codepen `fluxus/gPWvZm` (local copy in git-ignor
 - Source: the 2026 CV (`support_files/about/`, git-ignored). The site text is rewritten, not copied: condensed, first person, the CV's typos fixed.
 - Kept off About: the CV's expertise blocks and "Core expertise" (Skills, Unit 3); phone and email (Contact, Unit 4). LinkedIn and GitHub appear on both.
 - Headline, Bio, Roles and Hobbies are written together with the Owner: each gets a questionnaire, then a draft the Owner approves.
-- Roles: all five from the CV, newest first, each with a condensed text of its own and its technologies.
 - Education: the degree as in the CV, plus one business-level sentence on the product and business thinking it built.
 - Languages: Russian (native), English: fluent (C1), German: good working knowledge (B2), Spanish: basic (A2); word plus CEFR level. Ukrainian is left out.
-- Citizenship: "Permanent EU resident, no visa sponsorship required".
-- Kinds of work: permanent full-time or contract; remote preferred, some hybrid possible; open to relocation anywhere on good conditions (no place named). The target roles go into the Headline.
-- Top card, after `support_files/about/about-design.jpg` (no scroll arrow):
-  - Left: the greeting "Hello, I'm Alexander Durnev. I'm a {Headline}." (no location) in a serif (self-hosted, OFL; About's greeting and section headings only, an exception to Overused Grotesk site-wide). Under it, one smaller line (a bit bigger than the sample's) combining experience, passion for technology, team spirit and love of experimentation. LinkedIn and GitHub icons.
-  - Right, centred vertically: the Owner's face cut out of the CV photo, over an SVG brush sketch.
-  - Availability badges where the sample's "N" logo sits (or just above the card), large enough to read: "Available Now" (round, green, the text following the circle, "Available" on the top arc, "Now" on the bottom), remote/hybrid, "Open for Relocation".
+- Citizenship: "Permanent EU resident, no visa sponsorship required", said in the Bio (not a badge).
+- Kinds of work: permanent full-time or contract; remote preferred, hybrid possible (said in the Bio); open to relocation anywhere on good conditions (no place named). The target roles go into the Headline.
+- Availability badges: a row of six, big and readable, at the top left, level with the Expanded panel's close button: Available Now (starburst, green only), Full-time, Contract, Relocation, Remote work, AI ready. Shape references in `support_files/about/*_badge.*`.
+- Cards, in order: the top card; the Bio; Roles; Education; Languages and Hobbies together. Cards have a light `--panel-what-i-do` background. The top card also has a rounded border in a palette colour.
+- Top card, after `support_files/about/about-design.jpg` (no scroll arrow, no grey squares):
+  - Left: the greeting "Hello, I'm Alexander Durnev. I'm a {Headline}." (no location) in Playfair Display (self-hosted, OFL; About's greeting and section headings only, an exception to Overused Grotesk site-wide). Under it, one smaller line in the spirit of the sample's quote (a bit bigger than the sample's), combining experience, passion for technology, team spirit and love of experimentation. It is not the Bio. LinkedIn and GitHub icons and the CV download button.
+  - Right, centred vertically: the Owner's cut-out photo (`support_files/about/me.png`) over an SVG brush sketch (CC0/OFL asset, licence kept beside it).
+  - Background: a faded node burst (a centre disc with radiating coloured lines ending in dots), generated after `support_files/about/IMG_7255.jpg`; also needed as a 60×60 SVG.
   - Phone: badges, then the photo, then the rest.
-- The other sections follow the same style, made dark on the About Panel's `#25363a` with `#d1dcd9` text.
-- Photo: the one embedded in the CV (512×512 JPEG).
+- Roles: all five from the CV, newest first, each with a condensed text of its own and its technologies.
 - CV download: English only while the site has one locale. Until portfolio-yhih ships the new CV, About links the 2026 PDF (`support_files/about/A.Durnev-CV_2026.pdf`).
 
-**Open**: whether the card's short line is the Bio; the rest of the look; the questionnaires and drafts.
+**Open**: badge drawing and colours, card border and brush colours, the node burst's look and the 60×60 use; the questionnaires and drafts.
 
 **Sub-unit breakdown**: 2.0 About content type + JSON validation test; 2.x content sections and the CV download; 2.N E2E opening `/about` and downloading the CV.
 
