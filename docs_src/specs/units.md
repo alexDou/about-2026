@@ -92,11 +92,16 @@ Reference: the expanded menu of codepen `fluxus/gPWvZm` (local copy in git-ignor
 - Kept off About: the CV's expertise blocks and "Core expertise" (Skills, Unit 3); phone, email, LinkedIn, GitHub (Contact, Unit 4).
 - Headline, Bio, Roles and Hobbies are written together with the Owner: each gets a questionnaire, then a draft the Owner approves.
 - Roles: all five from the CV, each with a condensed text of its own.
-- Languages: Russian (native), English C1, German B2, Spanish A2. Ukrainian is left out.
+- Roles: newest first, each with its technologies.
+- Education: the degree as in the CV, plus one business-level sentence on the product and business thinking it built.
+- Languages: Russian (native), English: fluent (C1), German: good working knowledge (B2), Spanish: basic (A2); word plus CEFR level. Ukrainian is left out.
+- Citizenship: "Permanent EU resident, no visa sponsorship required".
+- Location: Berlin, Germany; open to relocation. Availability (available now) and the kinds of work the Owner is open to must be seen loud and clear.
+- Look: the top (name, Headline, Bio, photo) takes its inspiration from `support_files/about/about-design.jpg`, a greeting sentence beside the photo with a brush-stroke mask (which also hides the photo's black corner). The other sections follow the same style, made dark on the About Panel's `#25363a` with `#d1dcd9` text.
 - Photo: the one embedded in the CV (512×512 JPEG).
-- CV download: English only while the site has one locale. The downloadable file is a new CV made for the site, not the 2026 PDF.
+- CV download: English only while the site has one locale. The downloadable file is a new CV made for the site, not the 2026 PDF. It is its own bean, made after What I do, Skills and Contact and before Chat.
 
-**Open**: layout and look (reference: `support_files/about/about-design.jpg`), citizenship wording, the questionnaires and drafts.
+**Open**: the details of the look, the kinds of work, the questionnaires and drafts.
 
 **Sub-unit breakdown**: 2.0 About content type + JSON validation test; 2.x content sections and the CV download; 2.N E2E opening `/about` and downloading the CV.
 
