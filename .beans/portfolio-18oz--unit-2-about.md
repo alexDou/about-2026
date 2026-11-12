@@ -5,7 +5,7 @@ status: in-progress
 type: epic
 priority: normal
 created_at: 2026-11-06T20:27:21Z
-updated_at: 2026-11-12T12:14:10Z
+updated_at: 2026-11-12T15:22:17Z
 parent: portfolio-4ur0
 blocked_by:
     - portfolio-m9gt
@@ -42,3 +42,13 @@ Round 3 (2026-11-12), recorded in the Unit 2 spec section:
 - Top card: face cut out of the CV photo over an SVG brush sketch on the right, greeting + one short line + LinkedIn/GitHub icons on the left. Serif for greeting and section headings. No scroll arrow.
 - Until portfolio-yhih, About links the 2026 PDF.
 - No glossary term for Availability: the glossary defines domains, not one Panel line.
+
+
+Round 4 (2026-11-12), recorded in the Unit 2 spec section:
+
+- The card line under the greeting is not the Bio; the Bio is the next card and also says EU residence and optional hybrid.
+- Six badges (Available Now, Full-time, Contract, Relocation, Remote work, AI ready) in a row at the top left, level with the close button.
+- Photo: `support_files/about/me.png` (Owner's cut-out, 1079×1457).
+- Cards on `--panel-what-i-do`; top card with a rounded palette-colour border. Card order: top, Bio, Roles, Education, Languages + Hobbies.
+- Grey squares out; a faded node burst after `IMG_7255.jpg` instead (draft in `support_files/about/nodes-draft/`), also as a 60×60 SVG.
+- Playfair Display confirmed.
