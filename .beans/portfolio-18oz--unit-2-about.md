@@ -5,7 +5,7 @@ status: in-progress
 type: epic
 priority: normal
 created_at: 2026-11-06T20:27:21Z
-updated_at: 2026-11-12T11:28:15Z
+updated_at: 2026-11-12T12:14:10Z
 parent: portfolio-4ur0
 blocked_by:
     - portfolio-m9gt
@@ -33,3 +33,12 @@ Round 2 (2026-11-12), recorded in the Unit 2 spec section:
 - Languages as word plus CEFR. Education plus one business-level sentence. Roles newest first with technologies.
 - The CV download moves to its own bean, portfolio-yhih (after Skills, Contact, What I do; before Chat).
 - Questionnaires: one Markdown file per item in `docs_src/about/`, answered in place.
+
+
+Round 3 (2026-11-12), recorded in the Unit 2 spec section:
+
+- Kinds of work: permanent full-time or contract, remote preferred, some hybrid, relocation anywhere. Shown as badges where the reference has its "N" logo; "Available Now" is a round green badge with text on the circle.
+- Target roles go into the Headline. Greeting without location.
+- Top card: face cut out of the CV photo over an SVG brush sketch on the right, greeting + one short line + LinkedIn/GitHub icons on the left. Serif for greeting and section headings. No scroll arrow.
+- Until portfolio-yhih, About links the 2026 PDF.
+- No glossary term for Availability: the glossary defines domains, not one Panel line.
