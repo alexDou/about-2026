@@ -3,8 +3,9 @@
 title: CV for download
 status: todo
 type: feature
+priority: normal
 created_at: 2026-11-12T11:28:09Z
-updated_at: 2026-11-12T11:28:09Z
+updated_at: 2026-11-12T16:19:50Z
 parent: portfolio-4ur0
 blocking:
     - portfolio-h69y
@@ -21,3 +22,9 @@ Decided in the Unit 2 grilling (portfolio-18oz):
 - Made later, together with the Owner.
 
 Open: how it is produced, what it contains (phone number or not), where the file lives on Google Cloud (see Unit 8), and how About links to it.
+
+
+## Notes
+
+- Until this ships, About serves the 2026 PDF without the phone number at `frontend/public/cv/alexander-durnev-cv-en.pdf` (portfolio-6x9j). The new CV replaces that file at the same path.
+- Typos in the 2026 CV not to carry over: "Commulative", "convertion", "Ukranian", "Reduction on".
