@@ -5,7 +5,7 @@ status: in-progress
 type: epic
 priority: normal
 created_at: 2026-11-06T20:27:21Z
-updated_at: 2026-11-12T15:54:41Z
+updated_at: 2026-11-12T16:14:25Z
 parent: portfolio-4ur0
 blocked_by:
     - portfolio-m9gt
@@ -58,3 +58,6 @@ Round 5 (2026-11-12): node burst draft approved, to be greyed and dimmed, one on
 
 
 Round 5 (2026-11-12): node burst draft approved, to be greyed and dimmed, one only, below the icons on the left. Badges: own SVGs after the references (colours kept, slightly muted), rem-sized, wrapping flex row, one row on desktop clear of the close button, expressive `title` each. Brush `#25363a` at about 10 percent. Photo and brush responsive. Languages and Hobbies two columns, short lists. Bio outline from the Owner recorded in the spec.
+
+
+Round 6 (2026-11-12), recorded in the Unit 2 spec section: Bio text approved; badge labels and titles; Hobbies with a few words each; questionnaires (headline, credo, roles, hobbies, education) grilled in a dedicated content bean after 2.0; stages 2.0 to 2.N as in the spec; the 60×60 node burst goes to the logo (own bean); the 2026 PDF ships with the phone number stripped.
