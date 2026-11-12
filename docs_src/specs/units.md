@@ -85,11 +85,22 @@ Reference: the expanded menu of codepen `fluxus/gPWvZm` (local copy in git-ignor
 
 ## Unit 2: About
 
-**Objective**: the About Panel: photo, bio, education, work experience, languages, hobbies and passions, and the CV download in English and German.
+**Objective**: the About Panel, in the first person: name, Headline, photo, Bio, work experience (Roles), education, languages, Hobbies, citizenship, and the CV download.
 
-**Sub-unit breakdown**: 2.0 About content type + JSON validation test; 2.x content sections and the CV downloads; 2.N E2E opening `/about` and downloading both CVs.
+**Decided**:
+- Source: the 2026 CV (`support_files/about/`, git-ignored). The site text is rewritten, not copied: condensed, first person, the CV's typos fixed.
+- Kept off About: the CV's expertise blocks and "Core expertise" (Skills, Unit 3); phone, email, LinkedIn, GitHub (Contact, Unit 4).
+- Headline, Bio, Roles and Hobbies are written together with the Owner: each gets a questionnaire, then a draft the Owner approves.
+- Roles: all five from the CV, each with a condensed text of its own.
+- Languages: Russian (native), English C1, German B2, Spanish A2. Ukrainian is left out.
+- Photo: the one embedded in the CV (512×512 JPEG).
+- CV download: English only while the site has one locale. The downloadable file is a new CV made for the site, not the 2026 PDF.
 
-**Definition of Done**: content comes from the message JSON only; both CV files download.
+**Open**: layout and look (reference: `support_files/about/about-design.jpg`), citizenship wording, the questionnaires and drafts.
+
+**Sub-unit breakdown**: 2.0 About content type + JSON validation test; 2.x content sections and the CV download; 2.N E2E opening `/about` and downloading the CV.
+
+**Definition of Done**: content comes from the message JSON only; the CV file downloads.
 
 ## Unit 3: Skills
 

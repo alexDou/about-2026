@@ -61,8 +61,26 @@ One of six groups of six Takeovers. Group and position map onto a throw of two d
 _Avoid_: category
 
 **CV**:
-The Owner's downloadable résumé document, in English and German.
+The Owner's downloadable résumé document, one per site locale (English for now).
 _Avoid_: résumé, profile
+
+### About
+
+**Headline**:
+The one line naming what the Owner is professionally, shown under their name.
+_Avoid_: title, tagline, position
+
+**Bio**:
+The Owner's short self-introduction in their own words.
+_Avoid_: summary, profile, about text
+
+**Role**:
+One position in the Owner's work history: title, company, period, place and what the Owner did there.
+_Avoid_: job, position, experience, employment
+
+**Hobby**:
+Something the Owner enjoys outside work, told in their own words.
+_Avoid_: interest, passion
 
 ### Contact
 
