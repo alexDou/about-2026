@@ -104,7 +104,7 @@ Reference: the expanded menu of codepen `fluxus/gPWvZm` (local copy in git-ignor
   - Right, centred vertically: the Owner's cut-out photo (`support_files/about/me.png`) over an SVG brush sketch (CC0/OFL asset, licence kept beside it) in `#25363a` at about 10%. Both responsive, taking about the same share of the card as in the reference.
   - Background: one node burst (a centre disc with radiating lines ending in dots, generated after `support_files/about/IMG_7255.jpg`; draft in `support_files/about/nodes-draft/`), greyed out and dimmed, where the reference's second-lowest square sits (below the icons, left), a little bigger than that square. The 60×60 version is for the logo (a dimmed background or inside its "o", decided in a logo bean), not About.
   - Phone: badges, then the photo, then the rest.
-- Roles: all five from the CV, newest first, each with a condensed text of its own and its technologies.
+- Roles: all five from the CV, newest first, each an optional intro plus highlights ("what was done. My role: ...") in the Owner's own words, and its technologies.
 - CV download: English only while the site has one locale. Until portfolio-yhih ships the new CV, About links the 2026 PDF (`support_files/about/A.Durnev-CV_2026.pdf`) with the phone number stripped out, served as `frontend/public/cv/alexander-durnev-cv-en.pdf`.
 - Content: after the contracts (2.0), a dedicated grilling bean works through the questionnaires in `docs_src/about/` (`headline.md`, `credo.md`, `roles.md`, `hobbies.md`, `education.md`), then drafts the message JSON for the Owner to approve.
 
