@@ -5,7 +5,7 @@ status: todo
 type: feature
 priority: normal
 created_at: 2026-11-12T11:28:09Z
-updated_at: 2026-11-12T16:19:50Z
+updated_at: 2026-11-13T16:24:33Z
 parent: portfolio-4ur0
 blocking:
     - portfolio-h69y
@@ -28,3 +28,5 @@ Open: how it is produced, what it contains (phone number or not), where the file
 
 - Until this ships, About serves the 2026 PDF without the phone number at `frontend/public/cv/alexander-durnev-cv-en.pdf` (portfolio-6x9j). The new CV replaces that file at the same path.
 - Typos in the 2026 CV not to carry over: "Commulative", "convertion", "Ukranian", "Reduction on".
+
+- Claims in the 2026 CV that the Owner has corrected on the site, so the new CV must match About: Autodoc did not replace a previous monolithic frontend (the Owner designed the application from scratch); the school is the State University of Management, Moscow (the CV says "Federal Academy of Management"); the Owner was technical lead at Autodoc and led the Swing-to-React transformation at Tipico. Mentoring stays in the CV.
