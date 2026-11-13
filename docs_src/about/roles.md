@@ -36,6 +36,16 @@ Round 3, the Owner's own sample of the wanted style and content, verbatim:
 > "Frontend application serving a large B2B marketplace of automotive professionals. My role: designed from scratch the app internal architecture and tooling. Led the app development. Played an important role in decisions made on common workflow, deployment and research mechanisms. In close cooperation with business owners and backend coders took part in design of APIs. Main challenges: handling of huge data flow using real time communiation with UX degradation. huge ammount of data to be display in sortable, actionable way in products table.
 > A project wide i18n service written on Nodejs. My role: projects setup from ground up, custom modules for the CMS, dataflow schema, fault tollerance matters."
 
+Round 4 answers (2026-11-13), verbatim, to the open questions:
+
+> 1. technical lead. a team of equally positioned developers. i senior, guys were middle an one junior. this is for your knowledge - not to post it like this
+> 2. when, how much, to what exactly we should dedicate time to address opportunities to change to newer versions, faster tools, rethink, refactor etc
+> 3. without ofc
+> 4. CMS written on Nodejs. Strapi it is, but lets sip the name. custom modules: translation from JSON format that we were using in i18next-react to strapi format. json-to-strapi so to say. smt else cant recall now. data-flow schema: cache latest successful response on frontend to fallback to in a case of loss of availability of i18n service. caching layer redis. what goes to cdn, what goes to cms. + fault tollerance. me alone. again, not to copy. for your knowledge only. i need a professional wording that make sense in context of that we are doing
+> 5. yes. it was our initiative that palyed very well for the whole company. a short line worth it
+> 6. yes.
+> 9. yes, it makes sense for me. it easier to read like this. but some parts, such as situation in Tipco need a few lines intro, which you will write.
+
 Round 3 rulings: "replacing the previous monolithic frontend" is not true (the CV bullet is wrong for the Owner's part); "all of it was on me" is not a professional CV phrase; "thousands of rows" becomes "huge data load".
 
 ## 2. Senior Frontend Developer, Tipico GmbH (Sep 2019 – Apr 2022, Germany)
@@ -47,6 +57,10 @@ Round 3 rulings: "replacing the previous monolithic frontend" is not true (the C
 Round 1, verbatim:
 
 > yes, the main thing, and the only actually, was Swing-to-React transition. i found myself in the company in a period of great re-write of monolyth Java app to micro-services architecture. Swing was a part of the move. Swing has its limitations. things are not looking very good sometimes and there are not so much ways to improve compared with a typical frontend app. For a work start i had only a Figma design. all the frontend design and coded from scratch by 2 guys. I was working on end-users facing inerfaces. the app Tipico shop visitors see on the screens. another guy was working on admin-side UI - this is that shop owners, managers and company admins see. As i have seen it passing by a Tipico shop this UIs are still there. across the country.
+
+Round 4 answer, verbatim:
+
+> 7. here is the situation from the very beginning. I have mentioned this above. explain my role, explain design. do not focus too much on the other dev role
 
 Round 3 rulings: keep the sentence "I joined during the great rewrite of the monolithic Java application into microservices." as written; "the Swing-to-React move" alone does not convey the picture, so tell the story.
 
@@ -67,6 +81,10 @@ Round 2, verbatim:
 Credo anecdote (credo.md, question 8), verbatim:
 
 > with appearience of WebRTC from Google, we received an opportunity to replace Flash or ActiveX. Flash had a number of problems, ActiveX was not ideal too. but back of the days ( in my timeline these are Zovolt times ) the protocol was still not stable. let alone adapted by all major browsers and it took a lot of experimentations to figure out things that matter
+
+Round 4 answer, verbatim:
+
+> 8. yes, mine in a big deal. not coding the spec, but coding from specs. what we develop was defined by our brilliant software engineering lead. i have coded it. crypto as well. frontend, backend. we were working with codes that we ran on Raspberry Pi, as a side note. I coded many parts of Streembit project, part of which is public on Github
 
 Round 3 rulings: "unstable WebRTC" is out, write just WebRTC, AES-256 crypto, key pairs, p2p. Explain what Streembit is and enhance it with what the Owner did.
 
@@ -95,3 +113,47 @@ Round 1, verbatim:
 > - Workpress plugins. one or two of them ended up in official Workpress plugins repository. other were internal. i can't recall the name now and dont want to search for it
 
 Round 2: the Catholic community network is named as such ("yea, your way").
+
+## Round 5 (2026-11-13): the Owner's corrected versions, verbatim
+
+Structure agreed: an optional intro and a list of highlights per Role, each "what was done. My role: ...". The texts below are the Owner's; the polished versions of Roles 1 to 3 are in `about.json` (`about.role.N.intro`, `about.role.N.highlight.M`).
+
+### 1. Autodoc
+
+> Application. Frontend application of a large B2B marketplace for automotive professionals, built within Domain-Driven Design (DDD) model. My role: technical lead. I designed the application's internal architecture and tooling from scratch and led its development.
+> - Workflow and upkeep. I played an important role in the decisions on the common workflow and deployment. I also shaped how the team decides when, and how much time, to dedicate to technical debt.
+> - APIs. I took part in forging the APIs, working closely with business owners and backend engineers.
+> - Main challenge. Real-time communication channel with the underlying service serving a huge data flow, where data has to be shown in a sortable, actionable way without degrading performance or UX. My role: I designed the data flow and took part in implementation.
+> - i18n service. A project-wide translation service (Node.js CMS). My role: I set up the project from the ground up and wrote custom CMS modules, including a converter from the JSON format of i18next to the CMS's own format. I designed the data-flow schema: caching layer, fault tollerance mechanisms and where finds itself a split between CDN and CMS obligations.
+> - Component library. Our frontend team's initiative: a company-wide React component library that replaced third-party web-components libraries. My role: the initiative and taking part in implementation of components.
+> - Results. the first version of this new service covered 1 mil. revenue mark in just 3 months. Significant progress in performance and metrics, resulting in better user reviews and about tangible growth of customers base.
+
+### 2. Tipico
+
+> Intro: I joined the company in a period of major rewrite of the monolithic Java application into microservices. The betting-shop screens were part of that move. They ran on Java Swing, which has its limitations, and role was to replace it with a React based application.
+> - Frontend. Small team of frontend engineers overtook the required transfirmation. Tipico betting shops was designed and coded in React and TypeScript, starting from just a Figma designs. The work was split in two top-level chunks: UIs an actual customer sees in Tipico shops and admin part of the story, very well thought for shop owners, data providers and company's admins.
+> - My role. Lead the Swing-React transformation. Architecture and implementation from scratch of entire application that serve shop visitors. Here belongs team work on shape of Java Spring Boot API, services communication schemas, data flow handling on frontend, fault tollerance, performance and UX matters.
+> - Result. Successfully deployed and collected overwhelmingly positive reaction from end users. I've seen these interfaces on the screens in Tipico shop last time i passed by it.
+
+### 3. Zovolt
+
+> - Streembit. A decentralized, secure peer-to-peer communication platform that works in the browser: text chat, file sharing, video conferencing and IoT integration. It ran live in public beta until funding problems suspended the project. Part of the code is public on GitHub.
+> - My role. While decisions on the system shape and components were made by our software engineering lead, I coded those from development specifications, ending up authoring many parts of the platform: frontend, backend incl. cryptography, IoT services, P2P node discoveries, CLI tools, etc.
+> - Challanges. Unbittable security. Authentication level was based on private/public key pairs exchange, while all communication were AES-256 encrypted. Real time. WebRTC had just arrived as the alternative to Flash and ActiveX. It took extensive experimentation to find the proper reliability. Peer-to-peer layer. Emerging decentralized technologies such as blockchain concepts and a Kademlia DHT.
+> - IoT. we have also experimented with IoT devices running our code on Raspberry Pi.
+
+GitHub: Streembit https://github.com/streembit ; the Owner's repositories https://github.com/alexDou?tab=repositories&q=streembit
+
+## Round 6 (2026-11-13), verbatim
+
+> third-party web-components libraries
+> 1. yes, the marketplace platform. Euro.
+> 2. no, was antd, then our internal. keep it
+> 3. i meant Unbeatable, which is also impregnable. spelling issue on my side
+> 4. we keep mentoring for CV. here is ok to skip
+> 5. argh.. it was advanced back then, but time passed by. it might look outdated. not sure. wdyt?
+>
+> Upwork. you were right. do not say catholics, expess it the way you suggested
+> My role. Creation of custom modules and plugins specifically for a project.
+
+Applied: "third-party web-components libraries", "€1 million revenue mark", Ant Design stays in the technologies list, "Unbeatable security", the Upwork social networks described as "a community in western Europe" with that My role line. Demokratech (Role 4) and the Upwork intro and bullets were shown in the session and not objected to otherwise. The Streembit GitHub link stays out of the text (see the session).

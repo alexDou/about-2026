@@ -5,7 +5,7 @@ status: todo
 type: epic
 priority: normal
 created_at: 2026-11-06T20:27:21Z
-updated_at: 2026-11-12T16:19:50Z
+updated_at: 2026-11-13T14:56:32Z
 parent: portfolio-4ur0
 blocked_by:
     - portfolio-m9gt
@@ -28,7 +28,7 @@ Round 1 (2026-11-12), recorded in the Unit 2 spec section and `CONTEXT.md` (Head
 
 Round 2 (2026-11-12), recorded in the Unit 2 spec section:
 
-- Citizenship: "Permanent EU resident, no visa sponsorship required". Berlin, Germany; open to relocation; available now. The kinds of work must be seen loud and clear.
+- Citizenship: "A permanent EU resident" (no visa wording, Owner 2026-11-13). Berlin, Germany; open to relocation; available now. The kinds of work must be seen loud and clear.
 - Look: top section inspired by `about-design.jpg` (greeting sentence, brush-masked photo); other sections in the same style, dark on `#25363a`.
 - Languages as word plus CEFR. Education plus one business-level sentence. Roles newest first with technologies.
 - The CV download moves to its own bean, portfolio-yhih (after Skills, Contact, What I do; before Chat).

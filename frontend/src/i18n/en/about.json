@@ -263,6 +263,48 @@
       "value": "Autodoc SE"
     }
   ],
+  "about.role.1.highlight.1": [
+    {
+      "type": 0,
+      "value": "Application. Frontend application of a large B2B marketplace for automotive professionals, built within the Domain-Driven Design (DDD) model. My role: technical lead. I designed the application's internal architecture and tooling from scratch and led its development."
+    }
+  ],
+  "about.role.1.highlight.2": [
+    {
+      "type": 0,
+      "value": "Workflow and upkeep. I played an important role in the decisions on the common workflow and deployment. I also shaped how the team decides when, and how much time, to dedicate to technical debt."
+    }
+  ],
+  "about.role.1.highlight.3": [
+    {
+      "type": 0,
+      "value": "APIs. I took part in forging the APIs, working closely with business owners and backend engineers."
+    }
+  ],
+  "about.role.1.highlight.4": [
+    {
+      "type": 0,
+      "value": "Main challenge. A real-time communication channel with the underlying service, carrying a huge data flow that has to be shown in a sortable, actionable way without degrading performance or UX. My role: I designed the data flow and took part in its implementation."
+    }
+  ],
+  "about.role.1.highlight.5": [
+    {
+      "type": 0,
+      "value": "i18n service. A project-wide translation service on a Node.js CMS. My role: I set up the project from the ground up and wrote custom CMS modules, including a converter from the JSON format of i18next to the CMS's own format. I designed the data-flow schema: the caching layer, the fault-tolerance mechanisms and the split of responsibilities between the CDN and the CMS."
+    }
+  ],
+  "about.role.1.highlight.6": [
+    {
+      "type": 0,
+      "value": "Component library. Our frontend team's initiative: a company-wide React component library that replaced third-party web-components libraries. My role: I took part in the initiative and in implementing the components."
+    }
+  ],
+  "about.role.1.highlight.7": [
+    {
+      "type": 0,
+      "value": "Results. The first version of the platform reached the €1 million revenue mark in just 3 months. Significant progress in performance and metrics, resulting in better user reviews and tangible growth of the customer base."
+    }
+  ],
   "about.role.1.period": [
     {
       "type": 0,
@@ -281,12 +323,6 @@
       "value": "TypeScript, React, Next.js, Node.js, GraphQL, MySQL, Redis, Jest/RTL, Cypress, Playwright, Micro-/Hyper-frontends, Docker, CI/CD, Ant Design, Prometheus, New Relic"
     }
   ],
-  "about.role.1.text": [
-    {
-      "type": 0,
-      "value": "[Role 1 placeholder: What I did there.]"
-    }
-  ],
   "about.role.1.title": [
     {
       "type": 0,
@@ -297,6 +333,30 @@
     {
       "type": 0,
       "value": "Tipico GmbH"
+    }
+  ],
+  "about.role.2.highlight.1": [
+    {
+      "type": 0,
+      "value": "Frontend. A small team of frontend engineers carried out the required transformation. The new frontend of the Tipico betting shops was designed and coded in React and TypeScript, starting from just a Figma design. The work was split into two top-level chunks: the UIs an actual customer sees in Tipico shops, and the admin part, a carefully thought-out interface for shop owners, data providers and company admins."
+    }
+  ],
+  "about.role.2.highlight.2": [
+    {
+      "type": 0,
+      "value": "My role. I led the Swing-to-React transformation: the architecture and implementation from scratch of the entire application that serves shop visitors. That includes teamwork on the shape of the Java Spring Boot API, the service communication schemas, data-flow handling on the frontend, fault tolerance, and performance and UX matters."
+    }
+  ],
+  "about.role.2.highlight.3": [
+    {
+      "type": 0,
+      "value": "Result. Successfully deployed, with an overwhelmingly positive reaction from end users. The last time I passed a Tipico shop, I saw these interfaces on its screens."
+    }
+  ],
+  "about.role.2.intro": [
+    {
+      "type": 0,
+      "value": "I joined the company in a period of major rewrite of the monolithic Java application into microservices. The betting-shop screens were part of that move. They ran on Java Swing, which has its limitations, and the task was to replace them with a React-based application."
     }
   ],
   "about.role.2.period": [
@@ -317,12 +377,6 @@
       "value": "TypeScript, React, Node.js, GraphQL, Cypress, Jest/RTL, Java, MySQL, Kafka, Redis"
     }
   ],
-  "about.role.2.text": [
-    {
-      "type": 0,
-      "value": "[Role 2 placeholder: What I did there.]"
-    }
-  ],
   "about.role.2.title": [
     {
       "type": 0,
@@ -333,6 +387,30 @@
     {
       "type": 0,
       "value": "Zovolt Ltd"
+    }
+  ],
+  "about.role.3.highlight.1": [
+    {
+      "type": 0,
+      "value": "Streembit. A decentralized, secure peer-to-peer communication platform that works in the browser: text chat, file sharing, video conferencing and IoT integration. It ran live in public beta until funding problems suspended the project. Part of the code is public on GitHub."
+    }
+  ],
+  "about.role.3.highlight.2": [
+    {
+      "type": 0,
+      "value": "My role. The decisions on the system's shape and components were made by our software engineering lead; I coded them from the development specifications, ending up as the author of many parts of the platform: frontend, backend including cryptography, IoT services, P2P node discovery, CLI tools and more."
+    }
+  ],
+  "about.role.3.highlight.3": [
+    {
+      "type": 0,
+      "value": "Challenges. Unbeatable security: authentication was based on an exchange of private/public key pairs, and all communication was AES-256 encrypted. Real time: WebRTC had just arrived as the alternative to Flash and ActiveX, and it took extensive experimentation to reach the proper reliability. Peer-to-peer layer: emerging decentralized technologies such as blockchain concepts and a Kademlia DHT."
+    }
+  ],
+  "about.role.3.highlight.4": [
+    {
+      "type": 0,
+      "value": "IoT. We also experimented with IoT devices running our code on Raspberry Pi."
     }
   ],
   "about.role.3.period": [
@@ -353,12 +431,6 @@
       "value": "JavaScript, Node.js, WebRTC, Blockchain, Kademlia DHT, P2P, WebSockets"
     }
   ],
-  "about.role.3.text": [
-    {
-      "type": 0,
-      "value": "[Role 3 placeholder: What I did there.]"
-    }
-  ],
   "about.role.3.title": [
     {
       "type": 0,
@@ -369,6 +441,18 @@
     {
       "type": 0,
       "value": "Demokratech"
+    }
+  ],
+  "about.role.4.highlight.1": [
+    {
+      "type": 0,
+      "value": "Platform. A meeting management platform commissioned by the leading board of a Swedish county: agenda planning, live meeting management, real-time streaming and session recording through to archival."
+    }
+  ],
+  "about.role.4.highlight.2": [
+    {
+      "type": 0,
+      "value": "My role. I designed and implemented the backend services and REST APIs, and the rich JavaScript applications for administrators and meeting participants. I worked closely with the stakeholders and took part in system architecture, feature planning and the platform's long-term evolution."
     }
   ],
   "about.role.4.period": [
@@ -389,12 +473,6 @@
       "value": "PHP 7, Yii2, JavaScript, MySQL, REST APIs, WebRTC"
     }
   ],
-  "about.role.4.text": [
-    {
-      "type": 0,
-      "value": "[Role 4 placeholder: What I did there.]"
-    }
-  ],
   "about.role.4.title": [
     {
       "type": 0,
@@ -405,6 +483,36 @@
     {
       "type": 0,
       "value": "Upwork"
+    }
+  ],
+  "about.role.5.highlight.1": [
+    {
+      "type": 0,
+      "value": "Router and firewall management interface. A user sets a rule described in plain English in the browser, with a tick or a select. The system translates it into router configuration and firewall rules, applies them for the client and reloads the services. My role: full-stack development of the whole interface."
+    }
+  ],
+  "about.role.5.highlight.2": [
+    {
+      "type": 0,
+      "value": "Social networks. Two communities on the SocialEngine CMS (PHP, Zend Framework), one for a community in western Europe and one for pet owners, installed and set up for the clients. My role: creation of custom modules and plugins specifically for a project."
+    }
+  ],
+  "about.role.5.highlight.3": [
+    {
+      "type": 0,
+      "value": "Magento plugins. A checkout extension and a custom delivery plugin."
+    }
+  ],
+  "about.role.5.highlight.4": [
+    {
+      "type": 0,
+      "value": "WordPress plugins. One or two reached the official WordPress plugin repository, and the others were internal."
+    }
+  ],
+  "about.role.5.intro": [
+    {
+      "type": 0,
+      "value": "Nine years of commercial projects for international clients, startups and established businesses, each owned from business analysis and solution design to deployment and long-term maintenance."
     }
   ],
   "about.role.5.period": [
@@ -422,13 +530,7 @@
   "about.role.5.technologies": [
     {
       "type": 0,
-      "value": "[Role 5 placeholder: Technology, Technology, Technology]"
-    }
-  ],
-  "about.role.5.text": [
-    {
-      "type": 0,
-      "value": "[Role 5 placeholder: What I did there.]"
+      "value": "PHP, Zend Framework, SocialEngine CMS, Magento, WordPress"
     }
   ],
   "about.role.5.title": [

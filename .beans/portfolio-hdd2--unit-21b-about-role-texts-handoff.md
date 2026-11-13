@@ -1,12 +1,13 @@
 ---
 # portfolio-hdd2
 title: 'Unit 2.1b: About Role texts (handoff)'
-status: todo
+status: completed
 type: task
+priority: normal
 tags:
     - ready-for-human
 created_at: 2026-11-13T14:32:41Z
-updated_at: 2026-11-13T14:32:41Z
+updated_at: 2026-11-13T16:03:50Z
 parent: portfolio-18oz
 blocked_by:
     - portfolio-ajvs
@@ -70,7 +71,22 @@ General:
 
 ## Acceptance criteria
 
-- [ ] The open questions asked and answered; the answers kept in `docs_src/about/roles.md` (verbatim)
-- [ ] Each of the five Role texts approved by the Owner, one at a time
-- [ ] The approved texts (and technologies lists) replace the placeholders in `about.json`; the 2.0 test still passes
-- [ ] `scripts/verify.sh` GREEN
+- [x] The open questions asked and answered; the answers kept in `docs_src/about/roles.md` (verbatim)
+- [x] Each of the five Role texts approved by the Owner, one at a time
+- [x] The approved texts (and technologies lists) replace the placeholders in `about.json`; the 2.0 test still passes
+- [x] `scripts/verify.sh` GREEN
+
+## Round 4 (2026-11-13)
+
+The Owner answered the open questions in the session (kept verbatim in `docs_src/about/roles.md`, Round 4). Bullet list per Role approved in principle (needs a contract change after the first Role text is approved); a few intro lines for Roles like Tipico. Drafts of Autodoc, Tipico and Zovolt shown in chat for approval, none kept in files.
+
+## Round 5 (2026-11-13)
+
+`AboutRole` is now `intro?` plus `highlights` (derived from `about.role.N.highlight.M` messages); `text` is gone. Roles 1 to 3 polished from the Owner's corrected versions and written into `about.json`; Roles 4 and 5 still placeholders. 2.5 renders the list: note added to portfolio-xjur. Open: currency and subject of the "1 million revenue" line, Ant Design in the technologies list, "Unbittable" read as "Unbreakable".
+
+## Summary of Changes
+
+- Open questions asked and answered; the answers and the Owner's texts are kept verbatim in `docs_src/about/roles.md` (rounds 4 to 6).
+- `AboutRole` is now an optional `intro` plus `highlights` (read from the `about.role.N.highlight.M` messages), each highlight "what was done. My role: ..."; the 2.0 test pins the order and the Tipico intro. The 2.5 bean notes the list rendering.
+- The five Roles are in `about.json`: Autodoc, Tipico (with intro), Zovolt (Streembit), Demokratech, Upwork (with intro); no placeholders are left in the About messages. Demokratech and the Upwork text were approved by the Owner's silence on them after his Upwork corrections (Catholic community generalised, own My role line).
+- Left out on purpose: the Streembit GitHub link (the Owner asked for an opinion; recommended no link, the code is reachable from the GitHub link on About), mentoring (kept for the CV only), Web Vitals numbers.

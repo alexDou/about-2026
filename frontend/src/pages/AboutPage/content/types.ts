@@ -10,13 +10,18 @@ export type AboutBadge = {
   title: MessageId;
 };
 
-/** One position in the work history. `technologies` is one message: a comma-separated list. */
+/**
+ * One position in the work history. The text is an optional intro and a list of highlights, each
+ * "what was done, my role"; their number is whatever the message file holds. `technologies` is one
+ * message: a comma-separated list.
+ */
 export type AboutRole = {
   title: MessageId;
   company: MessageId;
   period: MessageId;
   place: MessageId;
-  text: MessageId;
+  intro?: MessageId;
+  highlights: readonly MessageId[];
   technologies: MessageId;
 };
 
