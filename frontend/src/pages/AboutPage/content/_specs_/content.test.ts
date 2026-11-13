@@ -90,8 +90,18 @@ describe("About content", () => {
   it("names the Owner and gives the approved Bio", () => {
     expect(en(ABOUT_CONTENT.name)).toBe("Alexander Durnev");
     expect(en(ABOUT_CONTENT.bio)).toBe(
-      "A software engineer who fell for the web 20 years ago and never left. I still set time aside for experiments and discoveries: that's where the better solutions keep coming from. Born in Moscow in January 1972, living in Germany since 2019. A permanent EU resident. I prefer remote work and am open to hybrid.",
+      "Born in Moscow in January 1972, living in Germany since 2019. A permanent EU resident. I prefer remote work and am open to hybrid.",
     );
+  });
+
+  it("lists the five Hobbies in order", () => {
+    expect(ABOUT_CONTENT.hobbies.map((hobby) => en(hobby.name))).toEqual([
+      "Technologies",
+      "Science",
+      "History and travel",
+      "Sport",
+      "Art",
+    ]);
   });
 
   it("has the Hobbies, the Headline, the credo and the CV label", () => {

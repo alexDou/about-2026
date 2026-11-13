@@ -3,10 +3,11 @@
 title: 'Unit 2.N: About E2E'
 status: todo
 type: task
+priority: normal
 tags:
     - ready-for-agent
 created_at: 2026-11-12T16:19:41Z
-updated_at: 2026-11-12T16:19:41Z
+updated_at: 2026-11-13T14:32:51Z
 parent: portfolio-18oz
 blocked_by:
     - portfolio-ajvs
@@ -14,6 +15,7 @@ blocked_by:
     - portfolio-fbzp
     - portfolio-xjur
     - portfolio-6x9j
+    - portfolio-hdd2
 ---
 
 ## Parent

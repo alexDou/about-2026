@@ -74,13 +74,13 @@
   "about.bio": [
     {
       "type": 0,
-      "value": "A software engineer who fell for the web 20 years ago and never left. I still set time aside for experiments and discoveries: that's where the better solutions keep coming from. Born in Moscow in January 1972, living in Germany since 2019. A permanent EU resident. I prefer remote work and am open to hybrid."
+      "value": "Born in Moscow in January 1972, living in Germany since 2019. A permanent EU resident. I prefer remote work and am open to hybrid."
     }
   ],
   "about.credo": [
     {
       "type": 0,
-      "value": "[Credo placeholder: one line on experience, passion, team spirit and experiments.]"
+      "value": "A software engineer who fell for the web 20 years ago and never left. I still set time aside for experiments and discoveries: that's where the better solutions keep coming from."
     }
   ],
   "about.cv.label": [
@@ -92,85 +92,97 @@
   "about.education.business": [
     {
       "type": 0,
-      "value": "[Education placeholder: business]"
+      "value": "My training in business operations, financial management, marketing and statistics shapes how I engineer: I read a requirement the way the business reads it, weigh every design choice against its cost and return, and measure whether the product delivers what the market wanted."
     }
   ],
   "about.education.degree": [
     {
       "type": 0,
-      "value": "[Education placeholder: degree]"
+      "value": "Marketing Management and Financial Analysis"
     }
   ],
   "about.education.place": [
     {
       "type": 0,
-      "value": "[Education placeholder: place]"
+      "value": "Moscow"
     }
   ],
   "about.education.school": [
     {
       "type": 0,
-      "value": "[Education placeholder: school]"
+      "value": "State University of Management"
     }
   ],
   "about.education.year": [
     {
       "type": 0,
-      "value": "[Education placeholder: year]"
+      "value": "2002"
     }
   ],
   "about.headline": [
     {
       "type": 0,
-      "value": "[Headline placeholder: target role]"
+      "value": "Senior Full-Stack Engineer and System Design Specialist"
     }
   ],
   "about.hobby.1.name": [
     {
       "type": 0,
-      "value": "[Hobby 1 placeholder]"
+      "value": "Technologies"
     }
   ],
   "about.hobby.1.text": [
     {
       "type": 0,
-      "value": "[Hobby 1 placeholder: a few words]"
+      "value": "These days mostly AI, and always something new: I keep experimenting with fresh tools, libraries and projects, like Octane and Oxc in this very site."
     }
   ],
   "about.hobby.2.name": [
     {
       "type": 0,
-      "value": "[Hobby 2 placeholder]"
+      "value": "Science"
     }
   ],
   "about.hobby.2.text": [
     {
       "type": 0,
-      "value": "[Hobby 2 placeholder: a few words]"
+      "value": "Physics, and research on health and ecology."
     }
   ],
   "about.hobby.3.name": [
     {
       "type": 0,
-      "value": "[Hobby 3 placeholder]"
+      "value": "History and travel"
     }
   ],
   "about.hobby.3.text": [
     {
       "type": 0,
-      "value": "[Hobby 3 placeholder: a few words]"
+      "value": "I like knowing how things were in the past, so I visit places and learn from cultural exchange. Sometimes the neighbourhood next door is as interesting as a famous place in another country."
     }
   ],
   "about.hobby.4.name": [
     {
       "type": 0,
-      "value": "[Hobby 4 placeholder]"
+      "value": "Sport"
     }
   ],
   "about.hobby.4.text": [
     {
       "type": 0,
-      "value": "[Hobby 4 placeholder: a few words]"
+      "value": "I ran a half-marathon in 2015 and work out in the gym regularly."
+    }
+  ],
+  "about.hobby.5.name": [
+    {
+      "type": 0,
+      "value": "Art"
+    }
+  ],
+  "about.hobby.5.text": [
+    {
+      "type": 0,
+      "value": "Inspiring work of every kind: music, painting, installations, street art, and now and then a brilliant post on social media."
     }
   ],
   "about.language.english.cefr": [
@@ -248,25 +260,25 @@
   "about.role.1.company": [
     {
       "type": 0,
-      "value": "[Role 1 placeholder: Company]"
+      "value": "Autodoc SE"
     }
   ],
   "about.role.1.period": [
     {
       "type": 0,
-      "value": "[Role 1 placeholder: Period]"
+      "value": "May 2022 – May 2026"
     }
   ],
   "about.role.1.place": [
     {
       "type": 0,
-      "value": "[Role 1 placeholder: Place]"
+      "value": "Germany"
     }
   ],
   "about.role.1.technologies": [
     {
       "type": 0,
-      "value": "[Role 1 placeholder: Technology, Technology, Technology]"
+      "value": "TypeScript, React, Next.js, Node.js, GraphQL, MySQL, Redis, Jest/RTL, Cypress, Playwright, Micro-/Hyper-frontends, Docker, CI/CD, Ant Design, Prometheus, New Relic"
     }
   ],
   "about.role.1.text": [
@@ -278,31 +290,31 @@
   "about.role.1.title": [
     {
       "type": 0,
-      "value": "[Role 1 placeholder: Role title]"
+      "value": "Senior Frontend Developer"
     }
   ],
   "about.role.2.company": [
     {
       "type": 0,
-      "value": "[Role 2 placeholder: Company]"
+      "value": "Tipico GmbH"
     }
   ],
   "about.role.2.period": [
     {
       "type": 0,
-      "value": "[Role 2 placeholder: Period]"
+      "value": "Sep 2019 – Apr 2022"
     }
   ],
   "about.role.2.place": [
     {
       "type": 0,
-      "value": "[Role 2 placeholder: Place]"
+      "value": "Germany"
     }
   ],
   "about.role.2.technologies": [
     {
       "type": 0,
-      "value": "[Role 2 placeholder: Technology, Technology, Technology]"
+      "value": "TypeScript, React, Node.js, GraphQL, Cypress, Jest/RTL, Java, MySQL, Kafka, Redis"
     }
   ],
   "about.role.2.text": [
@@ -314,31 +326,31 @@
   "about.role.2.title": [
     {
       "type": 0,
-      "value": "[Role 2 placeholder: Role title]"
+      "value": "Senior Frontend Developer"
     }
   ],
   "about.role.3.company": [
     {
       "type": 0,
-      "value": "[Role 3 placeholder: Company]"
+      "value": "Zovolt Ltd"
     }
   ],
   "about.role.3.period": [
     {
       "type": 0,
-      "value": "[Role 3 placeholder: Period]"
+      "value": "Nov 2017 – Mar 2019"
     }
   ],
   "about.role.3.place": [
     {
       "type": 0,
-      "value": "[Role 3 placeholder: Place]"
+      "value": "Remote, EU"
     }
   ],
   "about.role.3.technologies": [
     {
       "type": 0,
-      "value": "[Role 3 placeholder: Technology, Technology, Technology]"
+      "value": "JavaScript, Node.js, WebRTC, Blockchain, Kademlia DHT, P2P, WebSockets"
     }
   ],
   "about.role.3.text": [
@@ -350,31 +362,31 @@
   "about.role.3.title": [
     {
       "type": 0,
-      "value": "[Role 3 placeholder: Role title]"
+      "value": "Senior Web Developer"
     }
   ],
   "about.role.4.company": [
     {
       "type": 0,
-      "value": "[Role 4 placeholder: Company]"
+      "value": "Demokratech"
     }
   ],
   "about.role.4.period": [
     {
       "type": 0,
-      "value": "[Role 4 placeholder: Period]"
+      "value": "Jan 2015 – May 2017"
     }
   ],
   "about.role.4.place": [
     {
       "type": 0,
-      "value": "[Role 4 placeholder: Place]"
+      "value": "Remote, Sweden"
     }
   ],
   "about.role.4.technologies": [
     {
       "type": 0,
-      "value": "[Role 4 placeholder: Technology, Technology, Technology]"
+      "value": "PHP 7, Yii2, JavaScript, MySQL, REST APIs, WebRTC"
     }
   ],
   "about.role.4.text": [
@@ -386,25 +398,25 @@
   "about.role.4.title": [
     {
       "type": 0,
-      "value": "[Role 4 placeholder: Role title]"
+      "value": "Full Stack Developer"
     }
   ],
   "about.role.5.company": [
     {
       "type": 0,
-      "value": "[Role 5 placeholder: Company]"
+      "value": "Upwork"
     }
   ],
   "about.role.5.period": [
     {
       "type": 0,
-      "value": "[Role 5 placeholder: Period]"
+      "value": "Jan 2006 – Mar 2015"
     }
   ],
   "about.role.5.place": [
     {
       "type": 0,
-      "value": "[Role 5 placeholder: Place]"
+      "value": "Remote"
     }
   ],
   "about.role.5.technologies": [
@@ -422,7 +434,7 @@
   "about.role.5.title": [
     {
       "type": 0,
-      "value": "[Role 5 placeholder: Role title]"
+      "value": "Freelance Full-Stack Web Developer"
     }
   ]
 }
