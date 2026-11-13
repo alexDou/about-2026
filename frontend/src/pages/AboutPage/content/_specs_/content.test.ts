@@ -50,10 +50,10 @@ describe("About content", () => {
 
   it("gives each badge its text and title, final", () => {
     expect(ABOUT_CONTENT.badges.map((badge) => [en(badge.text), en(badge.title)])).toEqual([
-      ["AVAILABLE NOW", "Available now, can start right away."],
+      ["AVAILABLE NOW", "Can start immediately."],
       ["FULL-TIME", "Open to a permanent, full-time position."],
       ["CONTRACT", "Open to contract work."],
-      ["RELOCATION", "Ready to relocate on good conditions, anywhere."],
+      ["RELOCATION", "Open to relocation anywhere, for the right offer."],
       ["REMOTE WORK / READY", "Remote first, with years in distributed international teams."],
       [
         "AI READY",
@@ -100,9 +100,18 @@ describe("About content", () => {
 
   it("names the Owner and gives the approved Bio", () => {
     expect(en(ABOUT_CONTENT.name)).toBe("Alexander Durnev");
-    expect(en(ABOUT_CONTENT.bio)).toBe(
-      "Born in Moscow in January 1972, living in Germany since 2019. A permanent EU resident. I prefer remote work and am open to hybrid.",
+    expect(en(ABOUT_CONTENT.bio.professional)).toBe(
+      "Full-stack by trade, equally solid on the frontend and the backend. My work rests on the fundamentals of the craft: system design, clean code and architecture, test-driven development, refactoring and domain-driven design. A proven ability to turn complex business requirements into scalable, maintainable software. AI ready: I build AI-powered features into products and work in agentic, AI-assisted development, keeping both the agents and the code they generate under thorough control.",
     );
+    expect(en(ABOUT_CONTENT.bio.personal)).toBe(
+      "Born in Moscow, based in Germany since 2019, a permanent EU resident. I prefer remote work and am open to hybrid.",
+    );
+  });
+
+  it("names the freelance years Self-employed, with PHP (PHP 7 came after them)", () => {
+    const freelance = ABOUT_CONTENT.roles[4];
+    expect(freelance && en(freelance.company)).toBe("Self-employed");
+    expect(freelance && en(freelance.technologies)).not.toContain("PHP 7");
   });
 
   it("lists the five Hobbies in order", () => {

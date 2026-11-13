@@ -63,7 +63,10 @@ export const ABOUT_CONTENT: AboutContent = {
   name: "about.name",
   headline: "about.headline",
   credo: "about.credo",
-  bio: "about.bio",
+  bio: {
+    professional: "about.bio.professional",
+    personal: "about.bio.personal",
+  },
   badges: ABOUT_BADGE_KINDS.map(badge),
   roles: ABOUT_ROLE_NUMBERS.map(role),
   education: {
