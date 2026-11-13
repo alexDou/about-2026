@@ -15,7 +15,6 @@ blocked_by:
     - portfolio-fbzp
     - portfolio-xjur
     - portfolio-6x9j
-    - portfolio-hdd2
 ---
 
 ## Parent

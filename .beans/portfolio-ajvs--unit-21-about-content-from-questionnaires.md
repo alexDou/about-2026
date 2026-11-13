@@ -7,7 +7,7 @@ priority: normal
 tags:
     - ready-for-human
 created_at: 2026-11-12T16:19:41Z
-updated_at: 2026-11-13T14:33:01Z
+updated_at: 2026-11-13T16:13:23Z
 parent: portfolio-18oz
 blocked_by:
     - portfolio-3wkt
@@ -25,8 +25,8 @@ The About content, written with the Owner. First a grilling session over five qu
 
 - [x] Questionnaires in `docs_src/about/`: `headline.md` (who the Owner is professionally, the target roles), `credo.md` (the line under the greeting: experience, passion for technology, team spirit, experimentation), `roles.md` (one section per Role, seeded with the CV facts: proudest work, scale, team, the Owner's part), `hobbies.md` (each Hobby with a few words), `education.md` (one business-level sentence on the product and business thinking the degree built)
 - [x] Grilled with the Owner (grilling skill, numbered rounds), answers kept in the files
-- [x] Drafts for Headline, credo, Hobbies and the Education sentence, approved by the Owner (the five Role texts moved to portfolio-hdd2 on 2026-11-13: the Owner rejected the agent's drafts)
-- [x] The approved text (all but the Role texts, see portfolio-hdd2) replaces the placeholders in the About message file; the 2.0 test still passes
+- [x] Drafts for Headline, credo, five Role texts, Hobbies and the Education sentence, approved by the Owner
+- [x] The approved text replaces the placeholders in the About message file; the 2.0 test still passes
 - [x] CV typos not carried over ("Commulative", "convertion", "Ukranian", "Reduction on"); the Owner is told so the new CV (portfolio-yhih) gets them right
 - [x] `scripts/verify.sh` GREEN
 
@@ -55,5 +55,5 @@ Bio cut to its three personal sentences, credo = the former first two (spec upda
 - Questionnaires in `docs_src/about/` (headline, credo, roles, hobbies, education) with the Owner's answers; `roles.md` holds only questions and his verbatim words.
 - `about.json`: Headline "Senior Full-Stack Engineer and System Design Specialist", credo (the former first two Bio sentences), Bio cut to its three personal sentences, Education (degree, State University of Management, Moscow, 2002, one business sentence), five Hobbies (Technologies, Science, History and travel, Sport, Art), Role metadata and CV technologies lists.
 - Contract: `ABOUT_HOBBY_NUMBERS` is 1..5; the 2.0 test pins the five Hobby names and the new Bio. Spec updated (credo, Bio).
-- Role texts are not done: the Owner rejected the agent's drafts twice. Split into portfolio-hdd2 (handoff, with the Owner's style sample and open questions); 2.N waits for it. The Role `text` messages still hold the 2.0 placeholders.
+- Roles: `AboutRole` is an optional `intro` plus `highlights` (read from the `about.role.N.highlight.M` messages), each "what was done. My role: ..."; the 2.0 test pins the order and the Tipico intro, and the 2.5 bean notes the list rendering. The five Roles are written from the Owner's own versions (answers verbatim in `roles.md`); no placeholders are left in the About messages. A separate handoff bean was used for a while and deleted once the Roles were approved.
 - CV typos not carried over; the Owner is told so portfolio-yhih gets them right.

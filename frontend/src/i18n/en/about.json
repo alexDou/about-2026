@@ -530,7 +530,7 @@
   "about.role.5.technologies": [
     {
       "type": 0,
-      "value": "PHP, Zend Framework, SocialEngine CMS, Magento, WordPress"
+      "value": "PHP 7, JavaScript, relational databases, Sass/Less/CSS3, WebRTC, Bash, Apache, Nginx"
     }
   ],
   "about.role.5.title": [
