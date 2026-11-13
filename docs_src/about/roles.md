@@ -2,7 +2,7 @@
 
 One section per Role, newest first. Each ends as a first-person text plus its technologies. CV typos are not carried over ("Commulative", "convertion", "Ukranian", "Reduction on"); the new CV (portfolio-yhih) must get them right too.
 
-No drafts are kept in this file: the Owner rejected the agent's variants (round 3). This file holds the questions and the Owner's own words, verbatim (typos included); the text is written in portfolio-hdd2.
+No drafts are kept in this file: the Owner rejected the agent's variants (round 3). This file holds the questions and the Owner's own words, verbatim (typos included); the approved text is in `frontend/src/i18n/en/about.json`.
 
 For every Role ask: **proudest work**, **scale** (users, traffic, team size, codebase), **team** (who, how many, where), **your part** (what only you did), **one number or outcome** you can stand behind.
 
@@ -157,3 +157,10 @@ GitHub: Streembit https://github.com/streembit ; the Owner's repositories https:
 > My role. Creation of custom modules and plugins specifically for a project.
 
 Applied: "third-party web-components libraries", "€1 million revenue mark", Ant Design stays in the technologies list, "Unbeatable security", the Upwork social networks described as "a community in western Europe" with that My role line. Demokratech (Role 4) and the Upwork intro and bullets were shown in the session and not objected to otherwise. The Streembit GitHub link stays out of the text (see the session).
+
+## Round 7 (2026-11-13), verbatim
+
+> The technologies line holds only what you named: PHP, Zend Framework, SocialEngine CMS, Magento, WordPress. in Upwork? no, theres a lot more. dont mention CMS. keep: PHP7, Javascript, relational DB, SaSS/Less/CSS3, WebRTC, Bash, Apache, Nginx
+> Demokratech. yes, approval
+
+Applied: Upwork technologies "PHP 7, JavaScript, relational databases, Sass/Less/CSS3, WebRTC, Bash, Apache, Nginx". Demokratech approved.
