@@ -15,4 +15,4 @@ export const ABOUT_ROLE_NUMBERS = [1, 2, 3, 4, 5] as const;
 export const ABOUT_LANGUAGE_KINDS = ["russian", "english", "german", "spanish"] as const;
 
 /** The Hobbies on About, each by its position in the list. */
-export const ABOUT_HOBBY_NUMBERS = [1, 2, 3, 4] as const;
+export const ABOUT_HOBBY_NUMBERS = [1, 2, 3, 4, 5] as const;
