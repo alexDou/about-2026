@@ -72,6 +72,17 @@ describe("About content", () => {
     ]);
   });
 
+  it("gives every Role its highlights in order, and the Tipico Role an intro", () => {
+    ABOUT_CONTENT.roles.forEach((role, index) => {
+      const n = index + 1;
+      expect(role.highlights.length).toBeGreaterThan(0);
+      expect(role.highlights).toEqual(
+        role.highlights.map((_, position) => `about.role.${n}.highlight.${position + 1}`),
+      );
+    });
+    expect(ABOUT_CONTENT.roles[1]?.intro).toBe("about.role.2.intro");
+  });
+
   it("lists the four languages with their levels", () => {
     expect(
       ABOUT_CONTENT.languages.map((language) => [
