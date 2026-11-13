@@ -7,7 +7,7 @@ priority: normal
 tags:
     - ready-for-agent
 created_at: 2026-11-12T16:19:41Z
-updated_at: 2026-11-13T15:49:16Z
+updated_at: 2026-11-13T17:51:06Z
 parent: portfolio-18oz
 blocked_by:
     - portfolio-3wkt
@@ -26,7 +26,7 @@ The cards below the top card, in order: Bio; Roles; Education; Languages and Hob
 
 - [ ] Tests written first and red, then green (TDD)
 - [ ] Each card on `--panel-what-i-do` with `#25363a` text; section headings in Playfair Display
-- [ ] Bio: the approved text
+- [ ] Bio: the approved text, two paragraphs (`bio.professional`, then `bio.personal`)
 - [ ] Roles: five, newest first; title, company, period, place, an optional intro, the highlights list (`AboutRole.intro` / `highlights`, each "what was done. My role: ..."), a technologies line
 - [ ] Education: the degree, school, place, year and the business sentence
 - [ ] Languages and Hobbies in one card: two columns on desktop, stacked on phones; Languages as "word (CEFR)", e.g. "English: fluent (C1)"; Hobbies with a few words each

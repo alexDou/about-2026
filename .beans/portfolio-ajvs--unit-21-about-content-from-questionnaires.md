@@ -7,7 +7,7 @@ priority: normal
 tags:
     - ready-for-human
 created_at: 2026-11-12T16:19:41Z
-updated_at: 2026-11-13T16:13:23Z
+updated_at: 2026-11-13T17:51:21Z
 parent: portfolio-18oz
 blocked_by:
     - portfolio-3wkt
@@ -57,3 +57,23 @@ Bio cut to its three personal sentences, credo = the former first two (spec upda
 - Contract: `ABOUT_HOBBY_NUMBERS` is 1..5; the 2.0 test pins the five Hobby names and the new Bio. Spec updated (credo, Bio).
 - Roles: `AboutRole` is an optional `intro` plus `highlights` (read from the `about.role.N.highlight.M` messages), each "what was done. My role: ..."; the 2.0 test pins the order and the Tipico intro, and the 2.5 bean notes the list rendering. The five Roles are written from the Owner's own versions (answers verbatim in `roles.md`); no placeholders are left in the About messages. A separate handoff bean was used for a while and deleted once the Roles were approved.
 - CV typos not carried over; the Owner is told so portfolio-yhih gets them right.
+
+
+## Round 8 (2026-11-13): review
+
+An Opus review of the About text; answers verbatim in `docs_src/about/roles.md`, `bio.md` and `headline.md`.
+
+- [x] Approved review fixes applied to `about.json` (Bio, Roles 1 to 5), the 2.0 test updated first
+- [x] Professional summary for the Bio drafted and approved
+- [x] Tipico "Frontend" bullet and Zovolt "Real time" sentence approved
+- [x] Badge titles and the Technologies Hobby wording decided
+- [x] Spec Bio line and portfolio-yhih CV claims updated
+- [x] `scripts/verify.sh` GREEN
+
+
+## Summary of Changes (review, rounds 8 to 10)
+
+- Bio: two messages, `about.bio.professional` (new summary: full stack, the fundamentals, business requirements, AI ready) and `about.bio.personal` (no birth date); `AboutBio` type, the 2.0 test pins both. The 2.5 bean renders them as two paragraphs.
+- Roles: Autodoc title "Senior Frontend Developer · Technical Lead", bullets reordered, UI component libraries, the proposal and Results cause; Tipico small team, the visitor-facing app, "in every Tipico shop"; Zovolt public-key auth, End-to-end security, WebRTC browser reach, IoT folded into My role; Demokratech county council; Role 5 "Full-Stack Web Developer", "Self-employed", PHP. "Full-Stack" and "My role:" throughout.
+- Badges: Available Now "Can start immediately.", Relocation "Open to relocation anywhere, for the right offer." (spec and test). Hobby "on this very site".
+- The Owner's answers verbatim in `docs_src/about/` (`bio.md` new); the CV claims to match appended to portfolio-yhih.

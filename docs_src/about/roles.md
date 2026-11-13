@@ -164,3 +164,42 @@ Applied: "third-party web-components libraries", "€1 million revenue mark", An
 > Demokratech. yes, approval
 
 Applied: Upwork technologies "PHP 7, JavaScript, relational databases, Sass/Less/CSS3, WebRTC, Bash, Apache, Nginx". Demokratech approved.
+
+## Round 8 (2026-11-13): review, verbatim
+
+Answers to a numbered review of the About text (items 6, 7 in `bio.md`, 21 in `headline.md`).
+
+> 1. yes, correct. it was Elance back then. renamed to Upwork. Self-employed thn, thx
+> 2. PHP it is. last works were on the 7 though.
+> 3. yes, correct. public key exchange with private reserved for verification. your suggestion accepted
+> 4. arguable, there a security and the impregnity. former is junior level, later senior's. but ok, accepted
+> 5. yes, thanks for that. it is really un-professional. react components library. "UI libraries" to "UI components libraries" and accpted
+> 8. all of them across the country. how was the user base? i have no idea tbh. big company operating across Europe, one of leaders of the market
+> 9. accepted
+> 10. one person built visitor facing interfaces, another admins/owners ones. the first one is me
+> 11. ok, accepted
+> 12. not widely adapted, many if not overwhelming majority were still running on flash. if i not wrong. it affects community knowledge base. WebRTC is from 2007 with a significant progress marked in 2017 isn't it?
+> 13. ok, nice
+> 14. ok
+> 15. second meaning, forgery. yes, lets co-design then. too many "designs" in the section. find a sinonym to co-design, but not co-author
+> 16. ok
+> 17. yes, alright
+> 18. yes, thats what was it
+> 19. ok on both
+> 20. please use, "Full-Stack" and "My role"
+
+Applied: Role 5 company "Self-employed" (Elance, now Upwork), "PHP" in its technologies; Zovolt "End-to-end security: public-key authentication, with all traffic AES-256 encrypted", its My role leading with the Owner's part, the IoT bullet folded into it; Autodoc title "Senior Frontend Developer · Technical Lead", bullets reordered, "third-party UI component libraries such as Ant Design", the component-library proposal, "specified the APIs together with", "Refactoring and load-balancing optimisation" in Results; Tipico result "still running on the screens of every Tipico shop across Germany"; Demokratech "the executive board of a Swedish county council", "Full-Stack Developer"; "My role:" with a colon everywhere; Upwork community networks and WordPress wording. No scale numbers (none known).
+
+## Round 9 (2026-11-13), verbatim
+
+> Choices. "in every Tipico shop" (maybe outside Germany too, no idea). rest is good
+>
+> 10. "Two engineers" - "A small team of engineers". kust 2 sounds like a kindergarden
+>
+> 12. perfect
+>
+> 21. yes on each
+>
+> yep, please, drop freelance
+
+Applied: Tipico "still running on the screens in every Tipico shop"; "A small team of frontend engineers designed and built…", the interfaces customers see "which I built"; "My role: I led the Swing-to-React transformation and built the entire visitor-facing application from scratch, from its architecture to its implementation."; Zovolt "Real time: WebRTC had only just reached all major browsers, much of the web's real-time video still ran on Flash, and community know-how was thin…"; Role 5 title "Full-Stack Web Developer"; badge titles (spec, Unit 2) and the Technologies Hobby "on this very site".

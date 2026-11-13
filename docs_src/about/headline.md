@@ -24,3 +24,11 @@ The Headline is the one line after "Hello, I'm Alexander Durnev. I'm a {Headline
 
 Reads in the greeting as: "Hello, I'm Alexander Durnev. I'm a Senior Full-Stack Engineer and System Design Specialist."
 
+
+## Round 8 (2026-11-13): review, verbatim
+
+Asked whether "System Design Specialist" should become "Software Architect":
+
+> 21. there is a significant difference beween system design and software architecture. i'm talking about system design, which normal senior backend developer should know. I wont take responsibility for mature software architecture.
+
+The Headline stays.

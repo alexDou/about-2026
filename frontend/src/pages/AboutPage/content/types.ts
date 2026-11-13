@@ -25,6 +25,12 @@ export type AboutRole = {
   technologies: MessageId;
 };
 
+/** The Bio, two paragraphs: what the Owner does professionally, then the personal facts. */
+export type AboutBio = {
+  professional: MessageId;
+  personal: MessageId;
+};
+
 export type AboutEducation = {
   degree: MessageId;
   school: MessageId;
@@ -55,7 +61,7 @@ export type AboutContent = {
   name: MessageId;
   headline: MessageId;
   credo: MessageId;
-  bio: MessageId;
+  bio: AboutBio;
   badges: readonly AboutBadge[];
   /** Newest first. */
   roles: readonly AboutRole[];
