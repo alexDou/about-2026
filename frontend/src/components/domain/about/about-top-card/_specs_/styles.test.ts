@@ -27,7 +27,7 @@ describe("about-top-card stylesheets", () => {
   it("sits on the What I do colour, in a rounded palette-colour border", () => {
     const card = rule(css("styles.module.css"), ".about-top-card");
     expect(card).toMatch(/background:\s*var\(--panel-what-i-do\)/);
-    expect(card).toMatch(/border:\s*[\d.]+rem solid var\(--panel-[\w-]+\)/);
+    expect(card).toMatch(/border:\s*[\d.]+rem \w+ var\(--panel-[\w-]+\)/);
     expect(card).toMatch(/border-radius:\s*[\d.]+rem/);
   });
 

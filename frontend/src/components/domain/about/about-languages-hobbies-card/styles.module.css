@@ -1,0 +1,37 @@
+/* Two columns on a wide screen, stacked on phones. */
+.about-languages-hobbies-card__columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  gap: 1.5rem 3rem;
+}
+
+.about-languages-hobbies-card__column {
+  display: grid;
+  align-content: start;
+  gap: 1rem;
+}
+
+.about-languages-hobbies-card__list {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.about-languages-hobbies-card__hobby-name {
+  display: block;
+  font-weight: 600;
+}
+
+.about-languages-hobbies-card__hobby-text {
+  display: block;
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+@media (width < 840px) {
+  .about-languages-hobbies-card__columns {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

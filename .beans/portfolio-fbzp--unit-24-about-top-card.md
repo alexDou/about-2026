@@ -26,7 +26,7 @@ The top card, after `support_files/about/about-design.jpg` (no scroll arrow, no 
 
 - [x] Tests written first and red, then green (TDD)
 - [x] Card on `--panel-what-i-do`, rounded border in a palette colour (`--panel-skills`, radius as in the reference)
-- [x] Left: the greeting "Hello, I'm Alexander Durnev. I'm a {Headline}." in Playfair Display (no location); the credo below, a bit bigger than the reference's line; LinkedIn and GitHub icons; the CV download button (wired in 2.6)
+- [x] Left: the greeting "Hello, I'm Alexander Durnev." with the Headline on its own line, in Playfair Display (no location); the credo below, a bit bigger than the reference's line; LinkedIn and GitHub icons; the CV download button (wired in 2.6)
 - [x] Right, centred vertically on the greeting and credo (Owner, 2026-11-14): the photo over the brush stroke, both responsive, its lower edge frayed by the brush outline and faded (no hard corners)
 - [x] ~~One node burst~~: tried under the links and behind them, dropped by the Owner (2026-11-14); `nodes.svg` removed from About
 - [x] Phone: badges (smaller, growing a little with the width, via `progress()`), a gap, then the photo, then the rest
@@ -42,7 +42,7 @@ The top card, after `support_files/about/about-design.jpg` (no scroll arrow, no 
 
 ## Notes
 
-- Content contract extended: `greeting` (`about.greeting.hello` takes `{name}`, `about.greeting.headline` takes `{headline}`) and `profiles` (LinkedIn, GitHub; URLs from the 2026 CV in `content/config.ts`). The content test skips `url` fields as it does `kind`.
+- Content contract extended: `greeting` (`about.greeting.hello`, takes `{name}`; the Owner later dropped the "I'm a" sentence, so the Headline follows as its own line) and `profiles` (LinkedIn, GitHub; URLs from the 2026 CV in `content/config.ts`). The content test skips `url` fields as it does `kind`.
 - `AboutTopCard` in `components/domain/about/about-top-card/`, sub-components `portrait` (photo `<picture>` AVIF/WebP, brush drawn through `<use href="brush.svg#brush">` so CSS colours it) and `profile-links` (own LinkedIn drawing, GitHub mark from Simple Icons CC0).
 - Border colour picked: `--panel-skills`, 0.5rem, radius 1.75rem.
 - CV button is a `<span>` until 2.6 makes it a link (oxlint refuses an `<a>` without href).

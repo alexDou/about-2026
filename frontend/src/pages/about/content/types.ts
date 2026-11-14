@@ -34,15 +34,6 @@ export type AboutProfile = {
   url: string;
 };
 
-/**
- * The top card's greeting, two sentences: `hello` takes the `{name}`, `headline` the
- * `{headline}`.
- */
-export type AboutGreeting = {
-  hello: MessageId;
-  headline: MessageId;
-};
-
 /** The Bio, two paragraphs: what the Owner does professionally, then the personal facts. */
 export type AboutBio = {
   professional: MessageId;
@@ -56,6 +47,8 @@ export type AboutEducation = {
   year: MessageId;
   /** One sentence on the product and business thinking the degree built. */
   business: MessageId;
+  /** The "{school} · {place} · {year}" line. */
+  line: MessageId;
 };
 
 /** A spoken language: its name, the level in words and the CEFR level (none for a native one). */
@@ -71,6 +64,21 @@ export type AboutHobby = {
   text: MessageId;
 };
 
+/** The heading of each lower card (the Languages and Hobbies card has one per column). */
+export type AboutHeadings = {
+  bio: MessageId;
+  roles: MessageId;
+  education: MessageId;
+  languages: MessageId;
+  hobbies: MessageId;
+};
+
+/** How a language reads: "{name}: {level}", and with its "({cefr})" for a non-native one. */
+export type AboutLanguageLines = {
+  plain: MessageId;
+  withCefr: MessageId;
+};
+
 /**
  * Everything the About Panel shows, as message ids: the text is in `i18n/en/about.json`
  * and read through `useIntl()`.
@@ -78,7 +86,8 @@ export type AboutHobby = {
 export type AboutContent = {
   name: MessageId;
   headline: MessageId;
-  greeting: AboutGreeting;
+  /** The top card's greeting, "Hello, I'm {name}."; the Headline follows it. */
+  greeting: MessageId;
   credo: MessageId;
   profiles: readonly AboutProfile[];
   bio: AboutBio;
@@ -87,6 +96,12 @@ export type AboutContent = {
   roles: readonly AboutRole[];
   education: AboutEducation;
   languages: readonly AboutLanguage[];
+  languageLines: AboutLanguageLines;
   hobbies: readonly AboutHobby[];
+  headings: AboutHeadings;
+  /** The label before a Role's technologies line, colon included. */
+  technologiesLabel: MessageId;
+  /** A Role's "{company} · {period} · {place}" line. */
+  roleLine: MessageId;
   cvLabel: MessageId;
 };

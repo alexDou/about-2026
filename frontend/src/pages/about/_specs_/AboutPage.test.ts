@@ -31,6 +31,28 @@ describe("AboutPage", () => {
     expect(screen.getByRole("link", { name: "GitHub" })).toBeInTheDocument();
   });
 
+  it("shows the lower cards under the top card: Bio, Experience, Education, Languages and Hobbies", () => {
+    render(AboutPage, { props: {}, wrapper: intlWrapper() });
+    const headings = screen.getAllByRole("heading", { level: 2 }).map((h) => h.textContent);
+    expect(headings).toEqual(["Bio", "Experience", "Education", "Languages", "Hobbies"]);
+    const greeting = screen.getByText("Hello, I'm Alexander Durnev.");
+    const bio = screen.getByRole("heading", { name: "Bio" });
+    expect(greeting.compareDocumentPosition(bio) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  });
+
+  it("shows the five Roles, then the degree, and the Hobbies", () => {
+    render(AboutPage, { props: {}, wrapper: intlWrapper() });
+    expect(screen.getAllByRole("heading", { level: 3 }).map((h) => h.textContent)).toEqual([
+      "Senior Frontend Developer · Technical Lead",
+      "Senior Frontend Developer",
+      "Senior Web Developer",
+      "Full-Stack Developer",
+      "Full-Stack Web Developer",
+      "Marketing Management and Financial Analysis",
+    ]);
+    expect(screen.getByText("Science")).toBeInTheDocument();
+  });
+
   it("takes the heading from the messages", () => {
     render(AboutPage, {
       props: {},

@@ -77,10 +77,7 @@ const hobby = (n: (typeof ABOUT_HOBBY_NUMBERS)[number]): AboutHobby => ({
 export const ABOUT_CONTENT: AboutContent = {
   name: "about.name",
   headline: "about.headline",
-  greeting: {
-    hello: "about.greeting.hello",
-    headline: "about.greeting.headline",
-  },
+  greeting: "about.greeting.hello",
   credo: "about.credo",
   profiles: [profile("linkedin"), profile("github")],
   bio: {
@@ -95,6 +92,7 @@ export const ABOUT_CONTENT: AboutContent = {
     place: "about.education.place",
     year: "about.education.year",
     business: "about.education.business",
+    line: "about.education.line",
   },
   languages: [
     language("russian"),
@@ -102,6 +100,19 @@ export const ABOUT_CONTENT: AboutContent = {
     cefrLanguage("german"),
     cefrLanguage("spanish"),
   ],
+  languageLines: {
+    plain: "about.language.line",
+    withCefr: "about.language.lineCefr",
+  },
   hobbies: ABOUT_HOBBY_NUMBERS.map(hobby),
+  headings: {
+    bio: "about.heading.bio",
+    roles: "about.heading.roles",
+    education: "about.heading.education",
+    languages: "about.heading.languages",
+    hobbies: "about.heading.hobbies",
+  },
+  technologiesLabel: "about.roles.technologiesLabel",
+  roleLine: "about.role.line",
   cvLabel: "about.cv.label",
 };

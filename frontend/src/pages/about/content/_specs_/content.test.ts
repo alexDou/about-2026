@@ -36,8 +36,17 @@ describe("About content", () => {
   it("refers only to messages that exist and format, and every about.* message is used", () => {
     const referenced = referencedIds(ABOUT_CONTENT);
     for (const id of referenced) expect(enMessages).toHaveProperty([id]);
-    // The greeting's arguments; the other messages take none and ignore them.
-    const values = { name: "Name", headline: "Headline" };
+    // The arguments of the greeting and of the language lines; the other messages ignore them.
+    const values = {
+      name: "Name",
+      level: "level",
+      cefr: "A1",
+      company: "C",
+      period: "P",
+      place: "L",
+      school: "S",
+      year: "Y",
+    };
     expect(
       referenced.map((id) => intl.formatMessage({ id: id as MessageId }, values)),
     ).not.toContain("");
@@ -98,10 +107,10 @@ describe("About content", () => {
         language.cefr && en(language.cefr),
       ]),
     ).toEqual([
-      ["Russian", "Native", undefined],
-      ["English", "Fluent", "C1"],
-      ["German", "Good working knowledge", "B2"],
-      ["Spanish", "Basic", "A2"],
+      ["Russian", "native", undefined],
+      ["English", "fluent", "C1"],
+      ["German", "good working knowledge", "B2"],
+      ["Spanish", "basic", "A2"],
     ]);
   });
 
@@ -131,15 +140,42 @@ describe("About content", () => {
     ]);
   });
 
-  it("greets with the name and the Headline, in two sentences", () => {
+  it("greets with the name, then the Headline as its own sentence", () => {
     const name = en(ABOUT_CONTENT.name);
-    const headline = en(ABOUT_CONTENT.headline);
-    expect(intl.formatMessage({ id: ABOUT_CONTENT.greeting.hello }, { name })).toBe(
+    expect(intl.formatMessage({ id: ABOUT_CONTENT.greeting }, { name })).toBe(
       "Hello, I'm Alexander Durnev.",
     );
-    expect(intl.formatMessage({ id: ABOUT_CONTENT.greeting.headline }, { headline })).toBe(
-      `I'm a ${headline}.`,
+    expect(en(ABOUT_CONTENT.headline)).toBe(
+      "Senior Full-Stack Engineer and System Design Specialist.",
     );
+  });
+
+  it("gives each lower card its heading", () => {
+    const { headings } = ABOUT_CONTENT;
+    expect(Object.entries(headings).map(([key, id]) => [key, en(id)])).toEqual([
+      ["bio", "Bio"],
+      ["roles", "Experience"],
+      ["education", "Education"],
+      ["languages", "Languages"],
+      ["hobbies", "Hobbies"],
+    ]);
+  });
+
+  it('writes a language as "name: level (CEFR)", the CEFR level left out for a native one', () => {
+    const { languageLines } = ABOUT_CONTENT;
+    const values = { name: "English", level: "fluent", cefr: "C1" };
+    expect(intl.formatMessage({ id: languageLines.withCefr }, values)).toBe("English: fluent (C1)");
+    expect(intl.formatMessage({ id: languageLines.plain }, values)).toBe("English: fluent");
+  });
+
+  it("joins the Role and Education facts with a middle dot, in messages", () => {
+    const values = { company: "A", period: "B", place: "C", school: "S", year: "Y" };
+    expect(intl.formatMessage({ id: ABOUT_CONTENT.roleLine }, values)).toBe("A · B · C");
+    expect(intl.formatMessage({ id: ABOUT_CONTENT.education.line }, values)).toBe("S · C · Y");
+  });
+
+  it("labels the technologies line of a Role", () => {
+    expect(en(ABOUT_CONTENT.technologiesLabel)).toBe("Technologies:");
   });
 
   it("links the LinkedIn and GitHub profiles, in that order", () => {
