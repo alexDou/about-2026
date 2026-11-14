@@ -3,7 +3,7 @@ import { join } from "node:path";
 import { createIntl } from "@formatjs/intl";
 import { type MessageFormatElement, parse } from "@formatjs/icu-messageformat-parser";
 import { describe, expect, expectTypeOf, it } from "vitest";
-import { PANEL_IDS } from "../../hooks/useRoute";
+import { PANEL_IDS } from "../../hooks/use-route";
 import { enMessages, type MessageId } from "..";
 
 // A path, not a URL: jsdom replaces the global `URL`, which `node:fs` then rejects.

@@ -15,5 +15,5 @@ Feature: Site shell
     And the font "Overused Grotesk" has loaded
 
   Scenario: The font license is served with the font
-    When I fetch "/licenses/OverusedGrotesk-OFL.txt"
+    When I fetch "/licenses/fonts-OFL.txt"
     Then the response contains "SIL OPEN FONT LICENSE Version 1.1"

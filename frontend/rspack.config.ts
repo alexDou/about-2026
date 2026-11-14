@@ -63,8 +63,8 @@ export default defineConfig((_env, argv) => {
       new CopyRspackPlugin({
         patterns: [
           { from: "public" },
-          // The font is bundled, so its OFL license travels with it.
-          { from: "src/styles/fonts/OFL.txt", to: "licenses/OverusedGrotesk-OFL.txt" },
+          // The fonts are bundled, so their shared OFL license travels with them.
+          { from: "src/styles/fonts/OFL.txt", to: "licenses/fonts-OFL.txt" },
         ],
       }),
     ],

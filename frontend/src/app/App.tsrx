@@ -1,4 +1,4 @@
-import { Outlet } from "../hooks/useRoute";
+import { Outlet } from "../hooks/use-route";
 import { IntlProvider } from "../i18n";
 import styles from "./styles.module.css";
 

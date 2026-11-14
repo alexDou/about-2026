@@ -16,7 +16,7 @@ function relativeSpecifiers(source: string): string[] {
   ];
   return patterns
     .flatMap((pattern) => [...code.matchAll(pattern)].map((match) => match[1] ?? ""))
-    .filter((specifier) => specifier.startsWith("./") || specifier.startsWith("../"));
+    .filter((specifier) => specifier.startsWith(".") || specifier.startsWith(".."));
 }
 
 function isFile(path: string): boolean {

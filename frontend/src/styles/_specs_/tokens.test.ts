@@ -51,6 +51,9 @@ describe("motion tokens", () => {
   });
 });
 
+/** The shipped size (21.9 KB) plus about a quarter, so a 2x regression fails. */
+const PLAYFAIR_BUDGET_BYTES = 28_000;
+
 describe("fonts.css", () => {
   const fonts = css("fonts.css");
 
@@ -66,6 +69,15 @@ describe("fonts.css", () => {
     const license = readFileSync(styles("fonts/OFL.txt"), "utf8");
     expect(license).toContain("Copyright (c) 2023-2026, Bao Nguyen (RandomMaerks)");
     expect(license).toContain("SIL OPEN FONT LICENSE Version 1.1");
+  });
+
+  it("ships Playfair Display as a self-hosted woff2 within its byte budget, under the same OFL", () => {
+    const file = readFileSync(styles("fonts/PlayfairDisplay-Regular-latin.woff2"));
+    expect(file.toString("ascii", 0, 4)).toBe("wOF2");
+    expect(file.length).toBeLessThan(PLAYFAIR_BUDGET_BYTES);
+    expect(readFileSync(styles("fonts/OFL.txt"), "utf8")).toContain(
+      "Playfair Display Project Authors",
+    );
   });
 });
 

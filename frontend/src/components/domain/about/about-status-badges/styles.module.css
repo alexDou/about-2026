@@ -1,0 +1,42 @@
+/*
+ * The badge row: a wrapping flex row at the top left of the page, level with the Expanded panel's
+ * close button. It scrolls with the page.
+ */
+.about-status-badges {
+  /* Badge width, and the room kept to the close button on its right. */
+  --badge-size: 7rem;
+  --badge-gap: 1rem;
+  --close-button-room: 5rem;
+  /*
+   * The close bar above the page is 4rem tall and the row starts level with the button inside it
+   * (1rem down): pull the row up by the rest.
+   */
+  --close-bar-lead: -3rem;
+
+  /* Positioned so the row stacks above the sticky close bar it reaches into: hover titles need it. */
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--badge-gap);
+  margin: var(--close-bar-lead) var(--close-button-room) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.about-status-badges__item {
+  /* Based on its smallest size and growing to the badge size, so six fit one desktop row. */
+  flex: 1 1 4.5rem;
+  max-width: var(--badge-size);
+}
+
+/* Phones: two rows of three, under the close button instead of beside it. */
+@media (width < 840px) {
+  .about-status-badges {
+    margin: 0;
+  }
+
+  .about-status-badges__item {
+    flex: 0 0 calc((100% - 2 * var(--badge-gap)) / 3);
+    max-width: none;
+  }
+}
