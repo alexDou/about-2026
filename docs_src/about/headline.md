@@ -1,6 +1,6 @@
 # Headline questionnaire
 
-The Headline is the one line after "Hello, I'm Alexander Durnev. I'm a {Headline}." It names what the Owner is professionally and points at the target roles.
+The Headline is the line after "Hello, I'm Alexander Durnev." It names what the Owner is professionally and points at the target roles.
 
 **CV seed**: "Senior Full Stack Engineer | Technical Lead", 20 years of experience, TypeScript/JavaScript expert, practical Rust/Python/PHP, AI integration.
 
@@ -22,7 +22,7 @@ The Headline is the one line after "Hello, I'm Alexander Durnev. I'm a {Headline
 
 > Senior Full-Stack Engineer and System Design Specialist
 
-Reads in the greeting as: "Hello, I'm Alexander Durnev. I'm a Senior Full-Stack Engineer and System Design Specialist."
+Reads in the greeting as: "Hello, I'm Alexander Durnev." then, on its own line, "Senior Full-Stack Engineer and System Design Specialist."
 
 
 ## Round 8 (2026-11-13): review, verbatim

@@ -2,17 +2,12 @@ import type { MessageId } from "../../../../i18n";
 import type { PortraitPhoto } from "./components/portrait";
 import type { Profile } from "./components/profile-links";
 
-/** The greeting's two sentences: `hello` takes the `{name}`, `headline` the `{headline}`. */
-export type AboutTopCardGreeting = {
-  hello: MessageId;
-  headline: MessageId;
-};
-
 /** What the card says, as message ids. */
 export type AboutTopCardContent = {
   name: MessageId;
   headline: MessageId;
-  greeting: AboutTopCardGreeting;
+  /** The greeting's first sentence; it takes the `{name}`. The Headline follows it. */
+  greeting: MessageId;
   credo: MessageId;
   profiles: readonly Profile[];
   cvLabel: MessageId;

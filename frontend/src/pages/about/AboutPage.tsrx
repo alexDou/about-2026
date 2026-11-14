@@ -1,6 +1,10 @@
 import { Heading } from "../../components/ui/heading";
 import { useIntl } from "../../hooks/use-intl";
 import { AboutStatusBadges } from "../../components/domain/about/about-status-badges";
+import { AboutBioCard } from "../../components/domain/about/about-bio-card";
+import { AboutEducationCard } from "../../components/domain/about/about-education-card";
+import { AboutLanguagesHobbiesCard } from "../../components/domain/about/about-languages-hobbies-card";
+import { AboutRolesCard } from "../../components/domain/about/about-roles-card";
 import { AboutTopCard, type AboutTopCardMedia } from "../../components/domain/about/about-top-card";
 import { ABOUT_CONTENT } from "./content";
 import brush from "./media/brush.svg";
@@ -27,7 +31,7 @@ const TOP_CARD_MEDIA: AboutTopCardMedia = {
   brush,
 };
 
-/** The About Panel's page: the badge row and the top card; later units add the other cards. */
+/** The About Panel's page: the badge row, the top card, then the lower cards. */
 export function AboutPage() @{
   const intl = useIntl();
 
@@ -36,5 +40,27 @@ export function AboutPage() @{
     <Heading text={intl.formatMessage({ id: "board.panel.about.title" })} visuallyHidden />
     <AboutStatusBadges badges={ABOUT_CONTENT.badges} />
     <AboutTopCard content={ABOUT_CONTENT} media={TOP_CARD_MEDIA} />
+    <div class={styles["about-page__cards"]}>
+      <AboutBioCard heading={ABOUT_CONTENT.headings.bio} bio={ABOUT_CONTENT.bio} />
+      <AboutRolesCard
+        heading={ABOUT_CONTENT.headings.roles}
+        technologiesLabel={ABOUT_CONTENT.technologiesLabel}
+        roleLine={ABOUT_CONTENT.roleLine}
+        roles={ABOUT_CONTENT.roles}
+      />
+      <AboutEducationCard
+        heading={ABOUT_CONTENT.headings.education}
+        education={ABOUT_CONTENT.education}
+      />
+      <AboutLanguagesHobbiesCard
+        headings={{
+          languages: ABOUT_CONTENT.headings.languages,
+          hobbies: ABOUT_CONTENT.headings.hobbies,
+        }}
+        languageLines={ABOUT_CONTENT.languageLines}
+        languages={ABOUT_CONTENT.languages}
+        hobbies={ABOUT_CONTENT.hobbies}
+      />
+    </div>
   </section>;
 }

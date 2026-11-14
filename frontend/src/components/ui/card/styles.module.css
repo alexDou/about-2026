@@ -1,0 +1,15 @@
+/* On the What I do colour, in the dark text colour, like the top card. */
+.card {
+  display: grid;
+  gap: 1rem;
+  padding: 2rem 3rem;
+  border-radius: 1.75rem;
+  background: var(--panel-what-i-do);
+  color: var(--text-on-light);
+}
+
+@media (width < 840px) {
+  .card {
+    padding: 1.5rem;
+  }
+}

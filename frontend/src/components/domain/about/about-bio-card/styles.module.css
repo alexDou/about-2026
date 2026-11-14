@@ -1,0 +1,5 @@
+.about-bio-card__paragraph {
+  margin: 0;
+  line-height: 1.55;
+  text-wrap: pretty;
+}

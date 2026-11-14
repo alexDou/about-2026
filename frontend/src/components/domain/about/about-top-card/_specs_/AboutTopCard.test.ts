@@ -8,7 +8,7 @@ const props: AboutTopCardProps = {
   content: {
     name: "about.name",
     headline: "about.headline",
-    greeting: { hello: "about.greeting.hello", headline: "about.greeting.headline" },
+    greeting: "about.greeting.hello",
     credo: "about.credo",
     profiles: [
       { kind: "linkedin", label: "about.profile.linkedin.label", url: "https://linkedin.test/me" },
@@ -49,7 +49,7 @@ describe("AboutTopCard", () => {
   it("greets with the name and the Headline from the messages", () => {
     renderCard();
     expect(screen.getByText("Hello, I'm Ada Lovelace.")).toBeInTheDocument();
-    expect(screen.getByText("I'm a Analyst.")).toBeInTheDocument();
+    expect(screen.getByText("Analyst")).toBeInTheDocument();
   });
 
   it("shows the credo under the greeting", () => {

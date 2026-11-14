@@ -107,6 +107,28 @@
       "value": "Marketing Management and Financial Analysis"
     }
   ],
+  "about.education.line": [
+    {
+      "type": 1,
+      "value": "school"
+    },
+    {
+      "type": 0,
+      "value": " · "
+    },
+    {
+      "type": 1,
+      "value": "place"
+    },
+    {
+      "type": 0,
+      "value": " · "
+    },
+    {
+      "type": 1,
+      "value": "year"
+    }
+  ],
   "about.education.place": [
     {
       "type": 0,
@@ -125,20 +147,6 @@
       "value": "2002"
     }
   ],
-  "about.greeting.headline": [
-    {
-      "type": 0,
-      "value": "I'm a "
-    },
-    {
-      "type": 1,
-      "value": "headline"
-    },
-    {
-      "type": 0,
-      "value": "."
-    }
-  ],
   "about.greeting.hello": [
     {
       "type": 0,
@@ -151,6 +159,36 @@
     {
       "type": 0,
       "value": "."
+    }
+  ],
+  "about.heading.bio": [
+    {
+      "type": 0,
+      "value": "Bio"
+    }
+  ],
+  "about.heading.education": [
+    {
+      "type": 0,
+      "value": "Education"
+    }
+  ],
+  "about.heading.hobbies": [
+    {
+      "type": 0,
+      "value": "Hobbies"
+    }
+  ],
+  "about.heading.languages": [
+    {
+      "type": 0,
+      "value": "Languages"
+    }
+  ],
+  "about.heading.roles": [
+    {
+      "type": 0,
+      "value": "Experience"
     }
   ],
   "about.headline": [
@@ -228,7 +266,7 @@
   "about.language.english.level": [
     {
       "type": 0,
-      "value": "Fluent"
+      "value": "fluent"
     }
   ],
   "about.language.english.name": [
@@ -246,7 +284,7 @@
   "about.language.german.level": [
     {
       "type": 0,
-      "value": "Good working knowledge"
+      "value": "good working knowledge"
     }
   ],
   "about.language.german.name": [
@@ -255,10 +293,50 @@
       "value": "German"
     }
   ],
+  "about.language.line": [
+    {
+      "type": 1,
+      "value": "name"
+    },
+    {
+      "type": 0,
+      "value": ": "
+    },
+    {
+      "type": 1,
+      "value": "level"
+    }
+  ],
+  "about.language.lineCefr": [
+    {
+      "type": 1,
+      "value": "name"
+    },
+    {
+      "type": 0,
+      "value": ": "
+    },
+    {
+      "type": 1,
+      "value": "level"
+    },
+    {
+      "type": 0,
+      "value": " ("
+    },
+    {
+      "type": 1,
+      "value": "cefr"
+    },
+    {
+      "type": 0,
+      "value": ")"
+    }
+  ],
   "about.language.russian.level": [
     {
       "type": 0,
-      "value": "Native"
+      "value": "native"
     }
   ],
   "about.language.russian.name": [
@@ -276,7 +354,7 @@
   "about.language.spanish.level": [
     {
       "type": 0,
-      "value": "Basic"
+      "value": "basic"
     }
   ],
   "about.language.spanish.name": [
@@ -577,6 +655,34 @@
     {
       "type": 0,
       "value": "Full-Stack Web Developer"
+    }
+  ],
+  "about.role.line": [
+    {
+      "type": 1,
+      "value": "company"
+    },
+    {
+      "type": 0,
+      "value": " · "
+    },
+    {
+      "type": 1,
+      "value": "period"
+    },
+    {
+      "type": 0,
+      "value": " · "
+    },
+    {
+      "type": 1,
+      "value": "place"
+    }
+  ],
+  "about.roles.technologiesLabel": [
+    {
+      "type": 0,
+      "value": "Technologies:"
     }
   ]
 }

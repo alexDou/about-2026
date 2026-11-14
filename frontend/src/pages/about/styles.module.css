@@ -3,3 +3,10 @@
   margin: 0 auto;
   padding: 0 1.5rem 4rem;
 }
+
+/* The lower cards, one under the other. */
+.about-page__cards {
+  display: grid;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
