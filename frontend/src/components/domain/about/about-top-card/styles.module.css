@@ -1,0 +1,96 @@
+/*
+ * The card, after the reference (support_files/about/about-design.jpg): the greeting and the credo
+ * on the left, the photo centred beside them; below, the links and the CV button. Not positioned: the badge row is, so the row paints over the card's top border where the
+ * card pulls up under it.
+ */
+.about-top-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  grid-template-areas:
+    "text portrait"
+    "actions actions";
+  align-items: center;
+  gap: 1.4rem;
+  margin-top: -3.6rem;
+  /* The top padding clears the badges that hang into the card. */
+  padding: 3.2rem 0 2rem 3rem;
+  border: 0.5rem ridge var(--panel-about);
+  border-radius: 1.75rem;
+  border-inline-color: var(--panel-what-i-do);
+  border-block-style: dashed;
+  background: var(--panel-what-i-do);
+  color: var(--text-on-light);
+}
+
+.about-top-card__text {
+  grid-area: text;
+  display: grid;
+  gap: 1.25rem;
+}
+
+/* From 1.5rem on a small phone to 2rem on a wide screen; a fixed size where progress() is unknown. */
+.about-top-card__greeting {
+  margin: 0;
+  font-family: var(--font-greeting);
+  font-size: 1.6rem;
+  font-size: calc(1.5rem + 0.26rem * progress(100vw, 22.5rem, 80rem));
+  font-weight: 400;
+  line-height: 1.35;
+  text-wrap: pretty;
+}
+
+/* Each sentence starts its own line, as in the reference. */
+.about-top-card__sentence {
+  display: block;
+}
+
+/* The reference's quote line, a little bigger. */
+.about-top-card__credo {
+  max-width: 34rem;
+  margin: 0;
+  font-size: 1rem;
+  font-size: calc(1rem + 0.08rem * progress(100vw, 22.5rem, 80rem));
+  font-style: italic;
+  line-height: 1.4;
+  color: color-mix(in srgb, var(--text-on-light-secondary), transparent);
+}
+
+.about-top-card__actions {
+  grid-area: actions;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 2rem;
+}
+
+.about-top-card__cv {
+  padding: 0.4rem 1.6rem;
+  border-radius: 2rem;
+  background: var(--panel-about);
+  color: var(--text-on-dark);
+  font-size: .8rem;
+  letter-spacing: 0.04em;
+}
+
+.about-top-card__portrait {
+  grid-area: portrait;
+  justify-self: center;
+  width: 80%;
+}
+
+/* Phones: a gap under the badge row, then the photo, the text and the links, in one column. */
+@media (width < 840px) {
+  .about-top-card {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "portrait"
+      "text"
+      "actions";
+    margin-top: 1.5rem;
+    padding: 1.5rem;
+  }
+
+  .about-top-card__portrait {
+    width: min(85%, 18rem);
+  }
+}

@@ -5,7 +5,10 @@ export type {
   AboutBio,
   AboutContent,
   AboutEducation,
+  AboutGreeting,
   AboutHobby,
   AboutLanguage,
+  AboutProfile,
+  AboutProfileKind,
   AboutRole,
 } from "./types";

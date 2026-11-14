@@ -1,0 +1,43 @@
+/* The brush stroke and the photo share one grid cell: the photo sits on the stroke. */
+.portrait {
+  display: grid;
+  align-items: center;
+  justify-items: center;
+}
+
+.portrait__brush,
+.portrait__picture {
+  grid-area: 1 / 1;
+}
+
+/* The About colour at about 10%. */
+/* Stretched across the cell: an svg is a replaced element, which `normal` would not stretch. */
+.portrait__brush {
+  justify-self: stretch;
+  height: auto;
+  color: color-mix(in srgb, var(--panel-about) 10%, transparent);
+  fill: currentColor;
+}
+
+/* Narrower than the stroke, so the stroke shows around the photo, as in the reference. */
+.portrait__picture {
+  display: grid;
+  width: 62%;
+}
+
+/*
+ * No hard corners at the bottom: the brush's outline frays the lower edge (the mask keeps the top
+ * half whole) and a gradient fades what is left into the stroke.
+ */
+.portrait__photo {
+  /*
+   * A percentage, not a stretch: the image has a natural width (its `sizes`), and Chrome lays a
+   * replaced element out at that width whatever its justify-self.
+   */
+  width: 100%;
+  height: auto;
+  mask-image: url("./media/photo-mask.svg"), linear-gradient(#000 70%, transparent 98%);
+  mask-composite: intersect;
+  mask-size: 100% 100%;
+  mask-repeat: no-repeat;
+}

@@ -1,0 +1,5 @@
+photo-mask.svg: the outline of the About brush stroke (pages/about/media/brush.svg) without its
+streaks, joined to a solid top half. Original work, derived from an original work.
+
+License: CC0 1.0 Universal (public domain dedication),
+https://creativecommons.org/publicdomain/zero/1.0/

@@ -16,3 +16,9 @@ export const ABOUT_LANGUAGE_KINDS = ["russian", "english", "german", "spanish"] 
 
 /** The Hobbies on About, each by its position in the list. */
 export const ABOUT_HOBBY_NUMBERS = [1, 2, 3, 4, 5] as const;
+
+/** The Owner's profiles linked from the top card, in the order they show, with their addresses. */
+export const ABOUT_PROFILE_URLS = {
+  linkedin: "https://www.linkedin.com/in/a-doo/",
+  github: "https://github.com/alexDou",
+} as const;
