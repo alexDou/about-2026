@@ -5,9 +5,9 @@ import type { PortfolioWorld } from "../support/world.ts";
 const heading = (world: PortfolioWorld) => world.page.getByRole("heading", { level: 1 });
 const closeButton = (world: PortfolioWorld, label: string) =>
   world.page.getByRole("button", { name: label });
-// The Stripes are the in-site links: a page may link elsewhere too (About's profiles).
+// The Stripes are the in-site links: a page may link elsewhere too (About's profiles, its CV file).
 const stripes = (world: PortfolioWorld) =>
-  world.page.getByRole("link").and(world.page.locator('a[href^="/"]'));
+  world.page.getByRole("link").and(world.page.locator('a[href^="/"]:not([download])'));
 
 When("I click the page heading", async function (this: PortfolioWorld) {
   await heading(this).click();

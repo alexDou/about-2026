@@ -70,6 +70,16 @@
   color: var(--text-on-dark);
   font-size: 0.8rem;
   letter-spacing: 0.04em;
+  text-decoration: none;
+}
+
+.about-top-card__cv:hover {
+  background: var(--panel-chat);
+}
+
+.about-top-card__cv:focus-visible {
+  outline: 0.125rem solid var(--panel-chat);
+  outline-offset: 0.125rem;
 }
 
 .about-top-card__portrait {

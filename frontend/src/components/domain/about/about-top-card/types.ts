@@ -10,7 +10,7 @@ export type AboutTopCardContent = {
   greeting: MessageId;
   credo: MessageId;
   profiles: readonly Profile[];
-  cvLabel: MessageId;
+  cv: { label: MessageId; url: string };
 };
 
 /** The card's media files, as URLs: the photo and the brush stroke under it. */

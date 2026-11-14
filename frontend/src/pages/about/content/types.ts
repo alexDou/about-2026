@@ -103,5 +103,6 @@ export type AboutContent = {
   technologiesLabel: MessageId;
   /** A Role's "{company} · {period} · {place}" line. */
   roleLine: MessageId;
-  cvLabel: MessageId;
+  /** The CV download: its button label and the file, served from the site root. */
+  cv: { label: MessageId; url: string };
 };
