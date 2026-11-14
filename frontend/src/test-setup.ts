@@ -1,7 +1,7 @@
 import "@testing-library/jest-dom/vitest";
 import { cleanup } from "@octanejs/testing-library";
 import { afterEach } from "vitest";
-import { destroyTestRouters } from "./hooks/useRoute";
+import { destroyTestRouters } from "./hooks/use-route";
 
 // Auto-cleanup only registers with Vitest globals enabled, so do it explicitly.
 afterEach(cleanup);

@@ -3,7 +3,7 @@ import { join } from "node:path";
 import { createIntl } from "@formatjs/intl";
 import { act, fireEvent, render, screen, waitFor } from "@octanejs/testing-library";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { RouterProvider } from "../../hooks/useRoute";
+import { RouterProvider } from "../../hooks/use-route";
 import { enMessages } from "../../i18n";
 import { createSiteRouter } from "../router";
 
