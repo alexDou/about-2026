@@ -14,7 +14,7 @@ const props: AboutTopCardProps = {
       { kind: "linkedin", label: "about.profile.linkedin.label", url: "https://linkedin.test/me" },
       { kind: "github", label: "about.profile.github.label", url: "https://github.test/me" },
     ],
-    cvLabel: "about.cv.label",
+    cv: { label: "about.cv.label", url: "/cv/ada-cv.pdf" },
   },
   media: {
     photo: {
@@ -77,9 +77,11 @@ describe("AboutTopCard", () => {
     }
   });
 
-  it("shows the CV button with its label", () => {
+  it("offers the CV as a download link, named by its label", () => {
     renderCard();
-    expect(screen.getByText("Get my CV")).toBeInTheDocument();
+    const cv = screen.getByRole("link", { name: "Get my CV" });
+    expect(cv.getAttribute("href")).toBe("/cv/ada-cv.pdf");
+    expect(cv.hasAttribute("download")).toBe(true);
   });
 
   it("shows the photo, named after the Owner, in AVIF with a WebP fallback at both widths", () => {

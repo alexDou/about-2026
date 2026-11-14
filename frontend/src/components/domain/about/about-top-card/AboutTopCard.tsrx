@@ -26,10 +26,9 @@ export function AboutTopCard({ content, media }: AboutTopCardProps) @{
     </div>
     <div class={styles["about-top-card__actions"]}>
       <ProfileLinks profiles={content.profiles} />
-      // Not a link yet: the CV link (Unit 2.6) makes it one, with the file and its download.
-      <span class={styles["about-top-card__cv"]}>
-        {intl.formatMessage({ id: content.cvLabel })}
-      </span>
+      <a class={styles["about-top-card__cv"]} href={content.cv.url} download>
+        {intl.formatMessage({ id: content.cv.label })}
+      </a>
     </div>
     <div class={styles["about-top-card__portrait"]}>
       <Portrait photo={media.photo} brush={media.brush} alt={name} />

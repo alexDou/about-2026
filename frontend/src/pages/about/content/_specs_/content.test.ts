@@ -1,3 +1,5 @@
+import { existsSync } from "node:fs";
+import { resolve } from "node:path";
 import { createIntl } from "@formatjs/intl";
 import { describe, expect, it } from "vitest";
 import { enMessages, type MessageId } from "../../../../i18n";
@@ -11,6 +13,9 @@ const intl = createIntl({
     throw error;
   },
 });
+
+/** A file under `frontend/`, found from this test file, so the run's working directory is free. */
+const frontendFile = (path: string) => resolve(import.meta.dirname, "../../../../..", path);
 
 /** The English text of one message; throws when it is missing or does not format. */
 const en = (id: MessageId) => intl.formatMessage({ id });
@@ -191,6 +196,11 @@ describe("About content", () => {
     expect(ABOUT_CONTENT.hobbies.length).toBeGreaterThan(0);
     expect(en(ABOUT_CONTENT.headline)).not.toBe("");
     expect(en(ABOUT_CONTENT.credo)).not.toBe("");
-    expect(en(ABOUT_CONTENT.cvLabel)).not.toBe("");
+    expect(en(ABOUT_CONTENT.cv.label)).not.toBe("");
+  });
+
+  it("links the CV at a file that ships from public/", () => {
+    expect(ABOUT_CONTENT.cv.url).toBe("/cv/alexander-durnev-cv-en.pdf");
+    expect(existsSync(frontendFile(`public${ABOUT_CONTENT.cv.url}`))).toBe(true);
   });
 });

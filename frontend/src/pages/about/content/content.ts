@@ -114,5 +114,5 @@ export const ABOUT_CONTENT: AboutContent = {
   },
   technologiesLabel: "about.roles.technologiesLabel",
   roleLine: "about.role.line",
-  cvLabel: "about.cv.label",
+  cv: { label: "about.cv.label", url: "/cv/alexander-durnev-cv-en.pdf" },
 };
