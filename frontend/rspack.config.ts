@@ -44,7 +44,7 @@ export default defineConfig((_env, argv) => {
           use: [{ loader: "./tools/oxc-loader.mjs", options: { target: "es2023" } }],
         },
         { test: /\.css$/i, type: "css/auto" },
-        { test: /\.(?:svg|woff2)$/i, type: "asset/resource" },
+        { test: /\.(?:svg|woff2|avif|webp)$/i, type: "asset/resource" },
       ],
       parser: {
         "css/auto": { namedExports: false },

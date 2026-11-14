@@ -17,4 +17,11 @@ describe("about-status-badges stylesheet", () => {
     expect(row).toMatch(/display:\s*flex/);
     expect(row).toMatch(/flex-wrap:\s*wrap/);
   });
+
+  it("keeps the badges small on phones, growing only a little with the width, by progress()", () => {
+    const row = css("styles.module.css");
+    const phone = row.slice(row.indexOf("@media (width < 840px)"));
+    expect(phone).toMatch(/--badge-size:\s*[\d.]+rem;/);
+    expect(phone).toMatch(/--badge-size:\s*calc\([\d.]+rem \+ [\d.]+rem \* progress\(100vw,/);
+  });
 });

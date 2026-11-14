@@ -31,6 +31,7 @@ describe("tokens.css", () => {
     ["--panel-contact", "#5c8b70"],
     ["--text-on-dark", "#d1dcd9"],
     ["--text-on-light", "#25363a"],
+    ["--font-greeting", '"Playfair Display", Georgia, serif'],
   ])("defines %s as %s", (name, value) => {
     expect(tokens[name]).toBe(value);
   });
@@ -62,6 +63,13 @@ describe("fonts.css", () => {
     expect(fonts).toMatch(/font-weight:\s*200 900/);
     expect(fonts).toMatch(/font-display:\s*swap/);
     expect(fonts).toMatch(/url\("\.\/fonts\/OverusedGrotesk-VF\.woff2"\)\s*format\("woff2"\)/);
+  });
+
+  it("declares Playfair Display, self-hosted and swapping, for About's greeting", () => {
+    expect(fonts).toMatch(/font-family:\s*"Playfair Display"/);
+    expect(fonts).toMatch(
+      /url\("\.\/fonts\/PlayfairDisplay-Regular-latin\.woff2"\)\s*format\("woff2"\)/,
+    );
   });
 
   it("ships the font file with its OFL license", () => {

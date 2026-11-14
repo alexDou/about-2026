@@ -18,7 +18,6 @@ const BUDGET_BYTES = {
   "media/me-400.webp": 20_000,
   "media/me-800.avif": 36_000,
   "media/me-800.webp": 70_000,
-  "media/nodes.svg": 14_000,
   "media/brush.svg": 3_000,
 } as const;
 
@@ -74,33 +73,14 @@ describe("Brush stroke", () => {
     expect(existsSync(chunk("media/brush.LICENSE.txt"))).toBe(true);
   });
 
+  it('has the id `brush` on its root, so `<use href="…#brush">` draws it inline', () => {
+    expect(text(BRUSH)).toMatch(/^<svg\b[^>]*\bid="brush"/);
+  });
+
   it("is recolourable: no fixed fill, so CSS (currentColor) decides", () => {
     const svg = text(BRUSH);
     expect(svg).toContain('fill="currentColor"');
     expect(svg).not.toMatch(/fill="(?!none|currentColor)[^"]+"/);
     expect(svg).not.toMatch(/fill:\s*#/);
-  });
-});
-
-describe("Node burst", () => {
-  const NODES = "media/nodes.svg";
-
-  it("is a square SVG within its byte budget, sized by CSS (a viewBox, no width/height)", () => {
-    const svg = text(NODES);
-    expect(svg).toMatch(/viewBox="0 0 600 600"/);
-    expect(svg).not.toMatch(/<svg[^>]*\s(?:width|height)=/);
-    expect(size(NODES)).toBeLessThan(BUDGET_BYTES[NODES]);
-  });
-
-  it("is greyed out: every colour is a grey", () => {
-    const colours = [...text(NODES).matchAll(/(?:fill|stroke)="(#[0-9a-f]{6})"/gi)].map(
-      (m) => m[1]!,
-    );
-    expect(colours.length).toBeGreaterThan(0);
-    for (const colour of colours) {
-      const [r, g, b] = [1, 3, 5].map((i) => colour.slice(i, i + 2));
-      expect(r).toBe(g);
-      expect(g).toBe(b);
-    }
   });
 });

@@ -141,7 +141,11 @@ describe("App", () => {
       async (path, title) => {
         await renderAt(path);
         expect(heading()).toHaveTextContent(title);
-        expect(screen.getAllByRole("link")).toHaveLength(4);
+        // The Stripes are the in-site links: a page may link elsewhere too (About's profiles).
+        const inSite = screen
+          .getAllByRole("link")
+          .filter((link) => link.getAttribute("href")?.startsWith("/"));
+        expect(inSite).toHaveLength(4);
         expect(screen.queryByRole("link", { name: title })).not.toBeInTheDocument();
         expect(screen.getByRole("button", { name: `Close ${title}` })).toBeInTheDocument();
       },

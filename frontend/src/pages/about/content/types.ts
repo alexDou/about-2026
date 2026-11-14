@@ -1,5 +1,5 @@
 import type { MessageId } from "../../../i18n";
-import type { ABOUT_BADGE_KINDS } from "./config";
+import type { ABOUT_BADGE_KINDS, ABOUT_PROFILE_URLS } from "./config";
 
 export type AboutBadgeKind = (typeof ABOUT_BADGE_KINDS)[number];
 
@@ -23,6 +23,24 @@ export type AboutRole = {
   intro?: MessageId;
   highlights: readonly MessageId[];
   technologies: MessageId;
+};
+
+export type AboutProfileKind = keyof typeof ABOUT_PROFILE_URLS;
+
+/** A profile elsewhere (LinkedIn, GitHub): the name its link is read by, and its address. */
+export type AboutProfile = {
+  kind: AboutProfileKind;
+  label: MessageId;
+  url: string;
+};
+
+/**
+ * The top card's greeting, two sentences: `hello` takes the `{name}`, `headline` the
+ * `{headline}`.
+ */
+export type AboutGreeting = {
+  hello: MessageId;
+  headline: MessageId;
 };
 
 /** The Bio, two paragraphs: what the Owner does professionally, then the personal facts. */
@@ -60,7 +78,9 @@ export type AboutHobby = {
 export type AboutContent = {
   name: MessageId;
   headline: MessageId;
+  greeting: AboutGreeting;
   credo: MessageId;
+  profiles: readonly AboutProfile[];
   bio: AboutBio;
   badges: readonly AboutBadge[];
   /** Newest first. */

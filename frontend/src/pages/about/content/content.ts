@@ -3,9 +3,18 @@ import {
   ABOUT_BADGE_KINDS,
   ABOUT_HOBBY_NUMBERS,
   ABOUT_LANGUAGE_KINDS,
+  ABOUT_PROFILE_URLS,
   ABOUT_ROLE_NUMBERS,
 } from "./config";
-import type { AboutBadge, AboutContent, AboutHobby, AboutLanguage, AboutRole } from "./types";
+import type {
+  AboutBadge,
+  AboutContent,
+  AboutHobby,
+  AboutLanguage,
+  AboutProfile,
+  AboutProfileKind,
+  AboutRole,
+} from "./types";
 
 const badge = (kind: (typeof ABOUT_BADGE_KINDS)[number]): AboutBadge => ({
   kind,
@@ -53,6 +62,12 @@ const cefrLanguage = (kind: Exclude<(typeof ABOUT_LANGUAGE_KINDS)[number], "russ
   cefr: `about.language.${kind}.cefr` as const,
 });
 
+const profile = (kind: AboutProfileKind): AboutProfile => ({
+  kind,
+  label: `about.profile.${kind}.label`,
+  url: ABOUT_PROFILE_URLS[kind],
+});
+
 const hobby = (n: (typeof ABOUT_HOBBY_NUMBERS)[number]): AboutHobby => ({
   name: `about.hobby.${n}.name`,
   text: `about.hobby.${n}.text`,
@@ -62,7 +77,12 @@ const hobby = (n: (typeof ABOUT_HOBBY_NUMBERS)[number]): AboutHobby => ({
 export const ABOUT_CONTENT: AboutContent = {
   name: "about.name",
   headline: "about.headline",
+  greeting: {
+    hello: "about.greeting.hello",
+    headline: "about.greeting.headline",
+  },
   credo: "about.credo",
+  profiles: [profile("linkedin"), profile("github")],
   bio: {
     professional: "about.bio.professional",
     personal: "about.bio.personal",

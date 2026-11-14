@@ -15,13 +15,16 @@ const intl = createIntl({
 /** The English text of one message; throws when it is missing or does not format. */
 const en = (id: MessageId) => intl.formatMessage({ id });
 
-/** Every message id the content refers to, found at any depth. `kind` fields are names, not ids. */
+/** Fields that hold no message id: `kind` is a name, `url` an address. */
+const NOT_IDS = new Set(["kind", "url"]);
+
+/** Every message id the content refers to, found at any depth. */
 function referencedIds(value: unknown): string[] {
   if (typeof value === "string") return [value];
   if (Array.isArray(value)) return value.flatMap(referencedIds);
   if (value && typeof value === "object") {
     return Object.entries(value).flatMap(([key, inner]) =>
-      key === "kind" ? [] : referencedIds(inner),
+      NOT_IDS.has(key) ? [] : referencedIds(inner),
     );
   }
   return [];
@@ -33,7 +36,11 @@ describe("About content", () => {
   it("refers only to messages that exist and format, and every about.* message is used", () => {
     const referenced = referencedIds(ABOUT_CONTENT);
     for (const id of referenced) expect(enMessages).toHaveProperty([id]);
-    expect(referenced.map((id) => en(id as MessageId))).not.toContain("");
+    // The greeting's arguments; the other messages take none and ignore them.
+    const values = { name: "Name", headline: "Headline" };
+    expect(
+      referenced.map((id) => intl.formatMessage({ id: id as MessageId }, values)),
+    ).not.toContain("");
     expect([...new Set(referenced)].toSorted()).toEqual(ABOUT_IDS.toSorted());
   });
 
@@ -121,6 +128,26 @@ describe("About content", () => {
       "History and travel",
       "Sport",
       "Art",
+    ]);
+  });
+
+  it("greets with the name and the Headline, in two sentences", () => {
+    const name = en(ABOUT_CONTENT.name);
+    const headline = en(ABOUT_CONTENT.headline);
+    expect(intl.formatMessage({ id: ABOUT_CONTENT.greeting.hello }, { name })).toBe(
+      "Hello, I'm Alexander Durnev.",
+    );
+    expect(intl.formatMessage({ id: ABOUT_CONTENT.greeting.headline }, { headline })).toBe(
+      `I'm a ${headline}.`,
+    );
+  });
+
+  it("links the LinkedIn and GitHub profiles, in that order", () => {
+    expect(
+      ABOUT_CONTENT.profiles.map((profile) => [profile.kind, en(profile.label), profile.url]),
+    ).toEqual([
+      ["linkedin", "LinkedIn", "https://www.linkedin.com/in/a-doo/"],
+      ["github", "GitHub", "https://github.com/alexDou"],
     ]);
   });
 

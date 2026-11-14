@@ -16,6 +16,7 @@
   /* Text colours: on dark and on light backgrounds. */
   --text-on-dark: var(--panel-what-i-do);
   --text-on-light: var(--panel-about);
+  --text-on-light-secondary: #25292a;
 
   /* A Panel's dots row and Sublabel hang this far above and below its title. */
   --label-gap-top: 1.2rem;
@@ -42,6 +43,8 @@
   --seq-expanded-fade: 150ms;
 
   --font-site: "Overused Grotesk", system-ui, sans-serif;
+  /* About's greeting and section headings. */
+  --font-greeting: "Playfair Display", Georgia, serif;
 }
 
 /* A phone window as short as the Board's 420px minimum leaves rows of 84px: keep the Sublabel in. */

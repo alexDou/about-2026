@@ -15,4 +15,17 @@ describe("Heading", () => {
     heading.focus();
     expect(heading).toHaveFocus();
   });
+
+  it("shows by default", () => {
+    render(Heading, { props: { text: "Skills" } });
+    expect(screen.getByRole("heading")).not.toHaveClass("heading--visually-hidden");
+  });
+
+  it("can be visually hidden, staying the page's heading for assistive technology and focus", () => {
+    render(Heading, { props: { text: "About", visuallyHidden: true } });
+    const heading = screen.getByRole("heading", { level: 1, name: "About" });
+    expect(heading).toHaveClass("heading", "heading--visually-hidden");
+    heading.focus();
+    expect(heading).toHaveFocus();
+  });
 });

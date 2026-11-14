@@ -29,14 +29,28 @@
   max-width: var(--badge-size);
 }
 
-/* Phones: two rows of three, under the close button instead of beside it. */
+/*
+ * Phones: two rows of three, under the close button instead of beside it. Small badges, growing
+ * only a little with the width: 4.5rem on a small phone, 5.5rem at the breakpoint.
+ */
 @media (width < 840px) {
   .about-status-badges {
+    --badge-size: 5rem;
+    --badge-gap: 0.75rem;
+
+    max-width: calc(3 * var(--badge-size) + 2 * var(--badge-gap));
     margin: 0;
   }
 
+  /* A custom property takes no fallback from an earlier declaration: test for progress() first. */
+  @supports (width: calc(1rem * progress(1vw, 0vw, 2vw))) {
+    .about-status-badges {
+      --badge-size: calc(4.5rem + 1rem * progress(100vw, 20rem, 52.5rem));
+    }
+  }
+
   .about-status-badges__item {
-    flex: 0 0 calc((100% - 2 * var(--badge-gap)) / 3);
+    flex: 0 0 var(--badge-size);
     max-width: none;
   }
 }

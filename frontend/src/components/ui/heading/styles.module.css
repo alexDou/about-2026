@@ -13,3 +13,16 @@
 .heading:focus {
   outline: none;
 }
+
+/*
+ * Out of sight but read by screen readers and focusable: a 1px clipped box, its margin taking back
+ * the room it would hold in the flow.
+ */
+.heading--visually-hidden {
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

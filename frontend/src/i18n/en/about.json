@@ -125,10 +125,38 @@
       "value": "2002"
     }
   ],
+  "about.greeting.headline": [
+    {
+      "type": 0,
+      "value": "I'm a "
+    },
+    {
+      "type": 1,
+      "value": "headline"
+    },
+    {
+      "type": 0,
+      "value": "."
+    }
+  ],
+  "about.greeting.hello": [
+    {
+      "type": 0,
+      "value": "Hello, I'm "
+    },
+    {
+      "type": 1,
+      "value": "name"
+    },
+    {
+      "type": 0,
+      "value": "."
+    }
+  ],
   "about.headline": [
     {
       "type": 0,
-      "value": "Senior Full-Stack Engineer and System Design Specialist"
+      "value": "Senior Full-Stack Engineer and System Design Specialist."
     }
   ],
   "about.hobby.1.name": [
@@ -261,6 +289,18 @@
     {
       "type": 0,
       "value": "Alexander Durnev"
+    }
+  ],
+  "about.profile.github.label": [
+    {
+      "type": 0,
+      "value": "GitHub"
+    }
+  ],
+  "about.profile.linkedin.label": [
+    {
+      "type": 0,
+      "value": "LinkedIn"
     }
   ],
   "about.role.1.company": [
