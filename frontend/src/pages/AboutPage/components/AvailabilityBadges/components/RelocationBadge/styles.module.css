@@ -1,0 +1,27 @@
+.relocation-badge__basket {
+  fill: #36589a;
+  stroke: #36589a;
+  stroke-width: 6;
+  stroke-linejoin: round;
+}
+
+.relocation-badge__rim {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+  opacity: 0.85;
+}
+
+.relocation-badge__wheel {
+  fill: #36589a;
+}
+
+.relocation-badge__hub {
+  fill: #fff;
+}
+
+.relocation-badge__text {
+  fill: #fff;
+  font-style: italic;
+}

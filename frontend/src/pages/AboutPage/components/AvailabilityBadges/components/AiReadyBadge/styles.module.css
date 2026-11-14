@@ -1,0 +1,27 @@
+.ai-ready-badge__hexagon {
+  fill: #5b3a8f;
+  stroke: #5b3a8f;
+  stroke-width: 3;
+  stroke-linejoin: round;
+}
+
+.ai-ready-badge__top {
+  fill: #e6e3ef;
+}
+
+.ai-ready-badge__band {
+  fill: #3f2873;
+}
+
+.ai-ready-badge__bottom {
+  fill: #2a9bd0;
+}
+
+.ai-ready-badge__first,
+.ai-ready-badge__rest {
+  fill: #fff;
+}
+
+.ai-ready-badge__rest {
+  letter-spacing: 0.04em;
+}

@@ -1,0 +1,11 @@
+.badge-frame {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  /* A replaced element: it fills its item by width and keeps its ratio by height. */
+  /* Real SVG text, in the site's variable font, bold. */
+  font-family: var(--font-site);
+  font-weight: 800;
+  text-anchor: middle;
+}

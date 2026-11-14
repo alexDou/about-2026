@@ -5,9 +5,13 @@ import { AboutPage } from ".././AboutPage.tsrx";
 
 describe("AboutPage", () => {
   it("shows its heading, titled by the Panel's message", () => {
-    const { container } = render(AboutPage, { props: {}, wrapper: intlWrapper() });
+    render(AboutPage, { props: {}, wrapper: intlWrapper() });
     expect(screen.getByRole("heading", { level: 1, name: "About" })).toBeInTheDocument();
-    expect(container).toHaveTextContent(/^About$/);
+  });
+
+  it("shows the six availability badges", () => {
+    render(AboutPage, { props: {}, wrapper: intlWrapper() });
+    expect(screen.getAllByRole("img")).toHaveLength(6);
   });
 
   it("takes the heading from the messages", () => {

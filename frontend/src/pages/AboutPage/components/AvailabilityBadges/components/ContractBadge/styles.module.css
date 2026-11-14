@@ -1,0 +1,29 @@
+.contract-badge__seal {
+  fill: #d2ae48;
+  stroke: #d2ae48;
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+
+.contract-badge__ring {
+  fill: #1f2224;
+}
+
+.contract-badge__disc {
+  fill: #d9b955;
+  stroke: #b8953a;
+  stroke-width: 1;
+}
+
+.contract-badge__dot {
+  fill: #d2ae48;
+}
+
+.contract-badge__star {
+  fill: #1f2224;
+}
+
+.contract-badge__text {
+  fill: #fff;
+  letter-spacing: 0.06em;
+}
