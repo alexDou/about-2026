@@ -3,10 +3,11 @@
 title: 'Unit 2.4: About top card'
 status: todo
 type: task
+priority: normal
 tags:
     - ready-for-agent
 created_at: 2026-11-12T16:19:41Z
-updated_at: 2026-11-12T16:19:41Z
+updated_at: 2026-11-14T10:15:02Z
 parent: portfolio-18oz
 blocked_by:
     - portfolio-3wkt
@@ -30,9 +31,11 @@ The top card, after `support_files/about/about-design.jpg` (no scroll arrow, no 
 - [ ] One node burst, greyed and dimmed, where the reference's second-lowest square sits (below the icons, left), a little bigger than that square
 - [ ] Phone: badges, then the photo, then the rest; the node burst's phone look checked with the Owner
 - [ ] All text from the About messages
+- [ ] The badge row (built in portfolio-ftdn) overlaps the card's top border: the card pulls up under the row with a negative top margin; the row's items already paint above a later block's background
 - [ ] `scripts/verify.sh` GREEN
 
 ## Blocked by
 
 - portfolio-3wkt
 - portfolio-viuq
+

@@ -1,0 +1,34 @@
+.remote-work-badge__zigzag {
+  fill: #5fc4e2;
+}
+
+.remote-work-badge__disc {
+  fill: #6a86e6;
+}
+
+.remote-work-badge__core {
+  fill: #fff;
+  stroke: #5fc4e2;
+  stroke-width: 1;
+}
+
+.remote-work-badge__icon path {
+  fill: none;
+  stroke: #6a86e6;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.remote-work-badge__top,
+.remote-work-badge__bottom {
+  fill: #fff;
+}
+
+.remote-work-badge__top {
+  letter-spacing: 0.08em;
+}
+
+.remote-work-badge__bottom {
+  letter-spacing: 0.06em;
+}

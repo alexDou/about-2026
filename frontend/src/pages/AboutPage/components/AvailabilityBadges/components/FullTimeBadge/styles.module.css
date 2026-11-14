@@ -1,0 +1,28 @@
+.full-time-badge__stamp {
+  fill: #f1f4f2;
+  stroke: #3b4446;
+  stroke-width: 4;
+}
+
+.full-time-badge__inner-ring {
+  fill: none;
+  stroke: #3b4446;
+  stroke-width: 1.5;
+}
+
+.full-time-badge__star {
+  fill: #3b4446;
+}
+
+.full-time-badge__tail {
+  fill: #4f8f2e;
+}
+
+.full-time-badge__ribbon {
+  fill: #6dba3a;
+}
+
+.full-time-badge__text {
+  fill: #fff;
+  letter-spacing: 0.02em;
+}

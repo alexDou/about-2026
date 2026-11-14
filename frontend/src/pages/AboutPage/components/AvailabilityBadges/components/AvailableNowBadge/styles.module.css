@@ -1,0 +1,16 @@
+/* Green only, a little muted to sit with the palette. */
+.available-now-badge__burst {
+  fill: #35a26b;
+  stroke: #35a26b;
+  stroke-width: 3;
+  stroke-linejoin: round;
+}
+
+.available-now-badge__first,
+.available-now-badge__rest {
+  fill: #fff;
+}
+
+.available-now-badge__first {
+  letter-spacing: 0.02em;
+}
