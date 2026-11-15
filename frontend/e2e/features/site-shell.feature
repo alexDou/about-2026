@@ -9,10 +9,14 @@ Feature: Site shell
     Then the response disallows "GPTBot" and "ClaudeBot"
     And the response lets "*" in
 
-  Scenario: The site font is Overused Grotesk
+  Scenario: The site font is Amethysta
     Given I open the landing page
-    Then the page text is set in "Overused Grotesk"
-    And the font "Overused Grotesk" has loaded
+    Then the page text is set in "Amethysta"
+    And the font "Amethysta" has loaded
+
+  Scenario: The Panel titles are set in Overused Grotesk
+    When I open "/explore"
+    Then the font "Overused Grotesk" has loaded
 
   Scenario: The font license is served with the font
     When I fetch "/licenses/fonts-OFL.txt"

@@ -203,3 +203,19 @@ Applied: Role 5 company "Self-employed" (Elance, now Upwork), "PHP" in its techn
 > yep, please, drop freelance
 
 Applied: Tipico "still running on the screens in every Tipico shop"; "A small team of frontend engineers designed and built…", the interfaces customers see "which I built"; "My role: I led the Swing-to-React transformation and built the entire visitor-facing application from scratch, from its architecture to its implementation."; Zovolt "Real time: WebRTC had only just reached all major browsers, much of the web's real-time video still ran on Flash, and community know-how was thin…"; Role 5 title "Full-Stack Web Developer"; badge titles (spec, Unit 2) and the Technologies Hobby "on this very site".
+
+## Round 10 (2026-11-14): corrections after the lower cards, verbatim
+
+> - "I prefer remote work and am open to hybrid." make it appear on a new line (Bio)
+> - "including a converter from the JSON format of i18next to the CMS's own format" remove.
+> - "the CDN and the CMS" without "the" in both cases
+> - "I specified the APIs together with the business owners and backend engineers." worked on APIs specification
+> - "and how it decides when, and how much time, to dedicate to technical debt." including upgrades, refactoring and techincal debt.
+> - "the €1 million" why "the"? do you know this specific 1 mil? remove "the"
+> - "data-flow handling on the frontend, fault tolerance, and performance and UX matters" data-flow handling on the frontend, performance optimisation, fault tollerance measures and enire UX
+> - "with an overwhelmingly positive reaction from end users" received an overwhelmingly positive reaction from end users. Still running in every Tipico shop.
+> - "P2P node discovery" P2P communication layer
+> - "one in western Europe" one targeting specifically one of western Europe community, and the other worldwide for pet owners
+> - "creation of custom modules and plugins specifically for a project." setup, configuration. deployment of the system, and creation of custom modules, plugins, and patches tailored for a project.
+
+Applied in `about.json`: "€1 million in revenue in just 3 months" (the "the" and "mark" dropped to read right), "Successfully deployed. It received …" and "installed and set up for the clients" folded into the new My role line. The Education sentence and the Hobbies corrections are in `education.md` and `hobbies.md`.

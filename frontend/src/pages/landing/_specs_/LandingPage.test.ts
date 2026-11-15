@@ -43,7 +43,7 @@ describe("LandingPage", () => {
     expect(document.title).toBe("Site title");
   });
 
-  it("opens the Board as a new history entry when the logo is clicked", async () => {
+  it("opens Explore as a new history entry when the logo is clicked", async () => {
     const entries = window.history.length;
     render(LandingPage, { props: {}, wrapper: routerWrapper(intlWrapper()) });
     fireEvent.click(screen.getByRole("button", { name: "Portfolio A.Durnev" }));

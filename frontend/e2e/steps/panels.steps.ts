@@ -27,7 +27,7 @@ When("the page content is {int}px tall", async function (this: PortfolioWorld, h
 });
 
 When("I scroll down {int}px", async function (this: PortfolioWorld, pixels: number) {
-  // Retried: while the Board's entrance plays the page is clipped and cannot scroll yet.
+  // Retried: while Explore's entrance plays the page is clipped and cannot scroll yet.
   await expect
     .poll(() =>
       this.page.evaluate((y) => {
@@ -67,11 +67,34 @@ Then("the theme colour is {string}", async function (this: PortfolioWorld, color
 });
 
 Then(
-  "the close button {string} has its icon hidden from screen readers",
+  "the close button {string} is titled by its label",
   async function (this: PortfolioWorld, label: string) {
-    const button = closeButton(this, label);
-    await expect(button).toHaveAttribute("title", label);
-    await expect(button.locator("svg")).toHaveAttribute("aria-hidden", "true");
+    await expect(closeButton(this, label)).toHaveAttribute("title", label);
+  },
+);
+
+Then(
+  "the close button is a target of at least {int} by {int} pixels",
+  async function (this: PortfolioWorld, width: number, height: number) {
+    const box = await this.page.getByRole("button", { name: /^Close / }).boundingBox();
+    expect(box!.width).toBeGreaterThanOrEqual(width);
+    expect(box!.height).toBeGreaterThanOrEqual(height);
+  },
+);
+
+Then(
+  "the close button sits in the Expanded panel's top-right corner",
+  async function (this: PortfolioWorld) {
+    // The visible top-right corner of the Expanded panel's slot: its right edge, and the window's
+    // top once the page has scrolled (the button is sticky).
+    const { button, slot } = await this.page
+      .getByRole("button", { name: /^Close / })
+      .evaluate((el) => ({
+        button: el.getBoundingClientRect().toJSON() as DOMRect,
+        slot: el.closest("li")!.getBoundingClientRect().toJSON() as DOMRect,
+      }));
+    expect(button.right).toBeCloseTo(slot.right, 0);
+    expect(button.top).toBeCloseTo(Math.max(slot.top, 0), 0);
   },
 );
 
@@ -87,16 +110,69 @@ Then(
   },
 );
 
-Then("the Stripes and the close button are still in view", async function (this: PortfolioWorld) {
+Then("the Stripes are still in view", async function (this: PortfolioWorld) {
   const viewport = this.page.viewportSize()!;
   for (const stripe of await stripes(this).all()) {
     const box = await stripe.boundingBox();
     expect(box!.y).toBeCloseTo(0, 0);
     expect(box!.y + box!.height).toBeCloseTo(viewport.height, 0);
   }
-  const close = await this.page.getByRole("button").boundingBox();
-  expect(close!.y).toBeGreaterThanOrEqual(0);
-  expect(close!.y + close!.height).toBeLessThanOrEqual(viewport.height);
+});
+
+/** About's head, in the window: the close button, each badge, and the top card that follows the row. */
+async function aboutHead(world: PortfolioWorld) {
+  await expect(world.page.locator("main section ul").first()).toBeVisible();
+  return world.page.evaluate(() => {
+    const box = (el: Element) => {
+      const { left, right, top, bottom, height } = el.getBoundingClientRect();
+      return { left, right, top, bottom, height };
+    };
+    const row = document.querySelector("main section ul")!;
+    return {
+      close: box(document.querySelector('main button[aria-label^="Close"]')!),
+      badges: [...row.children].map(box),
+      card: box(row.nextElementSibling!),
+      rem: parseFloat(getComputedStyle(document.documentElement).fontSize),
+    };
+  });
+}
+
+Then("the close button covers none of the badges", async function (this: PortfolioWorld) {
+  const { close, badges } = await aboutHead(this);
+  for (const badge of badges) {
+    const apart =
+      badge.right <= close.left ||
+      badge.left >= close.right ||
+      badge.bottom <= close.top ||
+      badge.top >= close.bottom;
+    expect(apart).toBe(true);
+  }
+});
+
+Then("the six badges share one line", async function (this: PortfolioWorld) {
+  const { badges } = await aboutHead(this);
+  expect(badges).toHaveLength(6);
+  for (const badge of badges) expect(badge.top).toBeCloseTo(badges[0]!.top, 0);
+});
+
+Then(
+  "the top card's top border runs through the badges' middle",
+  async function (this: PortfolioWorld) {
+    const { badges, card, rem } = await aboutHead(this);
+    // The border is 0.5rem thick: its middle is a quarter rem below the card's top.
+    const borderMiddle = card.top + 0.25 * rem;
+    const badgesMiddle = badges[0]!.top + badges[0]!.height / 2;
+    expect(Math.abs(borderMiddle - badgesMiddle)).toBeLessThanOrEqual(1);
+  },
+);
+
+Then("the badges sit in rows of three above the top card", async function (this: PortfolioWorld) {
+  const { badges, card } = await aboutHead(this);
+  const tops = badges.map((badge) => Math.round(badge.top));
+  expect(new Set(tops.slice(0, 3)).size).toBe(1);
+  expect(new Set(tops.slice(3)).size).toBe(1);
+  expect(tops[3]).toBeGreaterThan(tops[0]!);
+  expect(card.top).toBeGreaterThanOrEqual(Math.max(...badges.map((badge) => badge.bottom)));
 });
 
 Then("the page is still scrolled down", async function (this: PortfolioWorld) {

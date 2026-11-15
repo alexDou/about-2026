@@ -1,12 +1,30 @@
+/*
+ * A grid, so the badge row's negative bottom margin (it hangs into the top card) adds to the
+ * card's own instead of collapsing with it.
+ */
 .about-page {
+  /* The same room under the top card, to make it stand out, and under the last card. */
+  --about-page-edge-gap: 4rem;
+
+  display: grid;
   max-width: 60rem;
   margin: 0 auto;
-  padding: 0 1.5rem 4rem;
+  /*
+   * 1rem at the top, as under the old close bar; the side padding is wider than the Expanded
+   * panel's close corner, so nothing on the page lies under it.
+   */
+  padding: 1rem var(--element-distance-standard) var(--about-page-edge-gap);
 }
 
 /* The lower cards, one under the other. */
 .about-page__cards {
   display: grid;
-  gap: 1.5rem;
-  margin-top: 1.5rem;
+  gap: var(--element-distance-standard);
+  margin-top: var(--about-page-edge-gap);
+}
+
+@media (width < 840px) {
+  .about-page {
+    padding-right: 2rem;
+  }
 }

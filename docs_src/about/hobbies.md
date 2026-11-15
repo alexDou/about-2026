@@ -16,7 +16,7 @@ The About Panel lists up to five Hobbies, each with a few words of its own (the 
 - Technologies: today mostly AI; keeps experimenting with new tools, libraries and projects, e.g. Octane and Oxc in this site.
 - Science: physics, health- and ecology-oriented research.
 - History: curious how things were in the past; visiting places, cultural exchange.
-- Sport: ran a half-marathon in 2015; regular gym visitor.
+- Sport: ran a half-marathon in 2025; regular gym visitor.
 - Art: inspiring works of many kinds (music, painting, installations, street art, the occasional brilliant social media post).
 - Travel: sometimes the neighbourhood next to yours is as interesting as a prominent place in another country.
 - Nothing off-limits stated. Six candidates for four slots: to choose.
@@ -25,8 +25,8 @@ The About Panel lists up to five Hobbies, each with a few words of its own (the 
 
 Five Hobbies (Travel folded into History, Art kept); the message file has five slots.
 
-1. Technologies: "These days mostly AI, and always something new: I keep experimenting with fresh tools, libraries and projects, like Octane and Oxc in this very site."
-2. Science: "Physics, and research on health and ecology."
+1. Technologies: "These days mostly AI; however, I keep experimenting with fresh tools, libraries and projects, like Octane and Oxc in this very site."
+2. Science: "Physics and research on health and ecology."
 3. History and travel: "I like knowing how things were in the past, so I visit places and learn from cultural exchange. Sometimes the neighbourhood next door is as interesting as a famous place in another country."
-4. Sport: "I ran a half-marathon in 2015 and work out in the gym regularly."
-5. Art: "Inspiring work of every kind: music, painting, installations, street art, and now and then a brilliant post on social media."
+4. Sport: "I ran a half-marathon in 2025 and work out in the gym regularly."
+5. Art: "Inspiring work of every kind: music, painting, installations, street art, and now and then brilliant posts on social media."

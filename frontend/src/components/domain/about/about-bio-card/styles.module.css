@@ -1,5 +1,7 @@
 .about-bio-card__paragraph {
   margin: 0;
-  line-height: 1.55;
+  /* A line break in the message is a line break on screen. */
+  white-space: pre-line;
+  line-height: var(--line-height-site);
   text-wrap: pretty;
 }

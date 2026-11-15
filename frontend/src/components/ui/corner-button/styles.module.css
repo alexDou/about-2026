@@ -1,0 +1,41 @@
+/*
+ * The flap of a peeled corner, after a page curl: the upper-right part of the square, its edge an
+ * arc around the lower-left corner (radius: the square's side), so the edge curves in from the
+ * top-left corner to the bottom-right one. The lower-left part is transparent.
+ *
+ * Contrast (WCAG 1.4.11): no one red reaches 3:1 against every panel colour, so the arc carries a
+ * crease in the text colour around the button (`currentColor`, 3:1 to 9:1 on every panel), and
+ * the red flap behind it is lighter at the fold and darker toward the corner.
+ */
+.corner-button {
+  /* 24px at the default 16px root size: the WCAG 2.5.8 minimum target. */
+  --corner-button-size: 1.5rem;
+  --corner-button-crease: 0.125rem;
+  --corner-button-color: var(--color-accent);
+
+  display: block;
+  width: var(--corner-button-size);
+  height: var(--corner-button-size);
+  padding: 0;
+  border: 0;
+  color: inherit;
+  background: radial-gradient(
+    circle var(--corner-button-size) at 0 100%,
+    transparent 0 calc(100% - 0.03rem),
+    currentColor 100% calc(100% + var(--corner-button-crease)),
+    color-mix(in srgb, var(--corner-button-color), white 15%)
+      calc(100% + var(--corner-button-crease) + 0.03rem),
+    color-mix(in srgb, var(--corner-button-color), black 20%) 141%
+  );
+  cursor: pointer;
+}
+
+.corner-button:hover {
+  --corner-button-color: color-mix(in srgb, var(--color-accent), black 15%);
+}
+
+/* Inside the square, as the corner it sits in clips anything outside it; in the text colour, for contrast. */
+.corner-button:focus-visible {
+  outline: 0.125rem solid currentColor;
+  outline-offset: -0.125rem;
+}

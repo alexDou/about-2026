@@ -15,8 +15,8 @@ const rule = (text: string, selector: string) =>
 
 const STYLESHEETS = [
   "styles.module.css",
-  "components/portrait/styles.module.css",
-  "components/profile-links/styles.module.css",
+  "portrait/styles.module.css",
+  "profile-links/styles.module.css",
 ];
 
 describe("about-top-card stylesheets", () => {
@@ -31,25 +31,30 @@ describe("about-top-card stylesheets", () => {
     expect(card).toMatch(/border-radius:\s*[\d.]+rem/);
   });
 
-  it("pulls up under the badge row on wider screens, with a negative top margin", () => {
+  it("starts at its top border's middle on wide screens, where the badges' middle runs", () => {
     const card = rule(css("styles.module.css"), ".about-top-card");
-    expect(card).toMatch(/margin-top:\s*-[\d.]+rem/);
+    expect(card).toMatch(/border:\s*0\.5rem /);
+    expect(card).toMatch(/margin-top:\s*-0\.25rem/);
   });
 
-  it("keeps a gap under the badge row on phones", () => {
+  it("keeps a gap under the badge row up to 1056px wide, as on phones", () => {
     const sheet = css("styles.module.css");
-    const phone = sheet.slice(sheet.indexOf("@media (width < 840px)"));
-    expect(rule(phone, "  .about-top-card")).toMatch(/margin-top:\s*[\d.]+rem/);
+    const phone = sheet.slice(sheet.indexOf("@media (width <= 1056px)"));
+    expect(rule(phone, "  .about-top-card")).toMatch(
+      /margin-top:\s*var\(--element-distance-standard\)/,
+    );
   });
 
-  it("scales its type with progress(), not clamp(), after a fixed fallback", () => {
+  it("scales the greeting with progress(), not clamp(), after a fixed fallback", () => {
     const sheet = css("styles.module.css");
     expect(sheet).not.toMatch(/clamp\(/);
-    for (const selector of [".about-top-card__greeting", ".about-top-card__credo"]) {
-      expect(rule(sheet, selector)).toMatch(
-        /font-size:\s*[\d.]+rem;\s*font-size:\s*calc\([^;]*progress\(100vw,/,
-      );
-    }
+    expect(rule(sheet, ".about-top-card__greeting")).toMatch(
+      /font-size:\s*[\d.]+rem;\s*font-size:\s*calc\([^;]*progress\(100vw,/,
+    );
+  });
+
+  it("sets the credo in the site's text size, which already grows with the window", () => {
+    expect(rule(css("styles.module.css"), ".about-top-card__credo")).not.toMatch(/font-size:/);
   });
 
   it("centres the photo on the greeting and credo, with the actions below", () => {
@@ -65,22 +70,22 @@ describe("about-top-card stylesheets", () => {
 
   it("sets the greeting in Playfair Display", () => {
     const greeting = rule(css("styles.module.css"), ".about-top-card__greeting");
-    expect(greeting).toMatch(/font-family:\s*var\(--font-greeting\)/);
+    expect(greeting).toMatch(/font-family:\s*var\(--font-heading\)/);
   });
 
-  it("shows the photo first on phones", () => {
+  it("shows the photo first in one column up to 1056px wide, as on phones", () => {
     const sheet = css("styles.module.css");
-    const phone = sheet.slice(sheet.indexOf("@media (width < 840px)"));
+    const phone = sheet.slice(sheet.indexOf("@media (width <= 1056px)"));
     expect(phone).toMatch(/grid-template-areas:\s*"portrait"\s*"text"\s*"actions"/);
   });
 
   it("colours the brush stroke the About colour at 10%", () => {
-    const portrait = css("components/portrait/styles.module.css");
+    const portrait = css("portrait/styles.module.css");
     expect(portrait).toMatch(/color-mix\(in srgb, var\(--panel-about\) 10%, transparent\)/);
   });
 
   it("frays the photo's lower edge with the brush outline and fades it out", () => {
-    const photo = rule(css("components/portrait/styles.module.css"), ".portrait__photo");
+    const photo = rule(css("portrait/styles.module.css"), ".portrait__photo");
     expect(photo).toMatch(/mask-image:\s*url\("\.\/media\/photo-mask\.svg"\),\s*linear-gradient\(/);
     expect(photo).toMatch(/mask-composite:\s*intersect/);
     expect(photo).toMatch(/mask-size:\s*100% 100%/);

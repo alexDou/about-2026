@@ -63,6 +63,13 @@ describe("AboutLanguagesHobbiesCard", () => {
     ]);
   });
 
+  it("names each Hobby with a heading one level under the column's", () => {
+    renderCard();
+    expect(
+      screen.getAllByRole("heading", { level: 3 }).map((heading) => heading.textContent),
+    ).toEqual(["Chess", "Trail running"]);
+  });
+
   it("puts the Languages column before the Hobbies column", () => {
     renderCard();
     const languages = screen.getByRole("heading", { name: "Languages" });

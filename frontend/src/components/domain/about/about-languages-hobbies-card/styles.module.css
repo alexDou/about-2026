@@ -1,8 +1,8 @@
 /* Two columns on a wide screen, stacked on phones. */
 .about-languages-hobbies-card__columns {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
-  gap: 1.5rem 3rem;
+  grid-template-columns: minmax(0, 1.12fr) minmax(0, 1.8fr);
+  gap: var(--element-distance-standard) 3rem;
 }
 
 .about-languages-hobbies-card__column {
@@ -20,13 +20,15 @@
 }
 
 .about-languages-hobbies-card__hobby-name {
-  display: block;
+  margin: 0 0 0.2rem;
+  font-family: var(--font-heading);
+  font-size: 1em;
   font-weight: 600;
 }
 
 .about-languages-hobbies-card__hobby-text {
   display: block;
-  line-height: 1.5;
+  line-height: var(--line-height-site);
   text-wrap: pretty;
 }
 

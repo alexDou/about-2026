@@ -1,0 +1,42 @@
+/* The title running top to bottom (an English book spine); the slot sets the Stripe's size (see Slot). */
+.stripe {
+  display: grid;
+}
+
+/* The whole Stripe is the link. */
+.stripe__link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* The trailing letter-space would pull the word off-centre. */
+  padding: 1.25rem 1rem 1.25rem;
+  padding-block-start: calc(1.25rem + 0.2em);
+  color: inherit;
+  font-family: var(--font-panel);
+  font-size: 1rem;
+  font-weight: 300;
+  letter-spacing: 0.2em;
+  text-decoration: none;
+  text-transform: uppercase;
+  white-space: nowrap;
+  writing-mode: vertical-rl;
+}
+
+.stripe__link:hover {
+  background: color-mix(in srgb, currentColor 10%, transparent);
+}
+
+.stripe__link:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: -4px;
+}
+
+/* Mobile: a row, the title horizontal. */
+@media (width < 840px) {
+  .stripe__link {
+    padding: 0.75rem 1rem;
+    padding-inline-start: calc(1rem + 0.2em);
+    writing-mode: horizontal-tb;
+    text-align: center;
+  }
+}

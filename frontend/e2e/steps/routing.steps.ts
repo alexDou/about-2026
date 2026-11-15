@@ -29,7 +29,7 @@ When("I click the Panel {string}", async function (this: PortfolioWorld, title: 
 // A Playwright click waits for the element to stop moving, which is the end of the unfold. A click
 // event sent at once is what a fast Visitor does.
 When(
-  "I click the Panel {string} while the Board unfolds",
+  "I click the Panel {string} while Explore unfolds",
   async function (this: PortfolioWorld, title: string) {
     await this.page.getByRole("link", { name: title }).dispatchEvent("click");
   },
@@ -43,7 +43,7 @@ Then("the logo is shown", async function (this: PortfolioWorld) {
   await expect(this.page.getByRole("button", { name: "Portfolio A.Durnev" })).toBeVisible();
 });
 
-Then("the Board lists the five Panels", async function (this: PortfolioWorld) {
+Then("Explore lists the five Panels", async function (this: PortfolioWorld) {
   await expect(this.page.getByRole("link")).toHaveText(PANEL_TITLES);
 });
 

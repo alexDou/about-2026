@@ -4,6 +4,9 @@ Copyright (c) 2023-2026, Bao Nguyen (RandomMaerks) (rmforbusiness@gmail.com)
 Playfair Display (PlayfairDisplay-Regular-latin.woff2, a Latin subset of Playfair Display):
 Copyright 2017 The Playfair Display Project Authors (https://github.com/clauseggers/Playfair-Display), with Reserved Font Name "Playfair Display". PlayfairDisplay-Italic[wght].ttf: Copyright 2017 The Playfair Display Project Authors (https://github.com/clauseggers/Playfair-Display), with Reserved Font Name "Playfair Display".
 
+Amethysta (Amethysta-Regular-latin.woff2, a Latin subset of Amethysta):
+Copyright (c) 2011, Cyreal (www.cyreal.org) with Reserved Font Name "Amethysta".
+
 This Font Software is licensed under the SIL Open Font License, Version 1.1.
 This license is copied below, and is also available with a FAQ at:
 https://openfontlicense.org

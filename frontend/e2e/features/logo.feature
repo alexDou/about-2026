@@ -13,7 +13,7 @@ Feature: Animated logo
     When I hover over the logo
     Then the logo ring uses the color "#f87269"
 
-  Scenario: Clicking the logo opens the Board
+  Scenario: Clicking the logo opens Explore
     When I click the logo
     Then I am on "/explore"
-    And the Board lists the five Panels
+    And Explore lists the five Panels

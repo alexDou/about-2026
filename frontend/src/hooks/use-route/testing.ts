@@ -39,7 +39,7 @@ export function testRouter({
   const router = createAppRouter({
     shell: Outlet,
     landing: nothing,
-    board: nothing,
+    explore: nothing,
     ...components,
     pages: { ...none, ...pages },
   });

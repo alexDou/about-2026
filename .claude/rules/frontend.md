@@ -22,7 +22,7 @@ Syntax: https://tsrx.dev/features.
 - Write `class`, not `className`.
 - Omit dependency arrays on built-in hooks. Write one only when you need exact control over when it reruns.
 - Test with `@octanejs/testing-library` (`render(Component, { props })`).
-- E2E contexts run with reduced motion, so the Board's entrance does not disturb measurements. A scenario about motion starts with `Given the visitor accepts motion`.
+- E2E contexts run with reduced motion, so Explore's entrance does not disturb measurements. A scenario about motion starts with `Given the visitor accepts motion`.
 - Document title: `index.html` carries the static site title, shown until JS runs and on every screen that sets none. A rendered `<title>` lands after it in `<head>` and never shows, so a screen sets the title through `useDocumentTitle`, which restores the previous title on cleanup.
 
 ## Declarative, conventional React
@@ -34,51 +34,51 @@ Syntax: https://tsrx.dev/features.
 
 ## Shared state: signals
 
-- State several components read and change is an Octane signal, shared as a module: the module holds one scope (`createScope`), one signal whose value is the state, derived signals for what components read, and plain functions that change it. Components import the handles and the functions directly; no context, no props for it. Example: `components/domain/board/motion/motion.ts`. Use it where the thing is one per document (one Board). Keep the rules of the state in plain pure functions next to it (`state.ts`), tested without the framework.
-- The route decides what shows, as the router does for the page: the Board renders from `useRoute().board`. The shared state holds only what the route does not know (the entrance still playing, the scroll before a switch).
+- State several components read and change is an Octane signal, shared as a module: the module holds one scope (`createScope`), one signal whose value is the state, derived signals for what components read, and plain functions that change it. Components import the handles and the functions directly; no context, no props for it. Example: `components/domain/explore/motion/motion.ts`. Use it where the thing is one per document (one Explore). Keep the rules of the state in plain pure functions next to it (`state.ts`), tested without the framework.
+- The route decides what shows, as the router does for the page: Explore renders from `useRoute().explore`. The shared state holds only what the route does not know (the entrance still playing, the scroll before a switch).
 - The backend's health is the other such module (`components/domain/api-status/health.ts`): one request at a time, `checkHealthOnce` for the page load, `checkHealth` to ask again; the last health stays while it asks. `useApiHealth()` reads it, and `OfflineNote` (Chat with me and Contact) asks again each time it appears. The request in flight is a plain module variable, since it is not state anyone renders.
 - State that belongs to a mount resets when its owner unmounts (`useEffect(() => reset, [])`), so the next mount starts from scratch.
 - A handle, and any function that returns handles, has a name ending in `$` (`busy$`); the compiler refuses otherwise.
 - Every module that reads a handle while rendering has a runtime `import "octane/signals";` (allowed in `.oxlintrc.json`).
 - A signal is written from event handlers and effects, not while a component renders or commits: not in a layout effect, and signals cannot be created during a render either (module level is fine).
 - A `derived$` renders its readers again whenever one of its inputs changes, even when its own value does not. Cheap here; do not rely on it to skip renders.
-- Tests: the pure functions are unit-tested with plain values; a component test sets the signals through the module's own functions (`go(...)`) and asserts on the state or on what shows; a test file resets in `afterEach` where no Board unmounts. Integration tests check what a visitor sees (`BoardNavigation.test.ts`).
+- Tests: the pure functions are unit-tested with plain values; a component test sets the signals through the module's own functions (`go(...)`) and asserts on the state or on what shows; a test file resets in `afterEach` where no Explore unmounts. Integration tests check what a visitor sees (`ExploreNavigation.test.ts`).
 
 ## No hardcoded values
 
-- Strong preference: a value with a meaning (a kind, a state, a tone) is a named constant in the chunk's `config.ts`, as an `as const` object, with its type derived from it (`(typeof BOARD_KIND)[keyof typeof BOARD_KIND]`). Code compares and assigns through the constant (`BOARD_KIND.expanded`), never through a string spelled out again.
-- Examples: `BOARD_KIND` (`hooks/use-route/config.ts`), `CHANGE_KINDS` (Board), `SLOT_VIEWS` (Slot), `API_HEALTH` (ApiStatus), `STATUS_TONES` (StatusBadge), DOM selectors as named constants.
+- Strong preference: a value with a meaning (a kind, a state, a tone) is a named constant in the chunk's `config.ts`, as an `as const` object, with its type derived from it (`(typeof EXPLORE_KIND)[keyof typeof EXPLORE_KIND]`). Code compares and assigns through the constant (`EXPLORE_KIND.expanded`), never through a string spelled out again.
+- Examples: `EXPLORE_KIND` (`hooks/use-route/config.ts`), `CHANGE_KINDS` (Explore), `SLOT_VIEWS` (Slot), `API_HEALTH` (ApiStatus), `STATUS_TONES` (StatusBadge), DOM selectors as named constants.
 - Fine as written: message ids (typed `MessageId`), CSS Module class keys (`styles["panel__title"]`), Web API names used once where the API is called (`"keydown"`), values that mirror the backend contract, and the expected values in tests (a test may also use the constants).
 - A constant module and its types module do not import each other both ways: the types derive from the constants, and the constants never import the types (see "Imports form no cycles").
 
 ## Routing
 
 - Routing runs on `@octanejs/tanstack-router` (ADR 0004) with code-defined routes. Do not add file-based routes or a route generator. The router matches the URL and renders the screen: no component switches on the route to pick what to show.
-- Route tree: the root route's component is `App` (messages and an `Outlet`); `/` is the Landing; the Board is a pathless layout route whose `Outlet` shows the Expanded panel's page; `/explore` and one route per Panel sit under it, and a Panel route carries `staticData: { panel }`. The tree lives in `hooks/useRoute/router.ts` (`createAppRouter`) and takes its components as required options, so it imports no page. `app/router.ts` (`createSiteRouter`) supplies the real ones.
-- `hooks/use-route` is the one place that imports `@octanejs/tanstack-router`: `useRoute()` gives `{ board, navigate, link }` (`board` is the Board state of the matched route; the default Board where no Board shows), and the index re-exports `Outlet` and `RouterProvider`. Test helpers, exported like `intlWrapper` (the production bundle tree-shakes them out): `testRouter({ board, pages, … })` makes a router whose components render nothing unless named, `routerWrapper` puts one in context, and `test-setup.ts` destroys every `testRouter` history after each test.
-- A `BoardState` is what `navigate` and `link` take. Panel titles and Stripes are plain `<a href>` elements with `link(board)`'s `onClick` (a plain click navigates in the app, a modified click is left to the browser).
+- Route tree: the root route's component is `App` (messages and an `Outlet`); `/` is the Landing; Explore is a pathless layout route (its component `ExplorePage`, from `pages/explore/`) whose `Outlet` shows the Expanded panel's page; `/explore` and one route per Panel sit under it, and a Panel route carries `staticData: { panel }`. The tree lives in `hooks/useRoute/router.ts` (`createAppRouter`) and takes its components as required options, so it imports no page. `app/router.ts` (`createSiteRouter`) supplies the real ones.
+- `hooks/use-route` is the one place that imports `@octanejs/tanstack-router`: `useRoute()` gives `{ explore, navigate, link }` (`explore` is the Explore state of the matched route; the default Explore where no Explore shows), and the index re-exports `Outlet` and `RouterProvider`. Test helpers, exported like `intlWrapper` (the production bundle tree-shakes them out): `testRouter({ explore, pages, … })` makes a router whose components render nothing unless named, `routerWrapper` puts one in context, and `test-setup.ts` destroys every `testRouter` history after each test.
+- An `ExploreState` is what `navigate` and `link` take. Panel titles and Stripes are plain `<a href>` elements with `link(explore)`'s `onClick` (a plain click navigates in the app, a modified click is left to the browser).
 - The site keeps no record of what caused a route change: every change plays the same transition. Do not bring back a `userTriggered` flag.
 - Navigation is asynchronous: tests that click a link or render a route tree wait for it (`await router.load()` inside `act`, `waitFor`, `findBy…`). A test of a routed component renders `RouterProvider` with a `testRouter` and stub pages.
 - `@tanstack/router-core` is a direct dependency, pinned to the version the binding pins, only so `StaticDataRouteOption` can be typed (`hooks/useRoute/types.ts`). Move both together.
 - A visit to a path with a trailing slash is replaced where the router is made, and an unknown path by a catch-all route, both without a history entry.
 
-## The Board's motion
+## Explore's motion
 
-- Every Panel has one `Slot` (`components/domain/board/components/slot/`): its `<li>` keeps the tone and the size, and the view inside (Panel, Stripe or Expanded panel) is one wrapper. The Board renders what the route says, at once.
-- A change of route plays as a browser View Transition. The router starts it (`defaultViewTransition`, passed as `viewTransition` to `createAppRouter`) with a type from `boardViewTransition` (Board `utils.ts`): `open`, `close` or `switch` (`CHANGE_KINDS`), none to or from a screen with no Board. No JS follows the animation: no stages, no `transitionend` reporting, no timers, no `getAnimations`.
+- Every Panel has one `Slot` (`components/domain/explore/slot/`): its `<li>` keeps the tone and the size, and the view inside (Panel, Stripe or Expanded panel) is one wrapper. Explore renders what the route says, at once.
+- A change of route plays as a browser View Transition. The router starts it (`defaultViewTransition`, passed as `viewTransition` to `createAppRouter`) with a type from `exploreViewTransition` (Explore `utils.ts`): `open`, `close` or `switch` (`CHANGE_KINDS`), none to or from a screen with no Explore. No JS follows the animation: no stages, no `transitionend` reporting, no timers, no `getAnimations`.
 - All View Transition CSS is in the Slot's stylesheet. Each slot and its view have a `view-transition-name` by tone and a `view-transition-class` (`slot`, `slot__view`). The slot's colour box stretches with its group; the old views are never shown (a native-Wayland Brave painted fading old snapshots as white boxes), the new views fade in after the resize on desktop. Switch and all of mobile only resize. Rules by type are `:root:active-view-transition-type(open)::view-transition-*`. Reduced motion sets `animation: none` on every pseudo-element. Without the API the change is instant.
-- The Board's motion is a module of signals (`components/domain/board/motion/motion.ts`): `busy$`, `entering$` and the functions `go`, `titleShown`, `scrollStarted`, `scrollEnded`, `reset`. `state.ts` holds the pure state functions. `useBoardSync(board)` is the Board's one hook for it: the route into `go`, `reset` on unmount.
+- Explore's motion is a module of signals (`components/domain/explore/motion/motion.ts`): `busy$`, `entering$` and the functions `go`, `titleShown`, `scrollStarted`, `scrollEnded`, `reset`. `state.ts` holds the pure state functions. `useExploreSync(explore)` is Explore's one hook for it: the route into `go`, `reset` on unmount.
 - The entrance is the titles' fade-in: each Panel reports `onAnimationEnd` of its title, and the entrance plays until all five have. Only a slot that shows the Panel unfolds. Opening a Panel ends it, so Panels that come back do not replay it. With reduced motion there is no entrance.
 - A click on a Stripe from a scrolled page scrolls up first (`scrollingUpFirst`) and changes the route when the page has: the route change removes the page, and the browser would clamp the scroll with it. Back and Forward do not wait for a scroll.
-- The Board is `busy` while the entrance plays or the page scrolls up; clicks, the close button and Escape are ignored then (`ignoredWhileBusy`). During a View Transition the browser's overlay takes the mouse clicks; the keyboard is not blocked, so Escape mid-open closes.
-- The durations are the `--seq-*` and `--enter-*` custom properties in `styles/tokens.css`. `useBoardFocus` moves focus when the route shows another Expanded panel.
-- Tests: jsdom has no View Transitions, so unit tests check what shows after a change of route (`_specs_/BoardNavigation.test.ts`), the transition types (`transitionTypes.test.ts`) and the entrance, firing `animationend` on the titles by hand (`BoardEntrance.test.ts`). The animation itself can only be checked in a real browser with motion on.
+- Explore is `busy` while the entrance plays or the page scrolls up; clicks, the close button and Escape are ignored then (`ignoredWhileBusy`). During a View Transition the browser's overlay takes the mouse clicks; the keyboard is not blocked, so Escape mid-open closes.
+- The durations are the `--seq-*` and `--enter-*` custom properties in `styles/tokens.css`. `useExploreFocus` moves focus when the route shows another Expanded panel.
+- Tests: jsdom has no View Transitions, so unit tests check what shows after a change of route (`_specs_/ExploreNavigation.test.ts`), the transition types (`transitionTypes.test.ts`) and the entrance, firing `animationend` on the titles by hand (`ExploreEntrance.test.ts`). The animation itself can only be checked in a real browser with motion on.
 
 ## Domain code stays in its domain
 
 - A hook, type, constant or helper that carries one domain's concepts lives in that domain's chunk, `components/domain/<Name>/` (`hooks/`, `types.ts`, `config.ts`), however many chunks use it. Example: `ApiStatus` owns `useApiHealth` and the `ApiHealth` type.
 - Other chunks reach domain code through the domain's `index.ts`.
-- The global `hooks/` and `utils/` hold domain-agnostic or app-wide code only: `useAnimationFrame`, `useIntl`, and `useRoute`, because navigation is site-wide even though it names the Panels and the Board state.
+- The global `hooks/` and `utils/` hold domain-agnostic or app-wide code only: `useAnimationFrame`, `useEscapeKey`, `useIntl`, and `useRoute`, because navigation is site-wide even though it names the Panels and Explore state.
 
 ## Imports form no cycles
 

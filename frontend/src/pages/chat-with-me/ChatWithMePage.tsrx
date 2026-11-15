@@ -8,7 +8,7 @@ export function ChatWithMePage() @{
   const intl = useIntl();
 
   <section class={styles["chat-with-me-page"]}>
-    <Heading text={intl.formatMessage({ id: "board.panel.chatWithMe.title" })} />
+    <Heading text={intl.formatMessage({ id: "explore.panel.chatWithMe.title" })} />
     <OfflineNote />
   </section>;
 }

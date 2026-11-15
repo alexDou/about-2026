@@ -8,7 +8,7 @@ const phone = css.slice(css.indexOf("@media (width < 840px)"));
 describe("about-languages-hobbies-card stylesheet", () => {
   it("lays the columns side by side, two grid columns", () => {
     const wide = css.slice(0, css.indexOf("@media"));
-    expect(wide).toMatch(/grid-template-columns:\s*minmax\(0, 1fr\) minmax\(0, 2fr\)/);
+    expect(wide).toMatch(/grid-template-columns:\s*minmax\(0, [\d.]+fr\) minmax\(0, [\d.]+fr\);/);
   });
 
   it("stacks them on phones, in one column", () => {

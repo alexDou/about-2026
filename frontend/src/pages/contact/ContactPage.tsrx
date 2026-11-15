@@ -8,7 +8,7 @@ export function ContactPage() @{
   const intl = useIntl();
 
   <section class={styles["contact-page"]}>
-    <Heading text={intl.formatMessage({ id: "board.panel.contact.title" })} />
+    <Heading text={intl.formatMessage({ id: "explore.panel.contact.title" })} />
     <OfflineNote />
   </section>;
 }

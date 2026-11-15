@@ -1,0 +1,30 @@
+/*
+ * The page and its close corner, in the Expanded panel's slot (and its tone, see Slot); the page
+ * scrolls with the document. Both share one grid cell: the corner adds no room of its own, and
+ * the pages keep the room at their top and right that it needs.
+ */
+.expanded-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-content: start;
+}
+
+.expanded-panel__page {
+  grid-area: 1 / 1;
+  min-width: 0;
+}
+
+/*
+ * The close corner, exactly in the panel's top-right corner, and sticky: it stays there in view
+ * while the page scrolls. It comes before the page in the document, which would paint over it
+ * (the About badge row is positioned): `z-index` keeps it on top.
+ */
+.expanded-panel__close {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  grid-area: 1 / 1;
+  justify-self: end;
+  align-self: start;
+  display: flex;
+}

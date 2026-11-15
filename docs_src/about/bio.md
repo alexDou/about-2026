@@ -9,7 +9,7 @@ The Bio is the Owner's short self-introduction (`CONTEXT.md`), the first lower c
 > 6. accepted
 > 7. valid, agree. but your line is NOT accepted. do not mention compamues. real-time data-flow is just one of many things, a detail. 20 years at first palce also no. so, totally not accepted, but it is needed for sure. take inspiration from my CV, first part. mention: full stack, equally solid FE/BE, architecture, system design, AI ready. these are topics expressed in a nice smooth way. this is what i do briefly
 
-Applied: the birth date dropped ("Born in Moscow, based in Germany since 2019, a permanent EU resident. I prefer remote work and am open to hybrid."). The professional summary is pending: no company names, no "20 years" up front, real-time data flow left out; topics full stack, equally solid frontend and backend, architecture, system design, AI ready.
+Applied: the birth date dropped ("Born in Moscow, based in Germany since 2019, a permanent EU resident.", then "I prefer remote work and am open to hybrid." on its own line). The professional summary is pending: no company names, no "20 years" up front, real-time data flow left out; topics full stack, equally solid frontend and backend, architecture, system design, AI ready.
 
 ## Round 9 (2026-11-13), verbatim
 

@@ -1,0 +1,288 @@
+/*
+ * One slot per Panel. Its size is what animates (`--seq-*` in tokens.css): the slots share
+ * Explore evenly, or one fills it and the others are Stripes. Desktop sizes are widths, mobile
+ * sizes heights; Explore is a row on desktop and a column on mobile.
+ */
+.slot {
+  display: grid;
+  /* The view fills the slot, as its one grid item; its content never widens the slot. */
+  grid-template-columns: minmax(0, 1fr);
+  flex: 1 1 0px;
+  /* No `min-height: 0` here: on mobile the Expanded panel's page gives the slot (and Explore) its height. */
+  min-width: 0;
+  /* Clips without a scroll container, so the sticky Stripes and close button keep working. */
+  overflow: clip;
+  background: var(--tone-bg);
+  color: var(--tone-fg);
+}
+
+/* Palette text: light on the dark About Panel, dark on the other four. */
+.slot--ink {
+  --tone-bg: var(--panel-about);
+  --tone-fg: var(--text-on-dark);
+}
+
+.slot--mist {
+  --tone-bg: var(--panel-what-i-do);
+  --tone-fg: var(--text-on-light);
+}
+
+.slot--teal {
+  --tone-bg: var(--panel-skills);
+  --tone-fg: var(--text-on-light);
+}
+
+.slot--blue {
+  --tone-bg: var(--panel-chat);
+  --tone-fg: var(--text-on-light);
+}
+
+.slot--green {
+  --tone-bg: var(--panel-contact);
+  --tone-fg: var(--text-on-light);
+}
+
+/*
+ * A Stripe's slot is as narrow as its title plus padding, and stays in view while the page
+ * scrolls: the height of the window, and sticky.
+ */
+.slot--stripe {
+  position: sticky;
+  top: 0;
+  flex: 0 0 calc(1lh + 2rem);
+  align-self: flex-start;
+  height: max(100dvh, 32rem);
+}
+
+/* A Panel's or a Stripe's content never sets the slot's size: Explore shares it out. */
+.slot--panel,
+.slot--stripe {
+  min-height: 0;
+}
+
+/* The view fills the slot, and the Panel, Stripe or Expanded panel in it fills the view. */
+.slot__view {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* Mobile: Stripes are rows of title height plus a little padding, at least 44px, scrolling with the page. */
+@media (width < 840px) {
+  .slot--stripe {
+    position: static;
+    flex-basis: max(44px, calc(1lh + var(--element-distance-standard)));
+    align-self: auto;
+    height: auto;
+  }
+}
+
+/* Explore's unfold: this Panel's turn (its title fades in after the last one, see Panel). */
+@media (prefers-reduced-motion: no-preference) {
+  .slot--entering {
+    --position: 0;
+
+    transform-origin: 0 0;
+    animation: unfold var(--enter-panel) var(--enter-ease) backwards;
+    animation-delay: calc(var(--position) * var(--enter-stagger));
+  }
+
+  .slot--entering:nth-child(2) {
+    --position: 1;
+  }
+
+  .slot--entering:nth-child(3) {
+    --position: 2;
+  }
+
+  .slot--entering:nth-child(4) {
+    --position: 3;
+  }
+
+  .slot--entering:nth-child(5) {
+    --position: 4;
+  }
+}
+
+@keyframes unfold {
+  from {
+    opacity: 0;
+    transform: perspective(2000px) rotateY(-180deg);
+  }
+}
+
+/*
+ * A change of route as a View Transition, which the router starts
+ * with types (`exploreViewTransition`): `open`, `close`, `switch`. Each slot
+ * and its view are named by tone; their `view-transition-class` is their own class name, `slot` or
+ * `slot__view` (left unhashed with `:global`). The slot's snapshot is its colour box (the view is
+ * cut out of it) and stretches; the view's keeps its natural size, anchored top left (the Expanded
+ * panel's centred on desktop), and its group clips it.
+ */
+.slot {
+  view-transition-class: slot;
+}
+
+.slot__view {
+  view-transition-class: slot__view;
+}
+
+.slot--expanded .slot__view {
+  view-transition-class: slot__view slot__view--expanded;
+}
+
+.slot--ink {
+  view-transition-name: slot-ink;
+}
+
+.slot--mist {
+  view-transition-name: slot-mist;
+}
+
+.slot--teal {
+  view-transition-name: slot-teal;
+}
+
+.slot--blue {
+  view-transition-name: slot-blue;
+}
+
+.slot--green {
+  view-transition-name: slot-green;
+}
+
+.slot--ink > .slot__view {
+  view-transition-name: view-ink;
+}
+
+.slot--mist > .slot__view {
+  view-transition-name: view-mist;
+}
+
+.slot--teal > .slot__view {
+  view-transition-name: view-teal;
+}
+
+.slot--blue > .slot__view {
+  view-transition-name: view-blue;
+}
+
+.slot--green > .slot__view {
+  view-transition-name: view-green;
+}
+
+/*
+ * Base, for a switch, for every change on mobile, and without types: the sizes animate, the views
+ * swap at once. A snapshot is hidden with `opacity`, never `display: none`: a GPU-composited
+ * Chrome then paints it as a blank white box when a later rule shows it.
+ */
+::view-transition-old(root) {
+  animation: none;
+  opacity: 0;
+}
+
+::view-transition-new(root) {
+  animation: none;
+}
+
+::view-transition-group(:global(.slot)),
+::view-transition-group(:global(.slot__view)) {
+  animation-duration: var(--seq-resize);
+  animation-timing-function: var(--seq-ease);
+}
+
+::view-transition-group(:global(.slot__view)) {
+  overflow: clip;
+}
+
+::view-transition-old(:global(.slot)) {
+  animation: none;
+  opacity: 0;
+}
+
+::view-transition-old(:global(.slot__view)) {
+  width: auto;
+  height: auto;
+  animation: none;
+  opacity: 0;
+}
+
+::view-transition-new(:global(.slot)) {
+  width: 100%;
+  height: 100%;
+  animation: none;
+}
+
+::view-transition-new(:global(.slot__view)) {
+  width: auto;
+  height: auto;
+  animation: none;
+}
+
+/*
+ * Desktop: the slots change width only, so the views are cropped at the sides alone (a Stripe's
+ * vertical title is never cut), and the Expanded panel's page stays centred, as its heading is.
+ */
+@media (width >= 840px) {
+  ::view-transition-group(:global(.slot__view)) {
+    overflow: visible;
+    overflow-x: clip;
+  }
+
+  /*
+   * A slot that keeps its size (a Stripe) moves on the compositor, one that changes it on the main
+   * thread, a frame or two behind: a seam would open between them. Each slot's colour box reaches
+   * on under its neighbour to the right (painted later), which covers the seam.
+   */
+  ::view-transition-new(:global(.slot)) {
+    width: calc(100% + 6rem);
+  }
+
+  ::view-transition-new(:global(.slot__view--expanded)) {
+    left: 50%;
+    translate: -50% 0;
+  }
+}
+
+/*
+ * Desktop open and close: the old views go at once, the slots change size, then the new views
+ * fade in (the Stripes and the Expanded panel on open, the Panels on close).
+ */
+@media (width >= 840px) {
+  /*
+   * The old views are never shown (they stay at the base `opacity: 0`), as on mobile: where they
+   * faded out, a native-Wayland Brave painted them as blank white boxes. So the old views go at
+   * once, the slots change size, and the new views fade in.
+   */
+  :root:active-view-transition-type(open)::view-transition-new(:global(.slot__view)) {
+    animation: vt-fade-in var(--seq-stripe-fade) linear both;
+    animation-delay: var(--seq-resize);
+  }
+
+  :root:active-view-transition-type(open)::view-transition-new(:global(.slot__view--expanded)) {
+    animation-duration: var(--seq-expanded-fade);
+  }
+
+  :root:active-view-transition-type(close)::view-transition-new(:global(.slot__view)) {
+    animation: vt-fade-in var(--seq-panel-fade) linear both;
+    animation-delay: var(--seq-resize);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
+/* Both ends spelled out: the snapshots rest at `opacity: 0` (above), so an implicit start would stay hidden. */
+@keyframes vt-fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}

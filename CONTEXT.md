@@ -1,7 +1,7 @@
 # Portfolio
 
 The Owner's CV presented as an interactive site, made for hiring managers and recruiters.
-A Visitor arrives on the Landing, opens the Board, and explores the Owner through its Panels.
+A Visitor arrives on the Landing, opens Explore, and explores the Owner through its Panels.
 
 ## Language
 
@@ -18,23 +18,23 @@ _Avoid_: user, recruiter, client
 ### Screens
 
 **Landing**:
-The first screen, showing the animated logo and whether the backend is reachable. Clicking the logo reveals the Board.
+The first screen, showing the animated logo and whether the backend is reachable. Clicking the logo reveals Explore.
 _Avoid_: home, intro, splash
 
-**Board**:
+**Explore**:
 The screen that holds the five Panels. It is the whole site after the Landing.
-_Avoid_: menu, overlay, hub
+_Avoid_: board (its former name), menu, overlay, hub
 
 **Panel**:
-One of the Board's five areas, in order: About, What I do, Skills, Chat with me, Contact.
+One of Explore's five areas, in order: About, What I do, Skills, Chat with me, Contact.
 _Avoid_: block, column, section, tile
 
 **Expanded panel**:
-The one Panel opened to fill the Board and show its content. At most one at a time.
+The one Panel opened to fill Explore and show its content. At most one at a time.
 _Avoid_: active block, open section
 
 **Stripe**:
-A Panel squeezed to the Board's edge while another Panel is expanded, showing only its title.
+A Panel squeezed to Explore's edge while another Panel is expanded, showing only its title.
 _Avoid_: collapsed column, sidebar
 
 **Sublabel**:

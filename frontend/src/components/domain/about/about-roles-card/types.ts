@@ -1,5 +1,5 @@
 import type { MessageId } from "../../../../i18n";
-import type { RoleEntryRole } from "./components/role-entry";
+import type { RoleEntryRole } from "./role-entry";
 
 export type AboutRolesCardProps = {
   heading: MessageId;

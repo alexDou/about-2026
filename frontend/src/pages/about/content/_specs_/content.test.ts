@@ -125,7 +125,7 @@ describe("About content", () => {
       "Full-stack by trade, equally solid on the frontend and the backend. My work rests on the fundamentals of the craft: system design, clean code and architecture, test-driven development, refactoring and domain-driven design. A proven ability to turn complex business requirements into scalable, maintainable software. AI ready: I build AI-powered features into products and work in agentic, AI-assisted development, keeping both the agents and the code they generate under thorough control.",
     );
     expect(en(ABOUT_CONTENT.bio.personal)).toBe(
-      "Born in Moscow, based in Germany since 2019, a permanent EU resident. I prefer remote work and am open to hybrid.",
+      "Born in Moscow, based in Germany since 2019, a permanent EU resident.\nI prefer remote work and am open to hybrid.",
     );
   });
 

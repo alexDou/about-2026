@@ -15,7 +15,7 @@ Feature: Open and close a Panel
       | /chat      | Chat with me |
       | /contact   | Contact      |
 
-  Scenario: The default Board has the site title and no heading
+  Scenario: The default Explore has the site title and no heading
     When I open "/explore"
     Then there is no page heading
     And the document title is "A.Durnev portfolio"
@@ -36,23 +36,23 @@ Feature: Open and close a Panel
     And the page heading has focus
     And the document title is "Contact · A.Durnev portfolio"
 
-  Scenario: The close button returns to the default Board and focus to the Panel
+  Scenario: The close button returns to the default Explore and focus to the Panel
     Given I open "/explore"
     And I click the Panel "Skills"
     When I click the close button "Close Skills"
     Then I am on "/explore"
     And there is no page heading
     And the Panel "Skills" has focus
-    And the Board lists the five Panels
+    And Explore lists the five Panels
 
-  Scenario: Escape returns to the default Board and focus to the Panel
+  Scenario: Escape returns to the default Explore and focus to the Panel
     Given I open "/explore"
     And I click the Panel "Contact"
     And the page heading reads "Contact"
     When I press Escape
     Then I am on "/explore"
     And the Panel "Contact" has focus
-    And the Board lists the five Panels
+    And Explore lists the five Panels
 
   Scenario: Clicking the Expanded panel itself does nothing
     Given I open "/skills"
@@ -60,9 +60,11 @@ Feature: Open and close a Panel
     Then I am on "/skills"
     And the page heading reads "Skills"
 
-  Scenario: The close button is a titled circle whose icon screen readers skip
+  Scenario: The close button is a titled corner, exactly in the Expanded panel's top-right corner
     When I open "/skills"
-    Then the close button "Close Skills" has its icon hidden from screen readers
+    Then the close button "Close Skills" is titled by its label
+    And the close button is a target of at least 24 by 24 pixels
+    And the close button sits in the Expanded panel's top-right corner
 
   Scenario: Every change is a history entry and Back and Forward walk through them
     Given I open "/explore"
@@ -90,9 +92,32 @@ Feature: Open and close a Panel
     And the page content is 2000px tall
     Then the Stripes are narrower than 120px and run top to bottom
     When I scroll down 100px
-    Then the Stripes and the close button are still in view
+    Then the Stripes are still in view
+    And the close button sits in the Expanded panel's top-right corner
 
-  Scenario: Every Board state starts at the top
+  Scenario: On a wide screen the About badges share one line, half over the top card
+    Given the window is 1280 by 800
+    When I open "/about"
+    Then the close button covers none of the badges
+    And the six badges share one line
+    And the top card's top border runs through the badges' middle
+
+  Scenario: Up to 1056px wide the About badges sit in rows of three above the top card
+    Given the window is 1000 by 800
+    When I open "/about"
+    Then the close button covers none of the badges
+    And the badges sit in rows of three above the top card
+
+  Scenario: On a phone the close button stays in the Expanded panel's top-right corner
+    Given the window is 375 by 667
+    When I open "/about"
+    And the page content is 2000px tall
+    Then the close button covers none of the badges
+    And the badges sit in rows of three above the top card
+    When I scroll down 300px
+    Then the close button sits in the Expanded panel's top-right corner
+
+  Scenario: Every Explore state starts at the top
     Given the window is 1280 by 400
     And I open "/about"
     When I scroll down 100px

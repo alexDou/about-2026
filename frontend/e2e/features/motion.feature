@@ -1,4 +1,4 @@
-Feature: The Board's route changes play as View Transitions
+Feature: Explore's route changes play as View Transitions
 
   Background:
     Given the visitor accepts motion
@@ -61,7 +61,7 @@ Feature: The Board's route changes play as View Transitions
     And every slot and view resizes over 500ms, "ease-in-out"
     And no view fades in
 
-  Scenario: Leaving the Board for the Landing plays no View Transition
+  Scenario: Leaving Explore for the Landing plays no View Transition
     Given I open the landing page
     When I click the logo
     And the unfold has ended
@@ -83,4 +83,4 @@ Feature: The Board's route changes play as View Transitions
     When I click the close button "Close Contact"
     Then a View Transition of type "close" plays
     And nothing animates in it
-    And the Board lists the five Panels
+    And Explore lists the five Panels

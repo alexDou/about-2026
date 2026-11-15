@@ -1,0 +1,190 @@
+import { fireEvent, screen, waitFor } from "@octanejs/testing-library";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { clickHandledByApp, renderExploreAt } from "./helpers";
+
+const themeColor = () =>
+  document.querySelector<HTMLMetaElement>('meta[name="theme-color"]')?.content;
+
+describe("Explore", () => {
+  // The router scrolls to the top on every navigation; jsdom has no scrolling.
+  beforeEach(() => vi.spyOn(window, "scrollTo").mockImplementation(() => {}));
+  afterEach(() => {
+    vi.restoreAllMocks();
+    window.history.replaceState(null, "", "/");
+  });
+
+  it("plays its entrance on the main landmark", async () => {
+    await renderExploreAt("/explore");
+    expect(screen.getByRole("main")).toHaveClass("explore");
+  });
+
+  describe("with no Panel open", () => {
+    it("lists the five Panel titles in order as links to their URLs", async () => {
+      await renderExploreAt("/explore");
+      const links = screen.getAllByRole("link");
+      expect(links.map((a) => [a.textContent, a.getAttribute("href")])).toEqual([
+        ["About", "/about"],
+        ["What I do", "/what-i-do"],
+        ["Skills", "/skills"],
+        ["Chat with me", "/chat"],
+        ["Contact", "/contact"],
+      ]);
+    });
+
+    it("gives each Panel its tone by position", async () => {
+      await renderExploreAt("/explore");
+      const items = screen.getAllByRole("listitem");
+      ["ink", "mist", "teal", "blue", "green"].forEach((tone, i) =>
+        expect(items[i]).toHaveClass(`slot--${tone}`),
+      );
+    });
+
+    it("shows Sublabels on What I do and Chat with me only", async () => {
+      await renderExploreAt("/explore");
+      const items = screen.getAllByRole("listitem").map((item) => item.textContent);
+      expect(items).toEqual([
+        "About",
+        "What I do36 Takeovers",
+        "Skills",
+        "Chat with meAI agent trained on my data",
+        "Contact",
+      ]);
+    });
+
+    it("takes the titles from the messages", async () => {
+      await renderExploreAt("/explore", { "explore.panel.about.title": "Über mich" });
+      expect(screen.getByRole("link", { name: "Über mich" })).toHaveAttribute("href", "/about");
+    });
+
+    it("handles a plain click in the app, without a reload", async () => {
+      await renderExploreAt("/explore");
+      expect(clickHandledByApp(screen.getByRole("link", { name: "Skills" }))).toBe(true);
+      await waitFor(() => expect(window.location.pathname).toBe("/skills"));
+    });
+
+    it.each([
+      ["Ctrl", { ctrlKey: true }],
+      ["Meta", { metaKey: true }],
+      ["middle", { button: 1 }],
+    ])("leaves a %s click to the browser", async (_name, init) => {
+      await renderExploreAt("/explore");
+      expect(clickHandledByApp(screen.getByRole("link", { name: "Skills" }), init)).toBe(false);
+    });
+
+    it("has no close button", async () => {
+      await renderExploreAt("/explore");
+      expect(screen.queryByRole("button")).not.toBeInTheDocument();
+    });
+  });
+
+  describe("with a Panel open", () => {
+    it("shows the page in the Expanded panel and the other four Panels as Stripes, in order", async () => {
+      await renderExploreAt("/skills");
+      const items = screen.getAllByRole("listitem");
+      expect(items.map((item) => item.textContent?.trim())).toEqual([
+        "About",
+        "What I do",
+        "The page",
+        "Chat with me",
+        "Contact",
+      ]);
+      expect(items[2]).toHaveClass("slot--expanded", "slot--teal");
+      expect(items[0]).toHaveClass("slot--stripe", "slot--ink");
+      expect(
+        screen.getAllByRole("link").map((a) => [a.textContent, a.getAttribute("href")]),
+      ).toEqual([
+        ["About", "/about"],
+        ["What I do", "/what-i-do"],
+        ["Chat with me", "/chat"],
+        ["Contact", "/contact"],
+      ]);
+    });
+
+    it("shows no Sublabels", async () => {
+      await renderExploreAt("/skills");
+      expect(screen.queryByText("36 Takeovers")).not.toBeInTheDocument();
+      expect(screen.queryByText("AI agent trained on my data")).not.toBeInTheDocument();
+    });
+
+    it("opens another Panel, as a new history entry, on a click on its Stripe", async () => {
+      await renderExploreAt("/skills");
+      const entries = window.history.length;
+
+      fireEvent.click(screen.getByRole("link", { name: "Contact" }));
+      await waitFor(() => expect(window.location.pathname).toBe("/contact"));
+      expect(window.history.length).toBe(entries + 1);
+    });
+
+    it("leaves a modified click on a Stripe to the browser", async () => {
+      await renderExploreAt("/skills");
+
+      expect(
+        clickHandledByApp(screen.getByRole("link", { name: "Contact" }), { ctrlKey: true }),
+      ).toBe(false);
+    });
+
+    it("closes to /explore, as a new history entry, on the close button", async () => {
+      await renderExploreAt("/skills");
+      const entries = window.history.length;
+
+      fireEvent.click(screen.getByRole("button", { name: "Close Skills" }));
+      await waitFor(() => expect(window.location.pathname).toBe("/explore"));
+      expect(window.history.length).toBe(entries + 1);
+    });
+
+    it("closes to /explore on Escape", async () => {
+      await renderExploreAt("/skills");
+
+      fireEvent.keyDown(document, { key: "Escape" });
+      await waitFor(() => expect(window.location.pathname).toBe("/explore"));
+    });
+
+    it("titles the close button from the messages", async () => {
+      await renderExploreAt("/skills", { "explore.panel.skills.close": "Skills schließen" });
+      expect(screen.getByRole("button", { name: "Skills schließen" })).toBeInTheDocument();
+    });
+  });
+
+  describe("the document", () => {
+    beforeEach(() => {
+      document.head.innerHTML =
+        '<meta name="theme-color" content="#182223"><title>A.Durnev portfolio</title>';
+      document.documentElement.style.setProperty("--panel-skills", "#67b3a8");
+    });
+    afterEach(() => {
+      document.head.innerHTML = "";
+      document.documentElement.removeAttribute("style");
+    });
+
+    it("keeps the site title and colour while no Panel is open", async () => {
+      await renderExploreAt("/explore");
+      expect(document.title).toBe("A.Durnev portfolio");
+      expect(themeColor()).toBe("#182223");
+    });
+
+    it("is titled and coloured by the Expanded panel", async () => {
+      await renderExploreAt("/skills");
+      expect(document.title).toBe("Skills · A.Durnev portfolio");
+      expect(themeColor()).toBe("#67b3a8");
+    });
+
+    it("takes the title from the messages", async () => {
+      await renderExploreAt("/skills", { "explore.expanded.documentTitle": "{site} / {panel}" });
+      expect(document.title).toBe("A.Durnev portfolio / Skills");
+    });
+
+    it("gives the title and colour back when the Panel closes, Explore staying on screen", async () => {
+      await renderExploreAt("/skills");
+      fireEvent.click(screen.getByRole("button", { name: "Close Skills" }));
+      await waitFor(() => expect(document.title).toBe("A.Durnev portfolio"));
+      expect(themeColor()).toBe("#182223");
+    });
+
+    it("gives the title and colour back when Explore goes away", async () => {
+      const { unmount } = await renderExploreAt("/skills");
+      unmount();
+      expect(document.title).toBe("A.Durnev portfolio");
+      expect(themeColor()).toBe("#182223");
+    });
+  });
+});

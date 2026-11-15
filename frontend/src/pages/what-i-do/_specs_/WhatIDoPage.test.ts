@@ -13,7 +13,7 @@ describe("WhatIDoPage", () => {
   it("takes the heading from the messages", () => {
     render(WhatIDoPage, {
       props: {},
-      wrapper: intlWrapper({ "board.panel.whatIDo.title": "Titel" }),
+      wrapper: intlWrapper({ "explore.panel.whatIDo.title": "Titel" }),
     });
     expect(screen.getByRole("heading", { name: "Titel" })).toBeInTheDocument();
   });

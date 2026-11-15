@@ -21,4 +21,4 @@ The degree as in the CV, plus one business-level sentence on the product and bus
 - Degree: Marketing Management and Financial Analysis
 - School: State University of Management, Moscow
 - Year: 2002
-- Business sentence: "My training in business operations, financial management, marketing and statistics shapes how I engineer: I read a requirement the way the business reads it, weigh every design choice against its cost and return, and measure whether the product delivers what the market wanted."
+- Business sentence: "My training in business operations, financial management, marketing and statistics shapes how I engineer: I read a requirement the way the business reads it, weigh every design choice against its cost and return, and measure whether the product delivers what the market demands."

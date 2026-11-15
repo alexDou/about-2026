@@ -7,6 +7,6 @@ export function SkillsPage() @{
   const intl = useIntl();
 
   <section class={styles["skills-page"]}>
-    <Heading text={intl.formatMessage({ id: "board.panel.skills.title" })} />
+    <Heading text={intl.formatMessage({ id: "explore.panel.skills.title" })} />
   </section>;
 }

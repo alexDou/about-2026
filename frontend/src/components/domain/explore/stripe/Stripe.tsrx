@@ -1,0 +1,11 @@
+import styles from "./styles.module.css";
+import type { StripeProps } from "./types";
+
+/** A Panel squeezed to Explore's edge while another is expanded: its title as one big link. */
+export function Stripe({ title, href, onClick }: StripeProps) @{
+  <div class={styles["stripe"]}>
+    <a class={styles["stripe__link"]} href={href} onClick={onClick}>
+      {title}
+    </a>
+  </div>;
+}

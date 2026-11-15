@@ -49,14 +49,18 @@ describe("AboutPage", () => {
       "Full-Stack Developer",
       "Full-Stack Web Developer",
       "Marketing Management and Financial Analysis",
+      "Technologies",
+      "Science",
+      "History and travel",
+      "Sport",
+      "Art",
     ]);
-    expect(screen.getByText("Science")).toBeInTheDocument();
   });
 
   it("takes the heading from the messages", () => {
     render(AboutPage, {
       props: {},
-      wrapper: intlWrapper({ "board.panel.about.title": "Titel" }),
+      wrapper: intlWrapper({ "explore.panel.about.title": "Titel" }),
     });
     expect(screen.getByRole("heading", { name: "Titel" })).toBeInTheDocument();
   });

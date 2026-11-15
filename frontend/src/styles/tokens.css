@@ -6,12 +6,17 @@
   --color-muted: #8a8aa3;
   color-scheme: dark;
 
-  /* Panel palette (Board). */
+  /* Panel palette (Explore). */
   --panel-about: #25363a;
   --panel-what-i-do: #d1dcd9;
   --panel-skills: #67b3a8;
   --panel-chat: #4c839f;
   --panel-contact: #5c8b70;
+
+  /* The corner close button's red: a muted vermilion, the warm counterpart to the cool panels. */
+  --color-accent: #e4572e;
+
+  --element-distance-standard: 1.8rem;
 
   /* Text colours: on dark and on light backgrounds. */
   --text-on-dark: var(--panel-what-i-do);
@@ -22,8 +27,8 @@
   --label-gap-top: 1.2rem;
   --label-gap-bottom: 0.6rem;
 
-  /* The Board's entrance, the unfold of the pen. Titles wait for the last of the five Panels. */
-  --enter-board: 300ms;
+  /* Explore's entrance, the unfold of the pen. Titles wait for the last of the five Panels. */
+  --enter-explore: 300ms;
   --enter-stagger: 150ms;
   --enter-panel: 950ms;
   --enter-title: 140ms;
@@ -32,7 +37,7 @@
   --enter-ease: cubic-bezier(0.37, 0, 0.63, 1);
 
   /*
-   * The expand and collapse sequence (Board): the Panels' content fades (120ms), the slots change
+   * The expand and collapse sequence (Explore): the Panels' content fades (120ms), the slots change
    * size (500ms), then the Stripes (400ms) and the Expanded panel's content (150ms) fade in.
    * Every step is instant under reduced motion (the Slot's CSS switches the transitions off).
    */
@@ -42,12 +47,17 @@
   --seq-stripe-fade: 400ms;
   --seq-expanded-fade: 150ms;
 
-  --font-site: "Overused Grotesk", system-ui, sans-serif;
+  /* The Panels' and Stripes' titles. */
+  --font-panel: "Overused Grotesk", system-ui, sans-serif;
+  /* The site's text. */
+  --font-site: "Amethysta", serif;
   /* About's greeting and section headings. */
-  --font-greeting: "Playfair Display", Georgia, serif;
+  --font-heading: "Playfair Display", Georgia, serif;
+  --line-height-site: 1.4;
+  --line-height-heading: 1.28;
 }
 
-/* A phone window as short as the Board's 420px minimum leaves rows of 84px: keep the Sublabel in. */
+/* A phone window as short as Explore's 420px minimum leaves rows of 84px: keep the Sublabel in. */
 @media (width < 840px) and (max-height: 460px) {
   :root {
     --label-gap-top: 0.8rem;

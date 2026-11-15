@@ -11,7 +11,7 @@ Feature: Offline note in Chat with me and Contact
       | /chat    | Chat with me |
       | /contact | Contact      |
 
-  Scenario: The note shows when the Panel opens from the Board
+  Scenario: The note shows when the Panel opens from Explore
     Given the backend is unreachable
     And I open "/explore"
     When I click the Panel "Chat with me"

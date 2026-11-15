@@ -37,7 +37,7 @@ export function AboutPage() @{
 
   <section class={styles["about-page"]}>
     // Read, not seen: the badges and the card open the page, as in the reference.
-    <Heading text={intl.formatMessage({ id: "board.panel.about.title" })} visuallyHidden />
+    <Heading text={intl.formatMessage({ id: "explore.panel.about.title" })} visuallyHidden />
     <AboutStatusBadges badges={ABOUT_CONTENT.badges} />
     <AboutTopCard content={ABOUT_CONTENT} media={TOP_CARD_MEDIA} />
     <div class={styles["about-page__cards"]}>
