@@ -1,11 +1,11 @@
 ---
 # portfolio-18oz
 title: 'Unit 2: About'
-status: todo
+status: completed
 type: epic
 priority: normal
 created_at: 2026-11-06T20:27:21Z
-updated_at: 2026-11-13T16:24:33Z
+updated_at: 2026-11-15T15:45:11Z
 parent: portfolio-4ur0
 blocked_by:
     - portfolio-m9gt
@@ -76,3 +76,9 @@ Child beans, in dependency order (each lists its blockers):
 - portfolio-04f9 Unit 2.N: About E2E
 
 The epic is done when every child bean is completed. Outside it: portfolio-yhih (the new CV, replaces 2.6's file at the same path) and portfolio-z9ns (node burst in the logo, draft).
+
+## Summary of Changes
+
+All eight stage beans are completed (2.0 content contract, 2.1 content, 2.2 assets, 2.3 badges, 2.4 top card, 2.5 lower cards, 2.6 CV link, 2.N E2E). About shows the top card with greeting, six badges and photo, then Bio, Experience, Education, Languages and Hobbies, and the CV download, with the final content. E2E: `frontend/e2e/features/about.feature` (8 scenarios); full suite 89/89, `scripts/verify.sh` GREEN.
+
+Outside the epic: portfolio-yhih (the new CV, same path) and portfolio-z9ns (node burst in the logo).
