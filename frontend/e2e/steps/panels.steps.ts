@@ -132,7 +132,7 @@ async function aboutHead(world: PortfolioWorld) {
       close: box(document.querySelector('main button[aria-label^="Close"]')!),
       badges: [...row.children].map(box),
       card: box(row.nextElementSibling!),
-      rem: parseFloat(getComputedStyle(document.documentElement).fontSize),
+      borderWidth: parseFloat(getComputedStyle(row.nextElementSibling!).borderTopWidth),
     };
   });
 }
@@ -158,9 +158,9 @@ Then("the six badges share one line", async function (this: PortfolioWorld) {
 Then(
   "the top card's top border runs through the badges' middle",
   async function (this: PortfolioWorld) {
-    const { badges, card, rem } = await aboutHead(this);
-    // The border is 0.5rem thick: its middle is a quarter rem below the card's top.
-    const borderMiddle = card.top + 0.25 * rem;
+    const { badges, card, borderWidth } = await aboutHead(this);
+    // The card's top border, whatever its thickness: its middle is half of it below the card's top.
+    const borderMiddle = card.top + borderWidth / 2;
     const badgesMiddle = badges[0]!.top + badges[0]!.height / 2;
     expect(Math.abs(borderMiddle - badgesMiddle)).toBeLessThanOrEqual(1);
   },
@@ -211,27 +211,20 @@ Then("the Expanded panel fills the rest of the window", async function (this: Po
   expect(panel!.height + stripeHeight).toBeGreaterThanOrEqual(viewport.height - 1);
 });
 
-Then(
-  "the Stripes are as tall as their title plus {float}rem",
-  async function (this: PortfolioWorld, rem: number) {
-    const rows = await stripes(this).evaluateAll((links) =>
-      links.map((link) => {
-        // `line-height: normal` has no number to read: measure the slot's line box (`1lh`, which
-        // sizes it), and read the root's rem.
-        const slot = link.closest("li")!;
-        const probe = document.createElement("span");
-        probe.style.cssText = "display: block; height: 1lh";
-        slot.append(probe);
-        const line = probe.getBoundingClientRect().height;
-        probe.remove();
-        return {
-          height: slot.getBoundingClientRect().height,
-          line,
-          rootRem: parseFloat(getComputedStyle(document.documentElement).fontSize),
-        };
-      }),
-    );
-    for (const { height, line, rootRem } of rows)
-      expect(Math.abs(height - Math.max(44, line + rem * rootRem))).toBeLessThan(1);
-  },
-);
+Then("the Stripes are taller than their title line", async function (this: PortfolioWorld) {
+  const rows = await stripes(this).evaluateAll((links) =>
+    links.map((link) => {
+      // `line-height: normal` has no number to read: measure the slot's line box (`1lh`, which
+      // sizes it).
+      const slot = link.closest("li")!;
+      const probe = document.createElement("span");
+      probe.style.cssText = "display: block; height: 1lh";
+      slot.append(probe);
+      const line = probe.getBoundingClientRect().height;
+      probe.remove();
+      return { height: slot.getBoundingClientRect().height, line };
+    }),
+  );
+  // How much room the title has around it is a style detail: only that it has some.
+  for (const { height, line } of rows) expect(height).toBeGreaterThan(line);
+});

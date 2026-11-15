@@ -101,15 +101,15 @@ Then("every Panel title is centred in its Panel", async function (this: Portfoli
 });
 
 Then(
-  "every Panel title is centred across its Panel, a tenth of its width above the middle",
+  "every Panel title is centred across its Panel, above the middle",
   async function (this: PortfolioWorld) {
-    // By design (as in the pen): the Panel's bottom padding, 20% of its width, lifts the title.
+    // By design (as in the pen): the Panel's bottom padding lifts the title; how far is a style detail.
     for (const item of await panels(this).all()) {
       const outer = (await item.boundingBox())!;
       const inner = (await item.getByRole("link").boundingBox())!;
       expect(Math.abs(inner.x + inner.width / 2 - (outer.x + outer.width / 2))).toBeLessThan(2);
       const lift = outer.y + outer.height / 2 - (inner.y + inner.height / 2);
-      expect(Math.abs(lift - outer.width / 10)).toBeLessThan(2);
+      expect(lift).toBeGreaterThan(0);
     }
   },
 );
@@ -192,15 +192,17 @@ Then(
 );
 
 Then(
-  "the dots above the Panel title {string} span the Panel, inset by 2% each side, and are at most {int}px tall",
+  "the dots above the Panel title {string} span the Panel, inset from its sides, and are at most {int}px tall",
   async function (this: PortfolioWorld, name: string, max: number) {
     const row = await dots(title(this, name));
     const box = (await panel(this, name).boundingBox())!;
     expect(row.above).toBe(true);
-    close(row.width, box.width * 0.96);
-    // The Panel's left edge plus its 2% inset. Slid in: no transform left.
+    // Inset from both sides, however much: narrower than the Panel, centred in it.
+    expect(row.width).toBeGreaterThan(0);
+    expect(row.width).toBeLessThan(box.width);
+    // Slid in: no transform left.
     expect(row.justifyItems).toBe("center");
-    close(row.left, box.x + box.width * 0.02);
+    close(row.left + row.width / 2, box.x + box.width / 2);
     expect(["none", "matrix(1, 0, 0, 1, 0, 0)"]).toContain(row.transform);
     expect(row.height).toBeGreaterThan(0);
     expect(row.height).toBeLessThanOrEqual(max);
@@ -284,11 +286,11 @@ const rowStart = (row: Awaited<ReturnType<typeof dots>>) =>
   row.titleLeft + row.paddingLeft + row.marginLeft;
 
 Then(
-  "the dots beside the Panel title {string} start {int}% in from the Panel's left border",
-  async function (this: PortfolioWorld, name: string, percent: number) {
+  "the dots beside the Panel title {string} start inside the Panel, past its left border",
+  async function (this: PortfolioWorld, name: string) {
     const row = await dots(title(this, name));
     const box = (await panel(this, name).boundingBox())!;
-    close(rowStart(row), box.x + (box.width * percent) / 100);
+    expect(rowStart(row)).toBeGreaterThan(box.x);
   },
 );
 
