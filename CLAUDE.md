@@ -27,7 +27,7 @@
 ## Rules (`.claude/rules/`)
 
 - `structure.md` is always loaded: where files go, the colocation rule.
-- `frontend.md`, `backend.md` and `api-contract.md` load automatically when you read or edit a file under their `paths`.
+- `frontend.md`, `backend.md`, `api-contract.md` and `opengrep.md` load automatically when you read or edit a file under their `paths`.
 
 ## Workflow
 

@@ -10,6 +10,7 @@
     "typecheck": "tsrs --noEmit --fast --runExternalCode",
     "lint": "oxlint",
     "cycles": "node tools/import-cycles.ts src e2e tools",
+    "scan:tsrx": "node tools/opengrep-tsrx.ts ../.opengrep/rules src",
     "fmt": "oxfmt",
     "fmt:check": "oxfmt --check",
     "test": "vitest run",
