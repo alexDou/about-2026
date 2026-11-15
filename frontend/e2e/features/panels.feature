@@ -142,5 +142,5 @@ Feature: Open and close a Panel
     Given the window is 375 by 667
     When I open "/skills"
     Then the Stripes are rows at least 44px tall, with no Sublabel
-    And the Stripes are as tall as their title plus 1.5rem
+    And the Stripes are taller than their title line
     And the Expanded panel fills the rest of the window

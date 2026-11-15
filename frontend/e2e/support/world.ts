@@ -8,7 +8,7 @@ import {
   World,
 } from "@cucumber/cucumber";
 import { chromium } from "@playwright/test";
-import type { Browser, BrowserContext, Page } from "@playwright/test";
+import type { Browser, BrowserContext, Download, Page } from "@playwright/test";
 import { startStaticServer } from "./static-server.ts";
 import type { StaticServer } from "./static-server.ts";
 
@@ -36,6 +36,8 @@ export class PortfolioWorld extends World {
   context!: BrowserContext;
   page!: Page;
   fetchedText = "";
+  /** The last download a scenario triggered (`about.steps.ts`). */
+  download?: Download;
   /** How many recorded View Transitions the scenario has checked, and the last one. */
   transitionsSeen = 0;
   transition?: RecordedTransition;

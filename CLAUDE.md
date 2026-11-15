@@ -28,6 +28,7 @@
 
 - `structure.md` is always loaded: where files go, the colocation rule.
 - `frontend.md`, `backend.md` and `api-contract.md` load automatically when you read or edit a file under their `paths`.
+- `testing.md` loads for test files: check presence, composition, palette, layout mode and functionality, never the exact value of a padding, margin or gap.
 
 ## Workflow
 

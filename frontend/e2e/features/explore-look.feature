@@ -21,7 +21,7 @@ Feature: Default Explore look
     Given the window is 1280 by 800
     When I open "/explore"
     Then the Panels are 5 equal columns filling the window
-    And every Panel title is centred across its Panel, a tenth of its width above the middle
+    And every Panel title is centred across its Panel, above the middle
 
   Scenario: A short desktop window keeps Explore at least 32rem tall
     Given the window is 1280 by 400
@@ -76,7 +76,7 @@ Feature: Default Explore look
     Then the dots above the Panel title "Skills" are hidden
     When I hover the Panel title "Skills"
     Then the dots above the Panel title "Skills" are shown
-    And the dots above the Panel title "Skills" span the Panel, inset by 2% each side, and are at most 8px tall
+    And the dots above the Panel title "Skills" span the Panel, inset from its sides, and are at most 8px tall
     And the dots above the Panel title "Skills" end above the title at the top label gap
     And the dots above the Panel title "Skills" are moving
     When I move the pointer away
@@ -92,7 +92,7 @@ Feature: Default Explore look
     When I hover the Panel title "Chat with me"
     Then the dots beside the Panel title "Chat with me" are shown
     And the dots beside the Panel title "Chat with me" are a row at most 8px tall, longer than 4 dots
-    And the dots beside the Panel title "Chat with me" start 4% in from the Panel's left border
+    And the dots beside the Panel title "Chat with me" start inside the Panel, past its left border
     And the dots beside the Panel title "Chat with me" are centred on the title's height
     And the dots beside the Panel title "Chat with me" are moving
 
