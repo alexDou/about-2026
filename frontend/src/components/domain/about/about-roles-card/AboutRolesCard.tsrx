@@ -1,7 +1,7 @@
 import { Card } from "../../../ui/card";
 import { CardHeading } from "../../../ui/card-heading";
 import { useIntl } from "../../../../hooks/use-intl";
-import { RoleEntry } from "./components/role-entry";
+import { RoleEntry } from "./role-entry";
 import styles from "./styles.module.css";
 import type { AboutRolesCardProps } from "./types";
 

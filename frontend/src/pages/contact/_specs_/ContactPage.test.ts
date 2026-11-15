@@ -25,7 +25,7 @@ describe("ContactPage", () => {
   it("takes the heading from the messages", () => {
     render(ContactPage, {
       props: {},
-      wrapper: intlWrapper({ "board.panel.contact.title": "Titel" }),
+      wrapper: intlWrapper({ "explore.panel.contact.title": "Titel" }),
     });
     expect(screen.getByRole("heading", { name: "Titel" })).toBeInTheDocument();
   });

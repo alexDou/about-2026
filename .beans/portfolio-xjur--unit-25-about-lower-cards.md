@@ -7,7 +7,7 @@ priority: normal
 tags:
     - ready-for-agent
 created_at: 2026-11-12T16:19:41Z
-updated_at: 2026-11-14T16:34:52Z
+updated_at: 2026-11-14T17:21:25Z
 parent: portfolio-18oz
 blocked_by:
     - portfolio-3wkt
@@ -47,3 +47,8 @@ The cards below the top card, in order: Bio; Roles; Education; Languages and Hob
 - Section headings are my wording (Bio, Experience, Education, Languages, Hobbies): not Owner-approved text, confirm or change.
 - Review (Standards and Spec axes): separators and label colon moved into messages, Languages and Hobbies card takes only its two headings, duplicate `aria-label` dropped. Left as is: `Card` and the top card still style the same surface twice (top card has its own ridge border; a follow-up could build it on `Card`); `role-entry` is tested through `AboutRolesCard`.
 - `scripts/verify.sh` GREEN; `pnpm e2e` 77/77 green (run before the review fixes).
+
+## Follow-up corrections (2026-11-14)
+
+- Owner's wording fixes in `about.json` and `docs_src/about/` (Bio line break on its own line, Autodoc, Tipico, Zovolt and Self-employed highlights, Education sentence, Hobbies; half-marathon year 2025).
+- Spacing: the gap under the top card and the space under the last card are both 4rem (`--about-page-edge-gap`); the lower cards keep 1.5rem between them.

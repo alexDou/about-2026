@@ -13,7 +13,7 @@ describe("SkillsPage", () => {
   it("takes the heading from the messages", () => {
     render(SkillsPage, {
       props: {},
-      wrapper: intlWrapper({ "board.panel.skills.title": "Titel" }),
+      wrapper: intlWrapper({ "explore.panel.skills.title": "Titel" }),
     });
     expect(screen.getByRole("heading", { name: "Titel" })).toBeInTheDocument();
   });

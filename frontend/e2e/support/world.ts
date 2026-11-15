@@ -62,7 +62,7 @@ AfterAll(async function () {
 });
 
 Before(async function (this: PortfolioWorld) {
-  // The Board unfolds on every mount, so measuring scenarios would catch the Panels mid-flight.
+  // Explore unfolds on every mount, so measuring scenarios would catch the Panels mid-flight.
   // Reduced motion shows the end state at once; scenarios about the unfold accept motion.
   this.context = await browser.newContext({ reducedMotion: "reduce" });
   this.page = await this.context.newPage();

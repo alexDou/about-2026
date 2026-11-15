@@ -1,0 +1,88 @@
+{
+  "explore.expanded.documentTitle": [
+    {
+      "type": 1,
+      "value": "panel"
+    },
+    {
+      "type": 0,
+      "value": " · "
+    },
+    {
+      "type": 1,
+      "value": "site"
+    }
+  ],
+  "explore.panel.about.close": [
+    {
+      "type": 0,
+      "value": "Close About"
+    }
+  ],
+  "explore.panel.about.title": [
+    {
+      "type": 0,
+      "value": "About"
+    }
+  ],
+  "explore.panel.chatWithMe.close": [
+    {
+      "type": 0,
+      "value": "Close Chat with me"
+    }
+  ],
+  "explore.panel.chatWithMe.sublabel": [
+    {
+      "type": 0,
+      "value": "AI agent trained on my data"
+    }
+  ],
+  "explore.panel.chatWithMe.title": [
+    {
+      "type": 0,
+      "value": "Chat with me"
+    }
+  ],
+  "explore.panel.contact.close": [
+    {
+      "type": 0,
+      "value": "Close Contact"
+    }
+  ],
+  "explore.panel.contact.title": [
+    {
+      "type": 0,
+      "value": "Contact"
+    }
+  ],
+  "explore.panel.skills.close": [
+    {
+      "type": 0,
+      "value": "Close Skills"
+    }
+  ],
+  "explore.panel.skills.title": [
+    {
+      "type": 0,
+      "value": "Skills"
+    }
+  ],
+  "explore.panel.whatIDo.close": [
+    {
+      "type": 0,
+      "value": "Close What I do"
+    }
+  ],
+  "explore.panel.whatIDo.sublabel": [
+    {
+      "type": 0,
+      "value": "36 Takeovers"
+    }
+  ],
+  "explore.panel.whatIDo.title": [
+    {
+      "type": 0,
+      "value": "What I do"
+    }
+  ]
+}

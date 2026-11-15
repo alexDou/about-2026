@@ -1,10 +1,10 @@
 /** The Landing's URL. */
 export const LANDING_PATH = "/";
 
-/** The URL of the Board with no Panel open. */
-export const BOARD_PATH = "/explore";
+/** The URL of Explore with no Panel open. */
+export const EXPLORE_PATH = "/explore";
 
-/** The Board's Panels, in Board order. */
+/** Explore's Panels, in Explore order. */
 export const PANEL_IDS = ["about", "whatIDo", "skills", "chatWithMe", "contact"] as const;
 
 /** The URL of each Panel when it is the Expanded panel. */
@@ -16,5 +16,5 @@ export const PANEL_PATHS = {
   contact: "/contact",
 } as const satisfies Record<(typeof PANEL_IDS)[number], `/${string}`>;
 
-/** The two states the Board is in: no Panel open, or one Expanded panel. */
-export const BOARD_KIND = { default: "default", expanded: "expanded" } as const;
+/** The two states Explore is in: no Panel open, or one Expanded panel. */
+export const EXPLORE_KIND = { default: "default", expanded: "expanded" } as const;

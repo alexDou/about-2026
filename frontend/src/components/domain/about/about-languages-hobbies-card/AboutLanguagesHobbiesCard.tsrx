@@ -39,9 +39,9 @@ export function AboutLanguagesHobbiesCard({
         <ul class={styles["about-languages-hobbies-card__list"]}>
           @for (const hobby of hobbies; key hobby.name) {
             <li>
-              <span class={styles["about-languages-hobbies-card__hobby-name"]}>
+              <h3 class={styles["about-languages-hobbies-card__hobby-name"]}>
                 {intl.formatMessage({ id: hobby.name })}
-              </span>
+              </h3>
               <span class={styles["about-languages-hobbies-card__hobby-text"]}>
                 {intl.formatMessage({ id: hobby.text })}
               </span>

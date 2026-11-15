@@ -65,9 +65,9 @@ function unformattable(messages: Record<string, unknown>): string[] {
 const en = (id: string) => format(enMessages, id);
 
 describe("English message files", () => {
-  it("include the site, the Landing, the Board, the offline note and About", () => {
+  it("include the site, the Landing, Explore, the offline note and About", () => {
     expect(EN_FILES.map((file) => file.area)).toEqual(
-      expect.arrayContaining(["about", "board", "landing", "offline", "site"]),
+      expect.arrayContaining(["about", "explore", "landing", "offline", "site"]),
     );
   });
 
@@ -86,14 +86,14 @@ describe("English messages", () => {
   });
 
   it("title every Panel and label its close button", () => {
-    expect(PANEL_IDS.map((panel) => en(`board.panel.${panel}.title`))).toEqual([
+    expect(PANEL_IDS.map((panel) => en(`explore.panel.${panel}.title`))).toEqual([
       "About",
       "What I do",
       "Skills",
       "Chat with me",
       "Contact",
     ]);
-    expect(PANEL_IDS.map((panel) => en(`board.panel.${panel}.close`))).toEqual([
+    expect(PANEL_IDS.map((panel) => en(`explore.panel.${panel}.close`))).toEqual([
       "Close About",
       "Close What I do",
       "Close Skills",
@@ -104,14 +104,14 @@ describe("English messages", () => {
 
   it("title the document by Panel and site", () => {
     expect(
-      format(enMessages, "board.expanded.documentTitle", { panel: "Skills", site: "Site" }),
+      format(enMessages, "explore.expanded.documentTitle", { panel: "Skills", site: "Site" }),
     ).toBe("Skills · Site");
   });
 
   it("give Sublabels to What I do and Chat with me only", () => {
     const sublabels = Object.fromEntries(
       PANEL_IDS.map((panel) => {
-        const id = `board.panel.${panel}.sublabel`;
+        const id = `explore.panel.${panel}.sublabel`;
         return [panel, id in enMessages ? en(id) : undefined];
       }),
     );
@@ -144,9 +144,9 @@ describe("MessageId", () => {
   it("accepts the ids of the English messages and rejects any other", () => {
     // Checked by the typecheck (tsrs), not at run time.
     expectTypeOf<
-      "site.title" | "landing.logo.label" | "board.panel.skills.title"
+      "site.title" | "landing.logo.label" | "explore.panel.skills.title"
     >().toExtend<MessageId>();
-    expectTypeOf<"board.panel.skills.subtitle">().not.toExtend<MessageId>();
+    expectTypeOf<"explore.panel.skills.subtitle">().not.toExtend<MessageId>();
   });
 });
 

@@ -25,7 +25,7 @@ describe("ChatWithMePage", () => {
   it("takes the heading from the messages", () => {
     render(ChatWithMePage, {
       props: {},
-      wrapper: intlWrapper({ "board.panel.chatWithMe.title": "Titel" }),
+      wrapper: intlWrapper({ "explore.panel.chatWithMe.title": "Titel" }),
     });
     expect(screen.getByRole("heading", { name: "Titel" })).toBeInTheDocument();
   });

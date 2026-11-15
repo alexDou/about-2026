@@ -31,7 +31,13 @@ describe("tokens.css", () => {
     ["--panel-contact", "#5c8b70"],
     ["--text-on-dark", "#d1dcd9"],
     ["--text-on-light", "#25363a"],
-    ["--font-greeting", '"Playfair Display", Georgia, serif'],
+    ["--font-panel", '"Overused Grotesk", system-ui, sans-serif'],
+    ["--font-site", '"Amethysta", serif'],
+    ["--font-heading", '"Playfair Display", Georgia, serif'],
+    ["--line-height-site", "1.4"],
+    ["--line-height-heading", "1.28"],
+    ["--color-accent", "#e4572e"],
+    ["--element-distance-standard", "1.8rem"],
   ])("defines %s as %s", (name, value) => {
     expect(tokens[name]).toBe(value);
   });
@@ -41,7 +47,7 @@ describe("motion tokens", () => {
   const tokens = rootTokens(css("tokens.css"));
 
   it.each([
-    ["--enter-board", "300ms"],
+    ["--enter-explore", "300ms"],
     ["--enter-stagger", "150ms"],
     ["--enter-panel", "950ms"],
     ["--enter-title", "140ms"],
@@ -54,6 +60,8 @@ describe("motion tokens", () => {
 
 /** The shipped size (21.9 KB) plus about a quarter, so a 2x regression fails. */
 const PLAYFAIR_BUDGET_BYTES = 28_000;
+/** The shipped size (24.6 KB) plus about a quarter. */
+const AMETHYSTA_BUDGET_BYTES = 31_000;
 
 describe("fonts.css", () => {
   const fonts = css("fonts.css");
@@ -65,7 +73,23 @@ describe("fonts.css", () => {
     expect(fonts).toMatch(/url\("\.\/fonts\/OverusedGrotesk-VF\.woff2"\)\s*format\("woff2"\)/);
   });
 
-  it("declares Playfair Display, self-hosted and swapping, for About's greeting", () => {
+  it("declares Amethysta, self-hosted and swapping, Latin only, for the site's text", () => {
+    const face = fonts.slice(fonts.indexOf('font-family: "Amethysta"'));
+    expect(face).toMatch(/url\("\.\/fonts\/Amethysta-Regular-latin\.woff2"\)\s*format\("woff2"\)/);
+    expect(face).toMatch(/font-display:\s*swap/);
+    expect(face).toMatch(/unicode-range:\s*U\+0000-00FF,/);
+  });
+
+  it("ships Amethysta as a self-hosted woff2 within its byte budget, under the same OFL", () => {
+    const file = readFileSync(styles("fonts/Amethysta-Regular-latin.woff2"));
+    expect(file.toString("ascii", 0, 4)).toBe("wOF2");
+    expect(file.length).toBeLessThan(AMETHYSTA_BUDGET_BYTES);
+    expect(readFileSync(styles("fonts/OFL.txt"), "utf8")).toContain(
+      'Copyright (c) 2011, Cyreal (www.cyreal.org) with Reserved Font Name "Amethysta"',
+    );
+  });
+
+  it("declares Playfair Display, self-hosted and swapping, for About's headings", () => {
     expect(fonts).toMatch(/font-family:\s*"Playfair Display"/);
     expect(fonts).toMatch(
       /url\("\.\/fonts\/PlayfairDisplay-Regular-latin\.woff2"\)\s*format\("woff2"\)/,
@@ -91,7 +115,17 @@ describe("fonts.css", () => {
 
 describe("global.css", () => {
   it("sets the site font on the body", () => {
-    expect(rootTokens(css("tokens.css"))["--font-site"]).toMatch(/^"Overused Grotesk",/);
     expect(css("global.css")).toMatch(/font-family:\s*var\(--font-site\)/);
+  });
+
+  it("grows the body text with the window from 17px, after a fixed fallback", () => {
+    expect(css("global.css")).toMatch(
+      /font-size:\s*1\.0625rem;\s*font-size:\s*calc\(1\.0625rem \+ [\d.]+rem \* progress\(100vw,/,
+    );
+  });
+
+  it("loads no font from a third party", () => {
+    const html = readFileSync(new URL("../../../index.html", import.meta.url), "utf8");
+    expect(html).not.toMatch(/fonts\.(googleapis|gstatic)\.com/);
   });
 });

@@ -1,7 +1,7 @@
 /* From 1.5rem on a small phone to 1.9rem on a wide screen; a fixed size where progress() is unknown. */
 .card-heading {
   margin: 0;
-  font-family: var(--font-greeting);
+  font-family: var(--font-heading);
   font-size: 1.6rem;
   font-size: calc(1.5rem + 0.4rem * progress(100vw, 22.5rem, 80rem));
   font-weight: 400;

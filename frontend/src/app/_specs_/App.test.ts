@@ -7,7 +7,7 @@ import { RouterProvider } from "../../hooks/use-route";
 import { enMessages } from "../../i18n";
 import { createSiteRouter } from "../router";
 
-const board = () => screen.getByRole("main");
+const explore = () => screen.getByRole("main");
 const panels = () => screen.getAllByRole("listitem");
 const heading = () => screen.getByRole("heading", { level: 1 });
 const logo = () => screen.queryByRole("button", { name: "Portfolio A.Durnev" });
@@ -36,7 +36,7 @@ describe("App", () => {
       vi.fn<typeof fetch>(() => new Promise(() => {})),
     );
     vi.spyOn(window, "scrollTo").mockImplementation(() => {});
-    // jsdom animates nothing, so the Board's entrance and stages would wait for events that never
+    // jsdom animates nothing, so Explore's entrance and stages would wait for events that never
     // come: these tests ask for no motion, as a visitor can. The unfold tests turn motion back on.
     window.matchMedia = ((query: string) =>
       ({
@@ -62,10 +62,10 @@ describe("App", () => {
   });
 
   it.each(["/explore", "/about", "/what-i-do", "/skills", "/chat", "/contact"])(
-    "renders the Board for a direct visit to %s",
+    "renders Explore for a direct visit to %s",
     async (path) => {
       await renderAt(path);
-      expect(board()).toBeInTheDocument();
+      expect(explore()).toBeInTheDocument();
       expect(logo()).not.toBeInTheDocument();
     },
   );
@@ -78,7 +78,7 @@ describe("App", () => {
     expect(window.history.length).toBe(entries);
   });
 
-  it("replaces /explore/ by /explore and shows the Board, without a history entry", async () => {
+  it("replaces /explore/ by /explore and shows Explore, without a history entry", async () => {
     const entries = window.history.length;
     await renderAt("/explore/");
     await waitFor(() => expect(window.location.pathname).toBe("/explore"));
@@ -86,7 +86,7 @@ describe("App", () => {
     expect(window.history.length).toBe(entries);
   });
 
-  it("goes Landing → Board on the logo click, back on Back and forward on Forward", async () => {
+  it("goes Landing → Explore on the logo click, back on Back and forward on Forward", async () => {
     await renderAt("/");
     fireEvent.click(logo()!);
     expect(await screen.findByRole("link", { name: "About" })).toBeInTheDocument();
@@ -100,19 +100,19 @@ describe("App", () => {
     expect(await screen.findByRole("link", { name: "About" })).toBeInTheDocument();
   });
 
-  describe("the Board's unfold", () => {
+  describe("Explore's unfold", () => {
     beforeEach(() => {
       Reflect.deleteProperty(window, "matchMedia");
     });
 
-    it("plays when the logo click opens the Board", async () => {
+    it("plays when the logo click opens Explore", async () => {
       await renderAt("/");
       fireEvent.click(logo()!);
       await screen.findByRole("link", { name: "About" });
       panels().forEach((panel) => expect(panel).toHaveClass("slot--entering"));
     });
 
-    it("plays on a direct visit to the Board", async () => {
+    it("plays on a direct visit to Explore", async () => {
       await renderAt("/explore");
       panels().forEach((panel) => expect(panel).toHaveClass("slot--entering"));
     });
@@ -153,7 +153,7 @@ describe("App", () => {
       },
     );
 
-    it("shows no page on the default Board", async () => {
+    it("shows no page on the default Explore", async () => {
       await renderAt("/explore");
       expect(screen.queryByRole("heading")).not.toBeInTheDocument();
     });
@@ -204,7 +204,7 @@ describe("App", () => {
       expect(heading()).not.toHaveFocus();
     });
 
-    it("scrolls to the top on every change of Board state, with scroll restoration off", async () => {
+    it("scrolls to the top on every change of Explore state, with scroll restoration off", async () => {
       await renderAt("/explore");
       expect(window.history.scrollRestoration).toBe("manual");
       vi.mocked(window.scrollTo).mockClear();
@@ -221,7 +221,7 @@ describe("App", () => {
       await waitFor(() => expect(window.scrollTo).toHaveBeenCalledTimes(1));
     });
 
-    it("does not replay the Board's unfold on the Panels that come back when a Panel closes", async () => {
+    it("does not replay Explore's unfold on the Panels that come back when a Panel closes", async () => {
       await renderAt("/");
       fireEvent.click(logo()!);
       await screen.findByRole("link", { name: "Skills" });

@@ -1,8 +1,8 @@
 import { act, renderHook } from "@octanejs/testing-library";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { DEFAULT_BOARD, expandedBoard, routerWrapper, testRouter, useRoute } from "..";
+import { DEFAULT_EXPLORE, expandedExplore, routerWrapper, testRouter, useRoute } from "..";
 
-const about = expandedBoard("about");
+const about = expandedExplore("about");
 
 /** A router at `path`, loaded, with a `useRoute()` under it. */
 async function hookAt(path: string) {
@@ -17,23 +17,23 @@ describe("useRoute", () => {
   afterEach(() => window.history.replaceState(null, "", "/"));
 
   it.each([
-    ["/", DEFAULT_BOARD],
-    ["/explore", DEFAULT_BOARD],
+    ["/", DEFAULT_EXPLORE],
+    ["/explore", DEFAULT_EXPLORE],
     ["/about", { kind: "expanded", panel: "about" }],
     ["/what-i-do", { kind: "expanded", panel: "whatIDo" }],
     ["/skills", { kind: "expanded", panel: "skills" }],
     ["/chat", { kind: "expanded", panel: "chatWithMe" }],
     ["/contact", { kind: "expanded", panel: "contact" }],
-  ])("reads the Board state of %s from the matched route", async (path, expected) => {
+  ])("reads Explore state of %s from the matched route", async (path, expected) => {
     const { result } = await hookAt(path);
-    expect(result.current.board).toEqual(expected);
+    expect(result.current.explore).toEqual(expected);
   });
 
   it("follows navigate(), as a new history entry", async () => {
     const { result } = await hookAt("/");
     const entries = window.history.length;
-    await act(() => result.current.navigate(DEFAULT_BOARD));
-    expect(result.current.board).toEqual(DEFAULT_BOARD);
+    await act(() => result.current.navigate(DEFAULT_EXPLORE));
+    expect(result.current.explore).toEqual(DEFAULT_EXPLORE);
     expect(window.location.pathname).toBe("/explore");
     expect(window.history.length).toBe(entries + 1);
   });
@@ -50,7 +50,7 @@ describe("useRoute", () => {
       await act(() => result.current.link(about).onClick(event));
       expect(event.defaultPrevented).toBe(true);
       expect(window.location.pathname).toBe("/about");
-      expect(result.current.board).toEqual(about);
+      expect(result.current.explore).toEqual(about);
     });
 
     it("leaves a modified click to the browser (new tab)", async () => {

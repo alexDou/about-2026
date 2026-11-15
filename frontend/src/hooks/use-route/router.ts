@@ -6,7 +6,7 @@ import {
   redirect,
 } from "@octanejs/tanstack-router";
 import type { RouterHistory } from "@octanejs/tanstack-router";
-import { BOARD_PATH, LANDING_PATH, PANEL_IDS, PANEL_PATHS } from "./config";
+import { EXPLORE_PATH, LANDING_PATH, PANEL_IDS, PANEL_PATHS } from "./config";
 import type { AppRouterOptions } from "./types";
 
 /**
@@ -20,18 +20,18 @@ function dropTrailingSlash(history: RouterHistory) {
 }
 
 /**
- * The site's router. The routes are the site's states: the Landing, and the Board with a page
+ * The site's router. The routes are the site's states: the Landing, and Explore with a page
  * route under it for each Panel. Any other path is replaced by `/` without a history entry, and
  * so is a trailing slash. The components come in as options, so this module imports none.
  */
 export function createAppRouter({
   shell,
   landing,
-  board,
+  explore,
   pages,
   viewTransition,
 }: AppRouterOptions) {
-  // Every Board state starts at the top, so the browser must not restore a scroll position on a
+  // Every Explore state starts at the top, so the browser must not restore a scroll position on a
   // reload or Back/Forward. Set when the router is made, because an effect would come too late.
   window.history.scrollRestoration = "manual";
   const history = createBrowserHistory();
@@ -43,11 +43,18 @@ export function createAppRouter({
     path: LANDING_PATH,
     component: landing,
   });
-  const boardRoute = createRoute({ getParentRoute: () => root, id: "board", component: board });
-  const defaultBoardRoute = createRoute({ getParentRoute: () => boardRoute, path: BOARD_PATH });
+  const exploreRoute = createRoute({
+    getParentRoute: () => root,
+    id: "explore",
+    component: explore,
+  });
+  const defaultExploreRoute = createRoute({
+    getParentRoute: () => exploreRoute,
+    path: EXPLORE_PATH,
+  });
   const panelRoutes = PANEL_IDS.map((panel) =>
     createRoute({
-      getParentRoute: () => boardRoute,
+      getParentRoute: () => exploreRoute,
       path: PANEL_PATHS[panel],
       component: pages[panel],
       staticData: { panel },
@@ -64,7 +71,7 @@ export function createAppRouter({
   return createRouter({
     routeTree: root.addChildren([
       landingRoute,
-      boardRoute.addChildren([defaultBoardRoute, ...panelRoutes]),
+      exploreRoute.addChildren([defaultExploreRoute, ...panelRoutes]),
       unknownRoute,
     ]),
     history,

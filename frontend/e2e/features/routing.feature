@@ -1,6 +1,6 @@
-Feature: Landing and Board routing
+Feature: Landing and Explore routing
 
-  Scenario: Back and Forward move between the Landing and the Board
+  Scenario: Back and Forward move between the Landing and Explore
     Given I open the landing page
     When I click the logo
     Then I am on "/explore"
@@ -9,7 +9,7 @@ Feature: Landing and Board routing
     And the logo is shown
     When I go forward
     Then I am on "/explore"
-    And the Board lists the five Panels
+    And Explore lists the five Panels
 
   Scenario: A direct visit to / shows the Landing
     When I open "/"
@@ -17,7 +17,7 @@ Feature: Landing and Board routing
     And the logo is shown
     And the document title is "A.Durnev portfolio"
 
-  Scenario: Back and Forward walk from the Landing through two Panels to the default Board
+  Scenario: Back and Forward walk from the Landing through two Panels to the default Explore
     Given I open the landing page
     When I click the logo
     And I click the Panel "Skills"
@@ -32,7 +32,7 @@ Feature: Landing and Board routing
     And the page heading reads "Skills"
     When I go back
     Then I am on "/explore"
-    And the Board lists the five Panels
+    And Explore lists the five Panels
     When I go back
     Then I am on "/"
     And the logo is shown
@@ -45,10 +45,10 @@ Feature: Landing and Board routing
     Then I am on "/explore"
     And there is no page heading
 
-  Scenario: A direct visit to /explore shows the Board
+  Scenario: A direct visit to /explore shows Explore
     When I open "/explore"
     Then I am on "/explore"
-    And the Board lists the five Panels
+    And Explore lists the five Panels
 
   Scenario: A Panel URL shows that Panel opened
     When I open "/skills"

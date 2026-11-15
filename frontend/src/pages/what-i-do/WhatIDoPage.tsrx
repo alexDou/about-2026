@@ -7,6 +7,6 @@ export function WhatIDoPage() @{
   const intl = useIntl();
 
   <section class={styles["what-i-do-page"]}>
-    <Heading text={intl.formatMessage({ id: "board.panel.whatIDo.title" })} />
+    <Heading text={intl.formatMessage({ id: "explore.panel.whatIDo.title" })} />
   </section>;
 }

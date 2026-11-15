@@ -4,7 +4,7 @@ Each unit is a complete, test-verified end-to-end slice: the Octane frontend (`f
 
 ## Objectives
 
-- **What**: the Owner's CV as an interactive site. An SPA: the Visitor lands on the animated logo, clicks, and the Board with five Panels is revealed.
+- **What**: the Owner's CV as an interactive site. An SPA: the Visitor lands on the animated logo, clicks, and Explore with five Panels is revealed.
 - **For whom**: hiring managers and recruiters for Senior Full Stack / Technical Lead roles. Not a business, not freelance.
 - **Focus**: the content and how the Visitor experiences it. The stack is the Owner's own practice, not a deliverable: when the two conflict, the Visitor's experience wins.
 - **Scope**: English only (content runs through FormatJS messages, ADR 0003, so other locales stay possible). No SEO; the site is bot-protected.
@@ -28,11 +28,11 @@ All unit specifications, task matrices, and ticket breakdowns follow a strict 3-
 
 ---
 
-Order: Board → About → Skills → Contact → What I do → Interview → Chat → Deploy. All eight make the launch milestone.
+Order: Explore → About → Skills → Contact → What I do → Interview → Chat → Deploy. All eight make the launch milestone.
 
-## Unit 1: Board
+## Unit 1: Explore
 
-**Objective**: the Landing → Board flow, with five Panels that expand and collapse, real URLs and the mobile layout. Panels are shells that show only their titles; later units fill them.
+**Objective**: the Landing → Explore flow, with five Panels that expand and collapse, real URLs and the mobile layout. Panels are shells that show only their titles; later units fill them.
 
 **Design**
 
@@ -40,8 +40,8 @@ Reference: the expanded menu of codepen `fluxus/gPWvZm` (local copy in git-ignor
 
 - **Layout**
   - Panels, in order: About, What I do, Skills, Chat with me, Contact.
-  - Desktop: full-height columns sharing the width evenly. The Board is at least 32rem tall. The title sits a tenth of the Panel's width above the middle, as in the pen.
-  - Mobile (below 840px wide): full-width rows sharing the height evenly. The Board is at least 420px tall. Two flaws of the pen are fixed: rows never shrink to a sliver on narrow screens, and titles are centred on both axes by layout, not by an offset.
+  - Desktop: full-height columns sharing the width evenly. Explore is at least 32rem tall. The title sits a tenth of the Panel's width above the middle, as in the pen.
+  - Mobile (below 840px wide): full-width rows sharing the height evenly. Explore is at least 420px tall. Two flaws of the pen are fixed: rows never shrink to a sliver on narrow screens, and titles are centred on both axes by layout, not by an offset.
   - Titles: the pen's style (uppercase, wide letter-spacing), 1rem (the pen: 0.9rem), in Overused Grotesk (self-hosted, used site-wide). In the default state only the title is clickable. On hover and focus a row of moving dots (CSS only) slides in above the title, the Panel's full width and just tall enough for the dots, 1.2rem above it (the Sublabel hangs 0.6rem below it). On a phone the row stands at the Panel's left border as in the pen: on the title's height, from 4% in to before the text, as long as the space allows. A phone 440px wide or less has no dots. No line ever crosses the title.
   - Sublabels: optional, shown only in the default state. For now What I do ("36 Takeovers") and Chat with me ("AI agent trained on my data").
 - **Expanded panel**
@@ -56,29 +56,29 @@ Reference: the expanded menu of codepen `fluxus/gPWvZm` (local copy in git-ignor
   - The palette colors are global tokens; each component switches a tone class by prop (`classnames`).
   - `#25363a` reaches only about 3:1 on the blue and green Panels: enough for titles, below AA for body text. Body text in Chat with me and Contact therefore sits on a `#d1dcd9` surface (Units 4 and 7).
 - **Motion**
-  - Every route change plays its transition, whatever caused it: the logo click, a Panel title, a Stripe, the close button, Escape, a direct visit to `/explore`, a reload of it and browser Back/Forward alike (a direct visit or reload of an Expanded panel shows it at once under the Board's entrance, see Stages). The site does not track the cause of a change or what was open before (ADR 0004).
-  - Entrance, whenever the Board appears (the logo click, a direct visit, a reload, Back/Forward from the Landing), as in the pen: the Board slides in (300ms), the Panels follow 150ms apart, the titles fade in (140ms). Clicks, the close button and Escape are ignored until it ends (the Board is busy, as it is during a sequence); with reduced motion there is no entrance to wait for.
+  - Every route change plays its transition, whatever caused it: the logo click, a Panel title, a Stripe, the close button, Escape, a direct visit to `/explore`, a reload of it and browser Back/Forward alike (a direct visit or reload of an Expanded panel shows it at once under Explore's entrance, see Stages). The site does not track the cause of a change or what was open before (ADR 0004).
+  - Entrance, whenever Explore appears (the logo click, a direct visit, a reload, Back/Forward from the Landing), as in the pen: Explore slides in (300ms), the Panels follow 150ms apart, the titles fade in (140ms). Clicks, the close button and Escape are ignored until it ends (Explore is busy, as it is during a sequence); with reduced motion there is no entrance to wait for.
   - Expanding on desktop: the other Panels' content fades out (120ms), the widths animate (500ms, ease-in-out), then the Stripes fade in (400ms) while the Expanded panel's content fades in faster (150ms). Collapsing runs the same steps backwards. Switching Panels (one Expanded panel to another) by a Stripe click: smooth scroll to the top (skipped when already there; the route changes when the scroll has ended), then one step like mobile: nothing fades, the previous Panel's width shrinks to a Stripe while the new one's grows (500ms, ease-in-out).
   - Expanding on mobile: no fade-out and no collapse step. The other rows shrink and the chosen one expands. Switching scrolls smoothly to the top first, then plays the same single step.
-  - Each Panel keeps one stable slot on the Board. Only the slot's size animates; the Panel, Stripe and Expanded panel views fade into each other inside it. CSS only: the durations are CSS custom properties kept in one place, and the steps chain on `transitionend`.
+  - Each Panel keeps one stable slot on Explore. Only the slot's size animates; the Panel, Stripe and Expanded panel views fade into each other inside it. CSS only: the durations are CSS custom properties kept in one place, and the steps chain on `transitionend`.
   - Clicks are ignored while a sequence runs, as in the pen. A route change by Back/Forward during a sequence drops the stages still to play and plays the way from the stage on screen to the new state, so what it plays depends on what is on screen, not on what was open before or on what caused the change.
-  - Stages: the Board is a small tree of stages (Panels shown → slots even, views faded out → one slot resized → Stripes and page shown). A sequence walks the tree from the stage on screen to the route's stage; switching Panels is one stage (the target's), since a fade-out and fade-in between two Expanded panels would show nothing the sizes do not. A stage ends when the slots and views it changes report that their CSS transitions ended (a stage that changes none is skipped; with reduced motion every stage is skipped, so every step is instant). The route reaches the Board's motion a frame after it changes. A direct visit or reload of an Expanded panel shows it at once under the Board's entrance, with no stages. The outgoing page is not kept: the route's `Outlet` shows the new page only in the slot the route names, so a closing or switching Expanded panel fades out without a page, and the Board follows the route a frame later.
+  - Stages: Explore is a small tree of stages (Panels shown → slots even, views faded out → one slot resized → Stripes and page shown). A sequence walks the tree from the stage on screen to the route's stage; switching Panels is one stage (the target's), since a fade-out and fade-in between two Expanded panels would show nothing the sizes do not. A stage ends when the slots and views it changes report that their CSS transitions ended (a stage that changes none is skipped; with reduced motion every stage is skipped, so every step is instant). The route reaches Explore's motion a frame after it changes. A direct visit or reload of an Expanded panel shows it at once under Explore's entrance, with no stages. The outgoing page is not kept: the route's `Outlet` shows the new page only in the slot the route names, so a closing or switching Expanded panel fades out without a page, and Explore follows the route a frame later.
   - Reduced motion: every step is instant. Focus: expanding moves it to the Expanded panel's heading; collapsing returns it to the Panel that was open.
 - **URLs and history**
-  - `/` Landing, `/explore` Board default, `/about`, `/what-i-do`, `/skills`, `/chat`, `/contact` per Expanded panel, through TanStack Router (`@octanejs/tanstack-router`, code-defined routes, ADR 0004).
+  - `/` Landing, `/explore` Explore default, `/about`, `/what-i-do`, `/skills`, `/chat`, `/contact` per Expanded panel, through TanStack Router (`@octanejs/tanstack-router`, code-defined routes, ADR 0004).
   - Panels and Stripes are real links, so opening one in a new tab works; normal clicks are handled in the app.
   - Every state change adds a history entry, the logo click included, so Back from `/explore` shows the Landing. The site itself offers no way back to the Landing.
   - An unknown path is replaced by `/`, and a trailing slash is dropped, both without a history entry.
-  - Browser scroll restoration is off; every Board state starts at the top.
+  - Browser scroll restoration is off; every Explore state starts at the top.
   - Document title: "A.Durnev portfolio" on `/` and `/explore`, "<Panel> · A.Durnev portfolio" per Expanded panel. `theme-color` follows the Expanded panel's color.
-- **Text**: all UI text is FormatJS (ICU) messages (ADR 0003). The setup and the message files (one per page or area, ids prefixed by area, e.g. `board.panel.skills.title`) live in `src/i18n/`; `useIntl()` is a shared hook. A Panel has a Sublabel when its Sublabel message exists. An unknown message id fails the type check, and a test checks that every message parses as ICU.
+- **Text**: all UI text is FormatJS (ICU) messages (ADR 0003). The setup and the message files (one per page or area, ids prefixed by area, e.g. `explore.panel.skills.title`) live in `src/i18n/`; `useIntl()` is a shared hook. A Panel has a Sublabel when its Sublabel message exists. An unknown message id fails the type check, and a test checks that every message parses as ICU.
 - **Backend status**: the Landing keeps its status badge. One shared health check runs on page load and again whenever Chat with me or Contact opens. While the backend is down, both show an offline note.
 - **Search engines**: `<meta name="robots" content="noindex, nofollow">` (the matching `X-Robots-Tag` header comes with Unit 8). `robots.txt` lets ordinary crawlers in, so they read the `noindex`, and disallows AI-training crawlers (GPTBot, ClaudeBot, CCBot, Google-Extended, …).
-- **Code layout**: the router matches the URL and renders the screen: `App` is the root route's component (messages and an `Outlet`), `LandingPage` is the route of `/`, and the Board is a layout route whose `Outlet` shows the Expanded panel's page, one page route per Panel (`staticData: { panel }` tells the Board which one is Expanded). There is no `switch` on the route in any component. The Board (`components/domain/Board/`) owns the Panel, Stripe and Expanded panel components and gives each Panel its tone by position. One page per Panel in `pages/`; `Heading` in `components/ui/`. `hooks/useRoute` holds the Panel ids and their order, id ↔ path, the Board state, the router factory (components passed in, so the module imports none) and `useRoute()` (`board`, `navigate`, `link`); `app/router.ts` supplies the real components. There is no separate Panel config.
+- **Code layout**: the router matches the URL and renders the screen: `App` is the root route's component (messages and an `Outlet`), `LandingPage` is the route of `/`, and Explore is a layout route whose `Outlet` shows the Expanded panel's page, one page route per Panel (`staticData: { panel }` tells Explore which one is Expanded). There is no `switch` on the route in any component. Explore (`components/domain/explore/`, rendered by `pages/explore/ExplorePage`) owns the Panel, Stripe and Expanded panel components and gives each Panel its tone by position. One page per Panel in `pages/`; `Heading` in `components/ui/`. `hooks/useRoute` holds the Panel ids and their order, id ↔ path, Explore state, the router factory (components passed in, so the module imports none) and `useRoute()` (`explore`, `navigate`, `link`); `app/router.ts` supplies the real components. There is no separate Panel config.
 
 **Sub-unit breakdown**
-- 1.0: Panel ids and order, the id ↔ path map, the Board state type (`default | expanded(panel)`), the URL ↔ state mapping and the message-id type, locked by tests.
-- 1.x: FormatJS setup with `en` messages; font and palette tokens; routing on TanStack Router (replacing the own route hook of 1.3); Heading, Panel, Stripe and Expanded panel; Board layout with the desktop and mobile expand/collapse sequences; Landing → Board entrance; document title and `theme-color`; shared health check and offline notes; `noindex` + `robots.txt`; the stale `logo/` mentions in `AnimatedLogo` (the playground moved to `support_files/logo/`).
+- 1.0: Panel ids and order, the id ↔ path map, Explore state type (`default | expanded(panel)`), the URL ↔ state mapping and the message-id type, locked by tests.
+- 1.x: FormatJS setup with `en` messages; font and palette tokens; routing on TanStack Router (replacing the own route hook of 1.3); Heading, Panel, Stripe and Expanded panel; Explore layout with the desktop and mobile expand/collapse sequences; Landing → Explore entrance; document title and `theme-color`; shared health check and offline notes; `noindex` + `robots.txt`; the stale `logo/` mentions in `AnimatedLogo` (the playground moved to `support_files/logo/`).
 - 1.N: E2E for deep links, Back/Forward, unknown paths, expanding from a Stripe, the close button and Escape restoring the default, and the mobile layout.
 
 **Definition of Done**: every URL renders the right state; every route change animates the same way (respecting reduced motion); mobile follows its own layout; E2E green.

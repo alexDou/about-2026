@@ -1,45 +1,50 @@
-/*
- * The badge row: a wrapping flex row at the top left of the page, level with the Expanded panel's
- * close button. It scrolls with the page.
- */
+/* The badge row at the top left of the page. It scrolls with the page. */
 .about-status-badges {
-  /* Badge width, and the room kept to the close button on its right. */
-  --badge-size: 7rem;
   --badge-gap: 1rem;
-  --close-button-room: 5rem;
-  /*
-   * The close bar above the page is 4rem tall and the row starts level with the button inside it
-   * (1rem down): pull the row up by the rest.
-   */
-  --close-bar-lead: -3rem;
 
-  /* Positioned so the row stacks above the sticky close bar it reaches into: hover titles need it. */
+  /* Positioned so the row paints over the top card it hangs into, and its hover titles work. */
   position: relative;
   display: flex;
-  flex-wrap: wrap;
   gap: var(--badge-gap);
-  margin: var(--close-bar-lead) var(--close-button-room) 0 0;
+  /*
+   * Wide screens: the six square badges share one line, each a sixth of it, and the row hangs
+   * half its height into the top card, whose top border then runs through the badges' middle. A
+   * percentage margin is of the page's width, so half a badge is (100% - 5 gaps) / 12.
+   */
+  margin: 0 0 calc((5 * var(--badge-gap) - 100%) / 12);
   padding: 0;
   list-style: none;
 }
 
 .about-status-badges__item {
-  /* Based on its smallest size and growing to the badge size, so six fit one desktop row. */
-  flex: 1 1 4.5rem;
-  max-width: var(--badge-size);
+  flex: 1 1 0;
+  min-width: 0;
 }
 
 /*
- * Phones: two rows of three, under the close button instead of beside it. Small badges, growing
- * only a little with the width: 4.5rem on a small phone, 5.5rem at the breakpoint.
+ * Where one line no longer fits (the breakpoint below): two rows of three, above the top card instead of
+ * hanging into it, as on phones.
  */
+@media (width <= 1056px) {
+  .about-status-badges {
+    --badge-size: 7rem;
+
+    flex-wrap: wrap;
+    max-width: calc(3 * var(--badge-size) + 2 * var(--badge-gap));
+    /* The top card's top margin keeps the gap: the page is a grid, so the two would add up. */
+    margin-bottom: 0;
+  }
+
+  .about-status-badges__item {
+    flex: 0 0 var(--badge-size);
+  }
+}
+
+/* Phones: small badges, growing only a little with the width: 4.5rem on a small phone, 5.5rem at the breakpoint. */
 @media (width < 840px) {
   .about-status-badges {
     --badge-size: 5rem;
     --badge-gap: 0.75rem;
-
-    max-width: calc(3 * var(--badge-size) + 2 * var(--badge-gap));
-    margin: 0;
   }
 
   /* A custom property takes no fallback from an earlier declaration: test for progress() first. */
@@ -47,10 +52,5 @@
     .about-status-badges {
       --badge-size: calc(4.5rem + 1rem * progress(100vw, 20rem, 52.5rem));
     }
-  }
-
-  .about-status-badges__item {
-    flex: 0 0 var(--badge-size);
-    max-width: none;
   }
 }

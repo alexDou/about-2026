@@ -1,6 +1,7 @@
 .about-education-card__degree {
   margin: 0;
-  font-size: 1.1rem;
+  font-family: var(--font-heading);
+  font-size: 1.1em;
   font-weight: 600;
 }
 
@@ -11,6 +12,6 @@
 
 .about-education-card__business {
   margin: 0;
-  line-height: 1.55;
+  line-height: var(--line-height-site);
   text-wrap: pretty;
 }
