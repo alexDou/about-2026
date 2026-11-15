@@ -20,7 +20,7 @@ Decoupled frontend/backend architecture following Clean Architecture & Ousterhou
 - **Test-Driven Development (TDD)**: Every task begins with a failing test (red → green → refactor).
   - Backend: `uv run --directory backend pytest`, `uv run --directory backend ruff check .`
   - Frontend: `pnpm --dir frontend test`, `pnpm --dir frontend lint`, `pnpm --dir frontend typecheck`
-- **End-of-Task Gate (mandatory)**: Every task that changes files ends with `scripts/verify.sh` (frontend and backend checks in parallel: tests + linters + formatters + typecheck + import cycles, then semgrep when rules exist). A task is not done, and must not be committed, until it prints `verify: GREEN`. Pre-existing failures outside your diff are reported by name, never hidden or silenced.
+- **End-of-Task Gate (mandatory)**: Every task that changes files ends with `scripts/verify.sh` (frontend, backend and Opengrep lanes in parallel: tests + linters + formatters + typecheck + import cycles + the project's security rules in `.opengrep/rules/`). A task is not done, and must not be committed, until it prints `verify: GREEN`. Pre-existing failures outside your diff are reported by name, never hidden or silenced.
 
 ## Code Organization & Directory Invariants
 

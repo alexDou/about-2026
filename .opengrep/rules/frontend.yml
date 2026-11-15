@@ -1,0 +1,65 @@
+# Frontend trust boundary: Visitor input, backend responses and (Unit 7) Agent replies must never
+# reach the DOM as markup or code. Octane escapes text children; these are the ways around it.
+# .tsrx files are scanned through their compiled TSX (frontend/tools/opengrep-tsrx.ts).
+rules:
+  - id: frontend-raw-html-sink
+    languages: [typescript]
+    severity: ERROR
+    message: >-
+      Raw HTML reaches the DOM. Backend and Agent text is attacker-influenced: render it as text
+      children (Octane escapes them). Raw HTML needs a sanitizer the project owns, reviewed first.
+    metadata:
+      category: security
+      cwe: "CWE-79: Cross-site Scripting"
+    pattern-either:
+      - pattern: <$EL dangerouslySetInnerHTML={...} />
+      - pattern: trustHTML(...)
+      - pattern: $NODE.innerHTML = $VALUE
+      - pattern: $NODE.outerHTML = $VALUE
+      - pattern: $NODE.srcdoc = $VALUE
+      - pattern: $NODE.insertAdjacentHTML(...)
+      - pattern: $RANGE.createContextualFragment(...)
+      - pattern: document.write(...)
+      - pattern: document.writeln(...)
+    paths:
+      include:
+        - /frontend/src/
+      exclude:
+        - _specs_/
+        - test-setup.ts
+
+  - id: frontend-code-from-string
+    languages: [typescript]
+    severity: ERROR
+    message: >-
+      A string is run as code. Never build code from text; call the function directly.
+    metadata:
+      category: security
+      cwe: "CWE-95: Eval Injection"
+    pattern-either:
+      - pattern: eval(...)
+      - pattern: new Function(...)
+      - pattern: Function(...)
+      - pattern: setTimeout("...", ...)
+      - pattern: setInterval("...", ...)
+    paths:
+      include:
+        - /frontend/src/
+
+  - id: frontend-javascript-url
+    languages: [typescript]
+    severity: ERROR
+    message: >-
+      A javascript: URL runs code on click. Use a button with a handler, or a real URL.
+    metadata:
+      category: security
+      cwe: "CWE-79: Cross-site Scripting"
+    patterns:
+      - pattern: |
+          "$URL"
+      - metavariable-regex:
+          metavariable: $URL
+          regex: '(?i)^\s*javascript:'
+    paths:
+      include:
+        - /frontend/src/
