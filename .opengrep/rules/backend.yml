@@ -1,0 +1,116 @@
+# Backend trust boundary: everything a Visitor sends to /api (Contact requests, Chat messages) is
+# untrusted. Generic Python security checks (eval, pickle, yaml.load, shell=True, hardcoded
+# passwords) are ruff's `S` rules; these cover what is specific to this FastAPI app.
+rules:
+  - id: backend-route-outside-api-router
+    languages: [python]
+    severity: ERROR
+    message: >-
+      Route registered on the FastAPI app itself. Every route lives under /api: register it on an
+      APIRouter included in the `/api` router, so the dev proxy and the deploy see one prefix.
+    metadata:
+      category: correctness
+    patterns:
+      - pattern-inside: |
+          $APP = FastAPI(...)
+          ...
+      - pattern-either:
+          - patterns:
+              - pattern-either:
+                  - pattern: |
+                      @$APP.$METHOD(...)
+                      def $FN(...): ...
+                  - pattern: |
+                      @$APP.$METHOD(...)
+                      async def $FN(...): ...
+              - metavariable-regex:
+                  metavariable: $METHOD
+                  regex: ^(get|post|put|patch|delete|options|head|trace|api_route|route|websocket)$
+          - pattern: $APP.add_api_route(...)
+          - pattern: $APP.add_api_websocket_route(...)
+    paths:
+      include:
+        - /backend/app/
+
+  - id: backend-exception-text-in-response
+    languages: [python]
+    severity: ERROR
+    message: >-
+      Exception text sent to the client. It leaks internals (paths, queries, provider errors).
+      Send a static message and log the exception server-side.
+    metadata:
+      category: security
+      cwe: "CWE-209: Information Exposure Through an Error Message"
+    patterns:
+      - pattern-inside: |
+          try:
+              ...
+          except $TYPE as $ERR:
+              ...
+      - pattern-either:
+          - pattern: HTTPException(..., detail=<... $ERR ...>, ...)
+          - pattern: HTTPException($CODE, <... $ERR ...>, ...)
+          - pattern: JSONResponse(<... $ERR ...>, ...)
+          - pattern: JSONResponse(..., content=<... $ERR ...>, ...)
+          - pattern: return <... $ERR ...>
+    paths:
+      include:
+        - /backend/app/
+
+  - id: backend-cors-wildcard
+    languages: [python]
+    severity: ERROR
+    message: >-
+      CORS lets any site call the API from a Visitor's browser. List the site's own origins.
+    metadata:
+      category: security
+      cwe: "CWE-942: Permissive Cross-domain Policy"
+    pattern-either:
+      - pattern: $F(CORSMiddleware, ..., allow_origins=[..., "*", ...], ...)
+      - patterns:
+          - pattern: $F(CORSMiddleware, ..., allow_origin_regex="$REGEX", ...)
+          - metavariable-regex:
+              metavariable: $REGEX
+              regex: ^\^?\.[*+]\$?$
+    paths:
+      include:
+        - /backend/app/
+
+  - id: backend-request-data-in-outbound-url
+    languages: [python]
+    severity: ERROR
+    message: >-
+      Request data flows into an outbound URL (SSRF): a Visitor picks where the server connects.
+      Outbound URLs come from configuration; request data goes in the body or as escaped query params.
+    metadata:
+      category: security
+      cwe: "CWE-918: Server-Side Request Forgery"
+    mode: taint
+    options:
+      taint_intrafile: true
+    pattern-sources:
+      - patterns:
+          - pattern-inside: |
+              @$ROUTER.$METHOD(...)
+              async def $FN(..., $PARAM, ...): ...
+          - pattern: $PARAM
+      - patterns:
+          - pattern-inside: |
+              @$ROUTER.$METHOD(...)
+              def $FN(..., $PARAM, ...): ...
+          - pattern: $PARAM
+    pattern-sinks:
+      - patterns:
+          - pattern-either:
+              - pattern: httpx.$CALL($URL, ...)
+              - pattern: $CLIENT.$CALL($URL, ...)
+          - metavariable-regex:
+              metavariable: $CALL
+              regex: ^(get|post|put|patch|delete|head|options|request|stream)$
+          - focus-metavariable: $URL
+      - patterns:
+          - pattern: httpx.$KIND(..., base_url=$URL, ...)
+          - focus-metavariable: $URL
+    paths:
+      include:
+        - /backend/app/

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# End-of-task quality gate: {frontend, backend} lanes in parallel -> semgrep (when rules exist).
+# End-of-task quality gate: {frontend, backend, opengrep} lanes in parallel.
 #
 #   scripts/verify.sh                 run the full gate (logs in .verify/)
 #   scripts/verify.sh --fingerprint   print the working-tree fingerprint (used by the Claude Stop hook)
@@ -59,9 +59,23 @@ lane_backend() {
   [[ ${#FAILS[@]} -eq 0 ]] || { echo "backend failed: ${FAILS[*]}"; return 1; }
 }
 
-# Runs only when .semgrep/ holds rules. A missing semgrep binary with rules present is a failure.
-lane_semgrep() {
-  semgrep scan --config .semgrep/ --error --metrics=off -q
+# Static security scan with the project rules in .opengrep/rules/ (Opengrep, free, LGPL-2.1).
+# Opengrep cannot parse .tsrx, so `scan:tsrx` scans their compiled TSX and reports .tsrx lines.
+OPENGREP_VERSION="2.0.0"
+lane_opengrep() {
+  FAILS=()
+  local have
+  have="$(opengrep --version 2>/dev/null)"
+  if [[ "$have" != "$OPENGREP_VERSION" ]]; then
+    echo "✖ opengrep $OPENGREP_VERSION required, found '${have:-none}'."
+    echo "  Install: curl -fsSL https://raw.githubusercontent.com/opengrep/opengrep/main/install.sh | bash -s -- -v v$OPENGREP_VERSION"
+    echo "opengrep failed: version"
+    return 1
+  fi
+  step "rule tests" opengrep test .opengrep/rules
+  step "scan" opengrep scan --config .opengrep/rules --error -q .
+  step "scan .tsrx" pnpm --dir frontend run -s scan:tsrx
+  [[ ${#FAILS[@]} -eq 0 ]] || { echo "opengrep failed: ${FAILS[*]}"; return 1; }
 }
 
 run() { # run <lane> -> logs to .verify/<lane>.log, returns lane status
@@ -73,7 +87,7 @@ declare -A STATUS
 report() {
   local failed=0
   echo "── verify summary ──"
-  for name in frontend backend semgrep; do
+  for name in frontend backend opengrep; do
     [[ -z "${STATUS[$name]:-}" ]] && continue
     if [[ "${STATUS[$name]}" == 0 ]]; then
       echo "  PASS  $name"
@@ -87,19 +101,14 @@ report() {
 }
 
 declare -A PIDS
-for name in frontend backend; do
+for name in frontend backend opengrep; do
   run "$name" &
   PIDS[$name]=$!
 done
-for name in frontend backend; do
+for name in frontend backend opengrep; do
   wait "${PIDS[$name]}"
   STATUS[$name]=$?
 done
-
-if compgen -G ".semgrep/*.y*ml" >/dev/null; then
-  run semgrep
-  STATUS[semgrep]=$?
-fi
 
 if report; then
   if [[ "$(fingerprint)" == "$FP_START" ]]; then

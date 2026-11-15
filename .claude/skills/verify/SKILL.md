@@ -1,6 +1,6 @@
 ---
 name: verify
-description: Run the full end-of-task quality gate (frontend oxfmt/oxlint/import cycles/tsrs/vitest, backend ruff/pytest, semgrep when rules exist) and fix failures until green. Use at the end of every task that changed files, before reporting done or committing.
+description: Run the full end-of-task quality gate (frontend oxfmt/oxlint/import cycles/tsrs/vitest, backend ruff/pytest, Opengrep security rules) and fix failures until green. Use at the end of every task that changed files, before reporting done or committing.
 ---
 
 # Verify
@@ -11,7 +11,7 @@ Run the gate:
 scripts/verify.sh
 ```
 
-- Lanes: `frontend` and `backend` **in parallel**, then `semgrep` (only when `.semgrep/` holds rules). Takes a few seconds.
+- Lanes: `frontend`, `backend` and `opengrep` **in parallel**. Takes a few seconds. `opengrep` fails when the installed Opengrep is not the version pinned in `verify.sh`; its log prints the install command.
 - Every step in a lane runs even if an earlier one fails; the summary lists each `✖` step. Full logs: `.verify/<lane>.log`.
 - Green run writes `.verify/stamp` (working-tree fingerprint). The Claude Stop hook compares against it — any later edit makes the tree "unverified" again.
 - E2E is not in the gate. For UI-visible changes also run `pnpm --dir frontend e2e` and report its result separately.
@@ -22,8 +22,9 @@ scripts/verify.sh
 2. Formatting failures → apply the formatter, don't hand-edit:
    - `pnpm --dir frontend fmt`
    - `uv run --directory backend ruff format . && uv run --directory backend ruff check --fix .`
-3. Test/lint/typecheck failures → fix the root cause. Never weaken a test, add a blanket `# noqa`/`oxlint-disable`/`@ts-expect-error`, or loosen a linter config to get green without the user's OK.
-4. Re-run `scripts/verify.sh` until `verify: GREEN`.
+3. Opengrep findings → fix the code, the finding's message says how. A false positive is fixed in the rule (with a new `# ok:` fixture), never with a `noopengrep` comment without the user's OK. See `.claude/rules/opengrep.md`.
+4. Test/lint/typecheck failures → fix the root cause. Never weaken a test, add a blanket `# noqa`/`oxlint-disable`/`@ts-expect-error`, or loosen a linter config to get green without the user's OK.
+5. Re-run `scripts/verify.sh` until `verify: GREEN`.
 
 ## Reporting
 
