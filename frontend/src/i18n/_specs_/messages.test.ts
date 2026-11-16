@@ -65,9 +65,9 @@ function unformattable(messages: Record<string, unknown>): string[] {
 const en = (id: string) => format(enMessages, id);
 
 describe("English message files", () => {
-  it("include the site, the Landing, Explore, the offline note and About", () => {
+  it("include the site, the Landing, Explore, the offline note, About and Skills", () => {
     expect(EN_FILES.map((file) => file.area)).toEqual(
-      expect.arrayContaining(["about", "explore", "landing", "offline", "site"]),
+      expect.arrayContaining(["about", "explore", "landing", "offline", "site", "skills"]),
     );
   });
 

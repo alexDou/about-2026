@@ -4,8 +4,9 @@ import explore from "./explore.json";
 import landing from "./landing.json";
 import offline from "./offline.json";
 import site from "./site.json";
+import skills from "./skills.json";
 
-const files = { ...site, ...landing, ...explore, ...offline, ...about };
+const files = { ...site, ...landing, ...explore, ...offline, ...about, ...skills };
 
 /**
  * The English messages, one file per area, as FormatJS ASTs (`formatjs compile --ast`). They are the

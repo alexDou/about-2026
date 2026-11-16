@@ -1,0 +1,380 @@
+{
+  "skills.certificate.educativeCleanCodePython.title": [
+    {
+      "type": 0,
+      "value": "Clean Code in Python"
+    }
+  ],
+  "skills.certificate.educativeDocker.title": [
+    {
+      "type": 0,
+      "value": "Docker for Developers"
+    }
+  ],
+  "skills.certificate.educativeKotlin.title": [
+    {
+      "type": 0,
+      "value": "The Ultimate Guide to Kotlin Programming"
+    }
+  ],
+  "skills.certificate.modernCssWizard.title": [
+    {
+      "type": 0,
+      "value": "CSS Wizard"
+    }
+  ],
+  "skills.certificate.testdomePython.ranking": [
+    {
+      "type": 0,
+      "value": "Top 10%"
+    }
+  ],
+  "skills.certificate.testdomePython.title": [
+    {
+      "type": 0,
+      "value": "Python"
+    }
+  ],
+  "skills.certificate.testdomeTypescript.ranking": [
+    {
+      "type": 0,
+      "value": "Top 10%"
+    }
+  ],
+  "skills.certificate.testdomeTypescript.title": [
+    {
+      "type": 0,
+      "value": "TypeScript"
+    }
+  ],
+  "skills.certificate.udemyAgenticAi.title": [
+    {
+      "type": 0,
+      "value": "AI Engineer Agentic Track: The Complete Agent & MCP Course"
+    }
+  ],
+  "skills.certificate.udemyBash.title": [
+    {
+      "type": 0,
+      "value": "BASH Programming Course: Master the Linux Command Line!"
+    }
+  ],
+  "skills.certificate.udemyElasticsearch.title": [
+    {
+      "type": 0,
+      "value": "Getting Started with Elasticsearch"
+    }
+  ],
+  "skills.certificate.udemyLlmEngineering.title": [
+    {
+      "type": 0,
+      "value": "LLM Engineering: Master AI, Large Language Models & Agents"
+    }
+  ],
+  "skills.group.ai.name": [
+    {
+      "type": 0,
+      "value": "AI"
+    }
+  ],
+  "skills.group.backend.name": [
+    {
+      "type": 0,
+      "value": "Backend"
+    }
+  ],
+  "skills.group.cloudDevops.name": [
+    {
+      "type": 0,
+      "value": "Cloud & DevOps"
+    }
+  ],
+  "skills.group.databases.name": [
+    {
+      "type": 0,
+      "value": "Databases & search"
+    }
+  ],
+  "skills.group.frontend.name": [
+    {
+      "type": 0,
+      "value": "Frontend"
+    }
+  ],
+  "skills.group.practice.name": [
+    {
+      "type": 0,
+      "value": "Engineering practice"
+    }
+  ],
+  "skills.group.testing.name": [
+    {
+      "type": 0,
+      "value": "Testing & quality"
+    }
+  ],
+  "skills.issuer.educative": [
+    {
+      "type": 0,
+      "value": "Educative"
+    }
+  ],
+  "skills.issuer.modernCss": [
+    {
+      "type": 0,
+      "value": "modern.css"
+    }
+  ],
+  "skills.issuer.testdome": [
+    {
+      "type": 0,
+      "value": "TestDome"
+    }
+  ],
+  "skills.issuer.udemy": [
+    {
+      "type": 0,
+      "value": "Udemy"
+    }
+  ],
+  "skills.skill.bash.name": [
+    {
+      "type": 0,
+      "value": "Bash"
+    }
+  ],
+  "skills.skill.bash.overview": [
+    {
+      "type": 0,
+      "value": "Placeholder overview for Bash, until the questionnaire fixes it."
+    }
+  ],
+  "skills.skill.cleanArchitecture.name": [
+    {
+      "type": 0,
+      "value": "Clean architecture"
+    }
+  ],
+  "skills.skill.cleanArchitecture.overview": [
+    {
+      "type": 0,
+      "value": "Placeholder overview for Clean architecture, until the questionnaire fixes it."
+    }
+  ],
+  "skills.skill.css.name": [
+    {
+      "type": 0,
+      "value": "CSS"
+    }
+  ],
+  "skills.skill.css.overview": [
+    {
+      "type": 0,
+      "value": "Placeholder overview for CSS, until the questionnaire fixes it."
+    }
+  ],
+  "skills.skill.designSystems.name": [
+    {
+      "type": 0,
+      "value": "Design systems"
+    }
+  ],
+  "skills.skill.designSystems.overview": [
+    {
+      "type": 0,
+      "value": "Placeholder overview for Design systems, until the questionnaire fixes it."
+    }
+  ],
+  "skills.skill.docker.name": [
+    {
+      "type": 0,
+      "value": "Docker"
+    }
+  ],
+  "skills.skill.docker.overview": [
+    {
+      "type": 0,
+      "value": "Placeholder overview for Docker, until the questionnaire fixes it."
+    }
+  ],
+  "skills.skill.elasticsearch.name": [
+    {
+      "type": 0,
+      "value": "Elasticsearch"
+    }
+  ],
+  "skills.skill.elasticsearch.overview": [
+    {
+      "type": 0,
+      "value": "Placeholder overview for Elasticsearch, until the questionnaire fixes it."
+    }
+  ],
+  "skills.skill.graphql.name": [
+    {
+      "type": 0,
+      "value": "GraphQL"
+    }
+  ],
+  "skills.skill.graphql.overview": [
+    {
+      "type": 0,
+      "value": "Placeholder overview for GraphQL, until the questionnaire fixes it."
+    }
+  ],
+  "skills.skill.kotlin.name": [
+    {
+      "type": 0,
+      "value": "Kotlin"
+    }
+  ],
+  "skills.skill.kotlin.overview": [
+    {
+      "type": 0,
+      "value": "Placeholder overview for Kotlin, until the questionnaire fixes it."
+    }
+  ],
+  "skills.skill.mcp.name": [
+    {
+      "type": 0,
+      "value": "MCP"
+    }
+  ],
+  "skills.skill.mcp.overview": [
+    {
+      "type": 0,
+      "value": "Placeholder overview for MCP, until the questionnaire fixes it."
+    }
+  ],
+  "skills.skill.nextjs.name": [
+    {
+      "type": 0,
+      "value": "Next.js"
+    }
+  ],
+  "skills.skill.nextjs.overview": [
+    {
+      "type": 0,
+      "value": "Placeholder overview for Next.js, until the questionnaire fixes it."
+    }
+  ],
+  "skills.skill.openaiSdk.name": [
+    {
+      "type": 0,
+      "value": "OpenAI SDK"
+    }
+  ],
+  "skills.skill.openaiSdk.overview": [
+    {
+      "type": 0,
+      "value": "Placeholder overview for OpenAI SDK, until the questionnaire fixes it."
+    }
+  ],
+  "skills.skill.playwright.name": [
+    {
+      "type": 0,
+      "value": "Playwright"
+    }
+  ],
+  "skills.skill.playwright.overview": [
+    {
+      "type": 0,
+      "value": "Placeholder overview for Playwright, until the questionnaire fixes it."
+    }
+  ],
+  "skills.skill.postgresql.name": [
+    {
+      "type": 0,
+      "value": "PostgreSQL"
+    }
+  ],
+  "skills.skill.postgresql.overview": [
+    {
+      "type": 0,
+      "value": "Placeholder overview for PostgreSQL, until the questionnaire fixes it."
+    }
+  ],
+  "skills.skill.python.name": [
+    {
+      "type": 0,
+      "value": "Python"
+    }
+  ],
+  "skills.skill.python.overview": [
+    {
+      "type": 0,
+      "value": "Placeholder overview for Python, until the questionnaire fixes it."
+    }
+  ],
+  "skills.skill.react.name": [
+    {
+      "type": 0,
+      "value": "React"
+    }
+  ],
+  "skills.skill.react.overview": [
+    {
+      "type": 0,
+      "value": "Placeholder overview for React, until the questionnaire fixes it."
+    }
+  ],
+  "skills.skill.rest.name": [
+    {
+      "type": 0,
+      "value": "REST"
+    }
+  ],
+  "skills.skill.rest.overview": [
+    {
+      "type": 0,
+      "value": "Placeholder overview for REST, until the questionnaire fixes it."
+    }
+  ],
+  "skills.skill.systemDesign.name": [
+    {
+      "type": 0,
+      "value": "System design"
+    }
+  ],
+  "skills.skill.systemDesign.overview": [
+    {
+      "type": 0,
+      "value": "Placeholder overview for System design, until the questionnaire fixes it."
+    }
+  ],
+  "skills.skill.typescript.name": [
+    {
+      "type": 0,
+      "value": "TypeScript"
+    }
+  ],
+  "skills.skill.typescript.overview": [
+    {
+      "type": 0,
+      "value": "Placeholder overview for TypeScript, until the questionnaire fixes it."
+    }
+  ],
+  "skills.skill.vitest.name": [
+    {
+      "type": 0,
+      "value": "Vitest"
+    }
+  ],
+  "skills.skill.vitest.overview": [
+    {
+      "type": 0,
+      "value": "Placeholder overview for Vitest, until the questionnaire fixes it."
+    }
+  ],
+  "skills.subgroup.apisArchitecture.name": [
+    {
+      "type": 0,
+      "value": "APIs & architecture"
+    }
+  ],
+  "skills.subgroup.architectureEcosystem.name": [
+    {
+      "type": 0,
+      "value": "Architecture & ecosystem"
+    }
+  ]
+}
