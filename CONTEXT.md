@@ -44,12 +44,23 @@ _Avoid_: subtitle, tagline
 ### Content
 
 **Skill**:
-Something the Owner knows, explained in their own words, with no proficiency rating.
+A named thing the Owner knows (a language, technology or practice) with an overview: a short
+statement in their own words. Depth is told in words, never as a rating.
 _Avoid_: competency, rating
 
+**Skill group**:
+A named set of related Skills, such as Databases. It may hold Skill subgroups.
+_Avoid_: category, section, expertise block
+
+**Skill subgroup**:
+A named set of Skills inside a Skill group, one level deep, such as Frontend's
+"Architecture & ecosystem".
+_Avoid_: subcategory, nested group
+
 **Certificate**:
-A credential the Owner holds, listed with the Skills.
-_Avoid_: certification, badge
+Proof from an outside issuer that the Owner passed a test or completed a course, shown on the
+Skill it backs.
+_Avoid_: certification, badge, credential
 
 **Takeover**:
 One of exactly 36 kinds of work the Owner can take over: what it is, why the Owner fits, and what

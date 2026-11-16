@@ -89,7 +89,7 @@ Reference: the expanded menu of codepen `fluxus/gPWvZm` (local copy in git-ignor
 
 **Decided**:
 - Source: the 2026 CV (`support_files/about/`, git-ignored). The site text is rewritten, not copied: condensed, first person, the CV's typos fixed.
-- Kept off About: the CV's expertise blocks and "Core expertise" (Skills, Unit 3); phone and email (Contact, Unit 4). LinkedIn and GitHub appear on both.
+- Kept off About: the CV's expertise blocks (Skills, Unit 3) and "Core expertise" (raw material for Takeovers, Unit 5); phone and email (Contact, Unit 4). LinkedIn and GitHub appear on both.
 - Headline, Bio, Roles and Hobbies are written together with the Owner: each gets a questionnaire, then a draft the Owner approves.
 - Education: the degree as in the CV, plus one business-level sentence on the product and business thinking it built.
 - Languages: Russian (native), English: fluent (C1), German: good working knowledge (B2), Spanish: basic (A2); word plus CEFR level. Ukrainian is left out.
@@ -118,11 +118,53 @@ Reference: the expanded menu of codepen `fluxus/gPWvZm` (local copy in git-ignor
 
 ## Unit 3: Skills
 
-**Objective**: the Skills Panel: grouped Skills explained in the Owner's words (no bars, no ratings) and the Certificates.
+**Objective**: the Skills Panel: Skills in Skill groups, each explained in the Owner's words (no bars, no ratings), with the Certificates that back them.
 
-**Sub-unit breakdown**: 3.0 Skills + Certificate content types + JSON validation test; 3.x rendering; 3.N E2E opening `/skills`.
+**Decided** (grilling 2026-11-16):
+- Source: the 2026 CV's expertise blocks and the Roles' technology lists (`support_files/about/`), the certificates in `support_files/skills/Zertifikate/` (both git-ignored). The CV's "Core expertise" list names kinds of work, not knowledge: it goes to What I do (Unit 5) as raw material for Takeovers, not to Skills.
+- Model: a Skill group holds Skills and at most one level of Skill subgroups. A Skill is a name plus an overview: a short statement in the Owner's words. Groups and subgroups carry no statement of their own. Depth is told in the overview's words ("expert", "commercial", "practical"), never as a label, bar or rating. No years per Skill, no demo links, no "used at" company mentions.
+- Skill groups, in order (the Skill lists are examples; the questionnaire fixes them):
+  1. Frontend: React, Next.js, Preact, Vue, Svelte. Subgroup "Architecture & ecosystem": design systems, micro-frontends, performance & standards (Web Vitals, accessibility, W3C), SEO, CSS, the major libraries.
+  2. Backend: the languages with their frameworks: TypeScript (Node.js, ...), Python (FastAPI, ...), Rust (Actix), PHP (Yii2, ...), and Kotlin: learnt and certified, not yet used in commercial work. Subgroup "APIs & architecture": REST, GraphQL, WebSockets, WebRTC, Kafka, gRPC, CQRS, microservices.
+  3. Databases & search: PostgreSQL, MySQL, Redis, ScyllaDB, RethinkDB, DynamoDB, MongoDB, Elasticsearch.
+  4. Cloud & DevOps (observability included): Docker, Kubernetes, AWS, Terraform, Jenkins, GitLab CI, Nginx, Apache, Bash; Prometheus, Grafana, Instana, New Relic, CloudWatch.
+  5. Testing & quality: Jest, RTL, Vitest, Cypress, Playwright, pytest, TDD.
+  6. AI: OpenAI SDK, LangChain, CrewAI, MCP, multi-agent orchestration, agentic AI-assisted development.
+  7. Engineering practice: system design, clean architecture, DDD, refactoring, code review, mentoring, Scrum/Kanban.
+- Layout: the "Skills" heading; a row with the Expand all switch (left) and the Copy skills button (right); the Skill group blocks, centred with a max-width on desktop, full width minus the side padding on phones. Each block is filled with the light `#d1dcd9` (About's card surface) with `#25363a` text and reasonable padding; it shows the group name, then its Skills and subgroups. Finer look later.
+- Default view: every group and subgroup shows its Skill names; every overview is hidden; Expand all is off. A closed page still lists every Skill name, for scanning and Ctrl+F.
+- A Skill's filled arrow is its only toggle (a button padded to a 24px target or more) and opens or closes its overview. The Skill's name is plain, selectable text.
+- Group and subgroup headings have a state of their own, closed by default. A click flips it and sets all their Skills to match (open all / close all). Opening or closing Skills by hand leaves the state alone, except: all of them closed by hand → the state becomes closed; all of them opened by hand → open. So the next heading click always does something visible. A heading acts on its own group or subgroup only.
+- Expand all: a convenience switch, the walking toggle below. It keeps the position the Visitor gave it and never follows the Skills: on opens every overview, off closes every overview (the headings' states then follow by the rule above). Opening everything by hand leaves it off.
+- Walking toggle: a smaller version of `support_files/skills/toogle/` (SCSS + React reference, no licence; ours is written after it in CSS Modules, no licence file kept): a 6×6 head instead of 12×12, scaled feet and input, no face, no dirt particles, a faster walk (about 1s instead of 2.5s), palette `#25363a`. The walk plays only after the first change (the reference's `--animated` class from a `hasToggled` state). With reduced motion the handle only slides. A native checkbox with `role="switch"` and the label "Expand all".
+- Certificates live inside the Skill they back, as a link in its overview, so they show only when the Skill is open: they back the words, they are not the headline. Every Skill with a certificate gets one, Elasticsearch's 2016 course included; no separate Certificates list. A Skill with two shows two links, each labelled by its issuer. The link opens the Certificate view: the certificate image, title, issuer, month and year, the TestDome ranking, and "Verify at the issuer" (the issuer's own verification URL; none for CSS Wizard).
+  - TypeScript: TestDome TypeScript (Jul 2020, top 10%).
+  - Python: TestDome Python (Mar 2022, top 10%); Educative "Clean Code in Python" (Jun 2025).
+  - Kotlin: Educative "The Ultimate Guide to Kotlin Programming" (Jun 2025).
+  - CSS (Frontend, Architecture & ecosystem): modern.css "CSS Wizard", Modern CSS Quiz 20/20 (2026).
+  - Docker: Educative "Docker for Developers" (Jun 2025).
+  - Bash: Udemy "BASH Programming Course: Master the Linux Command Line!" (Jul 2019).
+  - AI Skills: Udemy "LLM Engineering: Master AI, Large Language Models & Agents" (Jul 2025); Udemy "AI Engineer Agentic Track: The Complete Agent & MCP Course" (Jan 2026).
+  - Elasticsearch: Udemy "Getting Started with Elasticsearch" (Jul 2016).
+  - Left out: TestDome JavaScript and Node.js (2019, replaced by the TypeScript test), Udemy MongooseJS Essentials. No course hours shown.
+- Certificate files: images (AVIF/WebP, converted from the PDFs and PNGs: a PDF in an overlay renders unreliably on phones) in `frontend/public/certificates/` for now; on Google Cloud with Unit 8.
+- The Certificate view is a `<dialog>` opened declaratively with Invoker Commands (`commandfor` + `command="show-modal"` on the link's button, `command="close"` inside), with a quick entry and exit animation in CSS (`@starting-style`); no `showModal()` call, no ref. 3.5 checks Octane passes the attributes through. Escape closes only the Certificate view, never the Expanded panel behind it.
+- Copy skills copies everything, whatever is open on screen, as plain text indented two spaces per level: group, subgroup, Skill, overview, and a "Certified:" line per certificate with its verification URL:
+  ```
+  Backend
+    TypeScript
+      <overview>
+      Certified: TypeScript, TestDome, Jul 2020, top 10%, https://www.testdome.com/certificates/...
+    APIs & architecture
+      REST
+        <overview>
+  ```
+  The clipboard write is imperative (`navigator.clipboard.writeText`), agreed with the Owner: it lives in a global, domain-agnostic hook in `hooks/` (like `useEscapeKey`), and the button shows "Copied" for a moment.
+- Content: a dedicated bean grills one questionnaire per Skill group in `docs_src/skills/` with the Owner (the Owner's words polished, nothing invented, answers kept verbatim), then drafts the message JSON for the Owner to approve.
 
-**Definition of Done**: all Skills and Certificates render from the message JSON.
+**Sub-unit breakdown**: 3.0 Skill group / Skill subgroup / Skill / Certificate content types + JSON validation test (unique ids, every Certificate used by a Skill, every image present in `public/`); 3.1 content: questionnaires grilled with the Owner, then the message JSON; 3.2 certificate images (AVIF/WebP in `public/certificates/`); 3.3 walking toggle (`components/ui/`, a quick `prototype` first for scale and speed); 3.4 Skill groups: groups, subgroups, Skills, the heading rule, Expand all; 3.5 Certificate link and view (Invoker Commands), the Escape rule; 3.6 Copy skills: the plain-text format and the clipboard hook; 3.N E2E opening `/skills`: a Skill's toggle, the heading rule, Expand all, copying, the Certificate view opening and closing (Escape leaves the Panel open). Order: 3.0 first; 3.1 alongside 3.2 to 3.6; only 3.N waits for 3.1.
+
+**Definition of Done**: all Skills and Certificates render from the message JSON; Copy skills puts the full structured text on the clipboard.
 
 ## Unit 4: Contact
 
@@ -145,6 +187,8 @@ Reference: the expanded menu of codepen `fluxus/gPWvZm` (local copy in git-ignor
 ## Unit 5: What I do
 
 **Objective**: the 36 Takeovers, in 6 Takeover groups of 6. Each Takeover: title, why the Owner fits, what the Owner does in that regard.
+
+**Input**: the CV's "Core expertise" list (Full Stack Engineering, Technical Leadership, Product Development, Software Architecture, AI Integration, Micro-services & scalable frontends, Frontend Engineering, Backend Engineering, Performance Optimization, Cloud Infrastructure, Application Modernization): kinds of work, so raw material for Takeovers (decided in Unit 3's grilling).
 
 **Sub-unit breakdown**: 5.0 Takeover content type + JSON validation test enforcing 36 = 6 × 6; 5.x presentation; 5.N E2E.
 
