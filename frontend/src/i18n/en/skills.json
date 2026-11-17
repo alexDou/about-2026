@@ -191,16 +191,16 @@
       "value": "Ready to use from day one."
     }
   ],
-  "skills.skill.bash.name": [
+  "skills.skill.aws.name": [
     {
       "type": 0,
-      "value": "Bash"
+      "value": "AWS"
     }
   ],
-  "skills.skill.bash.overview": [
+  "skills.skill.aws.overview": [
     {
       "type": 0,
-      "value": "Placeholder overview for Bash, until the questionnaire fixes it."
+      "value": "Extensive deployment experience. IAM, EC2, S3, ELB, Route 53 and RDS or DynamoDB every time; other services as the project needs."
     }
   ],
   "skills.skill.buildTooling.name": [
@@ -266,13 +266,13 @@
   "skills.skill.docker.name": [
     {
       "type": 0,
-      "value": "Docker"
+      "value": "Docker & Docker Compose"
     }
   ],
   "skills.skill.docker.overview": [
     {
       "type": 0,
-      "value": "Placeholder overview for Docker, until the questionnaire fixes it."
+      "value": "Confident, following best practices for Dockerfile optimisation."
     }
   ],
   "skills.skill.dynamodb.name": [
@@ -359,6 +359,30 @@
       "value": "From the business requirements, together with my colleagues, I shape how a project is put together: its conventions and constraints, how it talks to external services, its tools and its deployment."
     }
   ],
+  "skills.skill.gitlabJenkins.name": [
+    {
+      "type": 0,
+      "value": "GitLab CI & Jenkins"
+    }
+  ],
+  "skills.skill.gitlabJenkins.overview": [
+    {
+      "type": 0,
+      "value": "Confident, with production experience: deployments, job configuration, caching."
+    }
+  ],
+  "skills.skill.googleCloud.name": [
+    {
+      "type": 0,
+      "value": "Google Cloud"
+    }
+  ],
+  "skills.skill.googleCloud.overview": [
+    {
+      "type": 0,
+      "value": "Cloud Run, Firestore and Cloud Storage, with ADK for the agent: the stack this site runs on."
+    }
+  ],
   "skills.skill.graphql.name": [
     {
       "type": 0,
@@ -395,6 +419,18 @@
       "value": "No production experience yet: learnt and certified, with a very basic grasp of Spring."
     }
   ],
+  "skills.skill.kubernetes.name": [
+    {
+      "type": 0,
+      "value": "Kubernetes"
+    }
+  ],
+  "skills.skill.kubernetes.overview": [
+    {
+      "type": 0,
+      "value": "Application-level knowledge, mostly as a user of clusters already running."
+    }
+  ],
   "skills.skill.langgraph.name": [
     {
       "type": 0,
@@ -417,6 +453,18 @@
     {
       "type": 0,
       "value": "Chosen not by name but by maturity, level of support, GitHub stars and community feedback: I pick the tools that best fit each project. Component libraries (Material UI, shadcn/ui, Ant Design, Radix, Semantic UI), state management (Redux, MobX, Zustand, XState, Jotai), animation (Framer Motion), 3D (Three.js), validation (Zod), i18n, Storybook, charts, tables, forms."
+    }
+  ],
+  "skills.skill.linux.name": [
+    {
+      "type": 0,
+      "value": "Linux"
+    }
+  ],
+  "skills.skill.linux.overview": [
+    {
+      "type": 0,
+      "value": "Confident: my everyday system, either a Debian-based distro or openSUSE. Bash scripting."
     }
   ],
   "skills.skill.mcp.name": [
@@ -455,6 +503,18 @@
       "value": "Expert in both; today I'd choose the official driver."
     }
   ],
+  "skills.skill.monitoring.name": [
+    {
+      "type": 0,
+      "value": "Monitoring & Observability"
+    }
+  ],
+  "skills.skill.monitoring.overview": [
+    {
+      "type": 0,
+      "value": "I use Prometheus, Grafana, Instana, GTM and CloudWatch regularly."
+    }
+  ],
   "skills.skill.nestHapiSails.name": [
     {
       "type": 0,
@@ -477,6 +537,18 @@
     {
       "type": 0,
       "value": "Expert, with successful commercial projects delivered on it."
+    }
+  ],
+  "skills.skill.nginxApache.name": [
+    {
+      "type": 0,
+      "value": "Nginx & Apache"
+    }
+  ],
+  "skills.skill.nginxApache.overview": [
+    {
+      "type": 0,
+      "value": "I configure them on a VPS or in the cloud: modules, load balancing and more."
     }
   ],
   "skills.skill.nodejs.name": [
@@ -849,6 +921,18 @@
     {
       "type": 0,
       "value": "Placeholder overview for System design, until the questionnaire fixes it."
+    }
+  ],
+  "skills.skill.terraformHelm.name": [
+    {
+      "type": 0,
+      "value": "Terraform & Helm"
+    }
+  ],
+  "skills.skill.terraformHelm.overview": [
+    {
+      "type": 0,
+      "value": "Application-level knowledge: I manage and amend their configurations."
     }
   ],
   "skills.skill.typeorm.name": [

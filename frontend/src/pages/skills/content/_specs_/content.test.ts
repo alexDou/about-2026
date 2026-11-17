@@ -125,6 +125,21 @@ describe("Skills content", () => {
     ]);
   });
 
+  it("lists Cloud & DevOps's Skills as fixed with the Owner, observability included", () => {
+    const cloud = SKILLS_CONTENT.groups.find((group) => group.id === "cloudDevops");
+    expect(cloud?.skills.map((skill) => en(skill.name))).toEqual([
+      "Docker & Docker Compose",
+      "Kubernetes",
+      "Terraform & Helm",
+      "GitLab CI & Jenkins",
+      "AWS",
+      "Google Cloud",
+      "Nginx & Apache",
+      "Linux",
+      "Monitoring & Observability",
+    ]);
+  });
+
   it("lists Frontend's Skills as fixed with the Owner", () => {
     const frontend = SKILLS_CONTENT.groups.find((group) => group.id === "frontend");
     expect(frontend?.skills.map((skill) => en(skill.name))).toEqual([
@@ -216,7 +231,9 @@ describe("Skills content", () => {
 
   it("names the Skills that are decided (the rest comes from the questionnaires)", () => {
     const names = allSkills.map((skill) => en(skill.name));
-    expect(names).toEqual(expect.arrayContaining(["TypeScript", "Python", "Kotlin", "Docker"]));
+    expect(names).toEqual(
+      expect.arrayContaining(["TypeScript", "Python", "Kotlin", "Docker & Docker Compose"]),
+    );
   });
 
   it("gives each Skill an id of its own, all from the configured list", () => {
@@ -252,7 +269,7 @@ describe("Certificates", () => {
       kotlin: ["educativeKotlin"],
       css: ["modernCssWizard"],
       docker: ["educativeDocker"],
-      bash: ["udemyBash"],
+      linux: ["udemyBash"],
       openaiSdk: ["udemyLlmEngineering"],
       mcp: ["udemyAgenticAi"],
       elasticsearch: ["udemyElasticsearch"],
