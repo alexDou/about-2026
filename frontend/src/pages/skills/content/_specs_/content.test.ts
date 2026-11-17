@@ -70,7 +70,7 @@ describe("Skills content", () => {
     expect(SKILLS_CONTENT.groups.map((group) => group.id)).toEqual([...SKILL_GROUP_IDS]);
   });
 
-  it('gives only Frontend and Backend a Skill subgroup: "Architecture & ecosystem" and "APIs & services"', () => {
+  it('gives only Frontend, Backend and AI a Skill subgroup: "Architecture & ecosystem", "APIs & services" and "AI-assisted development"', () => {
     expect(
       SKILLS_CONTENT.groups.map((group) => [
         group.id,
@@ -80,11 +80,29 @@ describe("Skills content", () => {
       ["programming", []],
       ["frontend", [["architectureEcosystem", "Architecture & ecosystem"]]],
       ["backend", [["apisServices", "APIs & services"]]],
-      ["ai", []],
+      ["ai", [["aiDevelopment", "AI-assisted development"]]],
       ["databases", []],
       ["cloudDevops", []],
       ["testing", []],
       ["practice", []],
+    ]);
+  });
+
+  it("lists AI's Skills as fixed with the Owner", () => {
+    const ai = SKILLS_CONTENT.groups.find((group) => group.id === "ai");
+    expect(ai?.skills.map((skill) => en(skill.name))).toEqual([
+      "OpenAI SDK",
+      "CrewAI",
+      "LangGraph",
+      "MCP",
+      "Agent creation: Google ADK & Amazon Bedrock",
+    ]);
+    expect(ai?.subgroups[0]?.skills.map((skill) => en(skill.name))).toEqual([
+      "Claude Code & Codex",
+      "Antigravity",
+      "OpenCode",
+      "RAG, Obsidian & Karpathy Wiki",
+      "Prompts, skills & rules",
     ]);
   });
 

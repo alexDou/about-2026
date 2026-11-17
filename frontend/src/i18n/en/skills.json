@@ -155,6 +155,30 @@
       "value": "Up to date, with very strong knowledge. My default for systems that demand low latency, high throughput and real-time work; for standard web APIs I'd consider Axum."
     }
   ],
+  "skills.skill.agentCreation.name": [
+    {
+      "type": 0,
+      "value": "Agent creation: Google ADK & Amazon Bedrock"
+    }
+  ],
+  "skills.skill.agentCreation.overview": [
+    {
+      "type": 0,
+      "value": "I'm building agents with them in my own projects; the CCAR-F and CCAR-P certifications are in the works."
+    }
+  ],
+  "skills.skill.antigravity.name": [
+    {
+      "type": 0,
+      "value": "Antigravity"
+    }
+  ],
+  "skills.skill.antigravity.overview": [
+    {
+      "type": 0,
+      "value": "My choice when I work with Gemini models."
+    }
+  ],
   "skills.skill.apollo.name": [
     {
       "type": 0,
@@ -191,6 +215,18 @@
       "value": "Expert, proven in production: Webpack, Vite, Rspack and Rollup."
     }
   ],
+  "skills.skill.claudeCodex.name": [
+    {
+      "type": 0,
+      "value": "Claude Code & Codex"
+    }
+  ],
+  "skills.skill.claudeCodex.overview": [
+    {
+      "type": 0,
+      "value": "My first choice."
+    }
+  ],
   "skills.skill.cleanArchitecture.name": [
     {
       "type": 0,
@@ -201,6 +237,18 @@
     {
       "type": 0,
       "value": "Placeholder overview for Clean architecture, until the questionnaire fixes it."
+    }
+  ],
+  "skills.skill.crewai.name": [
+    {
+      "type": 0,
+      "value": "CrewAI"
+    }
+  ],
+  "skills.skill.crewai.overview": [
+    {
+      "type": 0,
+      "value": "Very confident: I build on it successfully, and one of my projects runs on it."
     }
   ],
   "skills.skill.css.name": [
@@ -335,6 +383,18 @@
       "value": "No production experience yet: learnt and certified, with a very basic grasp of Spring."
     }
   ],
+  "skills.skill.langgraph.name": [
+    {
+      "type": 0,
+      "value": "LangGraph"
+    }
+  ],
+  "skills.skill.langgraph.overview": [
+    {
+      "type": 0,
+      "value": "I experiment with it in my own projects."
+    }
+  ],
   "skills.skill.libraries.name": [
     {
       "type": 0,
@@ -356,7 +416,7 @@
   "skills.skill.mcp.overview": [
     {
       "type": 0,
-      "value": "Placeholder overview for MCP, until the questionnaire fixes it."
+      "value": "Very confident: I use MCP servers and build my own."
     }
   ],
   "skills.skill.nestHapiSails.name": [
@@ -404,7 +464,7 @@
   "skills.skill.openaiSdk.overview": [
     {
       "type": 0,
-      "value": "Placeholder overview for OpenAI SDK, until the questionnaire fixes it."
+      "value": "Very confident: I build on it successfully."
     }
   ],
   "skills.skill.openapi.name": [
@@ -417,6 +477,18 @@
     {
       "type": 0,
       "value": "Up-to-date knowledge."
+    }
+  ],
+  "skills.skill.opencode.name": [
+    {
+      "type": 0,
+      "value": "OpenCode"
+    }
+  ],
+  "skills.skill.opencode.overview": [
+    {
+      "type": 0,
+      "value": "My choice for projects where I experiment with different models, free ones included."
     }
   ],
   "skills.skill.performance.name": [
@@ -491,6 +563,18 @@
       "value": "Commercially proven, with the same confidence as React."
     }
   ],
+  "skills.skill.promptsSkillsRules.name": [
+    {
+      "type": 0,
+      "value": "Prompts, skills & rules"
+    }
+  ],
+  "skills.skill.promptsSkillsRules.overview": [
+    {
+      "type": 0,
+      "value": "My own tried-and-tested practices for prompt engineering and for creating and maintaining skills and rules, which I keep improving."
+    }
+  ],
   "skills.skill.protocols.name": [
     {
       "type": 0,
@@ -513,6 +597,18 @@
     {
       "type": 0,
       "value": "Deep knowledge, though I don't claim expert level."
+    }
+  ],
+  "skills.skill.ragMemory.name": [
+    {
+      "type": 0,
+      "value": "RAG, Obsidian & Karpathy Wiki"
+    }
+  ],
+  "skills.skill.ragMemory.overview": [
+    {
+      "type": 0,
+      "value": "I use them regularly, for persistent memory and fast inference."
     }
   ],
   "skills.skill.react.name": [
@@ -717,6 +813,12 @@
     {
       "type": 0,
       "value": "Up-to-date knowledge."
+    }
+  ],
+  "skills.subgroup.aiDevelopment.name": [
+    {
+      "type": 0,
+      "value": "AI-assisted development"
     }
   ],
   "skills.subgroup.apisServices.name": [

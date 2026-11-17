@@ -10,13 +10,17 @@ export const SKILL_GROUP_IDS = [
   "practice",
 ] as const;
 
-/** The Skill subgroups: Frontend's and Backend's. */
-export const SKILL_SUBGROUP_IDS = ["architectureEcosystem", "apisServices"] as const;
+/** The Skill subgroups: Frontend's, Backend's and AI's. */
+export const SKILL_SUBGROUP_IDS = [
+  "architectureEcosystem",
+  "apisServices",
+  "aiDevelopment",
+] as const;
 
 /**
- * The Skills. Programming languages, Frontend and Backend are fixed with the Owner; the rest are
- * placeholders until their questionnaires fix them (Unit 3.1): every Skill that backs a Certificate
- * is here, plus a few per group so the stages after this one have content.
+ * The Skills. Programming languages, Frontend, Backend and AI are fixed with the Owner; the rest
+ * are placeholders until their questionnaires fix them (Unit 3.1): every Skill that backs a
+ * Certificate is here, plus a few per group so the stages after this one have content.
  */
 export const SKILL_IDS = [
   "react",
@@ -64,7 +68,15 @@ export const SKILL_IDS = [
   "vitest",
   "playwright",
   "openaiSdk",
+  "crewai",
+  "langgraph",
   "mcp",
+  "agentCreation",
+  "claudeCodex",
+  "antigravity",
+  "opencode",
+  "ragMemory",
+  "promptsSkillsRules",
   "systemDesign",
   "cleanArchitecture",
 ] as const;
