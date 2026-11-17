@@ -275,6 +275,18 @@
       "value": "Placeholder overview for Docker, until the questionnaire fixes it."
     }
   ],
+  "skills.skill.dynamodb.name": [
+    {
+      "type": 0,
+      "value": "DynamoDB"
+    }
+  ],
+  "skills.skill.dynamodb.overview": [
+    {
+      "type": 0,
+      "value": "Confident, though I don't claim expert level."
+    }
+  ],
   "skills.skill.elasticsearch.name": [
     {
       "type": 0,
@@ -284,7 +296,7 @@
   "skills.skill.elasticsearch.overview": [
     {
       "type": 0,
-      "value": "Placeholder overview for Elasticsearch, until the questionnaire fixes it."
+      "value": "Application-level knowledge."
     }
   ],
   "skills.skill.elysia.name": [
@@ -404,7 +416,7 @@
   "skills.skill.libraries.overview": [
     {
       "type": 0,
-      "value": "Chosen not by name but by maturity, level of support, GitHub stars and community feedback: I pick the tools that best fit each project. Component libraries (Material UI, shadcn/ui, Ant Design, Radix, Semantic UI), state management (Redux, MobX, Zustand, XState, Jotai), animation (Framer Motion), 3D (Three.js), i18n, Storybook, charts, tables, forms."
+      "value": "Chosen not by name but by maturity, level of support, GitHub stars and community feedback: I pick the tools that best fit each project. Component libraries (Material UI, shadcn/ui, Ant Design, Radix, Semantic UI), state management (Redux, MobX, Zustand, XState, Jotai), animation (Framer Motion), 3D (Three.js), validation (Zod), i18n, Storybook, charts, tables, forms."
     }
   ],
   "skills.skill.mcp.name": [
@@ -417,6 +429,30 @@
     {
       "type": 0,
       "value": "Very confident: I use MCP servers and build my own."
+    }
+  ],
+  "skills.skill.mongodb.name": [
+    {
+      "type": 0,
+      "value": "MongoDB"
+    }
+  ],
+  "skills.skill.mongodb.overview": [
+    {
+      "type": 0,
+      "value": "Expert, optimisation and transactions included."
+    }
+  ],
+  "skills.skill.mongoose.name": [
+    {
+      "type": 0,
+      "value": "Mongoose & the MongoDB Node.js driver"
+    }
+  ],
+  "skills.skill.mongoose.overview": [
+    {
+      "type": 0,
+      "value": "Expert in both; today I'd choose the official driver."
     }
   ],
   "skills.skill.nestHapiSails.name": [
@@ -539,16 +575,16 @@
       "value": "Placeholder overview for Playwright, until the questionnaire fixes it."
     }
   ],
-  "skills.skill.postgresql.name": [
+  "skills.skill.postgresMysql.name": [
     {
       "type": 0,
-      "value": "PostgreSQL"
+      "value": "PostgreSQL & MySQL"
     }
   ],
-  "skills.skill.postgresql.overview": [
+  "skills.skill.postgresMysql.overview": [
     {
       "type": 0,
-      "value": "Placeholder overview for PostgreSQL, until the questionnaire fixes it."
+      "value": "Expert: analysis, debugging, scaling and optimisation."
     }
   ],
   "skills.skill.preact.name": [
@@ -561,6 +597,18 @@
     {
       "type": 0,
       "value": "Commercially proven, with the same confidence as React."
+    }
+  ],
+  "skills.skill.prisma.name": [
+    {
+      "type": 0,
+      "value": "Prisma"
+    }
+  ],
+  "skills.skill.prisma.overview": [
+    {
+      "type": 0,
+      "value": "Expert, with a number of applications built on it."
     }
   ],
   "skills.skill.promptsSkillsRules.name": [
@@ -623,6 +671,18 @@
       "value": "Expert, and my default choice for frontend work, proven in successful commercial projects."
     }
   ],
+  "skills.skill.redis.name": [
+    {
+      "type": 0,
+      "value": "Redis"
+    }
+  ],
+  "skills.skill.redis.overview": [
+    {
+      "type": 0,
+      "value": "Expert; I use it mostly for caching."
+    }
+  ],
   "skills.skill.responsiveUi.name": [
     {
       "type": 0,
@@ -647,6 +707,18 @@
       "value": "Up-to-date knowledge."
     }
   ],
+  "skills.skill.rethinkdb.name": [
+    {
+      "type": 0,
+      "value": "RethinkDB"
+    }
+  ],
+  "skills.skill.rethinkdb.overview": [
+    {
+      "type": 0,
+      "value": "Confident; my first consideration for real-time use cases."
+    }
+  ],
   "skills.skill.rust.name": [
     {
       "type": 0,
@@ -657,6 +729,18 @@
     {
       "type": 0,
       "value": "An enthusiast: I enjoy the language and use it for web development only."
+    }
+  ],
+  "skills.skill.scylladb.name": [
+    {
+      "type": 0,
+      "value": "ScyllaDB"
+    }
+  ],
+  "skills.skill.scylladb.overview": [
+    {
+      "type": 0,
+      "value": "Confident; my first consideration for huge-scale, ultra-low-latency data flows."
     }
   ],
   "skills.skill.seo.name": [
@@ -681,6 +765,30 @@
     {
       "type": 0,
       "value": "Ready to use from day one."
+    }
+  ],
+  "skills.skill.sqlalchemy.name": [
+    {
+      "type": 0,
+      "value": "SQLAlchemy"
+    }
+  ],
+  "skills.skill.sqlalchemy.overview": [
+    {
+      "type": 0,
+      "value": "Ready to use from day one."
+    }
+  ],
+  "skills.skill.sqlite.name": [
+    {
+      "type": 0,
+      "value": "SQLite"
+    }
+  ],
+  "skills.skill.sqlite.overview": [
+    {
+      "type": 0,
+      "value": "I use it regularly."
     }
   ],
   "skills.skill.sse.name": [
@@ -741,6 +849,18 @@
     {
       "type": 0,
       "value": "Placeholder overview for System design, until the questionnaire fixes it."
+    }
+  ],
+  "skills.skill.typeorm.name": [
+    {
+      "type": 0,
+      "value": "TypeORM"
+    }
+  ],
+  "skills.skill.typeorm.overview": [
+    {
+      "type": 0,
+      "value": "Expert, though I haven't built on it for a while."
     }
   ],
   "skills.skill.typescript.name": [
@@ -831,6 +951,24 @@
     {
       "type": 0,
       "value": "Architecture & ecosystem"
+    }
+  ],
+  "skills.subgroup.nosql.name": [
+    {
+      "type": 0,
+      "value": "NoSQL"
+    }
+  ],
+  "skills.subgroup.ormsDrivers.name": [
+    {
+      "type": 0,
+      "value": "ORMs & drivers"
+    }
+  ],
+  "skills.subgroup.sql.name": [
+    {
+      "type": 0,
+      "value": "SQL"
     }
   ]
 }

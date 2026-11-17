@@ -10,17 +10,20 @@ export const SKILL_GROUP_IDS = [
   "practice",
 ] as const;
 
-/** The Skill subgroups: Frontend's, Backend's and AI's. */
+/** The Skill subgroups: Frontend's, Backend's, AI's and Databases & search's. */
 export const SKILL_SUBGROUP_IDS = [
   "architectureEcosystem",
   "apisServices",
   "aiDevelopment",
+  "sql",
+  "nosql",
+  "ormsDrivers",
 ] as const;
 
 /**
- * The Skills. Programming languages, Frontend, Backend and AI are fixed with the Owner; the rest
- * are placeholders until their questionnaires fix them (Unit 3.1): every Skill that backs a
- * Certificate is here, plus a few per group so the stages after this one have content.
+ * The Skills. Programming languages, Frontend, Backend, AI and Databases & search are fixed with
+ * the Owner; the rest are placeholders until their questionnaires fix them (Unit 3.1): every Skill
+ * that backs a Certificate is here, plus a few per group so the stages after this one have content.
  */
 export const SKILL_IDS = [
   "react",
@@ -61,8 +64,18 @@ export const SKILL_IDS = [
   "openapi",
   "kafka",
   "protocols",
-  "postgresql",
+  "postgresMysql",
+  "sqlite",
+  "redis",
+  "mongodb",
+  "dynamodb",
+  "rethinkdb",
+  "scylladb",
   "elasticsearch",
+  "prisma",
+  "typeorm",
+  "sqlalchemy",
+  "mongoose",
   "docker",
   "bash",
   "vitest",

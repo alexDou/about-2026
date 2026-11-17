@@ -70,7 +70,7 @@ describe("Skills content", () => {
     expect(SKILLS_CONTENT.groups.map((group) => group.id)).toEqual([...SKILL_GROUP_IDS]);
   });
 
-  it('gives only Frontend, Backend and AI a Skill subgroup: "Architecture & ecosystem", "APIs & services" and "AI-assisted development"', () => {
+  it("gives Frontend, Backend, AI and Databases & search their Skill subgroups", () => {
     expect(
       SKILLS_CONTENT.groups.map((group) => [
         group.id,
@@ -81,7 +81,14 @@ describe("Skills content", () => {
       ["frontend", [["architectureEcosystem", "Architecture & ecosystem"]]],
       ["backend", [["apisServices", "APIs & services"]]],
       ["ai", [["aiDevelopment", "AI-assisted development"]]],
-      ["databases", []],
+      [
+        "databases",
+        [
+          ["sql", "SQL"],
+          ["nosql", "NoSQL"],
+          ["ormsDrivers", "ORMs & drivers"],
+        ],
+      ],
       ["cloudDevops", []],
       ["testing", []],
       ["practice", []],
@@ -103,6 +110,18 @@ describe("Skills content", () => {
       "OpenCode",
       "RAG, Obsidian & Karpathy Wiki",
       "Prompts, skills & rules",
+    ]);
+  });
+
+  it("lists Databases & search's Skills as fixed with the Owner, all in subgroups", () => {
+    const databases = SKILLS_CONTENT.groups.find((group) => group.id === "databases");
+    expect(databases?.skills).toEqual([]);
+    expect(
+      databases?.subgroups.map((subgroup) => subgroup.skills.map((skill) => en(skill.name))),
+    ).toEqual([
+      ["PostgreSQL & MySQL", "SQLite"],
+      ["Redis", "MongoDB", "DynamoDB", "RethinkDB", "ScyllaDB", "Elasticsearch"],
+      ["Prisma", "TypeORM", "SQLAlchemy", "Mongoose & the MongoDB Node.js driver"],
     ]);
   });
 

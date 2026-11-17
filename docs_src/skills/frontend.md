@@ -109,3 +109,9 @@ On the draft:
 2. keep it on FE pls
 
 Approved: the text is in `frontend/src/i18n/en/skills.json`.
+
+## Addendum (Databases round 1)
+
+> side note: add Zod to frontend. we list some libs there. state managers etc. add zod too
+
+Applied: "validation (Zod)" in Libraries.
