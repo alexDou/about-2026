@@ -55,7 +55,7 @@ const group = (
 
 /**
  * The Skills Panel's content: which message each piece of it reads. Programming languages,
- * Frontend and Backend are fixed with the Owner; the rest are placeholders until their
+ * Frontend, Backend and AI are fixed with the Owner; the rest are placeholders until their
  * questionnaires (Unit 3.1) fix them. The Certificates are the ones decided in the grilling,
  * without verification links until Unit 3.2.
  */
@@ -128,10 +128,25 @@ export const SKILLS_CONTENT: SkillsContent = {
         ]),
       ],
     ),
-    group("ai", [
-      skill("openaiSdk", [certificate("udemyLlmEngineering", "udemy", { year: 2025, month: 7 })]),
-      skill("mcp", [certificate("udemyAgenticAi", "udemy", { year: 2026, month: 1 })]),
-    ]),
+    group(
+      "ai",
+      [
+        skill("openaiSdk", [certificate("udemyLlmEngineering", "udemy", { year: 2025, month: 7 })]),
+        skill("crewai"),
+        skill("langgraph"),
+        skill("mcp", [certificate("udemyAgenticAi", "udemy", { year: 2026, month: 1 })]),
+        skill("agentCreation"),
+      ],
+      [
+        subgroup("aiDevelopment", [
+          skill("claudeCodex"),
+          skill("antigravity"),
+          skill("opencode"),
+          skill("ragMemory"),
+          skill("promptsSkillsRules"),
+        ]),
+      ],
+    ),
     group("databases", [
       skill("postgresql"),
       skill("elasticsearch", [
