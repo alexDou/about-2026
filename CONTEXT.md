@@ -45,7 +45,7 @@ _Avoid_: subtitle, tagline
 
 **Skill**:
 A named thing the Owner knows (a language, technology or practice) with an overview: a short
-statement in their own words. Depth is told in words, never as a rating.
+statement in their own words. Depth, where given, is told in words, never as a rating.
 _Avoid_: competency, rating
 
 **Skill group**:
