@@ -54,10 +54,9 @@ const group = (
 });
 
 /**
- * The Skills Panel's content: which message each piece of it reads. Programming languages,
- * Frontend, Backend, AI, Databases & search and Cloud & DevOps are fixed with the Owner; the rest
- * are placeholders until their questionnaires (Unit 3.1) fix them. The Certificates are the ones
- * decided in the grilling, without verification links until Unit 3.2.
+ * The Skills Panel's content: which message each piece of it reads. The Skills are fixed with the
+ * Owner (Unit 3.1) except Engineering practice's, placeholders until its questionnaire fixes them.
+ * The Certificates are the ones decided in the grilling, without verification links until Unit 3.2.
  */
 export const SKILLS_CONTENT: SkillsContent = {
   groups: [
@@ -181,7 +180,16 @@ export const SKILLS_CONTENT: SkillsContent = {
       skill("linux", [certificate("udemyBash", "udemy", { year: 2019, month: 7 })]),
       skill("monitoring"),
     ]),
-    group("testing", [skill("vitest"), skill("playwright")]),
+    group("testing", [
+      skill("jestVitestMocha"),
+      skill("pytest"),
+      skill("rtlMsw"),
+      skill("cypressPlaywright"),
+      skill("cucumber"),
+      skill("eslintPrettierOxlint"),
+      skill("ruffClippy"),
+      skill("semgrep"),
+    ]),
     group("practice", [skill("systemDesign"), skill("cleanArchitecture")]),
   ],
 };
