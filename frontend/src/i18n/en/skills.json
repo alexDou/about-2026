@@ -167,6 +167,18 @@
       "value": "I'm building agents with them in my own projects; the CCAR-F and CCAR-P certifications are in the works."
     }
   ],
+  "skills.skill.agile.name": [
+    {
+      "type": 0,
+      "value": "Agile: Scrum & Kanban"
+    }
+  ],
+  "skills.skill.agile.overview": [
+    {
+      "type": 0,
+      "value": "Equally comfortable with both."
+    }
+  ],
   "skills.skill.antigravity.name": [
     {
       "type": 0,
@@ -227,16 +239,28 @@
       "value": "My first choice."
     }
   ],
-  "skills.skill.cleanArchitecture.name": [
+  "skills.skill.cleanCode.name": [
     {
       "type": 0,
-      "value": "Clean architecture"
+      "value": "Clean code, clean architecture & deep modules"
     }
   ],
-  "skills.skill.cleanArchitecture.overview": [
+  "skills.skill.cleanCode.overview": [
     {
       "type": 0,
-      "value": "Placeholder overview for Clean architecture, until the questionnaire fixes it."
+      "value": "Principles I stick to, from the first line of code to the shape of the whole project."
+    }
+  ],
+  "skills.skill.codeReview.name": [
+    {
+      "type": 0,
+      "value": "Code review"
+    }
+  ],
+  "skills.skill.codeReview.overview": [
+    {
+      "type": 0,
+      "value": "For me, an inseparable part of the work."
     }
   ],
   "skills.skill.crewai.name": [
@@ -287,6 +311,18 @@
       "value": "Expert, in regular use for end-to-end tests."
     }
   ],
+  "skills.skill.dddTddBdd.name": [
+    {
+      "type": 0,
+      "value": "DDD, TDD & BDD"
+    }
+  ],
+  "skills.skill.dddTddBdd.overview": [
+    {
+      "type": 0,
+      "value": "My preferred combination: domain-driven design, built test-first or behaviour-first."
+    }
+  ],
   "skills.skill.docker.name": [
     {
       "type": 0,
@@ -297,6 +333,18 @@
     {
       "type": 0,
       "value": "Confident, following best practices for Dockerfile optimisation."
+    }
+  ],
+  "skills.skill.documentation.name": [
+    {
+      "type": 0,
+      "value": "Technical documentation & ADRs"
+    }
+  ],
+  "skills.skill.documentation.overview": [
+    {
+      "type": 0,
+      "value": "I write technical documentation and ADRs, and document in code with JSDoc and the like."
     }
   ],
   "skills.skill.dynamodb.name": [
@@ -707,6 +755,18 @@
       "value": "Commercially proven, with the same confidence as React."
     }
   ],
+  "skills.skill.principles.name": [
+    {
+      "type": 0,
+      "value": "SOLID, DRY, KISS, YAGNI & design patterns"
+    }
+  ],
+  "skills.skill.principles.overview": [
+    {
+      "type": 0,
+      "value": "My guidance in every project: I check my code against them."
+    }
+  ],
   "skills.skill.prisma.name": [
     {
       "type": 0,
@@ -803,6 +863,18 @@
       "value": "Expert; I use it mostly for caching."
     }
   ],
+  "skills.skill.refactoring.name": [
+    {
+      "type": 0,
+      "value": "Legacy code & refactoring"
+    }
+  ],
+  "skills.skill.refactoring.overview": [
+    {
+      "type": 0,
+      "value": "Comfortable maintaining legacy code and refactoring it."
+    }
+  ],
   "skills.skill.responsiveUi.name": [
     {
       "type": 0,
@@ -885,6 +957,18 @@
     {
       "type": 0,
       "value": "Confident; my first consideration for huge-scale, ultra-low-latency data flows."
+    }
+  ],
+  "skills.skill.sdd.name": [
+    {
+      "type": 0,
+      "value": "Spec-driven development"
+    }
+  ],
+  "skills.skill.sdd.overview": [
+    {
+      "type": 0,
+      "value": "I use it very often since AI-assisted development took off; this site is built that way."
     }
   ],
   "skills.skill.semgrep.name": [
@@ -993,18 +1077,6 @@
     {
       "type": 0,
       "value": "Solid knowledge of Svelte and SvelteKit, and I'd gladly build with them; not yet used in commercial work."
-    }
-  ],
-  "skills.skill.systemDesign.name": [
-    {
-      "type": 0,
-      "value": "System design"
-    }
-  ],
-  "skills.skill.systemDesign.overview": [
-    {
-      "type": 0,
-      "value": "Placeholder overview for System design, until the questionnaire fixes it."
     }
   ],
   "skills.skill.terraformHelm.name": [

@@ -54,9 +54,9 @@ const group = (
 });
 
 /**
- * The Skills Panel's content: which message each piece of it reads. The Skills are fixed with the
- * Owner (Unit 3.1) except Engineering practice's, placeholders until its questionnaire fixes them.
- * The Certificates are the ones decided in the grilling, without verification links until Unit 3.2.
+ * The Skills Panel's content: which message each piece of it reads. The Skills are the ones fixed
+ * with the Owner in the questionnaires (`docs_src/skills/`, Unit 3.1). The Certificates are the
+ * ones decided in the grilling, without verification links until Unit 3.2.
  */
 export const SKILLS_CONTENT: SkillsContent = {
   groups: [
@@ -190,6 +190,15 @@ export const SKILLS_CONTENT: SkillsContent = {
       skill("ruffClippy"),
       skill("semgrep"),
     ]),
-    group("practice", [skill("systemDesign"), skill("cleanArchitecture")]),
+    group("practice", [
+      skill("principles"),
+      skill("cleanCode"),
+      skill("dddTddBdd"),
+      skill("sdd"),
+      skill("refactoring"),
+      skill("codeReview"),
+      skill("documentation"),
+      skill("agile"),
+    ]),
   ],
 };
