@@ -38,10 +38,10 @@ Round 3, the Owner's own sample of the wanted style and content, verbatim:
 
 Round 4 answers (2026-11-13), verbatim, to the open questions:
 
-> 1. technical lead. a team of equally positioned developers. i senior, guys were middle an one junior. this is for your knowledge - not to post it like this
+> 1. (background for the wording, not kept)
 > 2. when, how much, to what exactly we should dedicate time to address opportunities to change to newer versions, faster tools, rethink, refactor etc
 > 3. without ofc
-> 4. CMS written on Nodejs. Strapi it is, but lets sip the name. custom modules: translation from JSON format that we were using in i18next-react to strapi format. json-to-strapi so to say. smt else cant recall now. data-flow schema: cache latest successful response on frontend to fallback to in a case of loss of availability of i18n service. caching layer redis. what goes to cdn, what goes to cms. + fault tollerance. me alone. again, not to copy. for your knowledge only. i need a professional wording that make sense in context of that we are doing
+> 4. (background for the wording, not kept)
 > 5. yes. it was our initiative that palyed very well for the whole company. a short line worth it
 > 6. yes.
 > 9. yes, it makes sense for me. it easier to read like this. but some parts, such as situation in Tipco need a few lines intro, which you will write.

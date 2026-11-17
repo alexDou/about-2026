@@ -40,7 +40,7 @@ On the draft:
 1. yes
 2. experimented with it
 3. https://www.udemy.com/course/certified-claude-architect-masterclass-2026/; https://www.udemy.com/course/ccar-p-exam-prep/
-   very interesting and thourogh stuff, am still going thru it (dont say this exactly. fyk. maybe use smw in a fancy phrase)
+   (background for the wording, not kept)
 4. - https://community.obsidian.md/plugins/karpathywiki
    - forget it, drop
 5. answer's above
