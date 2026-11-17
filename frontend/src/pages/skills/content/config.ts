@@ -10,7 +10,7 @@ export const SKILL_GROUP_IDS = [
   "practice",
 ] as const;
 
-/** The Skill subgroups: Frontend's, Backend's, AI's and Databases & search's. */
+/** The Skill subgroups, in the order they show. */
 export const SKILL_SUBGROUP_IDS = [
   "architectureEcosystem",
   "apisServices",
@@ -21,9 +21,15 @@ export const SKILL_SUBGROUP_IDS = [
 ] as const;
 
 /**
- * The Skills, fixed with the Owner in the questionnaires (`docs_src/skills/`, Unit 3.1).
+ * The Skills, in the order they show, fixed with the Owner in the questionnaires
+ * (`docs_src/skills/`, Unit 3.1).
  */
 export const SKILL_IDS = [
+  "typescript",
+  "python",
+  "rust",
+  "php",
+  "kotlin",
   "react",
   "nextjs",
   "preact",
@@ -37,14 +43,9 @@ export const SKILL_IDS = [
   "uxPrinciples",
   "standardsAccessibility",
   "seo",
-  "performance",
+  "frontendPerformance",
   "css",
-  "libraries",
-  "typescript",
-  "python",
-  "rust",
-  "php",
-  "kotlin",
+  "frontendLibraries",
   "nodejs",
   "expressKoa",
   "socketIo",
@@ -61,7 +62,17 @@ export const SKILL_IDS = [
   "webrtc",
   "openapi",
   "kafka",
-  "protocols",
+  "communicationProtocols",
+  "openaiSdk",
+  "crewai",
+  "langgraph",
+  "mcp",
+  "agentCreation",
+  "claudeCodex",
+  "antigravity",
+  "opencode",
+  "ragObsidian",
+  "promptsSkillsRules",
   "postgresMysql",
   "sqlite",
   "redis",
@@ -91,23 +102,13 @@ export const SKILL_IDS = [
   "eslintPrettierOxlint",
   "ruffClippy",
   "semgrep",
-  "openaiSdk",
-  "crewai",
-  "langgraph",
-  "mcp",
-  "agentCreation",
-  "claudeCodex",
-  "antigravity",
-  "opencode",
-  "ragMemory",
-  "promptsSkillsRules",
-  "principles",
+  "designPrinciples",
   "cleanCode",
   "dddTddBdd",
   "sdd",
   "refactoring",
   "codeReview",
-  "documentation",
+  "techDocumentation",
   "agile",
 ] as const;
 

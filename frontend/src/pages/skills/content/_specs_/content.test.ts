@@ -9,7 +9,7 @@ import {
   SKILL_SUBGROUP_IDS,
 } from "../config";
 import { SKILLS_CONTENT } from "..";
-import type { Certificate, Skill } from "../types";
+import type { Certificate, Skill, SkillGroup } from "../types";
 
 const intl = createIntl({
   locale: "en",
@@ -46,6 +46,12 @@ const allSkills: Skill[] = SKILLS_CONTENT.groups.flatMap((group) => [
   ...group.subgroups.flatMap((subgroup) => subgroup.skills),
 ]);
 
+/** A group's Skill names: its own first, then one list per subgroup. */
+const skillNames = (group: SkillGroup): string[][] => [
+  group.skills.map((skill) => en(skill.name)),
+  ...group.subgroups.map((subgroup) => subgroup.skills.map((skill) => en(skill.name))),
+];
+
 const allCertificates: Certificate[] = allSkills.flatMap((skill) => [...skill.certificates]);
 
 describe("Skills content", () => {
@@ -70,7 +76,7 @@ describe("Skills content", () => {
     expect(SKILLS_CONTENT.groups.map((group) => group.id)).toEqual([...SKILL_GROUP_IDS]);
   });
 
-  it("gives Frontend, Backend, AI and Databases & search their Skill subgroups", () => {
+  it("gives each Skill group its subgroups", () => {
     expect(
       SKILLS_CONTENT.groups.map((group) => [
         group.id,
@@ -95,145 +101,112 @@ describe("Skills content", () => {
     ]);
   });
 
-  it("lists AI's Skills as fixed with the Owner", () => {
-    const ai = SKILLS_CONTENT.groups.find((group) => group.id === "ai");
-    expect(ai?.skills.map((skill) => en(skill.name))).toEqual([
-      "OpenAI SDK",
-      "CrewAI",
-      "LangGraph",
-      "MCP",
-      "Agent creation: Google ADK & Amazon Bedrock",
-    ]);
-    expect(ai?.subgroups[0]?.skills.map((skill) => en(skill.name))).toEqual([
-      "Claude Code & Codex",
-      "Antigravity",
-      "OpenCode",
-      "RAG, Obsidian & Karpathy Wiki",
-      "Prompts, skills & rules",
-    ]);
-  });
-
-  it("lists Databases & search's Skills as fixed with the Owner, all in subgroups", () => {
-    const databases = SKILLS_CONTENT.groups.find((group) => group.id === "databases");
-    expect(databases?.skills).toEqual([]);
+  it("lists each group's Skills as fixed with the Owner: its own, then each subgroup's", () => {
     expect(
-      databases?.subgroups.map((subgroup) => subgroup.skills.map((skill) => en(skill.name))),
-    ).toEqual([
-      ["PostgreSQL & MySQL", "SQLite"],
-      ["Redis", "MongoDB", "DynamoDB", "RethinkDB", "ScyllaDB", "Elasticsearch"],
-      ["Prisma", "TypeORM", "SQLAlchemy", "Mongoose & the MongoDB Node.js driver"],
-    ]);
-  });
-
-  it("lists Cloud & DevOps's Skills as fixed with the Owner, observability included", () => {
-    const cloud = SKILLS_CONTENT.groups.find((group) => group.id === "cloudDevops");
-    expect(cloud?.skills.map((skill) => en(skill.name))).toEqual([
-      "Docker & Docker Compose",
-      "Kubernetes",
-      "Terraform & Helm",
-      "GitLab CI & Jenkins",
-      "AWS",
-      "Google Cloud",
-      "Nginx & Apache",
-      "Linux",
-      "Monitoring & Observability",
-    ]);
-  });
-
-  it("lists Testing & quality's Skills as fixed with the Owner", () => {
-    const testing = SKILLS_CONTENT.groups.find((group) => group.id === "testing");
-    expect(testing?.skills.map((skill) => en(skill.name))).toEqual([
-      "Jest, Vitest & Mocha",
-      "pytest",
-      "React Testing Library & MSW",
-      "Cypress & Playwright",
-      "Cucumber & Gherkin",
-      "ESLint, Prettier & oxlint",
-      "Ruff & Clippy",
-      "Semgrep",
-    ]);
-  });
-
-  it("lists Engineering practice's Skills as fixed with the Owner", () => {
-    const practice = SKILLS_CONTENT.groups.find((group) => group.id === "practice");
-    expect(practice?.skills.map((skill) => en(skill.name))).toEqual([
-      "SOLID, DRY, KISS, YAGNI & design patterns",
-      "Clean code, clean architecture & deep modules",
-      "DDD, TDD & BDD",
-      "Spec-driven development",
-      "Legacy code & refactoring",
-      "Code review",
-      "Technical documentation & ADRs",
-      "Agile: Scrum & Kanban",
-    ]);
-  });
-
-  it("leaves no placeholder text", () => {
-    for (const id of SKILLS_IDS) expect(en(id as MessageId)).not.toMatch(/placeholder/i);
-  });
-
-  it("lists Frontend's Skills as fixed with the Owner", () => {
-    const frontend = SKILLS_CONTENT.groups.find((group) => group.id === "frontend");
-    expect(frontend?.skills.map((skill) => en(skill.name))).toEqual([
-      "React",
-      "Next.js",
-      "Preact",
-      "Vue",
-      "Svelte",
-    ]);
-    expect(frontend?.subgroups[0]?.skills.map((skill) => en(skill.name))).toEqual([
-      "Frontend architecture",
-      "Build tooling",
-      "SSR & SSG",
-      "Responsive UI",
-      "Figma to UI",
-      "UX principles",
-      "Standards & accessibility",
-      "SEO",
-      "Performance optimisation",
-      "CSS",
-      "Libraries",
-    ]);
-  });
-
-  it("lists the Programming languages as fixed with the Owner", () => {
-    const programming = SKILLS_CONTENT.groups.find((group) => group.id === "programming");
-    expect(programming?.skills.map((skill) => en(skill.name))).toEqual([
-      "TypeScript",
-      "Python",
-      "Rust",
-      "PHP",
-      "Kotlin",
-    ]);
+      Object.fromEntries(SKILLS_CONTENT.groups.map((group) => [group.id, skillNames(group)])),
+    ).toEqual({
+      programming: [["TypeScript", "Python", "Rust", "PHP", "Kotlin"]],
+      frontend: [
+        ["React", "Next.js", "Preact", "Vue", "Svelte"],
+        [
+          "Frontend architecture",
+          "Build tooling",
+          "SSR & SSG",
+          "Responsive UI",
+          "Figma to UI",
+          "UX principles",
+          "Standards & accessibility",
+          "SEO",
+          "Performance optimisation",
+          "CSS",
+          "Libraries",
+        ],
+      ],
+      backend: [
+        [
+          "Node.js",
+          "Express & Koa",
+          "Socket.io",
+          "Apollo",
+          "ElysiaJS",
+          "NestJS, Hapi & Sails.js",
+          "FastAPI",
+          "Actix",
+          "Yii2, Zend Framework & Laravel",
+        ],
+        [
+          "RESTful APIs",
+          "GraphQL",
+          "WebSockets",
+          "Server-Sent Events",
+          "WebRTC",
+          "OpenAPI/Swagger",
+          "Kafka",
+          "Communication protocols",
+        ],
+      ],
+      ai: [
+        ["OpenAI SDK", "CrewAI", "LangGraph", "MCP", "Agent creation: Google ADK & Amazon Bedrock"],
+        [
+          "Claude Code & Codex",
+          "Antigravity",
+          "OpenCode",
+          "RAG, Obsidian & Karpathy Wiki",
+          "Prompts, skills & rules",
+        ],
+      ],
+      databases: [
+        [],
+        ["PostgreSQL & MySQL", "SQLite"],
+        ["Redis", "MongoDB", "DynamoDB", "RethinkDB", "ScyllaDB", "Elasticsearch"],
+        ["Prisma", "TypeORM", "SQLAlchemy", "Mongoose & the MongoDB Node.js driver"],
+      ],
+      cloudDevops: [
+        [
+          "Docker & Docker Compose",
+          "Kubernetes",
+          "Terraform & Helm",
+          "GitLab CI & Jenkins",
+          "AWS",
+          "Google Cloud",
+          "Nginx & Apache",
+          "Linux",
+          "Monitoring & Observability",
+        ],
+      ],
+      testing: [
+        [
+          "Jest, Vitest & Mocha",
+          "pytest",
+          "React Testing Library & MSW",
+          "Cypress & Playwright",
+          "Cucumber & Gherkin",
+          "ESLint, Prettier & oxlint",
+          "Ruff & Clippy",
+          "Semgrep",
+        ],
+      ],
+      practice: [
+        [
+          "SOLID, DRY, KISS, YAGNI & design patterns",
+          "Clean code, clean architecture & deep modules",
+          "DDD, TDD & BDD",
+          "Spec-driven development",
+          "Legacy code & refactoring",
+          "Code review",
+          "Technical documentation & ADRs",
+          "Agile: Scrum & Kanban",
+        ],
+      ],
+    });
   });
 
   it("says Kotlin has no production experience", () => {
     expect(en("skills.skill.kotlin.overview")).toMatch(/no production experience/i);
   });
 
-  it("lists Backend's Skills as fixed with the Owner", () => {
-    const backend = SKILLS_CONTENT.groups.find((group) => group.id === "backend");
-    expect(backend?.skills.map((skill) => en(skill.name))).toEqual([
-      "Node.js",
-      "Express & Koa",
-      "Socket.io",
-      "Apollo",
-      "ElysiaJS",
-      "NestJS, Hapi & Sails.js",
-      "FastAPI",
-      "Actix",
-      "Yii2, Zend Framework & Laravel",
-    ]);
-    expect(backend?.subgroups[0]?.skills.map((skill) => en(skill.name))).toEqual([
-      "RESTful APIs",
-      "GraphQL",
-      "WebSockets",
-      "Server-Sent Events",
-      "WebRTC",
-      "OpenAPI/Swagger",
-      "Kafka",
-      "Communication protocols",
-    ]);
+  it("leaves no placeholder text", () => {
+    for (const id of SKILLS_IDS) expect(en(id as MessageId)).not.toMatch(/placeholder/i);
   });
 
   it("keeps a Skill group one level deep, and gives groups and subgroups no statement", () => {
@@ -259,13 +232,6 @@ describe("Skills content", () => {
       expect(en(skill.name)).not.toBe("");
       expect(en(skill.overview)).not.toBe("");
     }
-  });
-
-  it("names the Skills that are decided (the rest comes from the questionnaires)", () => {
-    const names = allSkills.map((skill) => en(skill.name));
-    expect(names).toEqual(
-      expect.arrayContaining(["TypeScript", "Python", "Kotlin", "Docker & Docker Compose"]),
-    );
   });
 
   it("gives each Skill an id of its own, all from the configured list", () => {

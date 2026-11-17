@@ -29,7 +29,7 @@ Programming languages
     Certified: TypeScript, TestDome, Jul 2020, top 10%, https://www.testdome.com/certificates/...
 Backend
   APIs & services
-    REST
+    RESTful APIs
       <overview>
 ```
 
