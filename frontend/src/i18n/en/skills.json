@@ -263,6 +263,18 @@
       "value": "For me, an inseparable part of the work."
     }
   ],
+  "skills.skill.communicationProtocols.name": [
+    {
+      "type": 0,
+      "value": "Communication protocols"
+    }
+  ],
+  "skills.skill.communicationProtocols.overview": [
+    {
+      "type": 0,
+      "value": "Application-level knowledge of gRPC, AMQP and MQTT."
+    }
+  ],
   "skills.skill.crewai.name": [
     {
       "type": 0,
@@ -323,6 +335,18 @@
       "value": "My preferred combination: domain-driven design, built test-first or behaviour-first."
     }
   ],
+  "skills.skill.designPrinciples.name": [
+    {
+      "type": 0,
+      "value": "SOLID, DRY, KISS, YAGNI & design patterns"
+    }
+  ],
+  "skills.skill.designPrinciples.overview": [
+    {
+      "type": 0,
+      "value": "My guidance in every project: I check my code against them."
+    }
+  ],
   "skills.skill.docker.name": [
     {
       "type": 0,
@@ -333,18 +357,6 @@
     {
       "type": 0,
       "value": "Confident, following best practices for Dockerfile optimisation."
-    }
-  ],
-  "skills.skill.documentation.name": [
-    {
-      "type": 0,
-      "value": "Technical documentation & ADRs"
-    }
-  ],
-  "skills.skill.documentation.overview": [
-    {
-      "type": 0,
-      "value": "I write technical documentation and ADRs, and document in code with JSDoc and the like."
     }
   ],
   "skills.skill.dynamodb.name": [
@@ -443,6 +455,30 @@
       "value": "From the business requirements, together with my colleagues, I shape how a project is put together: its conventions and constraints, how it talks to external services, its tools and its deployment."
     }
   ],
+  "skills.skill.frontendLibraries.name": [
+    {
+      "type": 0,
+      "value": "Libraries"
+    }
+  ],
+  "skills.skill.frontendLibraries.overview": [
+    {
+      "type": 0,
+      "value": "Chosen not by name but by maturity, level of support, GitHub stars and community feedback: I pick the tools that best fit each project. Component libraries (Material UI, shadcn/ui, Ant Design, Radix, Semantic UI), state management (Redux, MobX, Zustand, XState, Jotai), animation (Framer Motion), 3D (Three.js), validation (Zod), i18n, Storybook, charts, tables, forms."
+    }
+  ],
+  "skills.skill.frontendPerformance.name": [
+    {
+      "type": 0,
+      "value": "Performance optimisation"
+    }
+  ],
+  "skills.skill.frontendPerformance.overview": [
+    {
+      "type": 0,
+      "value": "Taken to the best possible result, guided by Lighthouse, GTmetrix and Pingdom, internal monitoring data and user feedback."
+    }
+  ],
   "skills.skill.gitlabJenkins.name": [
     {
       "type": 0,
@@ -537,18 +573,6 @@
     {
       "type": 0,
       "value": "I experiment with it in my own projects."
-    }
-  ],
-  "skills.skill.libraries.name": [
-    {
-      "type": 0,
-      "value": "Libraries"
-    }
-  ],
-  "skills.skill.libraries.overview": [
-    {
-      "type": 0,
-      "value": "Chosen not by name but by maturity, level of support, GitHub stars and community feedback: I pick the tools that best fit each project. Component libraries (Material UI, shadcn/ui, Ant Design, Radix, Semantic UI), state management (Redux, MobX, Zustand, XState, Jotai), animation (Framer Motion), 3D (Three.js), validation (Zod), i18n, Storybook, charts, tables, forms."
     }
   ],
   "skills.skill.linux.name": [
@@ -695,18 +719,6 @@
       "value": "My choice for projects where I experiment with different models, free ones included."
     }
   ],
-  "skills.skill.performance.name": [
-    {
-      "type": 0,
-      "value": "Performance optimisation"
-    }
-  ],
-  "skills.skill.performance.overview": [
-    {
-      "type": 0,
-      "value": "Taken to the best possible result, guided by Lighthouse, GTmetrix and Pingdom, internal monitoring data and user feedback."
-    }
-  ],
   "skills.skill.php.name": [
     {
       "type": 0,
@@ -755,18 +767,6 @@
       "value": "Commercially proven, with the same confidence as React."
     }
   ],
-  "skills.skill.principles.name": [
-    {
-      "type": 0,
-      "value": "SOLID, DRY, KISS, YAGNI & design patterns"
-    }
-  ],
-  "skills.skill.principles.overview": [
-    {
-      "type": 0,
-      "value": "My guidance in every project: I check my code against them."
-    }
-  ],
   "skills.skill.prisma.name": [
     {
       "type": 0,
@@ -789,18 +789,6 @@
     {
       "type": 0,
       "value": "My own tried-and-tested practices for prompt engineering and for creating and maintaining skills and rules, which I keep improving."
-    }
-  ],
-  "skills.skill.protocols.name": [
-    {
-      "type": 0,
-      "value": "Communication protocols"
-    }
-  ],
-  "skills.skill.protocols.overview": [
-    {
-      "type": 0,
-      "value": "Application-level knowledge of gRPC, AMQP and MQTT."
     }
   ],
   "skills.skill.pytest.name": [
@@ -827,13 +815,13 @@
       "value": "Deep knowledge, though I don't claim expert level."
     }
   ],
-  "skills.skill.ragMemory.name": [
+  "skills.skill.ragObsidian.name": [
     {
       "type": 0,
       "value": "RAG, Obsidian & Karpathy Wiki"
     }
   ],
-  "skills.skill.ragMemory.overview": [
+  "skills.skill.ragObsidian.overview": [
     {
       "type": 0,
       "value": "I use them regularly, for persistent memory and fast inference."
@@ -1077,6 +1065,18 @@
     {
       "type": 0,
       "value": "Solid knowledge of Svelte and SvelteKit, and I'd gladly build with them; not yet used in commercial work."
+    }
+  ],
+  "skills.skill.techDocumentation.name": [
+    {
+      "type": 0,
+      "value": "Technical documentation & ADRs"
+    }
+  ],
+  "skills.skill.techDocumentation.overview": [
+    {
+      "type": 0,
+      "value": "I write technical documentation and ADRs, and document in code with JSDoc and the like."
     }
   ],
   "skills.skill.terraformHelm.name": [

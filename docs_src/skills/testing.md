@@ -29,4 +29,12 @@ The Testing & quality Skill group. The Owner's answers are kept verbatim; the po
 2. add pytest pls
 3. yes
 
-Approved (round 3): the text is in `frontend/src/i18n/en/skills.json`. pytest as drafted; TDD goes to Engineering practice's questionnaire.
+## Round 3
+
+The final text, pytest as "In regular use for Python tests." (no depth word given), approved?
+
+### Answers
+
+> approved
+
+Approved: the text is in `frontend/src/i18n/en/skills.json`. TDD goes to Engineering practice's questionnaire.

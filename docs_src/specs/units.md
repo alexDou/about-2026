@@ -158,7 +158,7 @@ Reference: the expanded menu of codepen `fluxus/gPWvZm` (local copy in git-ignor
       Certified: TypeScript, TestDome, Jul 2020, top 10%, https://www.testdome.com/certificates/...
   Backend
     APIs & services
-      REST
+      RESTful APIs
         <overview>
   ```
   The clipboard write is imperative (`navigator.clipboard.writeText`), agreed with the Owner: it lives in a global, domain-agnostic hook in `hooks/` (like `useEscapeKey`), and the button shows "Copied" for a moment.
