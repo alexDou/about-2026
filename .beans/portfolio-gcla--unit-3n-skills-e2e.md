@@ -25,7 +25,7 @@ Cucumber + Playwright E2E for Skills against the real frontend build, with the f
 
 ## Acceptance criteria
 
-- [ ] Opening `/skills` shows the heading, Expand all, Copy skills and the seven Skill groups in order, every Skill name visible and every overview hidden
+- [ ] Opening `/skills` shows the heading, Expand all, Copy skills and the eight Skill groups in order, every Skill name visible and every overview hidden
 - [ ] A Skill's arrow opens and closes its overview
 - [ ] The heading rule: a heading click opens all of its Skills; with some closed by hand it closes all; all closed by hand → the next click opens
 - [ ] Expand all opens and closes every overview and keeps its own position

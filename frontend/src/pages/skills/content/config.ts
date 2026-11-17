@@ -1,26 +1,40 @@
 /** The Skill groups, in the order they show. */
 export const SKILL_GROUP_IDS = [
+  "programming",
   "frontend",
   "backend",
+  "ai",
   "databases",
   "cloudDevops",
   "testing",
-  "ai",
   "practice",
 ] as const;
 
 /** The Skill subgroups: Frontend's and Backend's. */
-export const SKILL_SUBGROUP_IDS = ["architectureEcosystem", "apisArchitecture"] as const;
+export const SKILL_SUBGROUP_IDS = ["architectureEcosystem", "apisServices"] as const;
 
 /**
- * The Skills. Placeholders until the questionnaires fix the lists (Unit 3.1): every Skill that
- * backs a Certificate is here, plus a few per group so the stages after this one have content.
+ * The Skills. Frontend's are fixed with the Owner; the rest are placeholders until their
+ * questionnaires fix them (Unit 3.1): every Skill that backs a Certificate is here, plus a few per
+ * group so the stages after this one have content.
  */
 export const SKILL_IDS = [
   "react",
   "nextjs",
-  "designSystems",
+  "preact",
+  "vue",
+  "svelte",
+  "frontendArchitecture",
+  "buildTooling",
+  "ssrSsg",
+  "responsiveUi",
+  "figmaToUi",
+  "uxPrinciples",
+  "standardsAccessibility",
+  "seo",
+  "performance",
   "css",
+  "libraries",
   "typescript",
   "python",
   "kotlin",

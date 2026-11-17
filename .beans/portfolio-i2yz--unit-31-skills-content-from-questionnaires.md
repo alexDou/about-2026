@@ -1,12 +1,13 @@
 ---
 # portfolio-i2yz
 title: 'Unit 3.1: Skills content from questionnaires'
-status: todo
+status: in-progress
 type: task
+priority: normal
 tags:
     - ready-for-human
 created_at: 2026-11-16T09:50:04Z
-updated_at: 2026-11-16T09:50:04Z
+updated_at: 2026-11-17T08:47:12Z
 parent: portfolio-4rt0
 blocked_by:
     - portfolio-vg1p
@@ -32,3 +33,8 @@ The real Skills content, written with the Owner: one questionnaire per Skill gro
 ## Blocked by
 
 - portfolio-vg1p
+
+## Notes
+
+- 2026-11-17, Frontend round 3/4: the Owner restores a "Programming languages" group, lost between the 2026-11-16 grilling (nine areas) and the spec (seven). Groups, in order: Programming languages, Frontend, Backend, AI, Databases & search, Cloud & DevOps (observability included), Testing & quality, Engineering practice. To apply here: spec (Unit 3), `config.ts`, the 3.0 test, `skills.json`. Backend keeps the frameworks; the languages move to the new group.
+- The Owner avoids claiming "architect": the Backend subgroup "APIs & architecture" gets a new name (Backend round 1).
