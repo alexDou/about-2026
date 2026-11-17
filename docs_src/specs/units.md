@@ -131,7 +131,7 @@ Reference: the expanded menu of codepen `fluxus/gPWvZm` (local copy in git-ignor
   5. Databases & search, in three subgroups and no Skills of its own: "SQL" (PostgreSQL & MySQL, SQLite), "NoSQL" (Redis, MongoDB, DynamoDB, RethinkDB, ScyllaDB, Elasticsearch), "ORMs & drivers" (Prisma, TypeORM, SQLAlchemy, Mongoose & the MongoDB Node.js driver) (fixed with the Owner in `docs_src/skills/databases.md`).
   6. Cloud & DevOps (observability included), no subgroup: Docker & Docker Compose, Kubernetes, Terraform & Helm, GitLab CI & Jenkins, AWS, Google Cloud, Nginx & Apache, Linux (Bash scripting), Monitoring & Observability (Prometheus, Grafana, Instana, GTM, CloudWatch) (fixed with the Owner in `docs_src/skills/cloud-devops.md`).
   7. Testing & quality: Jest, Vitest & Mocha, pytest, React Testing Library & MSW, Cypress & Playwright, Cucumber & Gherkin, ESLint, Prettier & oxlint, Ruff & Clippy, Semgrep. TDD moves to Engineering practice (fixed with the Owner in `docs_src/skills/testing.md`).
-  8. Engineering practice: system design, clean architecture, DDD, refactoring, code review, mentoring, Scrum/Kanban.
+  8. Engineering practice: SOLID, DRY, KISS, YAGNI & design patterns; clean code, clean architecture & deep modules; DDD, TDD & BDD; spec-driven development; legacy code & refactoring; code review; technical documentation & ADRs; Agile: Scrum & Kanban (fixed with the Owner in `docs_src/skills/practice.md`).
 - Layout: the "Skills" heading; a row with the Expand all switch (left) and the Copy skills button (right); the Skill group blocks, centred with a max-width on desktop, full width minus the side padding on phones. Each block is filled with the light `#d1dcd9` (About's card surface) with `#25363a` text and reasonable padding; it shows the group name, then its Skills and subgroups. Finer look later.
 - Default view: every group and subgroup shows its Skill names; every overview is hidden; Expand all is off. A closed page still lists every Skill name, for scanning and Ctrl+F.
 - A Skill's filled arrow is its only toggle (a button padded to a 24px target or more) and opens or closes its overview. The Skill's name is plain, selectable text.
@@ -190,7 +190,7 @@ Reference: the expanded menu of codepen `fluxus/gPWvZm` (local copy in git-ignor
 
 **Objective**: the 36 Takeovers, in 6 Takeover groups of 6. Each Takeover: title, why the Owner fits, what the Owner does in that regard.
 
-**Input**: the CV's "Core expertise" list (Full Stack Engineering, Technical Leadership, Product Development, Software Architecture, AI Integration, Micro-services & scalable frontends, Frontend Engineering, Backend Engineering, Performance Optimization, Cloud Infrastructure, Application Modernization): kinds of work, so raw material for Takeovers (decided in Unit 3's grilling). Also CQRS and microservices, taken off Skills in its content round (3.1).
+**Input**: the CV's "Core expertise" list (Full Stack Engineering, Technical Leadership, Product Development, Software Architecture, AI Integration, Micro-services & scalable frontends, Frontend Engineering, Backend Engineering, Performance Optimization, Cloud Infrastructure, Application Modernization): kinds of work, so raw material for Takeovers (decided in Unit 3's grilling). Also CQRS, microservices, system design and mentoring, taken off Skills in its content round (3.1).
 
 **Sub-unit breakdown**: 5.0 Takeover content type + JSON validation test enforcing 36 = 6 × 6; 5.x presentation; 5.N E2E.
 

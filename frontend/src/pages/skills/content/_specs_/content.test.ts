@@ -154,6 +154,24 @@ describe("Skills content", () => {
     ]);
   });
 
+  it("lists Engineering practice's Skills as fixed with the Owner", () => {
+    const practice = SKILLS_CONTENT.groups.find((group) => group.id === "practice");
+    expect(practice?.skills.map((skill) => en(skill.name))).toEqual([
+      "SOLID, DRY, KISS, YAGNI & design patterns",
+      "Clean code, clean architecture & deep modules",
+      "DDD, TDD & BDD",
+      "Spec-driven development",
+      "Legacy code & refactoring",
+      "Code review",
+      "Technical documentation & ADRs",
+      "Agile: Scrum & Kanban",
+    ]);
+  });
+
+  it("leaves no placeholder text", () => {
+    for (const id of SKILLS_IDS) expect(en(id as MessageId)).not.toMatch(/placeholder/i);
+  });
+
   it("lists Frontend's Skills as fixed with the Owner", () => {
     const frontend = SKILLS_CONTENT.groups.find((group) => group.id === "frontend");
     expect(frontend?.skills.map((skill) => en(skill.name))).toEqual([

@@ -21,8 +21,7 @@ export const SKILL_SUBGROUP_IDS = [
 ] as const;
 
 /**
- * The Skills, fixed with the Owner (Unit 3.1) except Engineering practice's, which are
- * placeholders until its questionnaire fixes them.
+ * The Skills, fixed with the Owner in the questionnaires (`docs_src/skills/`, Unit 3.1).
  */
 export const SKILL_IDS = [
   "react",
@@ -102,8 +101,14 @@ export const SKILL_IDS = [
   "opencode",
   "ragMemory",
   "promptsSkillsRules",
-  "systemDesign",
-  "cleanArchitecture",
+  "principles",
+  "cleanCode",
+  "dddTddBdd",
+  "sdd",
+  "refactoring",
+  "codeReview",
+  "documentation",
+  "agile",
 ] as const;
 
 /** The Certificates the Owner holds that back a Skill. */
