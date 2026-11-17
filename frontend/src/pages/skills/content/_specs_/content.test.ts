@@ -112,11 +112,44 @@ describe("Skills content", () => {
     ]);
   });
 
-  it("puts the languages in their own group, Kotlin included", () => {
+  it("lists the Programming languages as fixed with the Owner", () => {
     const programming = SKILLS_CONTENT.groups.find((group) => group.id === "programming");
-    expect(programming?.skills.map((skill) => skill.id)).toEqual(
-      expect.arrayContaining(["typescript", "python", "kotlin"]),
-    );
+    expect(programming?.skills.map((skill) => en(skill.name))).toEqual([
+      "TypeScript",
+      "Python",
+      "Rust",
+      "PHP",
+      "Kotlin",
+    ]);
+  });
+
+  it("says Kotlin has no production experience", () => {
+    expect(en("skills.skill.kotlin.overview")).toMatch(/no production experience/i);
+  });
+
+  it("lists Backend's Skills as fixed with the Owner", () => {
+    const backend = SKILLS_CONTENT.groups.find((group) => group.id === "backend");
+    expect(backend?.skills.map((skill) => en(skill.name))).toEqual([
+      "Node.js",
+      "Express & Koa",
+      "Socket.io",
+      "Apollo",
+      "ElysiaJS",
+      "NestJS, Hapi & Sails.js",
+      "FastAPI",
+      "Actix",
+      "Yii2, Zend Framework & Laravel",
+    ]);
+    expect(backend?.subgroups[0]?.skills.map((skill) => en(skill.name))).toEqual([
+      "RESTful APIs",
+      "GraphQL",
+      "WebSockets",
+      "Server-Sent Events",
+      "WebRTC",
+      "OpenAPI/Swagger",
+      "Kafka",
+      "Communication protocols",
+    ]);
   });
 
   it("keeps a Skill group one level deep, and gives groups and subgroups no statement", () => {

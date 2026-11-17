@@ -14,9 +14,9 @@ export const SKILL_GROUP_IDS = [
 export const SKILL_SUBGROUP_IDS = ["architectureEcosystem", "apisServices"] as const;
 
 /**
- * The Skills. Frontend's are fixed with the Owner; the rest are placeholders until their
- * questionnaires fix them (Unit 3.1): every Skill that backs a Certificate is here, plus a few per
- * group so the stages after this one have content.
+ * The Skills. Programming languages, Frontend and Backend are fixed with the Owner; the rest are
+ * placeholders until their questionnaires fix them (Unit 3.1): every Skill that backs a Certificate
+ * is here, plus a few per group so the stages after this one have content.
  */
 export const SKILL_IDS = [
   "react",
@@ -37,9 +37,26 @@ export const SKILL_IDS = [
   "libraries",
   "typescript",
   "python",
+  "rust",
+  "php",
   "kotlin",
+  "nodejs",
+  "expressKoa",
+  "socketIo",
+  "apollo",
+  "elysia",
+  "nestHapiSails",
+  "fastapi",
+  "actix",
+  "phpFrameworks",
   "rest",
   "graphql",
+  "websockets",
+  "sse",
+  "webrtc",
+  "openapi",
+  "kafka",
+  "protocols",
   "postgresql",
   "elasticsearch",
   "docker",

@@ -54,9 +54,10 @@ const group = (
 });
 
 /**
- * The Skills Panel's content: which message each piece of it reads. Frontend's Skills are fixed
- * with the Owner; the rest are placeholders until their questionnaires (Unit 3.1) fix them. The
- * Certificates are the ones decided in the grilling, without verification links until Unit 3.2.
+ * The Skills Panel's content: which message each piece of it reads. Programming languages,
+ * Frontend and Backend are fixed with the Owner; the rest are placeholders until their
+ * questionnaires (Unit 3.1) fix them. The Certificates are the ones decided in the grilling,
+ * without verification links until Unit 3.2.
  */
 export const SKILLS_CONTENT: SkillsContent = {
   groups: [
@@ -78,6 +79,8 @@ export const SKILLS_CONTENT: SkillsContent = {
         ),
         certificate("educativeCleanCodePython", "educative", { year: 2025, month: 6 }),
       ]),
+      skill("rust"),
+      skill("php"),
       skill("kotlin", [certificate("educativeKotlin", "educative", { year: 2025, month: 6 })]),
     ]),
     group(
@@ -99,7 +102,32 @@ export const SKILLS_CONTENT: SkillsContent = {
         ]),
       ],
     ),
-    group("backend", [], [subgroup("apisServices", [skill("rest"), skill("graphql")])]),
+    group(
+      "backend",
+      [
+        skill("nodejs"),
+        skill("expressKoa"),
+        skill("socketIo"),
+        skill("apollo"),
+        skill("elysia"),
+        skill("nestHapiSails"),
+        skill("fastapi"),
+        skill("actix"),
+        skill("phpFrameworks"),
+      ],
+      [
+        subgroup("apisServices", [
+          skill("rest"),
+          skill("graphql"),
+          skill("websockets"),
+          skill("sse"),
+          skill("webrtc"),
+          skill("openapi"),
+          skill("kafka"),
+          skill("protocols"),
+        ]),
+      ],
+    ),
     group("ai", [
       skill("openaiSdk", [certificate("udemyLlmEngineering", "udemy", { year: 2025, month: 7 })]),
       skill("mcp", [certificate("udemyAgenticAi", "udemy", { year: 2026, month: 1 })]),
