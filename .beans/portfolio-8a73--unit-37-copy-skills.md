@@ -23,11 +23,12 @@ Copy skills: a button in the header row that copies all Skills to the clipboard 
 Format, two spaces per level: group, subgroup, Skill, overview, and a "Certified:" line per Certificate with its verification URL:
 
 ```
-Backend
+Programming languages
   TypeScript
     <overview>
     Certified: TypeScript, TestDome, Jul 2020, top 10%, https://www.testdome.com/certificates/...
-  APIs & architecture
+Backend
+  APIs & services
     REST
       <overview>
 ```

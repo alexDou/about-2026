@@ -56,34 +56,67 @@ describe("Skills content", () => {
     expect([...new Set(referenced)].toSorted()).toEqual(SKILLS_IDS.toSorted());
   });
 
-  it("has the seven Skill groups in order", () => {
+  it("has the eight Skill groups in order", () => {
     expect(SKILLS_CONTENT.groups.map((group) => [group.id, en(group.name)])).toEqual([
+      ["programming", "Programming languages"],
       ["frontend", "Frontend"],
       ["backend", "Backend"],
+      ["ai", "AI"],
       ["databases", "Databases & search"],
       ["cloudDevops", "Cloud & DevOps"],
       ["testing", "Testing & quality"],
-      ["ai", "AI"],
       ["practice", "Engineering practice"],
     ]);
     expect(SKILLS_CONTENT.groups.map((group) => group.id)).toEqual([...SKILL_GROUP_IDS]);
   });
 
-  it('gives only Frontend and Backend a Skill subgroup: "Architecture & ecosystem" and "APIs & architecture"', () => {
+  it('gives only Frontend and Backend a Skill subgroup: "Architecture & ecosystem" and "APIs & services"', () => {
     expect(
       SKILLS_CONTENT.groups.map((group) => [
         group.id,
         group.subgroups.map((subgroup) => [subgroup.id, en(subgroup.name)]),
       ]),
     ).toEqual([
+      ["programming", []],
       ["frontend", [["architectureEcosystem", "Architecture & ecosystem"]]],
-      ["backend", [["apisArchitecture", "APIs & architecture"]]],
+      ["backend", [["apisServices", "APIs & services"]]],
+      ["ai", []],
       ["databases", []],
       ["cloudDevops", []],
       ["testing", []],
-      ["ai", []],
       ["practice", []],
     ]);
+  });
+
+  it("lists Frontend's Skills as fixed with the Owner", () => {
+    const frontend = SKILLS_CONTENT.groups.find((group) => group.id === "frontend");
+    expect(frontend?.skills.map((skill) => en(skill.name))).toEqual([
+      "React",
+      "Next.js",
+      "Preact",
+      "Vue",
+      "Svelte",
+    ]);
+    expect(frontend?.subgroups[0]?.skills.map((skill) => en(skill.name))).toEqual([
+      "Frontend architecture",
+      "Build tooling",
+      "SSR & SSG",
+      "Responsive UI",
+      "Figma to UI",
+      "UX principles",
+      "Standards & accessibility",
+      "SEO",
+      "Performance optimisation",
+      "CSS",
+      "Libraries",
+    ]);
+  });
+
+  it("puts the languages in their own group, Kotlin included", () => {
+    const programming = SKILLS_CONTENT.groups.find((group) => group.id === "programming");
+    expect(programming?.skills.map((skill) => skill.id)).toEqual(
+      expect.arrayContaining(["typescript", "python", "kotlin"]),
+    );
   });
 
   it("keeps a Skill group one level deep, and gives groups and subgroups no statement", () => {

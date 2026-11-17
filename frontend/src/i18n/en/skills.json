@@ -107,6 +107,12 @@
       "value": "Engineering practice"
     }
   ],
+  "skills.group.programming.name": [
+    {
+      "type": 0,
+      "value": "Programming languages"
+    }
+  ],
   "skills.group.testing.name": [
     {
       "type": 0,
@@ -149,6 +155,18 @@
       "value": "Placeholder overview for Bash, until the questionnaire fixes it."
     }
   ],
+  "skills.skill.buildTooling.name": [
+    {
+      "type": 0,
+      "value": "Build tooling"
+    }
+  ],
+  "skills.skill.buildTooling.overview": [
+    {
+      "type": 0,
+      "value": "Expert, proven in production: Webpack, Vite, Rspack and Rollup."
+    }
+  ],
   "skills.skill.cleanArchitecture.name": [
     {
       "type": 0,
@@ -170,19 +188,7 @@
   "skills.skill.css.overview": [
     {
       "type": 0,
-      "value": "Placeholder overview for CSS, until the questionnaire fixes it."
-    }
-  ],
-  "skills.skill.designSystems.name": [
-    {
-      "type": 0,
-      "value": "Design systems"
-    }
-  ],
-  "skills.skill.designSystems.overview": [
-    {
-      "type": 0,
-      "value": "Placeholder overview for Design systems, until the questionnaire fixes it."
+      "value": "Modern CSS all the way, because it is beautiful. Sass and Less are in my toolbelt; CSS Modules are my default choice."
     }
   ],
   "skills.skill.docker.name": [
@@ -209,6 +215,30 @@
       "value": "Placeholder overview for Elasticsearch, until the questionnaire fixes it."
     }
   ],
+  "skills.skill.figmaToUi.name": [
+    {
+      "type": 0,
+      "value": "Figma to UI"
+    }
+  ],
+  "skills.skill.figmaToUi.overview": [
+    {
+      "type": 0,
+      "value": "Pixel-perfect interfaces built from Figma designs."
+    }
+  ],
+  "skills.skill.frontendArchitecture.name": [
+    {
+      "type": 0,
+      "value": "Frontend architecture"
+    }
+  ],
+  "skills.skill.frontendArchitecture.overview": [
+    {
+      "type": 0,
+      "value": "From the business requirements, together with my colleagues, I shape how a project is put together: its conventions and constraints, how it talks to external services, its tools and its deployment."
+    }
+  ],
   "skills.skill.graphql.name": [
     {
       "type": 0,
@@ -233,6 +263,18 @@
       "value": "Placeholder overview for Kotlin, until the questionnaire fixes it."
     }
   ],
+  "skills.skill.libraries.name": [
+    {
+      "type": 0,
+      "value": "Libraries"
+    }
+  ],
+  "skills.skill.libraries.overview": [
+    {
+      "type": 0,
+      "value": "Chosen not by name but by maturity, level of support, GitHub stars and community feedback: I pick the tools that best fit each project. Component libraries (Material UI, shadcn/ui, Ant Design, Radix, Semantic UI), state management (Redux, MobX, Zustand, XState, Jotai), animation (Framer Motion), 3D (Three.js), i18n, Storybook, charts, tables, forms."
+    }
+  ],
   "skills.skill.mcp.name": [
     {
       "type": 0,
@@ -254,7 +296,7 @@
   "skills.skill.nextjs.overview": [
     {
       "type": 0,
-      "value": "Placeholder overview for Next.js, until the questionnaire fixes it."
+      "value": "Expert, with successful commercial projects delivered on it."
     }
   ],
   "skills.skill.openaiSdk.name": [
@@ -267,6 +309,18 @@
     {
       "type": 0,
       "value": "Placeholder overview for OpenAI SDK, until the questionnaire fixes it."
+    }
+  ],
+  "skills.skill.performance.name": [
+    {
+      "type": 0,
+      "value": "Performance optimisation"
+    }
+  ],
+  "skills.skill.performance.overview": [
+    {
+      "type": 0,
+      "value": "Taken to the best possible result, guided by Lighthouse, GTmetrix and Pingdom, internal monitoring data and user feedback."
     }
   ],
   "skills.skill.playwright.name": [
@@ -293,6 +347,18 @@
       "value": "Placeholder overview for PostgreSQL, until the questionnaire fixes it."
     }
   ],
+  "skills.skill.preact.name": [
+    {
+      "type": 0,
+      "value": "Preact"
+    }
+  ],
+  "skills.skill.preact.overview": [
+    {
+      "type": 0,
+      "value": "Commercially proven, with the same confidence as React."
+    }
+  ],
   "skills.skill.python.name": [
     {
       "type": 0,
@@ -314,7 +380,19 @@
   "skills.skill.react.overview": [
     {
       "type": 0,
-      "value": "Placeholder overview for React, until the questionnaire fixes it."
+      "value": "Expert, and my default choice for frontend work, proven in successful commercial projects."
+    }
+  ],
+  "skills.skill.responsiveUi.name": [
+    {
+      "type": 0,
+      "value": "Responsive UI"
+    }
+  ],
+  "skills.skill.responsiveUi.overview": [
+    {
+      "type": 0,
+      "value": "Mobile-first, responsive interfaces that work across browsers."
     }
   ],
   "skills.skill.rest.name": [
@@ -327,6 +405,54 @@
     {
       "type": 0,
       "value": "Placeholder overview for REST, until the questionnaire fixes it."
+    }
+  ],
+  "skills.skill.seo.name": [
+    {
+      "type": 0,
+      "value": "SEO"
+    }
+  ],
+  "skills.skill.seo.overview": [
+    {
+      "type": 0,
+      "value": "Taken to the best possible result with Semrush, Ahrefs, Lumar and Otterly AI: better search positions, Click-Through Rate (CTR) and Conversion Rate (CVR)."
+    }
+  ],
+  "skills.skill.ssrSsg.name": [
+    {
+      "type": 0,
+      "value": "SSR & SSG"
+    }
+  ],
+  "skills.skill.ssrSsg.overview": [
+    {
+      "type": 0,
+      "value": "Server-side rendering and static site generation in commercial projects."
+    }
+  ],
+  "skills.skill.standardsAccessibility.name": [
+    {
+      "type": 0,
+      "value": "Standards & accessibility"
+    }
+  ],
+  "skills.skill.standardsAccessibility.overview": [
+    {
+      "type": 0,
+      "value": "I follow W3C standards and WCAG 2: accessibility plays an important role in my work."
+    }
+  ],
+  "skills.skill.svelte.name": [
+    {
+      "type": 0,
+      "value": "Svelte"
+    }
+  ],
+  "skills.skill.svelte.overview": [
+    {
+      "type": 0,
+      "value": "Solid knowledge of Svelte and SvelteKit, and I'd gladly build with them; not yet used in commercial work."
     }
   ],
   "skills.skill.systemDesign.name": [
@@ -353,6 +479,18 @@
       "value": "Placeholder overview for TypeScript, until the questionnaire fixes it."
     }
   ],
+  "skills.skill.uxPrinciples.name": [
+    {
+      "type": 0,
+      "value": "UX principles"
+    }
+  ],
+  "skills.skill.uxPrinciples.overview": [
+    {
+      "type": 0,
+      "value": "A strong understanding of UX principles."
+    }
+  ],
   "skills.skill.vitest.name": [
     {
       "type": 0,
@@ -365,10 +503,22 @@
       "value": "Placeholder overview for Vitest, until the questionnaire fixes it."
     }
   ],
-  "skills.subgroup.apisArchitecture.name": [
+  "skills.skill.vue.name": [
     {
       "type": 0,
-      "value": "APIs & architecture"
+      "value": "Vue"
+    }
+  ],
+  "skills.skill.vue.overview": [
+    {
+      "type": 0,
+      "value": "Solid knowledge, incl. Nuxt, proven in commercial applications, though fewer than with React."
+    }
+  ],
+  "skills.subgroup.apisServices.name": [
+    {
+      "type": 0,
+      "value": "APIs & services"
     }
   ],
   "skills.subgroup.architectureEcosystem.name": [
