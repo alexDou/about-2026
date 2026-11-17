@@ -140,6 +140,20 @@ describe("Skills content", () => {
     ]);
   });
 
+  it("lists Testing & quality's Skills as fixed with the Owner", () => {
+    const testing = SKILLS_CONTENT.groups.find((group) => group.id === "testing");
+    expect(testing?.skills.map((skill) => en(skill.name))).toEqual([
+      "Jest, Vitest & Mocha",
+      "pytest",
+      "React Testing Library & MSW",
+      "Cypress & Playwright",
+      "Cucumber & Gherkin",
+      "ESLint, Prettier & oxlint",
+      "Ruff & Clippy",
+      "Semgrep",
+    ]);
+  });
+
   it("lists Frontend's Skills as fixed with the Owner", () => {
     const frontend = SKILLS_CONTENT.groups.find((group) => group.id === "frontend");
     expect(frontend?.skills.map((skill) => en(skill.name))).toEqual([

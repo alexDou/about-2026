@@ -21,10 +21,8 @@ export const SKILL_SUBGROUP_IDS = [
 ] as const;
 
 /**
- * The Skills. Programming languages, Frontend, Backend, AI, Databases & search and Cloud & DevOps
- * are fixed with the Owner; the rest are placeholders until their questionnaires fix them (Unit
- * 3.1): every Skill that backs a Certificate is here, plus a few per group so the stages after this
- * one have content.
+ * The Skills, fixed with the Owner (Unit 3.1) except Engineering practice's, which are
+ * placeholders until its questionnaire fixes them.
  */
 export const SKILL_IDS = [
   "react",
@@ -86,8 +84,14 @@ export const SKILL_IDS = [
   "nginxApache",
   "linux",
   "monitoring",
-  "vitest",
-  "playwright",
+  "jestVitestMocha",
+  "pytest",
+  "rtlMsw",
+  "cypressPlaywright",
+  "cucumber",
+  "eslintPrettierOxlint",
+  "ruffClippy",
+  "semgrep",
   "openaiSdk",
   "crewai",
   "langgraph",

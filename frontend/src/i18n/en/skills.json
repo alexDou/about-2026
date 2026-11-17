@@ -263,6 +263,30 @@
       "value": "Modern CSS all the way, because it is beautiful. Sass and Less are in my toolbelt; CSS Modules are my default choice."
     }
   ],
+  "skills.skill.cucumber.name": [
+    {
+      "type": 0,
+      "value": "Cucumber & Gherkin"
+    }
+  ],
+  "skills.skill.cucumber.overview": [
+    {
+      "type": 0,
+      "value": "Expert, in regular use for behaviour-driven scenarios."
+    }
+  ],
+  "skills.skill.cypressPlaywright.name": [
+    {
+      "type": 0,
+      "value": "Cypress & Playwright"
+    }
+  ],
+  "skills.skill.cypressPlaywright.overview": [
+    {
+      "type": 0,
+      "value": "Expert, in regular use for end-to-end tests."
+    }
+  ],
   "skills.skill.docker.name": [
     {
       "type": 0,
@@ -309,6 +333,18 @@
     {
       "type": 0,
       "value": "Fascinated by it, and I'll fill the gaps in my knowledge at the first opportunity. For a new project it's the first thing I'd consider today: very convenient and top-performing."
+    }
+  ],
+  "skills.skill.eslintPrettierOxlint.name": [
+    {
+      "type": 0,
+      "value": "ESLint, Prettier & oxlint"
+    }
+  ],
+  "skills.skill.eslintPrettierOxlint.overview": [
+    {
+      "type": 0,
+      "value": "Expert, in regular use for linting and formatting."
     }
   ],
   "skills.skill.expressKoa.name": [
@@ -393,6 +429,18 @@
     {
       "type": 0,
       "value": "Up-to-date knowledge."
+    }
+  ],
+  "skills.skill.jestVitestMocha.name": [
+    {
+      "type": 0,
+      "value": "Jest, Vitest & Mocha"
+    }
+  ],
+  "skills.skill.jestVitestMocha.overview": [
+    {
+      "type": 0,
+      "value": "Expert, in regular use for unit and integration tests."
     }
   ],
   "skills.skill.kafka.name": [
@@ -635,18 +683,6 @@
       "value": "Extensive experience from past projects; I haven't kept up with their latest versions."
     }
   ],
-  "skills.skill.playwright.name": [
-    {
-      "type": 0,
-      "value": "Playwright"
-    }
-  ],
-  "skills.skill.playwright.overview": [
-    {
-      "type": 0,
-      "value": "Placeholder overview for Playwright, until the questionnaire fixes it."
-    }
-  ],
   "skills.skill.postgresMysql.name": [
     {
       "type": 0,
@@ -705,6 +741,18 @@
     {
       "type": 0,
       "value": "Application-level knowledge of gRPC, AMQP and MQTT."
+    }
+  ],
+  "skills.skill.pytest.name": [
+    {
+      "type": 0,
+      "value": "pytest"
+    }
+  ],
+  "skills.skill.pytest.overview": [
+    {
+      "type": 0,
+      "value": "In regular use for Python tests."
     }
   ],
   "skills.skill.python.name": [
@@ -791,6 +839,30 @@
       "value": "Confident; my first consideration for real-time use cases."
     }
   ],
+  "skills.skill.rtlMsw.name": [
+    {
+      "type": 0,
+      "value": "React Testing Library & MSW"
+    }
+  ],
+  "skills.skill.rtlMsw.overview": [
+    {
+      "type": 0,
+      "value": "Expert, in regular use for component tests, with the network mocked by MSW."
+    }
+  ],
+  "skills.skill.ruffClippy.name": [
+    {
+      "type": 0,
+      "value": "Ruff & Clippy"
+    }
+  ],
+  "skills.skill.ruffClippy.overview": [
+    {
+      "type": 0,
+      "value": "Application-level knowledge of the Python and Rust linters."
+    }
+  ],
   "skills.skill.rust.name": [
     {
       "type": 0,
@@ -813,6 +885,18 @@
     {
       "type": 0,
       "value": "Confident; my first consideration for huge-scale, ultra-low-latency data flows."
+    }
+  ],
+  "skills.skill.semgrep.name": [
+    {
+      "type": 0,
+      "value": "Semgrep"
+    }
+  ],
+  "skills.skill.semgrep.overview": [
+    {
+      "type": 0,
+      "value": "In regular use for static security scanning."
     }
   ],
   "skills.skill.seo.name": [
@@ -969,18 +1053,6 @@
     {
       "type": 0,
       "value": "A strong understanding of UX principles."
-    }
-  ],
-  "skills.skill.vitest.name": [
-    {
-      "type": 0,
-      "value": "Vitest"
-    }
-  ],
-  "skills.skill.vitest.overview": [
-    {
-      "type": 0,
-      "value": "Placeholder overview for Vitest, until the questionnaire fixes it."
     }
   ],
   "skills.skill.vue.name": [
