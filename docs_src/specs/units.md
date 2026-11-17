@@ -124,9 +124,9 @@ Reference: the expanded menu of codepen `fluxus/gPWvZm` (local copy in git-ignor
 - Source: the 2026 CV's expertise blocks and the Roles' technology lists (`support_files/about/`), the certificates in `support_files/skills/Zertifikate/` (both git-ignored). The CV's "Core expertise" list names kinds of work, not knowledge: it goes to What I do (Unit 5) as raw material for Takeovers, not to Skills.
 - Model: a Skill group holds Skills and at most one level of Skill subgroups. A Skill is a name plus an overview: a short statement in the Owner's words. Groups and subgroups carry no statement of their own. Depth is told in the overview's words ("expert", "commercial", "practical"), never as a label, bar or rating. No years per Skill, no demo links, no "used at" company mentions.
 - Skill groups, in order (the Skill lists are examples; the questionnaires fix them). Eight since 3.1: the "Programming languages" group, decided in the grilling, was lost on the way to this list and restored by the Owner (2026-11-17); AI moved up to 4th.
-  1. Programming languages: TypeScript (JavaScript included), Python, Rust, PHP, and Kotlin: learnt and certified, not yet used in commercial work.
+  1. Programming languages: TypeScript, Python, Rust, PHP, Kotlin (no production experience: learnt and certified, very basic Spring) (fixed with the Owner in `docs_src/skills/programming-languages.md`).
   2. Frontend: React, Next.js, Preact, Vue, Svelte. Subgroup "Architecture & ecosystem": frontend architecture, build tooling, SSR & SSG, responsive UI, Figma to UI, UX principles, standards & accessibility (W3C, WCAG 2), SEO, performance optimisation, CSS, libraries (fixed with the Owner in `docs_src/skills/frontend.md`).
-  3. Backend: the frameworks of the languages: Node.js (Express, ...), FastAPI, Actix, the PHP frameworks, Spring. Subgroup "APIs & services" (the Owner claims no architect title): REST, GraphQL, WebSockets, WebRTC, Kafka, gRPC, CQRS, microservices.
+  3. Backend: Node.js, Express & Koa, Socket.io, Apollo, ElysiaJS, NestJS/Hapi/Sails.js, FastAPI, Actix, the PHP frameworks in one Skill. Subgroup "APIs & services" (the Owner claims no architect title): RESTful APIs, GraphQL, WebSockets, Server-Sent Events, WebRTC, OpenAPI/Swagger, Kafka, communication protocols (gRPC, AMQP, MQTT). CQRS and microservices are patterns: What I do (Unit 5). No CMS is named (fixed with the Owner in `docs_src/skills/backend.md`).
   4. AI: OpenAI SDK, LangChain, CrewAI, MCP, multi-agent orchestration, agentic AI-assisted development.
   5. Databases & search: PostgreSQL, MySQL, Redis, ScyllaDB, RethinkDB, DynamoDB, MongoDB, Elasticsearch.
   6. Cloud & DevOps (observability included): Docker, Kubernetes, AWS, Terraform, Jenkins, GitLab CI, Nginx, Apache, Bash; Prometheus, Grafana, Instana, New Relic, CloudWatch.
@@ -190,7 +190,7 @@ Reference: the expanded menu of codepen `fluxus/gPWvZm` (local copy in git-ignor
 
 **Objective**: the 36 Takeovers, in 6 Takeover groups of 6. Each Takeover: title, why the Owner fits, what the Owner does in that regard.
 
-**Input**: the CV's "Core expertise" list (Full Stack Engineering, Technical Leadership, Product Development, Software Architecture, AI Integration, Micro-services & scalable frontends, Frontend Engineering, Backend Engineering, Performance Optimization, Cloud Infrastructure, Application Modernization): kinds of work, so raw material for Takeovers (decided in Unit 3's grilling).
+**Input**: the CV's "Core expertise" list (Full Stack Engineering, Technical Leadership, Product Development, Software Architecture, AI Integration, Micro-services & scalable frontends, Frontend Engineering, Backend Engineering, Performance Optimization, Cloud Infrastructure, Application Modernization): kinds of work, so raw material for Takeovers (decided in Unit 3's grilling). Also CQRS and microservices, taken off Skills in its content round (3.1).
 
 **Sub-unit breakdown**: 5.0 Takeover content type + JSON validation test enforcing 36 = 6 × 6; 5.x presentation; 5.N E2E.
 

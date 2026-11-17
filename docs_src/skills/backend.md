@@ -52,3 +52,27 @@ The Backend Skill group, in the Frontend format: its Skills (the frameworks of t
 3. no, just Typescript. say, expert, confidently operating complex types/interfaces (better words)
 4. enthusiast - yea good way to put it. i personally like this language add that i use it for web development only
 5. change places PHP - Rust and ok
+
+## Round 3
+
+1. Repeated lines ("Expert." four times, the NestJS line three times, "Ready to use from day one." nine times): keep (A), or merge the duplicates into one Skill each (B)?
+2. Spring: shown at all, or folded into Kotlin's line?
+3. The rest approved?
+
+### Answers
+
+> Express, Koa - in one, Expert with extensive prod experience;
+> Socket.io, Apollo - ready to use
+> Nestjs, Hapi, Sailsjs - in one
+>
+> REST - RESTful API
+> REST, GraphQL, WebSockets, Server-Sent Events, WebRTC, OpenAPI/Swagger, Kafka - up to date knowledge
+> CQRS, Microservices - development/sys.design patterns, correct me if i wrong. we will mention them in what-i-do. remove from here
+>
+> Languages OK
+>
+> hmm, very basic Spring and Kotlin. move to Kotlin. no experience must be loud and clear
+>
+> approved
+
+Approved: the text is in `frontend/src/i18n/en/skills.json`. CQRS and microservices go to What I do (Unit 5).

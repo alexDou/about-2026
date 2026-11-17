@@ -143,6 +143,30 @@
       "value": "Udemy"
     }
   ],
+  "skills.skill.actix.name": [
+    {
+      "type": 0,
+      "value": "Actix"
+    }
+  ],
+  "skills.skill.actix.overview": [
+    {
+      "type": 0,
+      "value": "Up to date, with very strong knowledge. My default for systems that demand low latency, high throughput and real-time work; for standard web APIs I'd consider Axum."
+    }
+  ],
+  "skills.skill.apollo.name": [
+    {
+      "type": 0,
+      "value": "Apollo"
+    }
+  ],
+  "skills.skill.apollo.overview": [
+    {
+      "type": 0,
+      "value": "Ready to use from day one."
+    }
+  ],
   "skills.skill.bash.name": [
     {
       "type": 0,
@@ -215,6 +239,42 @@
       "value": "Placeholder overview for Elasticsearch, until the questionnaire fixes it."
     }
   ],
+  "skills.skill.elysia.name": [
+    {
+      "type": 0,
+      "value": "ElysiaJS"
+    }
+  ],
+  "skills.skill.elysia.overview": [
+    {
+      "type": 0,
+      "value": "Fascinated by it, and I'll fill the gaps in my knowledge at the first opportunity. For a new project it's the first thing I'd consider today: very convenient and top-performing."
+    }
+  ],
+  "skills.skill.expressKoa.name": [
+    {
+      "type": 0,
+      "value": "Express & Koa"
+    }
+  ],
+  "skills.skill.expressKoa.overview": [
+    {
+      "type": 0,
+      "value": "Expert, with extensive production experience."
+    }
+  ],
+  "skills.skill.fastapi.name": [
+    {
+      "type": 0,
+      "value": "FastAPI"
+    }
+  ],
+  "skills.skill.fastapi.overview": [
+    {
+      "type": 0,
+      "value": "Confident, though I don't claim expert level."
+    }
+  ],
   "skills.skill.figmaToUi.name": [
     {
       "type": 0,
@@ -248,7 +308,19 @@
   "skills.skill.graphql.overview": [
     {
       "type": 0,
-      "value": "Placeholder overview for GraphQL, until the questionnaire fixes it."
+      "value": "Up-to-date knowledge."
+    }
+  ],
+  "skills.skill.kafka.name": [
+    {
+      "type": 0,
+      "value": "Kafka"
+    }
+  ],
+  "skills.skill.kafka.overview": [
+    {
+      "type": 0,
+      "value": "Up-to-date knowledge."
     }
   ],
   "skills.skill.kotlin.name": [
@@ -260,7 +332,7 @@
   "skills.skill.kotlin.overview": [
     {
       "type": 0,
-      "value": "Placeholder overview for Kotlin, until the questionnaire fixes it."
+      "value": "No production experience yet: learnt and certified, with a very basic grasp of Spring."
     }
   ],
   "skills.skill.libraries.name": [
@@ -287,6 +359,18 @@
       "value": "Placeholder overview for MCP, until the questionnaire fixes it."
     }
   ],
+  "skills.skill.nestHapiSails.name": [
+    {
+      "type": 0,
+      "value": "NestJS, Hapi & Sails.js"
+    }
+  ],
+  "skills.skill.nestHapiSails.overview": [
+    {
+      "type": 0,
+      "value": "Confident: I may not know the latest features, but I'd jump right in."
+    }
+  ],
   "skills.skill.nextjs.name": [
     {
       "type": 0,
@@ -297,6 +381,18 @@
     {
       "type": 0,
       "value": "Expert, with successful commercial projects delivered on it."
+    }
+  ],
+  "skills.skill.nodejs.name": [
+    {
+      "type": 0,
+      "value": "Node.js"
+    }
+  ],
+  "skills.skill.nodejs.overview": [
+    {
+      "type": 0,
+      "value": "Expert, with proven success in commercial production."
     }
   ],
   "skills.skill.openaiSdk.name": [
@@ -311,6 +407,18 @@
       "value": "Placeholder overview for OpenAI SDK, until the questionnaire fixes it."
     }
   ],
+  "skills.skill.openapi.name": [
+    {
+      "type": 0,
+      "value": "OpenAPI/Swagger"
+    }
+  ],
+  "skills.skill.openapi.overview": [
+    {
+      "type": 0,
+      "value": "Up-to-date knowledge."
+    }
+  ],
   "skills.skill.performance.name": [
     {
       "type": 0,
@@ -321,6 +429,30 @@
     {
       "type": 0,
       "value": "Taken to the best possible result, guided by Lighthouse, GTmetrix and Pingdom, internal monitoring data and user feedback."
+    }
+  ],
+  "skills.skill.php.name": [
+    {
+      "type": 0,
+      "value": "PHP"
+    }
+  ],
+  "skills.skill.php.overview": [
+    {
+      "type": 0,
+      "value": "Used extensively in the past, across many projects of every kind, up to full-scale social networks; I rarely use it these days."
+    }
+  ],
+  "skills.skill.phpFrameworks.name": [
+    {
+      "type": 0,
+      "value": "Yii2, Zend Framework & Laravel"
+    }
+  ],
+  "skills.skill.phpFrameworks.overview": [
+    {
+      "type": 0,
+      "value": "Extensive experience from past projects; I haven't kept up with their latest versions."
     }
   ],
   "skills.skill.playwright.name": [
@@ -359,6 +491,18 @@
       "value": "Commercially proven, with the same confidence as React."
     }
   ],
+  "skills.skill.protocols.name": [
+    {
+      "type": 0,
+      "value": "Communication protocols"
+    }
+  ],
+  "skills.skill.protocols.overview": [
+    {
+      "type": 0,
+      "value": "Application-level knowledge of gRPC, AMQP and MQTT."
+    }
+  ],
   "skills.skill.python.name": [
     {
       "type": 0,
@@ -368,7 +512,7 @@
   "skills.skill.python.overview": [
     {
       "type": 0,
-      "value": "Placeholder overview for Python, until the questionnaire fixes it."
+      "value": "Deep knowledge, though I don't claim expert level."
     }
   ],
   "skills.skill.react.name": [
@@ -398,13 +542,25 @@
   "skills.skill.rest.name": [
     {
       "type": 0,
-      "value": "REST"
+      "value": "RESTful APIs"
     }
   ],
   "skills.skill.rest.overview": [
     {
       "type": 0,
-      "value": "Placeholder overview for REST, until the questionnaire fixes it."
+      "value": "Up-to-date knowledge."
+    }
+  ],
+  "skills.skill.rust.name": [
+    {
+      "type": 0,
+      "value": "Rust"
+    }
+  ],
+  "skills.skill.rust.overview": [
+    {
+      "type": 0,
+      "value": "An enthusiast: I enjoy the language and use it for web development only."
     }
   ],
   "skills.skill.seo.name": [
@@ -417,6 +573,30 @@
     {
       "type": 0,
       "value": "Taken to the best possible result with Semrush, Ahrefs, Lumar and Otterly AI: better search positions, Click-Through Rate (CTR) and Conversion Rate (CVR)."
+    }
+  ],
+  "skills.skill.socketIo.name": [
+    {
+      "type": 0,
+      "value": "Socket.io"
+    }
+  ],
+  "skills.skill.socketIo.overview": [
+    {
+      "type": 0,
+      "value": "Ready to use from day one."
+    }
+  ],
+  "skills.skill.sse.name": [
+    {
+      "type": 0,
+      "value": "Server-Sent Events"
+    }
+  ],
+  "skills.skill.sse.overview": [
+    {
+      "type": 0,
+      "value": "Up-to-date knowledge."
     }
   ],
   "skills.skill.ssrSsg.name": [
@@ -476,7 +656,7 @@
   "skills.skill.typescript.overview": [
     {
       "type": 0,
-      "value": "Placeholder overview for TypeScript, until the questionnaire fixes it."
+      "value": "Expert, working confidently with complex types and interfaces."
     }
   ],
   "skills.skill.uxPrinciples.name": [
@@ -513,6 +693,30 @@
     {
       "type": 0,
       "value": "Solid knowledge, incl. Nuxt, proven in commercial applications, though fewer than with React."
+    }
+  ],
+  "skills.skill.webrtc.name": [
+    {
+      "type": 0,
+      "value": "WebRTC"
+    }
+  ],
+  "skills.skill.webrtc.overview": [
+    {
+      "type": 0,
+      "value": "Up-to-date knowledge."
+    }
+  ],
+  "skills.skill.websockets.name": [
+    {
+      "type": 0,
+      "value": "WebSockets"
+    }
+  ],
+  "skills.skill.websockets.overview": [
+    {
+      "type": 0,
+      "value": "Up-to-date knowledge."
     }
   ],
   "skills.subgroup.apisServices.name": [
