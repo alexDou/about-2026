@@ -129,7 +129,7 @@ Reference: the expanded menu of codepen `fluxus/gPWvZm` (local copy in git-ignor
   3. Backend: Node.js, Express & Koa, Socket.io, Apollo, ElysiaJS, NestJS/Hapi/Sails.js, FastAPI, Actix, the PHP frameworks in one Skill. Subgroup "APIs & services" (the Owner claims no architect title): RESTful APIs, GraphQL, WebSockets, Server-Sent Events, WebRTC, OpenAPI/Swagger, Kafka, communication protocols (gRPC, AMQP, MQTT). CQRS and microservices are patterns: What I do (Unit 5). No CMS is named (fixed with the Owner in `docs_src/skills/backend.md`).
   4. AI: OpenAI SDK, CrewAI, LangGraph, MCP, agent creation (Google ADK, Amazon Bedrock). Subgroup "AI-assisted development": Claude Code & Codex, Antigravity, OpenCode, RAG with Obsidian & Karpathy Wiki, prompts, skills & rules. LangChain is not named (fixed with the Owner in `docs_src/skills/ai.md`).
   5. Databases & search, in three subgroups and no Skills of its own: "SQL" (PostgreSQL & MySQL, SQLite), "NoSQL" (Redis, MongoDB, DynamoDB, RethinkDB, ScyllaDB, Elasticsearch), "ORMs & drivers" (Prisma, TypeORM, SQLAlchemy, Mongoose & the MongoDB Node.js driver) (fixed with the Owner in `docs_src/skills/databases.md`).
-  6. Cloud & DevOps (observability included): Docker, Kubernetes, AWS, Terraform, Jenkins, GitLab CI, Nginx, Apache, Bash; Prometheus, Grafana, Instana, New Relic, CloudWatch.
+  6. Cloud & DevOps (observability included), no subgroup: Docker & Docker Compose, Kubernetes, Terraform & Helm, GitLab CI & Jenkins, AWS, Google Cloud, Nginx & Apache, Linux (Bash scripting), Monitoring & Observability (Prometheus, Grafana, Instana, GTM, CloudWatch) (fixed with the Owner in `docs_src/skills/cloud-devops.md`).
   7. Testing & quality: Jest, RTL, Vitest, Cypress, Playwright, pytest, TDD.
   8. Engineering practice: system design, clean architecture, DDD, refactoring, code review, mentoring, Scrum/Kanban.
 - Layout: the "Skills" heading; a row with the Expand all switch (left) and the Copy skills button (right); the Skill group blocks, centred with a max-width on desktop, full width minus the side padding on phones. Each block is filled with the light `#d1dcd9` (About's card surface) with `#25363a` text and reasonable padding; it shows the group name, then its Skills and subgroups. Finer look later.
@@ -144,7 +144,7 @@ Reference: the expanded menu of codepen `fluxus/gPWvZm` (local copy in git-ignor
   - Kotlin: Educative "The Ultimate Guide to Kotlin Programming" (Jun 2025).
   - CSS (Frontend, Architecture & ecosystem): modern.css "CSS Wizard", Modern CSS Quiz 20/20 (2026).
   - Docker: Educative "Docker for Developers" (Jun 2025).
-  - Bash: Udemy "BASH Programming Course: Master the Linux Command Line!" (Jul 2019).
+  - Linux (Bash scripting): Udemy "BASH Programming Course: Master the Linux Command Line!" (Jul 2019).
   - AI Skills: Udemy "LLM Engineering: Master AI, Large Language Models & Agents" (Jul 2025); Udemy "AI Engineer Agentic Track: The Complete Agent & MCP Course" (Jan 2026).
   - Elasticsearch: Udemy "Getting Started with Elasticsearch" (Jul 2016).
   - Left out: TestDome JavaScript and Node.js (2019, replaced by the TypeScript test), Udemy MongooseJS Essentials. No course hours shown.

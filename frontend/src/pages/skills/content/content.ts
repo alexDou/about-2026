@@ -55,9 +55,9 @@ const group = (
 
 /**
  * The Skills Panel's content: which message each piece of it reads. Programming languages,
- * Frontend, Backend, AI and Databases & search are fixed with the Owner; the rest are placeholders
- * until their questionnaires (Unit 3.1) fix them. The Certificates are the ones decided in the
- * grilling, without verification links until Unit 3.2.
+ * Frontend, Backend, AI, Databases & search and Cloud & DevOps are fixed with the Owner; the rest
+ * are placeholders until their questionnaires (Unit 3.1) fix them. The Certificates are the ones
+ * decided in the grilling, without verification links until Unit 3.2.
  */
 export const SKILLS_CONTENT: SkillsContent = {
   groups: [
@@ -172,7 +172,14 @@ export const SKILLS_CONTENT: SkillsContent = {
     ),
     group("cloudDevops", [
       skill("docker", [certificate("educativeDocker", "educative", { year: 2025, month: 6 })]),
-      skill("bash", [certificate("udemyBash", "udemy", { year: 2019, month: 7 })]),
+      skill("kubernetes"),
+      skill("terraformHelm"),
+      skill("gitlabJenkins"),
+      skill("aws"),
+      skill("googleCloud"),
+      skill("nginxApache"),
+      skill("linux", [certificate("udemyBash", "udemy", { year: 2019, month: 7 })]),
+      skill("monitoring"),
     ]),
     group("testing", [skill("vitest"), skill("playwright")]),
     group("practice", [skill("systemDesign"), skill("cleanArchitecture")]),
