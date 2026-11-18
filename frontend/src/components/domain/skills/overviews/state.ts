@@ -109,3 +109,23 @@ export function allSet(
   }
   return followSkills({ ...state, groups: opened, skills }, groups.flatMap(headingsOf));
 }
+
+/**
+ * Where Expand all belongs, read from what is open: `true` when every group and every overview is
+ * open, `false` when every overview is closed (the groups may stay open), `undefined` for a mix,
+ * which leaves the switch where it is.
+ */
+export function expandedOf(
+  state: OverviewsState,
+  groups: readonly OverviewGroup[],
+): boolean | undefined {
+  const skills = groups.flatMap(skillsOf);
+  if (
+    groups.every((group) => groupOpen(state, group.id)) &&
+    skills.every((skill) => skillOpen(state, skill.id))
+  ) {
+    return true;
+  }
+  if (skills.every((skill) => !skillOpen(state, skill.id))) return false;
+  return undefined;
+}

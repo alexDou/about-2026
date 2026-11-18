@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   ALL_CLOSED,
   allSet,
+  expandedOf,
   groupOpen,
   groupToggled,
   headingOpen,
@@ -226,5 +227,47 @@ describe("allSet", () => {
     const state = allSet(some, groups, true);
     expect(groupOpen(state, "databases")).toBe(true);
     expect(skillOpen(state, "postgres")).toBe(true);
+  });
+});
+
+describe("expandedOf", () => {
+  const groups = [DATABASES, FLAT];
+
+  it("is false when everything is closed", () => {
+    expect(expandedOf(ALL_CLOSED, groups)).toBe(false);
+  });
+
+  it("is true when every group and every overview is open, however it got open", () => {
+    expect(expandedOf(allSet(ALL_CLOSED, groups, true), groups)).toBe(true);
+    let byHand = ALL_CLOSED;
+    for (const group of groups) byHand = groupToggled(byHand, group);
+    expect(expandedOf(byHand, groups)).toBe(true);
+  });
+
+  it("is false again when everything is closed by hand", () => {
+    let state = allSet(ALL_CLOSED, groups, true);
+    for (const group of groups) state = groupToggled(state, group);
+    expect(expandedOf(state, groups)).toBe(false);
+  });
+
+  it("is undecided (undefined) for a mix: some open, some closed", () => {
+    expect(expandedOf(groupToggled(ALL_CLOSED, FLAT), groups)).toBeUndefined();
+    const closedOne = skillToggled(
+      allSet(ALL_CLOSED, groups, true),
+      headingsOf(DATABASES),
+      "redis",
+    );
+    expect(expandedOf(closedOne, groups)).toBeUndefined();
+  });
+
+  it("is false when every overview is closed by hand, though the groups stay open", () => {
+    let state = allSet(ALL_CLOSED, groups, true);
+    for (const group of groups) {
+      for (const skill of [...group.skills, ...group.subgroups.flatMap((s) => s.skills)]) {
+        state = skillToggled(state, headingsOf(group), skill.id);
+      }
+    }
+    expect(groupOpen(state, "databases")).toBe(true);
+    expect(expandedOf(state, groups)).toBe(false);
   });
 });
