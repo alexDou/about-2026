@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { fireEvent, render, screen, within } from "@octanejs/testing-library";
-import { afterEach, describe, expect, it } from "vitest";
+import { act, fireEvent, render, screen, within } from "@octanejs/testing-library";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { intlWrapper } from "../../../i18n";
 import { SKILLS_CONTENT } from "../content";
 import { SkillsPage } from "../SkillsPage.tsrx";
@@ -43,6 +43,30 @@ describe("SkillsPage", () => {
     expect(stylesheet).toMatch(
       /\.skills-page__header-row\s*{[^}]*justify-content:\s*space-between/,
     );
+  });
+
+  it("has Copy skills in the header row, after Expand all, which comes first", () => {
+    const { container } = renderPage();
+    const row = container.querySelector(`.${styles["skills-page__header-row"]}`)!;
+    const expand = within(row as HTMLElement).getByRole("button", { name: "Expand all" });
+    const copy = within(row as HTMLElement).getByRole("button", { name: "Copy skills" });
+    expect(expand.compareDocumentPosition(copy) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  });
+
+  it("copies all the Skills, whatever is open: every group is in the text while all are closed", async () => {
+    const writeText = vi.fn<(text: string) => Promise<void>>().mockResolvedValue(undefined);
+    Object.defineProperty(navigator, "clipboard", { value: { writeText }, configurable: true });
+    renderPage();
+    await act(async () => {
+      fireEvent.click(screen.getByRole("button", { name: "Copy skills" }));
+    });
+    const lines = writeText.mock.calls[0]![0].split("\n");
+    // Every group the page shows is in the text, though all of them are closed.
+    for (const heading of screen.getAllByRole("heading", { level: 2 })) {
+      expect(lines).toContain(heading.textContent);
+    }
+    expect(lines.slice(0, 2)).toEqual(["Programming languages", "  TypeScript"]);
+    expect(screen.getByRole("status")).toHaveTextContent("Copied");
   });
 
   it("shows a band for every Skill group, in the content's order, in one accordion", () => {

@@ -2,6 +2,7 @@ import { useEffect } from "octane";
 import { Heading } from "../../components/ui/heading";
 import { WalkingToggle } from "../../components/ui/walking-toggle";
 import { reset, setAll } from "../../components/domain/skills/overviews";
+import { CopySkills } from "../../components/domain/skills/copy-skills";
 import { SkillGroup } from "../../components/domain/skills/skill-group";
 import { useIntl } from "../../hooks/use-intl";
 import { SKILLS_CONTENT } from "./content";
@@ -26,6 +27,7 @@ export function SkillsPage() @{
         }}
         onChange={(open) => setAll(SKILLS_CONTENT.groups, open)}
       />
+      <CopySkills groups={SKILLS_CONTENT.groups} />
     </div>
     <div class={styles["skills-page__accordion"]}>
       @for (const group of SKILLS_CONTENT.groups; key group.id) {

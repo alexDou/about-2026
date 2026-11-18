@@ -18,3 +18,10 @@ Feature: Skills
     Then the Certificate view "Clean Code in Python" is open
     When I close the Certificate view
     Then the Certificate view "Clean Code in Python" is closed
+
+  Scenario: Copy skills puts all the Skills on the clipboard, though every group is closed
+    Given the visitor lets the page use the clipboard
+    When I open "/skills"
+    And I click the button "Copy skills"
+    Then "Copied" is announced in the status region
+    And the clipboard starts with the Skills text

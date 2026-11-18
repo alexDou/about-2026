@@ -1,4 +1,5 @@
 import { useIntl } from "../../../../../hooks/use-intl";
+import { formatCertificateDate } from "../../format-certificate-date";
 import styles from "./styles.module.css";
 import type { CertificateViewProps } from "./types";
 
@@ -14,13 +15,7 @@ export function CertificateView({ certificate, label }: CertificateViewProps) @{
   const titleId = `${dialogId}-title`;
   const title = intl.formatMessage({ id: certificate.title });
   const issuer = intl.formatMessage({ id: certificate.issuer });
-  const { year, month } = certificate.date;
-  // UTC both ways, so the month does not move with the Visitor's time zone.
-  const date = intl.formatDate(`${year}-${String(month ?? 1).padStart(2, "0")}-01T00:00:00Z`, {
-    year: "numeric",
-    month: month === undefined ? undefined : "short",
-    timeZone: "UTC",
-  });
+  const date = formatCertificateDate(intl, certificate.date);
 
   <>
     <button
