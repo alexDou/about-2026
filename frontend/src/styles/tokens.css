@@ -14,14 +14,14 @@
   --panel-contact: #5c8b70;
 
   /*
-   * Skills' accordion: the Contact green in steps, each darker than the one before. The open band
-   * and the boxes under it carry light text: 4.6:1 or better.
+   * Skills' accordion, in the light end of the palette: the content stays on --panel-what-i-do,
+   * only a group's or subgroup's name changes, a step darker and another when open. All carry
+   * --text-on-light at 5.7:1 or better.
    */
-  --skills-band-open: #40664f;
-  --skills-subgroup: #2f4b3c;
-  --skills-subgroup-open: #243a2d;
-  /* The room round the boxes inside an open band. */
-  --skills-gap: 1rem;
+  --skills-heading: #b8c9c4;
+  --skills-heading-open: #9db4ae;
+  /* The left room of a subgroup's name and Skills: more than a group name's. */
+  --skills-subgroup-indent: 3.2rem;
 
   /* The corner close button's red: a muted vermilion, the warm counterpart to the cool panels. */
   --color-accent: #e4572e;

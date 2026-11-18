@@ -94,6 +94,10 @@ describe("SkillsPage", () => {
     );
   });
 
+  it("has square corners", () => {
+    expect(stylesheet).not.toMatch(/border-radius/);
+  });
+
   it("puts a strip before and after the accordion's bands", () => {
     expect(stylesheet).toMatch(
       /\.skills-page__accordion::before,\s*\.skills-page__accordion::after\s*{[^}]*content:\s*""/,
