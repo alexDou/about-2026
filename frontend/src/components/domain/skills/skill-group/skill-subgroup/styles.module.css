@@ -1,43 +1,46 @@
-/* A box inside the open band: its width is the band's minus the band's padding. */
-.skill-subgroup {
-  display: grid;
-  gap: 0.4rem;
-  padding: var(--skills-gap);
-  border-radius: 0.75rem;
-  background: var(--skills-subgroup);
-  transition: background-color var(--overview-duration) ease;
-}
-
-.skill-subgroup--open {
-  background: var(--skills-subgroup-open);
-}
-
+/*
+ * A subgroup: its name runs the full width of the group, smaller and shorter than a group's, with
+ * more room on the left. The content stays on the group's colour: only the name's background
+ * changes, a step darker, and another when the subgroup is expanded.
+ */
 .skill-subgroup__heading {
   margin: 0;
-  font-size: 1.1rem;
-  font-weight: 700;
+  font-size: 1.05rem;
+  font-weight: 400;
 }
 
 .skill-subgroup__toggle {
-  padding: 0.25rem 0;
+  width: 100%;
+  padding-block: 0.35rem;
+  padding-inline: var(--skills-subgroup-indent) var(--element-distance-standard);
   border: 0;
-  background: none;
+  background: var(--skills-heading);
   color: inherit;
   font: inherit;
   text-align: start;
   cursor: pointer;
+  transition: background-color var(--overview-duration) ease;
+}
+
+.skill-subgroup--open .skill-subgroup__toggle {
+  background: var(--skills-heading-open);
+}
+
+.skill-subgroup__toggle:hover {
+  background: var(--skills-heading-open);
 }
 
 .skill-subgroup__skills {
   display: grid;
   gap: 0.4rem;
   margin: 0;
-  padding: 0;
+  padding-block: 0.8rem;
+  padding-inline: var(--skills-subgroup-indent) var(--element-distance-standard);
   list-style: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .skill-subgroup {
+  .skill-subgroup__toggle {
     transition: none;
   }
 }

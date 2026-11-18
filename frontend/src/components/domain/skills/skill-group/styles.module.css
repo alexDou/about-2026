@@ -1,29 +1,22 @@
 /*
- * A band of the accordion, after the CodePen "CSS Responsive animated Accordion": the Contact
- * green closed, a darker one open, the colours and the panel changing with the overviews' timing.
+ * A band of the accordion, after the CodePen "CSS Responsive animated Accordion", in the light end
+ * of the palette. The content stays on the What I do colour, open or closed: only the name's
+ * background changes (`__toggle`), a step darker, and another when open.
  */
 .skill-group {
-  background: var(--panel-contact);
+  background: var(--panel-what-i-do);
   color: var(--text-on-light);
-  transition:
-    background-color var(--overview-duration) ease,
-    color var(--overview-duration) ease;
-}
-
-.skill-group--open {
-  background: var(--skills-band-open);
-  color: var(--text-on-dark);
 }
 
 /* The thin line between two bands, as the pen has under each heading. */
 .skill-group + .skill-group {
-  border-top: 1px solid var(--skills-band-open);
+  border-top: 1px solid var(--skills-heading-open);
 }
 
 .skill-group__heading {
   margin: 0;
   font-size: 1.25rem;
-  font-weight: 700;
+  font-weight: 400;
 }
 
 /* The name on the left, the "+" on the right. */
@@ -35,15 +28,20 @@
   width: 100%;
   padding: 0.7rem var(--element-distance-standard);
   border: 0;
-  background: none;
+  background: var(--skills-heading);
   color: inherit;
   font: inherit;
   text-align: start;
   cursor: pointer;
+  transition: background-color var(--overview-duration) ease;
+}
+
+.skill-group--open .skill-group__toggle {
+  background: var(--skills-heading-open);
 }
 
 .skill-group__toggle:hover {
-  background: rgb(0 0 0 / 8%);
+  background: var(--skills-heading-open);
 }
 
 /* The pen's "+", turning into "×" when the band opens. */
@@ -86,22 +84,17 @@
   overflow: hidden;
 }
 
-.skill-group__content {
-  display: grid;
-  gap: var(--skills-gap);
-  padding: 0 var(--skills-gap) var(--skills-gap);
-}
-
+/* Subgroups run the full width of the band; a plain list is indented as the name is. */
 .skill-group__skills {
   display: grid;
   gap: 0.4rem;
   margin: 0;
-  padding: 0;
+  padding: 0.8rem var(--element-distance-standard);
   list-style: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .skill-group,
+  .skill-group__toggle,
   .skill-group__icon::before,
   .skill-group__panel,
   .skill-group__panel--open {
