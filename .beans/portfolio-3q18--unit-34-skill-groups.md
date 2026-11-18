@@ -7,7 +7,7 @@ priority: normal
 tags:
     - ready-for-agent
 created_at: 2026-11-16T09:50:04Z
-updated_at: 2026-11-17T14:05:42Z
+updated_at: 2026-11-18T07:41:53Z
 parent: portfolio-4rt0
 blocked_by:
     - portfolio-vg1p
@@ -39,3 +39,5 @@ The Skills Panel's groups: opening `/skills` shows the "Skills" heading, the hea
 ## Notes
 
 - From 3.1 (2026-11-17): groups can hold several subgroups (Databases & search has three: SQL, NoSQL, ORMs & drivers) and no Skills of their own; Backend and AI also have one subgroup each. The spec says "a heading acts on its own group or subgroup only" and "sets all their Skills": decide with the Owner whether a group heading over subgroups only (Databases) opens the subgroups' Skills or does nothing.
+
+- From the walking toggle prototype (2026-11-18): an overview opens and closes with a quick, smooth CSS transition (the prototype: grid rows 0fr to 1fr with a fade, about 220ms, the arrow turning; none with reduced motion). No JS animation.

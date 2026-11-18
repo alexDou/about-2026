@@ -7,7 +7,7 @@ priority: normal
 tags:
     - ready-for-agent
 created_at: 2026-11-16T09:50:04Z
-updated_at: 2026-11-18T06:44:16Z
+updated_at: 2026-11-18T07:41:53Z
 parent: portfolio-4rt0
 blocked_by:
     - portfolio-3q18
@@ -45,3 +45,7 @@ Backend
 ## Blocked by
 
 - portfolio-3q18
+
+## Notes
+
+- From the walking toggle prototype (2026-11-18): the button is `--control-height` tall (35px, the same as Expand all) with a 20px border radius.

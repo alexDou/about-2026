@@ -3,10 +3,11 @@
 title: 'Unit 3.5: Expand all'
 status: todo
 type: task
+priority: normal
 tags:
     - ready-for-agent
 created_at: 2026-11-16T09:50:04Z
-updated_at: 2026-11-16T09:50:04Z
+updated_at: 2026-11-18T07:41:53Z
 parent: portfolio-4rt0
 blocked_by:
     - portfolio-r41n
@@ -33,3 +34,7 @@ Expand all: the walking toggle in the header row, labelled "Expand all", as a co
 
 - portfolio-r41n
 - portfolio-3q18
+
+## Notes
+
+- From the walking toggle (2026-11-18): the toggle reports a change only when its walk (or reduced-motion slide) has ended; Expand all opens or closes the overviews then, not on click. The toggle has no visible label: "Expand all" is its accessible name and its hover hint.
