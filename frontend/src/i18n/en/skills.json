@@ -113,6 +113,24 @@
       "value": "Collapse all"
     }
   ],
+  "skills.copied": [
+    {
+      "type": 0,
+      "value": "Copied"
+    }
+  ],
+  "skills.copyCertified": [
+    {
+      "type": 0,
+      "value": "Certified"
+    }
+  ],
+  "skills.copySkills": [
+    {
+      "type": 0,
+      "value": "Copy skills"
+    }
+  ],
   "skills.expandAll": [
     {
       "type": 0,

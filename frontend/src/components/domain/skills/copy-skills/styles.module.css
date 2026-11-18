@@ -1,0 +1,29 @@
+/* The status ("Copied") on the left of the button, both centred on the row. */
+.copy-skills {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.copy-skills__status {
+  font-size: 0.875rem;
+  color: var(--text-on-dark);
+}
+
+/* As tall as Expand all, the row's other control, with the same rounded ends. */
+.copy-skills__button {
+  height: var(--control-height);
+  padding: 0 1.25rem;
+  border: 0;
+  border-radius: 1.25rem;
+  background: var(--panel-about);
+  color: var(--text-on-dark);
+  font: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.copy-skills__button:focus-visible {
+  outline: 0.125rem solid var(--panel-about);
+  outline-offset: 0.125rem;
+}

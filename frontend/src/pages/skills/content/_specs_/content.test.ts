@@ -59,6 +59,9 @@ const COMPONENT_MESSAGES: readonly string[] = [
   "skills.certificateLink",
   "skills.certificateVerify",
   "skills.collapseAll",
+  "skills.copied",
+  "skills.copyCertified",
+  "skills.copySkills",
   "skills.expandAll",
   "skills.overviewToggle",
 ];

@@ -21,8 +21,8 @@ Feature: Offline note in Chat with me and Contact
 
   Scenario: Other Panels have no offline note
     Given the backend is unreachable
-    When I open "/skills"
-    Then the page heading reads "Skills"
+    When I open "/about"
+    Then the page heading reads "About"
     And the page has no place for an offline note
 
   Scenario: With the backend up there is no offline note

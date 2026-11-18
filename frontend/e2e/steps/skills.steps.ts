@@ -1,4 +1,4 @@
-import { Then, When } from "@cucumber/cucumber";
+import { Given, Then, When } from "@cucumber/cucumber";
 import { expect } from "@playwright/test";
 import type { PortfolioWorld } from "../support/world.ts";
 
@@ -32,4 +32,28 @@ Then("the Certificate image is shown", async function (this: PortfolioWorld) {
   await expect
     .poll(() => image.evaluate((img: HTMLImageElement) => img.currentSrc))
     .toMatch(/\/certificates\/testdomePython\.(avif|webp)$/);
+});
+
+Given("the visitor lets the page use the clipboard", async function (this: PortfolioWorld) {
+  await this.context.grantPermissions(["clipboard-read", "clipboard-write"]);
+});
+
+When("I click the button {string}", async function (this: PortfolioWorld, name: string) {
+  await this.page.getByRole("button", { name, exact: true }).click();
+});
+
+Then(
+  "{string} is announced in the status region",
+  async function (this: PortfolioWorld, text: string) {
+    await expect(this.page.getByRole("status").filter({ hasText: text })).toBeVisible();
+  },
+);
+
+Then("the clipboard starts with the Skills text", async function (this: PortfolioWorld) {
+  const text = await this.page.evaluate(() => navigator.clipboard.readText());
+  expect(text.split("\n").slice(0, 3)).toEqual([
+    "Programming languages",
+    "  TypeScript",
+    "    Expert, working confidently with complex types and interfaces.",
+  ]);
 });
