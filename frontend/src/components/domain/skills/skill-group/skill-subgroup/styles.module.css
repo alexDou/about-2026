@@ -5,7 +5,8 @@
  */
 .skill-subgroup__heading {
   margin: 0;
-  font-size: 1.05rem;
+  font-family: var(--font-heading);
+  font-size: 1.08rem;
   font-weight: 400;
 }
 
@@ -23,11 +24,11 @@
 }
 
 .skill-subgroup--open .skill-subgroup__toggle {
-  background: var(--skills-heading-open);
+  background: var(--skills-subgroup-heading-open);
 }
 
 .skill-subgroup__toggle:hover {
-  background: var(--skills-heading-open);
+  background: var(--skills-subgroup-heading-open-hover);
 }
 
 .skill-subgroup__skills {

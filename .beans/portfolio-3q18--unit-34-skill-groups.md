@@ -21,7 +21,7 @@ portfolio-4rt0 (Unit 3: Skills). Design: the Unit 3 section of `docs_src/specs/u
 
 The Skills Panel's groups: opening `/skills` shows the "Skills" heading, the header row (room for Expand all on the left and Copy skills on the right), and one accordion of Skill groups after the pen in `support_files/skills/accordion` (CSS Responsive animated Accordion, CodePen), kept inside the page's max-width and standard side margin.
 
-- One accordion wrapper, not separate cards, with a 1rem strip at its top (`::before`) and at its bottom (`::after`), in the dark Contact green.
+- One accordion wrapper, not separate cards, with a 1rem strip at its bottom (`::after`) in the darkest tone; the top strip (`::before`) was dropped by the Owner after the second look.
 - Light end of the palette (second look, 2026-11-18): the content is always on What I do `#d1dcd9` with the About text colour; only a group's or subgroup's name changes background, a step darker (`#b8c9c4`) and another when open (`#9db4ae`), weight 400. A group is a band with the name left and a "+" on the right that turns into "×" when open, a smaller height than the pen's. All groups start closed, so the Visitor sees all eight without scrolling. No border radius anywhere in the accordion.
 - A click on a group opens it and every overview in it at once: the subgroups appear, each a name the full width of the group (smaller and shorter than a group's, more room on the left) over its Skills, with their overviews open. The Visitor closes what they do not need.
 - Frontend, Backend and AI keep their loose Skills in a new first subgroup (Frontend: "Frameworks & libraries", Backend: "Runtimes & frameworks", AI: "SDKs & agent frameworks"), so no list is left without a bulk control. Groups with no subgroups (Programming languages, Cloud & DevOps, Testing & quality, Engineering practice) are plain lists.
@@ -38,7 +38,7 @@ The Skills Panel's groups: opening `/skills` shows the "Skills" heading, the hea
 - [x] A group heading is a button with `aria-expanded`: a click opens the group, every overview in it and, by the subgroup rule, every subgroup heading; the next click closes the group and every overview in it. Its state is whether the group shows: opening or closing Skills by hand never opens or closes the group
 - [x] Subgroup headings keep a state of their own and the rule: a click flips it and sets all their Skills to match; opening or closing Skills by hand leaves it alone, except all closed → closed, all opened → open; a heading acts on its own subgroup only
 - [x] The group and subgroup rules live in pure functions with their own unit tests
-- [x] One accordion wrapper with a 1rem strip before and after: content always on What I do with the About text colour; a group's or subgroup's name a step darker and another when open, weight 400; group names left, the "+" turning to "×" on the right; a subgroup's name full width of its group, shorter than a group's, with more left room; square corners; no separate cards, inside the page's max-width and side margin
+- [x] One accordion wrapper with a 1rem strip after its bands (none before): content always on What I do with the About text colour; a group's or subgroup's name a step darker and another when open, weight 400; group names left, the "+" turning to "×" on the right; a subgroup's name full width of its group, shorter than a group's, with more left room; square corners; no separate cards, inside the page's max-width and side margin
 - [x] Frontend, Backend and AI hold their Skills in subgroups only; the Backend order, "WebSockets, Socket.io", "gRPC, AMQP and MQTT" and "Packages" are in the content, and the content tests and questionnaires follow
 - [x] E2E run for the UI-visible change
 
@@ -80,3 +80,5 @@ The Skills Panel is one accordion (`skills-page__accordion`, a 1rem strip before
 ## Summary of Changes (second look)
 
 The accordion in the light end of the palette: `.skill-group` keeps `--panel-what-i-do` and `--text-on-light`, open or closed; only the name buttons change (`--skills-heading`, `--skills-heading-open`, weight 400, with a hover on the darker tone). A subgroup is no longer a box: its name is full width (`--skills-subgroup-indent` on the left, shorter and smaller), its Skills indented the same. No border radius on the wrapper or the names; the strips use the open tone. Tokens `--skills-band-open`, `--skills-subgroup`, `--skills-subgroup-open`, `--skills-gap` replaced by `--skills-heading`, `--skills-heading-open`, `--skills-subgroup-indent`. Stylesheet tests follow.
+
+- Third look (2026-11-18): the wrapper's `::before` strip is removed; only `::after` stays.
