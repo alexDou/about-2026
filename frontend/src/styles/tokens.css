@@ -18,6 +18,9 @@
 
   --element-distance-standard: 1.8rem;
 
+  /* The height of a row's controls side by side (Skills: Expand all and Copy skills), 35px. */
+  --control-height: 2.1875rem;
+
   /* Text colours: on dark and on light backgrounds. */
   --text-on-dark: var(--panel-what-i-do);
   --text-on-light: var(--panel-about);
