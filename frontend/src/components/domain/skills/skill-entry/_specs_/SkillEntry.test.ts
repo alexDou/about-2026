@@ -8,13 +8,33 @@ const SKILL = {
   id: "typescript",
   name: "skills.skill.typescript.name",
   overview: "skills.skill.typescript.overview",
+  certificates: [],
+} as const;
+
+const TESTDOME = {
+  id: "testdomePython",
+  title: "skills.certificate.testdomePython.title",
+  issuer: "skills.issuer.testdome",
+  date: { year: 2022, month: 3 },
+  image: { avif: "/certificates/testdomePython.avif", webp: "/certificates/testdomePython.webp" },
+} as const;
+
+const EDUCATIVE = {
+  id: "educativeCleanCodePython",
+  title: "skills.certificate.educativeCleanCodePython.title",
+  issuer: "skills.issuer.educative",
+  date: { year: 2025, month: 6 },
+  image: {
+    avif: "/certificates/educativeCleanCodePython.avif",
+    webp: "/certificates/educativeCleanCodePython.webp",
+  },
 } as const;
 
 const GROUP = { id: "programming", skills: [{ id: "typescript" }], subgroups: [] };
 
-function setup() {
+function setup(certificates: readonly (typeof TESTDOME | typeof EDUCATIVE)[] = []) {
   return render(SkillEntry, {
-    props: { skill: SKILL, headings: headingsOf(GROUP) },
+    props: { skill: { ...SKILL, certificates }, headings: headingsOf(GROUP) },
     wrapper: intlWrapper({
       "skills.skill.typescript.name": "TypeScript",
       "skills.skill.typescript.overview": "Expert.",
@@ -65,5 +85,36 @@ describe("SkillEntry", () => {
       "aria-expanded",
       "true",
     );
+  });
+
+  describe("Certificates", () => {
+    it("has no link for a Skill without a Certificate", () => {
+      const { container } = setup();
+      expect(container.querySelector("[commandfor]")).toBeNull();
+      expect(container.querySelector("dialog")).toBeNull();
+    });
+
+    it('has one link, "Certificate", for a Skill with one', () => {
+      setup([TESTDOME]);
+      expect(screen.getByRole("button", { hidden: true, name: "Certificate" })).toHaveAttribute(
+        "command",
+        "show-modal",
+      );
+    });
+
+    it("has a link per Certificate, each labelled by its issuer, for a Skill with two", () => {
+      setup([TESTDOME, EDUCATIVE]);
+      expect(screen.getByRole("button", { hidden: true, name: "TestDome" })).toBeInTheDocument();
+      expect(screen.getByRole("button", { hidden: true, name: "Educative" })).toBeInTheDocument();
+      expect(screen.queryByRole("button", { hidden: true, name: "Certificate" })).toBeNull();
+    });
+
+    it("shows them only while the Skill is open: they sit in the overview, out of reach until then", () => {
+      setup([TESTDOME]);
+      const link = screen.getByRole("button", { hidden: true, name: "Certificate" });
+      expect(link.closest("[inert]")).not.toBeNull();
+      fireEvent.click(screen.getByRole("button", { name: "Overview of TypeScript" }));
+      expect(link.closest("[inert]")).toBeNull();
+    });
   });
 });

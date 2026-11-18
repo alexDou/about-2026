@@ -12,6 +12,13 @@ const renderPage = (overrides: Parameters<typeof intlWrapper>[0] = {}) =>
 
 const stylesheet = readFileSync(resolve(import.meta.dirname, "../styles.module.css"), "utf8");
 
+/** Click the toggle and let its walk end, as the handle in the header row reports it. */
+const walk = (container: HTMLElement, name: "Expand all" | "Collapse all") => {
+  fireEvent.click(screen.getByRole("button", { name }));
+  const row = container.querySelector(`.${styles["skills-page__header-row"]}`)!;
+  fireEvent.animationEnd(row.querySelector("svg")!);
+};
+
 afterEach(() => {
   document.body.innerHTML = "";
 });
@@ -77,7 +84,7 @@ describe("SkillsPage", () => {
     const arrows = screen.getAllByRole("button", { name: /^Overview of / });
     expect(arrows).toHaveLength(skillCount);
     for (const arrow of arrows) expect(arrow).toHaveAttribute("aria-expanded", "true");
-    expect(screen.getByText("TypeScript")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Overview of TypeScript" })).toBeInTheDocument();
     expect(screen.getByText("PostgreSQL & MySQL")).toBeInTheDocument();
   });
 
@@ -115,13 +122,6 @@ describe("SkillsPage", () => {
   });
 
   describe("Expand all", () => {
-    /** Click the toggle and let its walk end, as the handle in the header row reports it. */
-    const walk = (container: HTMLElement, name: "Expand all" | "Collapse all") => {
-      fireEvent.click(screen.getByRole("button", { name }));
-      const row = container.querySelector(`.${styles["skills-page__header-row"]}`)!;
-      fireEvent.animationEnd(row.querySelector("svg")!);
-    };
-
     it('sits in the header row, off, named "Expand all", and opens nothing on load', () => {
       const { container } = renderPage();
       const row = container.querySelector(`.${styles["skills-page__header-row"]}`)!;

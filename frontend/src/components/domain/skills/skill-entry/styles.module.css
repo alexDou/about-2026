@@ -66,12 +66,27 @@
     visibility 0s;
 }
 
-.skill-entry__overview-text {
+/* The grid row's one child: it clips the text and the Certificate links while the row is closed. */
+.skill-entry__overview-body {
   min-height: 0;
+  overflow: hidden;
+}
+
+.skill-entry__overview-text {
   margin: 0;
   /* Indented under the name, past the arrow. */
   padding-inline-start: 1.9rem;
-  overflow: hidden;
+}
+
+.skill-entry__certificates {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem 1.2rem;
+  margin: 0;
+  /* Under the overview's text. */
+  padding: 0.2rem 0 0;
+  padding-inline-start: 1.9rem;
+  list-style: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
