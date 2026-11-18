@@ -33,6 +33,11 @@ describe("SkillEntry stylesheet", () => {
     expect(rule(".skill-entry__overview--open")).toMatch(/visibility:\s*visible/);
   });
 
+  it("clips the overview's whole body, text and Certificate links, while it is closed", () => {
+    expect(rule(".skill-entry__overview-body")).toMatch(/min-height:\s*0/);
+    expect(rule(".skill-entry__overview-body")).toMatch(/overflow:\s*hidden/);
+  });
+
   it("turns the arrow when the overview is open", () => {
     expect(rule(".skill-entry__arrow--open .skill-entry__arrow-shape")).toMatch(/rotate:/);
   });

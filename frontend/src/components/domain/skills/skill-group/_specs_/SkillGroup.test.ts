@@ -12,6 +12,7 @@ const skill = (id: TestSkillId): SkillEntrySkill => ({
   id,
   name: `skills.skill.${id}.name`,
   overview: `skills.skill.${id}.overview`,
+  certificates: [],
 });
 
 /** Frontend-like: two subgroups, no Skills of its own. */

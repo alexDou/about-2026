@@ -1,0 +1,121 @@
+/* The link in a Skill's overview: plain text that looks like a link. */
+.certificate-view__link {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  cursor: pointer;
+}
+
+/*
+ * The dialog comes in and goes out in CSS alone: `@starting-style` gives it somewhere to come
+ * from, and `allow-discrete` keeps it in the top layer and displayed until the fade has run.
+ */
+.certificate-view__dialog {
+  display: grid;
+  gap: 0.5rem;
+  width: min(40rem, calc(100vw - 2 * var(--element-distance-standard)));
+  max-height: calc(100dvh - 2 * var(--element-distance-standard));
+  padding: var(--element-distance-standard);
+  overflow: auto;
+  border: 0;
+  background: var(--panel-what-i-do);
+  color: var(--text-on-light);
+  opacity: 0;
+  translate: 0 0.75rem;
+  transition:
+    opacity var(--overview-duration) ease,
+    translate var(--overview-duration) ease,
+    display var(--overview-duration) allow-discrete,
+    overlay var(--overview-duration) allow-discrete;
+}
+
+.certificate-view__dialog:not([open]) {
+  display: none;
+}
+
+.certificate-view__dialog[open] {
+  opacity: 1;
+  translate: 0 0;
+}
+
+@starting-style {
+  .certificate-view__dialog[open] {
+    opacity: 0;
+    translate: 0 0.75rem;
+  }
+}
+
+.certificate-view__dialog::backdrop {
+  background: rgb(24 34 35 / 70%);
+  opacity: 0;
+  transition:
+    opacity var(--overview-duration) ease,
+    display var(--overview-duration) allow-discrete,
+    overlay var(--overview-duration) allow-discrete;
+}
+
+.certificate-view__dialog[open]::backdrop {
+  opacity: 1;
+}
+
+@starting-style {
+  .certificate-view__dialog[open]::backdrop {
+    opacity: 0;
+  }
+}
+
+/* The image keeps its own shape, whatever it is: a wide page or a tall one. */
+.certificate-view__image {
+  display: block;
+  max-width: 100%;
+  max-height: 60dvh;
+  width: auto;
+  height: auto;
+  margin: 0 auto;
+}
+
+.certificate-view__title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 1.2rem;
+  font-weight: 400;
+}
+
+.certificate-view__issuer,
+.certificate-view__date,
+.certificate-view__ranking {
+  margin: 0;
+}
+
+.certificate-view__verify {
+  justify-self: start;
+  color: inherit;
+}
+
+/* A 24px target, an "×" drawn by two bars, in the dialog's top-right corner. */
+.certificate-view__close {
+  position: absolute;
+  inset-block-start: 0.4rem;
+  inset-inline-end: 0.4rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0;
+  border: 0;
+  background:
+    linear-gradient(currentcolor, currentcolor) center / 100% 2px no-repeat,
+    linear-gradient(currentcolor, currentcolor) center / 2px 100% no-repeat;
+  color: inherit;
+  rotate: 45deg;
+  cursor: pointer;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .certificate-view__dialog,
+  .certificate-view__dialog::backdrop {
+    transition: none;
+  }
+}

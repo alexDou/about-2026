@@ -54,6 +54,10 @@ function referencedIds(value: unknown): string[] {
  * Their text has values to fill (`{name}`), checked where they show (the components' tests).
  */
 const COMPONENT_MESSAGES: readonly string[] = [
+  "skills.certificateClose",
+  "skills.certificateImageAlt",
+  "skills.certificateLink",
+  "skills.certificateVerify",
   "skills.collapseAll",
   "skills.expandAll",
   "skills.overviewToggle",

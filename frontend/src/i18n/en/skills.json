@@ -71,6 +71,42 @@
       "value": "LLM Engineering: Master AI, Large Language Models & Agents"
     }
   ],
+  "skills.certificateClose": [
+    {
+      "type": 0,
+      "value": "Close"
+    }
+  ],
+  "skills.certificateImageAlt": [
+    {
+      "type": 0,
+      "value": "Certificate \""
+    },
+    {
+      "type": 1,
+      "value": "title"
+    },
+    {
+      "type": 0,
+      "value": "\" from "
+    },
+    {
+      "type": 1,
+      "value": "issuer"
+    }
+  ],
+  "skills.certificateLink": [
+    {
+      "type": 0,
+      "value": "Certificate"
+    }
+  ],
+  "skills.certificateVerify": [
+    {
+      "type": 0,
+      "value": "Verify at the issuer"
+    }
+  ],
   "skills.collapseAll": [
     {
       "type": 0,
