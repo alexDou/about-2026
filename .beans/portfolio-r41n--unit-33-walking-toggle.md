@@ -7,7 +7,7 @@ priority: normal
 tags:
     - ready-for-agent
 created_at: 2026-11-16T09:50:04Z
-updated_at: 2026-11-18T14:43:02Z
+updated_at: 2026-11-18T14:58:24Z
 parent: portfolio-4rt0
 ---
 
@@ -27,7 +27,7 @@ The walking toggle: a smaller version of the "toggle switch with legs" in `suppo
 - [x] A 1s walk; head and legs `#25363a`; track `#98b2ae` off, `#04b198` on
 - [x] The walk plays only after the first change (no animation on load), driven by state, no imperative code
 - [x] Reduced motion: the handle only slides
-- [x] A `<button role="switch" aria-checked>` named by a label from the props, with no visible label: the label shows as a hint to the right on hover or keyboard focus, in CSS alone (no popover, no `interestfor`), in the palette, fading and sliding in and out
+- [x] A button named by what a click does, its two labels from the props (`labels.off` "Expand all", `labels.on` "Collapse all"; the page passes them from its messages), no switch role, with no visible label: the label shows as a hint to the right on hover or keyboard focus, in CSS alone (no popover, no `interestfor`), in the palette, fading and sliding in and out
 - [x] Reports a change only once the walk (or, with reduced motion, the slide) has ended
 - [x] `scripts/verify.sh` GREEN
 
@@ -54,7 +54,9 @@ The walking toggle: a smaller version of the "toggle switch with legs" in `suppo
 ## Summary of Changes
 
 - `components/ui/walking-toggle/` (`WalkingToggle`): a switch whose handle walks across its track on two legs, after the reference in `support_files/skills/toogle/`, without face or dirt. Uncontrolled: it keeps the position the Visitor gives it and calls `onChange(on)` once the handle has arrived (the handle's own `animationend`, or `transitionend` under reduced motion), never on load or on the click itself.
-- A `<button role="switch" aria-checked>` named by `label`, with no visible label: the label shows as a hint to the right on hover or keyboard focus, in CSS alone, works in every browser.
+- A button named by what a click does, from `labels` (`off` "Expand all", `on` "Collapse all", passed by the page from its messages), no switch role, with no visible label: the label shows as a hint to the right on hover or keyboard focus, in CSS alone, works in every browser. The on state is the `walking-toggle__track--on` modifier.
 - Look (approved in the prototype): track `--control-height` tall (new token, 35px, shared with Copy skills), `#98b2ae` off, `#04b198` on, head and legs `#25363a`, a 1s walk, played only after the first change; under reduced motion the handle only slides. Track, handle and hint share one grid, no absolute positioning.
 - Tests: `_specs_/WalkingToggle.test.ts` (role, name, hint, walk only after a change, report after the walk or slide only, the legs' animations ignored) and `_specs_/styles.test.ts` (height token, palette, 1s walk, both walk directions, no face or dirt, reduced motion, hint placement and CSS show/hide).
 - Spec (`docs_src/specs/units.md`) and criteria amended with the Owner's decisions; notes for 3.4, 3.5 and 3.7 on their beans. Follow-ups under the Refactoring epic: portfolio-mnmz (close corner), portfolio-werw (one hook for SVG-safe ids).
+
+- Owner decision round 5 (2026-11-18): the label follows the position: "Expand all" while off, "Collapse all" while on, and every text on the site comes from the messages. The component takes `labels: { off, on }` and holds no text; the page passes them from the `skills` messages (portfolio-zb2n). The accessible name and the hint are the same text, so the visible words are the name (WCAG 2.5.3). `role="switch"` and `aria-checked` dropped: an action for a name plus an on/off state reads "Collapse all, switch, on". The on state is the `walking-toggle__track--on` modifier. The track colours are custom properties on the block (`--walking-toggle-disabled`, `--walking-toggle-enabled`), as edited in the stylesheet.

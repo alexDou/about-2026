@@ -14,6 +14,7 @@
   --walking-toggle-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
 
   --walking-toggle-disabled: #98b2ae;
+  --walking-toggle-enabled: #04b198;
 
   font-size: calc(var(--control-height) / 1.5);
   display: inline-grid;
@@ -34,14 +35,14 @@
   font: inherit;
   box-shadow: 0 0 0 max(1px, 0.0625em) var(--panel-about) inset;
   /* Off: Skills' teal moved toward grey. On: moved toward the dark, saturated end. */
-  background-color: #98b2ae;
+  background-color: var(--walking-toggle-disabled);
   cursor: pointer;
   transition: background-color 0.3s;
   -webkit-tap-highlight-color: transparent;
 }
 
-.walking-toggle__track[aria-checked="true"] {
-  background-color: #04b198;
+.walking-toggle__track--on {
+  background-color: var(--walking-toggle-enabled);
 }
 
 .walking-toggle__track:focus-visible {
@@ -77,7 +78,7 @@
   fill: currentColor;
 }
 
-.walking-toggle__track[aria-checked="true"] ~ .walking-toggle__handle {
+.walking-toggle__track--on ~ .walking-toggle__handle {
   transform: translateX(var(--walking-toggle-travel));
 }
 
@@ -119,55 +120,39 @@
     animation-name: off-handle-left-foot;
   }
 
-  .walking-toggle__track[aria-checked="true"] ~ .walking-toggle__handle--walking {
+  .walking-toggle__track--on ~ .walking-toggle__handle--walking {
     animation-name: on-handle-move-right;
   }
 
-  .walking-toggle__track[aria-checked="true"]
-    ~ .walking-toggle__handle--walking
-    .walking-toggle__body {
+  .walking-toggle__track--on ~ .walking-toggle__handle--walking .walking-toggle__body {
     animation-name: on-handle-body;
   }
 
-  .walking-toggle__track[aria-checked="true"]
-    ~ .walking-toggle__handle--walking
-    .walking-toggle__right-leg-upper {
+  .walking-toggle__track--on ~ .walking-toggle__handle--walking .walking-toggle__right-leg-upper {
     animation-name: on-handle-right-leg-upper;
   }
 
-  .walking-toggle__track[aria-checked="true"]
-    ~ .walking-toggle__handle--walking
-    .walking-toggle__right-leg-lower {
+  .walking-toggle__track--on ~ .walking-toggle__handle--walking .walking-toggle__right-leg-lower {
     animation-name: on-handle-right-leg-lower;
   }
 
-  .walking-toggle__track[aria-checked="true"]
-    ~ .walking-toggle__handle--walking
-    .walking-toggle__left-leg-upper {
+  .walking-toggle__track--on ~ .walking-toggle__handle--walking .walking-toggle__left-leg-upper {
     animation-name: on-handle-left-leg-upper;
   }
 
-  .walking-toggle__track[aria-checked="true"]
-    ~ .walking-toggle__handle--walking
-    .walking-toggle__left-leg-lower {
+  .walking-toggle__track--on ~ .walking-toggle__handle--walking .walking-toggle__left-leg-lower {
     animation-name: on-handle-left-leg-lower;
   }
 
-  .walking-toggle__track[aria-checked="true"]
-    ~ .walking-toggle__handle--walking
-    .walking-toggle__legs {
+  .walking-toggle__track--on ~ .walking-toggle__handle--walking .walking-toggle__legs {
     animation-name: on-handle-legs;
   }
 
-  .walking-toggle__track[aria-checked="true"]
-    ~ .walking-toggle__handle--walking
-    .walking-toggle__right-foot {
+  .walking-toggle__track--on ~ .walking-toggle__handle--walking .walking-toggle__right-foot {
     animation-name: on-handle-right-foot;
   }
 
-  .walking-toggle__track[aria-checked="true"]
-    ~ .walking-toggle__handle--walking
-    .walking-toggle__left-foot {
+  .walking-toggle__track--on ~ .walking-toggle__handle--walking .walking-toggle__left-foot {
     animation-name: on-handle-left-foot;
   }
 }

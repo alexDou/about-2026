@@ -6,11 +6,14 @@ import type { WalkingToggleProps } from "./types";
 /**
  * A switch whose handle gets up on two legs and walks across its track, after the "toggle switch
  * with legs" (`support_files/skills/toogle/`), without the face and the dirt. It keeps the position
- * the Visitor gives it and reports it once the handle has arrived. It has no visible label: the
- * label names it, and shows as a hint to its right on hover or keyboard focus, in CSS alone.
+ * the Visitor gives it and reports it once the handle has arrived. It has no visible label: a
+ * button named by what a click does ("Expand all", then "Collapse all"), shown as a hint to its
+ * right on hover or keyboard focus, in CSS alone. No switch role: an action for a name and an
+ * on/off state would contradict each other ("Collapse all, on").
  */
-export function WalkingToggle({ label, onChange }: WalkingToggleProps) @{
+export function WalkingToggle({ labels, onChange }: WalkingToggleProps) @{
   const [on, setOn] = useState(false);
+  const label = on ? labels.on : labels.off;
   // The walk plays only after the first change, so nothing moves on load.
   const [toggled, setToggled] = useState(false);
   // Only word characters: the id goes into `url(#…)`, the legs' clip.
@@ -24,9 +27,7 @@ export function WalkingToggle({ label, onChange }: WalkingToggleProps) @{
   <span class={styles["walking-toggle"]}>
     <button
       type="button"
-      role="switch"
-      class={styles["walking-toggle__track"]}
-      aria-checked={on}
+      class={cx(styles["walking-toggle__track"], on && styles["walking-toggle__track--on"])}
       aria-label={label}
       onClick={() => {
         setOn(!on);

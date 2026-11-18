@@ -7,7 +7,7 @@ priority: normal
 tags:
     - ready-for-agent
 created_at: 2026-11-16T09:50:04Z
-updated_at: 2026-11-18T07:41:53Z
+updated_at: 2026-11-18T14:54:21Z
 parent: portfolio-4rt0
 blocked_by:
     - portfolio-r41n
@@ -38,3 +38,5 @@ Expand all: the walking toggle in the header row, labelled "Expand all", as a co
 ## Notes
 
 - From the walking toggle (2026-11-18): the toggle reports a change only when its walk (or reduced-motion slide) has ended; Expand all opens or closes the overviews then, not on click. The toggle has no visible label: "Expand all" is its accessible name and its hover hint.
+
+- The toggle's two labels (2026-11-18): `WalkingToggle` takes `labels: { off, on }`; pass "Expand all" and "Collapse all" from new `skills` messages (every text on the site comes from the messages; the skills content test wants every `skills.*` message used, so add them with the code that reads them).
