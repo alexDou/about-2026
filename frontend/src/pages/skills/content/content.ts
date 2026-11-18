@@ -32,7 +32,10 @@ const certificate = (
   title: `skills.certificate.${id}.title`,
   issuer: `skills.issuer.${issuer}`,
   date,
-  image: `${CERTIFICATE_IMAGE_DIR}/${id}.webp`,
+  image: {
+    avif: `${CERTIFICATE_IMAGE_DIR}/${id}.avif`,
+    webp: `${CERTIFICATE_IMAGE_DIR}/${id}.webp`,
+  },
   ...extras,
 });
 
@@ -56,7 +59,7 @@ const group = (
 /**
  * The Skills Panel's content: which message each piece of it reads. The Skills are the ones fixed
  * with the Owner in the questionnaires (`docs_src/skills/`, Unit 3.1). The Certificates are the
- * ones decided in the grilling, without verification links until Unit 3.2.
+ * ones decided in the grilling; TestDome's and CSS Wizard's carry no verification link.
  */
 export const SKILLS_CONTENT: SkillsContent = {
   groups: [
@@ -76,11 +79,27 @@ export const SKILLS_CONTENT: SkillsContent = {
           { year: 2022, month: 3 },
           { ranking: "skills.certificate.testdomePython.ranking" },
         ),
-        certificate("educativeCleanCodePython", "educative", { year: 2025, month: 6 }),
+        certificate(
+          "educativeCleanCodePython",
+          "educative",
+          { year: 2025, month: 6 },
+          {
+            verifyUrl: "https://www.educative.io/verify-certificate/qjv3oKCJ00B27kjW9SqxmPE85PWktK",
+          },
+        ),
       ]),
       skill("rust"),
       skill("php"),
-      skill("kotlin", [certificate("educativeKotlin", "educative", { year: 2025, month: 6 })]),
+      skill("kotlin", [
+        certificate(
+          "educativeKotlin",
+          "educative",
+          { year: 2025, month: 6 },
+          {
+            verifyUrl: "https://www.educative.io/verify-certificate/MjprXLCvrQJ1pXJkMHG5mjW60jqvIZ",
+          },
+        ),
+      ]),
     ]),
     group(
       "frontend",
@@ -130,10 +149,24 @@ export const SKILLS_CONTENT: SkillsContent = {
     group(
       "ai",
       [
-        skill("openaiSdk", [certificate("udemyLlmEngineering", "udemy", { year: 2025, month: 7 })]),
+        skill("openaiSdk", [
+          certificate(
+            "udemyLlmEngineering",
+            "udemy",
+            { year: 2025, month: 7 },
+            { verifyUrl: "https://ude.my/UC-7d2da67c-8d0e-4da8-973c-e291442941eb" },
+          ),
+        ]),
         skill("crewai"),
         skill("langgraph"),
-        skill("mcp", [certificate("udemyAgenticAi", "udemy", { year: 2026, month: 1 })]),
+        skill("mcp", [
+          certificate(
+            "udemyAgenticAi",
+            "udemy",
+            { year: 2026, month: 1 },
+            { verifyUrl: "https://ude.my/UC-a7efde5a-28b4-450e-bbfb-eb00ae6d5269" },
+          ),
+        ]),
         skill("agentCreation"),
       ],
       [
@@ -158,7 +191,12 @@ export const SKILLS_CONTENT: SkillsContent = {
           skill("rethinkdb"),
           skill("scylladb"),
           skill("elasticsearch", [
-            certificate("udemyElasticsearch", "udemy", { year: 2016, month: 7 }),
+            certificate(
+              "udemyElasticsearch",
+              "udemy",
+              { year: 2016, month: 7 },
+              { verifyUrl: "https://ude.my/UC-50CLL29G" },
+            ),
           ]),
         ]),
         subgroup("ormsDrivers", [
@@ -170,14 +208,30 @@ export const SKILLS_CONTENT: SkillsContent = {
       ],
     ),
     group("cloudDevops", [
-      skill("docker", [certificate("educativeDocker", "educative", { year: 2025, month: 6 })]),
+      skill("docker", [
+        certificate(
+          "educativeDocker",
+          "educative",
+          { year: 2025, month: 6 },
+          {
+            verifyUrl: "https://www.educative.io/verify-certificate/An5VrvSl8Ov7k6y2gt2lgpYE0pkDF9",
+          },
+        ),
+      ]),
       skill("kubernetes"),
       skill("terraformHelm"),
       skill("gitlabJenkins"),
       skill("aws"),
       skill("googleCloud"),
       skill("nginxApache"),
-      skill("linux", [certificate("udemyBash", "udemy", { year: 2019, month: 7 })]),
+      skill("linux", [
+        certificate(
+          "udemyBash",
+          "udemy",
+          { year: 2019, month: 7 },
+          { verifyUrl: "https://ude.my/UC-DBQU5RN9" },
+        ),
+      ]),
       skill("monitoring"),
     ]),
     group("testing", [
