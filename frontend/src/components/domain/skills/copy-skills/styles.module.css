@@ -1,26 +1,35 @@
 /* The status ("Copied") on the left of the button, both centred on the row. */
 .copy-skills {
+  /* A bit darker than the page's own colour, for the hover. */
+  --copy-skills-hover: color-mix(in srgb, var(--panel-skills), black 12%);
+
   display: flex;
   align-items: center;
   gap: 0.625rem;
 }
 
 .copy-skills__status {
-  font-size: 0.875rem;
-  color: var(--text-on-dark);
+  font-size: 1rem;
+  color: var(--text-on-light);
 }
 
 /* As tall as Expand all, the row's other control, with the same rounded ends. */
 .copy-skills__button {
   height: var(--control-height);
   padding: 0 1.25rem;
-  border: 0;
+  border: 1px solid var(--panel-about);
   border-radius: 1.25rem;
-  background: var(--panel-about);
-  color: var(--text-on-dark);
+  background: var(--panel-skills);
+  color: var(--text-on-light);
   font: inherit;
+  font-size: 1rem;
   cursor: pointer;
+  transition: background-color 120ms ease;
   -webkit-tap-highlight-color: transparent;
+}
+
+.copy-skills__button:hover {
+  background: var(--copy-skills-hover);
 }
 
 .copy-skills__button:focus-visible {

@@ -116,9 +116,23 @@ describe("CopySkills stylesheet", () => {
     expect(rule(".copy-skills__button")).toMatch(/border-radius:/);
   });
 
-  it("uses the palette: About's colour behind the light text", () => {
-    expect(rule(".copy-skills__button")).toMatch(/background(-color)?:\s*var\(--panel-about\)/);
-    expect(rule(".copy-skills__button")).toMatch(/color:\s*var\(--text-on-dark\)/);
+  it("sits on the page's own colour, with dark text and an About-coloured border", () => {
+    const button = rule(".copy-skills__button");
+    expect(button).toMatch(/background(-color)?:\s*var\(--panel-skills\)/);
+    expect(button).toMatch(/color:\s*var\(--text-on-light\)/);
+    expect(button).toMatch(/border:\s*1px solid var\(--panel-about\)/);
+  });
+
+  it("is a darker colour on hover, reached with a short transition", () => {
+    expect(rule(".copy-skills__button:hover")).toMatch(
+      /background(-color)?:\s*var\(--copy-skills-hover\)/,
+    );
+    expect(rule(".copy-skills")).toMatch(/--copy-skills-hover:\s*color-mix\(.*black/);
+    expect(rule(".copy-skills__button")).toMatch(/transition:\s*background-color/);
+  });
+
+  it("has a 1rem font", () => {
+    expect(rule(".copy-skills__button")).toMatch(/font-size:\s*1rem/);
   });
 
   it("lays the status and the button out in a flex row with a gap", () => {
