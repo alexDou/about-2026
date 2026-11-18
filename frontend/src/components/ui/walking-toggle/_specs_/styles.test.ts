@@ -30,9 +30,14 @@ describe("walking-toggle stylesheet", () => {
   });
 
   it("colours the track grey-teal when off and deep teal when on, head and legs in ink", () => {
-    expect(rule(".walking-toggle__track")).toMatch(/background-color:\s*#98b2ae/i);
-    expect(rule('.walking-toggle__track[aria-checked="true"]')).toMatch(
-      /background-color:\s*#04b198/i,
+    const block = rule(".walking-toggle");
+    expect(block).toMatch(/--walking-toggle-disabled:\s*#98b2ae/i);
+    expect(block).toMatch(/--walking-toggle-enabled:\s*#04b198/i);
+    expect(rule(".walking-toggle__track")).toMatch(
+      /background-color:\s*var\(--walking-toggle-disabled\)/,
+    );
+    expect(rule(".walking-toggle__track--on")).toMatch(
+      /background-color:\s*var\(--walking-toggle-enabled\)/,
     );
     expect(rule(".walking-toggle__handle")).toMatch(/color:\s*var\(--panel-about\)/);
     expect(rule(".walking-toggle__head")).toMatch(/fill:\s*currentColor/);
@@ -44,9 +49,7 @@ describe("walking-toggle stylesheet", () => {
   });
 
   it("walks both ways, only with the walking modifier", () => {
-    const walkOn = rule(
-      '.walking-toggle__track[aria-checked="true"] ~ .walking-toggle__handle--walking',
-    );
+    const walkOn = rule(".walking-toggle__track--on ~ .walking-toggle__handle--walking");
     const walkOff = rule(".walking-toggle__handle--walking");
     expect(walkOn).toMatch(/animation-name:/);
     expect(walkOff).toMatch(/animation-name:/);
