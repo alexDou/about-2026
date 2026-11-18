@@ -138,7 +138,7 @@ Reference: the expanded menu of codepen `fluxus/gPWvZm` (local copy in git-ignor
 - Group and subgroup headings have a state of their own, closed by default. A click flips it and sets all their Skills to match (open all / close all). Opening or closing Skills by hand leaves the state alone, except: all of them closed by hand → the state becomes closed; all of them opened by hand → open. So the next heading click always does something visible. A heading acts on its own group or subgroup only.
 - Expand all: a convenience switch, the walking toggle below. It keeps the position the Visitor gave it and never follows the Skills: on opens every overview, off closes every overview (the headings' states then follow by the rule above). Opening everything by hand leaves it off.
 - Walking toggle: a smaller version of `support_files/skills/toogle/` (SCSS + React reference, no licence; ours is written after it in CSS Modules, no licence file kept): a 6×6 head instead of 12×12, scaled feet and input, no face, no dirt particles, a faster walk (about 1s instead of 2.5s), palette `#25363a`. The walk plays only after the first change (the reference's `--animated` class from a `hasToggled` state). With reduced motion the handle only slides. A native checkbox with `role="switch"` and the label "Expand all".
-- Certificates live inside the Skill they back, as a link in its overview, so they show only when the Skill is open: they back the words, they are not the headline. Every Skill with a certificate gets one, Elasticsearch's 2016 course included; no separate Certificates list. A Skill with two shows two links, each labelled by its issuer. The link opens the Certificate view: the certificate image, title, issuer, month and year, the TestDome ranking, and "Verify at the issuer" (the issuer's own verification URL; none for CSS Wizard).
+- Certificates live inside the Skill they back, as a link in its overview, so they show only when the Skill is open: they back the words, they are not the headline. Every Skill with a certificate gets one, Elasticsearch's 2016 course included; no separate Certificates list. A Skill with two shows two links, each labelled by its issuer. The link opens the Certificate view: the certificate image, title, issuer, month and year, the TestDome ranking, and "Verify at the issuer" (the issuer's own verification URL; none for TestDome or CSS Wizard).
   - TypeScript: TestDome TypeScript (Jul 2020, top 10%).
   - Python: TestDome Python (Mar 2022, top 10%); Educative "Clean Code in Python" (Jun 2025).
   - Kotlin: Educative "The Ultimate Guide to Kotlin Programming" (Jun 2025).
@@ -150,12 +150,12 @@ Reference: the expanded menu of codepen `fluxus/gPWvZm` (local copy in git-ignor
   - Left out: TestDome JavaScript and Node.js (2019, replaced by the TypeScript test), Udemy MongooseJS Essentials. No course hours shown.
 - Certificate files: images (AVIF/WebP, converted from the PDFs and PNGs: a PDF in an overlay renders unreliably on phones) in `frontend/public/certificates/` for now; on Google Cloud with Unit 8.
 - The Certificate view is a `<dialog>` opened declaratively with Invoker Commands (`commandfor` + `command="show-modal"` on the link's button, `command="close"` inside), with a quick entry and exit animation in CSS (`@starting-style`); no `showModal()` call, no ref. 3.5 checks Octane passes the attributes through. Escape closes only the Certificate view, never the Expanded panel behind it.
-- Copy skills copies everything, whatever is open on screen, as plain text indented two spaces per level: group, subgroup, Skill, overview, and a "Certified:" line per certificate with its verification URL:
+- Copy skills copies everything, whatever is open on screen, as plain text indented two spaces per level: group, subgroup, Skill, overview, and a "Certified:" line per certificate, with its verification URL where it has one:
   ```
   Programming languages
     TypeScript
       <overview>
-      Certified: TypeScript, TestDome, Jul 2020, top 10%, https://www.testdome.com/certificates/...
+      Certified: TypeScript, TestDome, Jul 2020, top 10%
   Backend
     APIs & services
       RESTful APIs

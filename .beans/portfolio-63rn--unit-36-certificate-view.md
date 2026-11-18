@@ -3,10 +3,11 @@
 title: 'Unit 3.6: Certificate view'
 status: todo
 type: task
+priority: normal
 tags:
     - ready-for-agent
 created_at: 2026-11-16T09:50:04Z
-updated_at: 2026-11-16T09:50:04Z
+updated_at: 2026-11-18T06:44:16Z
 parent: portfolio-4rt0
 blocked_by:
     - portfolio-k6h6
@@ -19,7 +20,7 @@ portfolio-4rt0 (Unit 3: Skills). Design: the Unit 3 section of `docs_src/specs/u
 
 ## What to build
 
-The Certificate view: inside an open Skill's overview, a link per Certificate (labelled by its issuer when the Skill has two) opens a dialog with the certificate image, title, issuer, month and year, the TestDome ranking and "Verify at the issuer" (none for CSS Wizard). Certificates show only when the Skill is open; there is no separate Certificates list.
+The Certificate view: inside an open Skill's overview, a link per Certificate (labelled by its issuer when the Skill has two) opens a dialog with the certificate image, title, issuer, month and year, the TestDome ranking and "Verify at the issuer" (none for TestDome or CSS Wizard). Certificates show only when the Skill is open; there is no separate Certificates list.
 
 ## Acceptance criteria
 

@@ -3,6 +3,7 @@ export type {
   Certificate,
   CertificateDate,
   CertificateId,
+  CertificateImage,
   CertificateIssuerId,
   Skill,
   SkillGroup,

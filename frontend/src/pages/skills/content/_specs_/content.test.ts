@@ -1,3 +1,5 @@
+import { existsSync, statSync } from "node:fs";
+import { resolve } from "node:path";
 import { createIntl } from "@formatjs/intl";
 import { describe, expect, it } from "vitest";
 import { enMessages, type MessageId } from "../../../../i18n";
@@ -19,6 +21,15 @@ const intl = createIntl({
     throw error;
   },
 });
+
+/** A path under `frontend/`. */
+const frontendFile = (path: string) => resolve(import.meta.dirname, "../../../../..", path);
+
+/**
+ * Byte budget per Certificate image file, which a phone downloads when the Certificate view opens:
+ * the largest shipped file plus about a quarter, so a 2x regression fails.
+ */
+const IMAGE_BUDGET_BYTES = 180_000;
 
 /** The English text of one message; throws when it is missing or does not format. */
 const en = (id: MessageId) => intl.formatMessage({ id });
@@ -279,7 +290,10 @@ describe("Certificates", () => {
       expect(en(certificate.title)).not.toBe("");
       expect(en(certificate.issuer)).not.toBe("");
       expect(certificate.date.year).toBeGreaterThanOrEqual(2000);
-      expect(certificate.image).toBe(`${CERTIFICATE_IMAGE_DIR}/${certificate.id}.webp`);
+      expect(certificate.image).toEqual({
+        avif: `${CERTIFICATE_IMAGE_DIR}/${certificate.id}.avif`,
+        webp: `${CERTIFICATE_IMAGE_DIR}/${certificate.id}.webp`,
+      });
     }
     // Optional parts, when present, are well formed.
     const months = allCertificates.flatMap(({ date }) =>
@@ -328,6 +342,35 @@ describe("Certificates", () => {
       udemyLlmEngineering: "Udemy",
       udemyAgenticAi: "Udemy",
       udemyElasticsearch: "Udemy",
+    });
+  });
+
+  it.each(allCertificates.flatMap(({ image }) => [image.avif, image.webp]))(
+    "ship %s from public/ within its byte budget",
+    (path) => {
+      const file = frontendFile(`public${path}`);
+      expect(existsSync(file)).toBe(true);
+      expect(statSync(file).size).toBeLessThan(IMAGE_BUDGET_BYTES);
+    },
+  );
+
+  it("link each to the issuer's own verification page, none for TestDome or CSS Wizard", () => {
+    expect(
+      Object.fromEntries(
+        allCertificates.map((certificate) => [certificate.id, certificate.verifyUrl]),
+      ),
+    ).toEqual({
+      testdomeTypescript: undefined,
+      testdomePython: undefined,
+      educativeCleanCodePython:
+        "https://www.educative.io/verify-certificate/qjv3oKCJ00B27kjW9SqxmPE85PWktK",
+      educativeKotlin: "https://www.educative.io/verify-certificate/MjprXLCvrQJ1pXJkMHG5mjW60jqvIZ",
+      modernCssWizard: undefined,
+      educativeDocker: "https://www.educative.io/verify-certificate/An5VrvSl8Ov7k6y2gt2lgpYE0pkDF9",
+      udemyBash: "https://ude.my/UC-DBQU5RN9",
+      udemyLlmEngineering: "https://ude.my/UC-7d2da67c-8d0e-4da8-973c-e291442941eb",
+      udemyAgenticAi: "https://ude.my/UC-a7efde5a-28b4-450e-bbfb-eb00ae6d5269",
+      udemyElasticsearch: "https://ude.my/UC-50CLL29G",
     });
   });
 });

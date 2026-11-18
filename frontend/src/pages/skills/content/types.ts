@@ -20,6 +20,13 @@ export type CertificateDate = {
   month?: number;
 };
 
+/** A Certificate's image in both formats, each a path from the site root (`public/certificates/`). */
+export type CertificateImage = {
+  avif: string;
+  /** The fallback for browsers without AVIF. */
+  webp: string;
+};
+
 /** Proof from an outside issuer that the Owner passed a test or completed a course. */
 export type Certificate = {
   id: CertificateId;
@@ -30,8 +37,7 @@ export type Certificate = {
   ranking?: MessageId;
   /** The issuer's own page that verifies the Certificate. */
   verifyUrl?: string;
-  /** The Certificate's image, a path from the site root. */
-  image: string;
+  image: CertificateImage;
 };
 
 /**

@@ -3,10 +3,11 @@
 title: 'Unit 3.7: Copy skills'
 status: todo
 type: task
+priority: normal
 tags:
     - ready-for-agent
 created_at: 2026-11-16T09:50:04Z
-updated_at: 2026-11-16T09:50:04Z
+updated_at: 2026-11-18T06:44:16Z
 parent: portfolio-4rt0
 blocked_by:
     - portfolio-3q18
@@ -20,13 +21,13 @@ portfolio-4rt0 (Unit 3: Skills). Design: the Unit 3 section of `docs_src/specs/u
 
 Copy skills: a button in the header row that copies all Skills to the clipboard as plain, structured text, whatever is open on screen, and shows "Copied" for a moment.
 
-Format, two spaces per level: group, subgroup, Skill, overview, and a "Certified:" line per Certificate with its verification URL:
+Format, two spaces per level: group, subgroup, Skill, overview, and a "Certified:" line per Certificate, with its verification URL where it has one (none for TestDome or CSS Wizard):
 
 ```
 Programming languages
   TypeScript
     <overview>
-    Certified: TypeScript, TestDome, Jul 2020, top 10%, https://www.testdome.com/certificates/...
+    Certified: TypeScript, TestDome, Jul 2020, top 10%
 Backend
   APIs & services
     RESTful APIs
