@@ -103,9 +103,27 @@ describe("Skills content", () => {
       ]),
     ).toEqual([
       ["programming", []],
-      ["frontend", [["architectureEcosystem", "Architecture & ecosystem"]]],
-      ["backend", [["apisServices", "APIs & services"]]],
-      ["ai", [["aiDevelopment", "AI-assisted development"]]],
+      [
+        "frontend",
+        [
+          ["frameworksLibraries", "Frameworks & libraries"],
+          ["architectureEcosystem", "Architecture & ecosystem"],
+        ],
+      ],
+      [
+        "backend",
+        [
+          ["runtimesFrameworks", "Runtimes & frameworks"],
+          ["apisServices", "APIs & services"],
+        ],
+      ],
+      [
+        "ai",
+        [
+          ["sdksAgents", "SDKs & agent frameworks"],
+          ["aiDevelopment", "AI-assisted development"],
+        ],
+      ],
       [
         "databases",
         [
@@ -120,12 +138,13 @@ describe("Skills content", () => {
     ]);
   });
 
-  it("lists each group's Skills as fixed with the Owner: its own, then each subgroup's", () => {
+  it("lists each group's Skills as fixed with the Owner: its own, then each subgroup's, in order", () => {
     expect(
       Object.fromEntries(SKILLS_CONTENT.groups.map((group) => [group.id, skillNames(group)])),
     ).toEqual({
       programming: [["TypeScript", "Python", "Rust", "PHP", "Kotlin"]],
       frontend: [
+        [],
         ["React", "Next.js", "Preact", "Vue", "Svelte"],
         [
           "Frontend architecture",
@@ -138,17 +157,17 @@ describe("Skills content", () => {
           "SEO",
           "Performance optimisation",
           "CSS",
-          "Libraries",
+          "Packages",
         ],
       ],
       backend: [
+        [],
         [
           "Node.js",
           "Express & Koa",
-          "Socket.io",
-          "Apollo",
           "ElysiaJS",
           "NestJS, Hapi & Sails.js",
+          "Apollo",
           "FastAPI",
           "Actix",
           "Yii2, Zend Framework & Laravel",
@@ -156,15 +175,16 @@ describe("Skills content", () => {
         [
           "RESTful APIs",
           "GraphQL",
-          "WebSockets",
+          "WebSockets, Socket.io",
           "Server-Sent Events",
           "WebRTC",
           "OpenAPI/Swagger",
           "Kafka",
-          "Communication protocols",
+          "gRPC, AMQP and MQTT",
         ],
       ],
       ai: [
+        [],
         ["OpenAI SDK", "CrewAI", "LangGraph", "MCP", "Agent creation: Google ADK & Amazon Bedrock"],
         [
           "Claude Code & Codex",
@@ -218,6 +238,22 @@ describe("Skills content", () => {
         ],
       ],
     });
+  });
+
+  it("holds a group's Skills directly or in subgroups, never both", () => {
+    for (const group of SKILLS_CONTENT.groups) {
+      expect([group.id, group.skills.length === 0 || group.subgroups.length === 0]).toEqual([
+        group.id,
+        true,
+      ]);
+    }
+  });
+
+  it("gives the Skills the Owner moved their words (2026-11-18)", () => {
+    expect(en("skills.skill.websockets.overview")).toBe(
+      "Up-to-date knowledge. Socket.io: ready to use from day one.",
+    );
+    expect(en("skills.skill.grpcAmqpMqtt.overview")).toBe("Application-level knowledge.");
   });
 
   it("says Kotlin has no production experience", () => {

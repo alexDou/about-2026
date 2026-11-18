@@ -76,3 +76,11 @@ The Backend Skill group, in the Frontend format: its Skills (the frameworks of t
 > approved
 
 Approved: the text is in `frontend/src/i18n/en/skills.json`. CQRS and microservices go to What I do (Unit 5).
+
+## Design review (2026-11-18)
+
+After the first look at the Skills Panel, the Owner reworked the layout and the order (Unit 3.4):
+
+- The loose Skills go in a first subgroup, "Runtimes & frameworks", in this order: Node.js, Express & Koa, ElysiaJS, NestJS/Hapi/Sails.js, Apollo, FastAPI, Actix, the PHP frameworks.
+- Socket.io joins WebSockets: one Skill, "WebSockets, Socket.io".
+- "Communication protocols" becomes "gRPC, AMQP and MQTT", "Application-level knowledge."

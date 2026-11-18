@@ -115,3 +115,7 @@ Approved: the text is in `frontend/src/i18n/en/skills.json`.
 > side note: add Zod to frontend. we list some libs there. state managers etc. add zod too
 
 Applied: "validation (Zod)" in Libraries.
+
+## Design review (2026-11-18)
+
+After the first look at the Skills Panel, the Owner reworked the layout (Unit 3.4): the loose Skills (React, Next.js, Preact, Vue, Svelte) go in a first subgroup, "Frameworks & libraries", so a subgroup click opens them too. "Libraries" in "Architecture & ecosystem" is renamed "Packages" (React is a library).

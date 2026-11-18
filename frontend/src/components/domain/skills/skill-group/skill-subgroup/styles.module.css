@@ -1,6 +1,31 @@
+/* A box inside the open band: its width is the band's minus the band's padding. */
 .skill-subgroup {
   display: grid;
   gap: 0.4rem;
+  padding: var(--skills-gap);
+  border-radius: 0.75rem;
+  background: var(--skills-subgroup);
+  transition: background-color var(--overview-duration) ease;
+}
+
+.skill-subgroup--open {
+  background: var(--skills-subgroup-open);
+}
+
+.skill-subgroup__heading {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.skill-subgroup__toggle {
+  padding: 0.25rem 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
 }
 
 .skill-subgroup__skills {
@@ -9,4 +34,10 @@
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skill-subgroup {
+    transition: none;
+  }
 }

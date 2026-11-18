@@ -8,7 +8,7 @@ import styles from "./styles.module.css";
 
 /**
  * The Skills Panel's page: the heading, a row for the page's two controls (Expand all on the
- * left, Copy skills on the right), then a block per Skill group.
+ * left, Copy skills on the right), then the accordion: a band per Skill group, all closed.
  */
 export function SkillsPage() @{
   const intl = useIntl();
@@ -18,7 +18,7 @@ export function SkillsPage() @{
   <section class={styles["skills-page"]}>
     <Heading text={intl.formatMessage({ id: "explore.panel.skills.title" })} />
     <div class={styles["skills-page__header-row"]} />
-    <div class={styles["skills-page__groups"]}>
+    <div class={styles["skills-page__accordion"]}>
       @for (const group of SKILLS_CONTENT.groups; key group.id) {
         <SkillGroup group={group} />;
       }

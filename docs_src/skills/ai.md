@@ -83,3 +83,7 @@ On the draft:
 3. Names. yes
 
 Approved: the text is in `frontend/src/i18n/en/skills.json`. Claude Code & Codex reads "My first choice." for a last check.
+
+## Design review (2026-11-18)
+
+After the first look at the Skills Panel, the Owner reworked the layout (Unit 3.4): the loose Skills (OpenAI SDK, CrewAI, LangGraph, MCP, agent creation) go in a first subgroup, "SDKs & agent frameworks" (the name was left to the assistant), so a subgroup click opens them too.

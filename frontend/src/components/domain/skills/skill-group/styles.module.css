@@ -1,7 +1,110 @@
+/*
+ * A band of the accordion, after the CodePen "CSS Responsive animated Accordion": the Contact
+ * green closed, a darker one open, the colours and the panel changing with the overviews' timing.
+ */
+.skill-group {
+  background: var(--panel-contact);
+  color: var(--text-on-light);
+  transition:
+    background-color var(--overview-duration) ease,
+    color var(--overview-duration) ease;
+}
+
+.skill-group--open {
+  background: var(--skills-band-open);
+  color: var(--text-on-dark);
+}
+
+/* The thin line between two bands, as the pen has under each heading. */
+.skill-group + .skill-group {
+  border-top: 1px solid var(--skills-band-open);
+}
+
+.skill-group__heading {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+/* The name on the left, the "+" on the right. */
+.skill-group__toggle {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  padding: 0.7rem var(--element-distance-standard);
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.skill-group__toggle:hover {
+  background: rgb(0 0 0 / 8%);
+}
+
+/* The pen's "+", turning into "×" when the band opens. */
+.skill-group__icon::before {
+  display: block;
+  content: "+";
+  font-size: 1.5em;
+  line-height: 1;
+  transition: rotate var(--overview-duration) ease-in-out;
+}
+
+.skill-group--open .skill-group__icon::before {
+  rotate: -225deg;
+}
+
+/* Closed, the panel takes no room: its grid row is 0fr; `inert` keeps its content out of reach. */
+.skill-group__panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  visibility: hidden;
+  opacity: 0;
+  transition:
+    grid-template-rows var(--overview-duration) ease,
+    opacity var(--overview-duration) ease,
+    visibility 0s var(--overview-duration);
+}
+
+.skill-group__panel--open {
+  grid-template-rows: 1fr;
+  visibility: visible;
+  opacity: 1;
+  transition:
+    grid-template-rows var(--overview-duration) ease,
+    opacity var(--overview-duration) ease,
+    visibility 0s;
+}
+
+.skill-group__clip {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.skill-group__content {
+  display: grid;
+  gap: var(--skills-gap);
+  padding: 0 var(--skills-gap) var(--skills-gap);
+}
+
 .skill-group__skills {
   display: grid;
   gap: 0.4rem;
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skill-group,
+  .skill-group__icon::before,
+  .skill-group__panel,
+  .skill-group__panel--open {
+    transition: none;
+  }
 }

@@ -273,18 +273,6 @@
       "value": "For me, an inseparable part of the work."
     }
   ],
-  "skills.skill.communicationProtocols.name": [
-    {
-      "type": 0,
-      "value": "Communication protocols"
-    }
-  ],
-  "skills.skill.communicationProtocols.overview": [
-    {
-      "type": 0,
-      "value": "Application-level knowledge of gRPC, AMQP and MQTT."
-    }
-  ],
   "skills.skill.crewai.name": [
     {
       "type": 0,
@@ -465,13 +453,13 @@
       "value": "From the business requirements, together with my colleagues, I shape how a project is put together: its conventions and constraints, how it talks to external services, its tools and its deployment."
     }
   ],
-  "skills.skill.frontendLibraries.name": [
+  "skills.skill.frontendPackages.name": [
     {
       "type": 0,
-      "value": "Libraries"
+      "value": "Packages"
     }
   ],
-  "skills.skill.frontendLibraries.overview": [
+  "skills.skill.frontendPackages.overview": [
     {
       "type": 0,
       "value": "Chosen not by name but by maturity, level of support, GitHub stars and community feedback: I pick the tools that best fit each project. Component libraries (Material UI, shadcn/ui, Ant Design, Radix, Semantic UI), state management (Redux, MobX, Zustand, XState, Jotai), animation (Framer Motion), 3D (Three.js), validation (Zod), i18n, Storybook, charts, tables, forms."
@@ -523,6 +511,18 @@
     {
       "type": 0,
       "value": "Up-to-date knowledge."
+    }
+  ],
+  "skills.skill.grpcAmqpMqtt.name": [
+    {
+      "type": 0,
+      "value": "gRPC, AMQP and MQTT"
+    }
+  ],
+  "skills.skill.grpcAmqpMqtt.overview": [
+    {
+      "type": 0,
+      "value": "Application-level knowledge."
     }
   ],
   "skills.skill.jestVitestMocha.name": [
@@ -993,18 +993,6 @@
       "value": "Taken to the best possible result with Semrush, Ahrefs, Lumar and Otterly AI: better search positions, Click-Through Rate (CTR) and Conversion Rate (CVR)."
     }
   ],
-  "skills.skill.socketIo.name": [
-    {
-      "type": 0,
-      "value": "Socket.io"
-    }
-  ],
-  "skills.skill.socketIo.overview": [
-    {
-      "type": 0,
-      "value": "Ready to use from day one."
-    }
-  ],
   "skills.skill.sqlalchemy.name": [
     {
       "type": 0,
@@ -1164,13 +1152,13 @@
   "skills.skill.websockets.name": [
     {
       "type": 0,
-      "value": "WebSockets"
+      "value": "WebSockets, Socket.io"
     }
   ],
   "skills.skill.websockets.overview": [
     {
       "type": 0,
-      "value": "Up-to-date knowledge."
+      "value": "Up-to-date knowledge. Socket.io: ready to use from day one."
     }
   ],
   "skills.subgroup.aiDevelopment.name": [
@@ -1191,6 +1179,12 @@
       "value": "Architecture & ecosystem"
     }
   ],
+  "skills.subgroup.frameworksLibraries.name": [
+    {
+      "type": 0,
+      "value": "Frameworks & libraries"
+    }
+  ],
   "skills.subgroup.nosql.name": [
     {
       "type": 0,
@@ -1201,6 +1195,18 @@
     {
       "type": 0,
       "value": "ORMs & drivers"
+    }
+  ],
+  "skills.subgroup.runtimesFrameworks.name": [
+    {
+      "type": 0,
+      "value": "Runtimes & frameworks"
+    }
+  ],
+  "skills.subgroup.sdksAgents.name": [
+    {
+      "type": 0,
+      "value": "SDKs & agent frameworks"
     }
   ],
   "skills.subgroup.sql.name": [
