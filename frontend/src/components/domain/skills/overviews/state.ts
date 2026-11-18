@@ -26,6 +26,12 @@ export function headingsOf(group: OverviewGroup): OverviewHeading[] {
   }));
 }
 
+/** Every Skill of a group: its own first, then those of each subgroup. */
+const skillsOf = (group: OverviewGroup) => [
+  ...group.skills,
+  ...group.subgroups.flatMap((subgroup) => subgroup.skills),
+];
+
 /**
  * The heading rule after Skills changed: a heading whose Skills are all closed is closed, and one
  * whose Skills are all open is open. Any mix leaves its state alone, so the next click on a
@@ -79,10 +85,27 @@ export function headingToggled(
 export function groupToggled(state: OverviewsState, group: OverviewGroup): OverviewsState {
   const open = !groupOpen(state, group.id);
   const skills = { ...state.skills };
-  const ids = [...group.skills, ...group.subgroups.flatMap((subgroup) => subgroup.skills)];
-  for (const skill of ids) skills[skill.id] = open;
+  for (const skill of skillsOf(group)) skills[skill.id] = open;
   return followSkills(
     { ...state, skills, groups: { ...state.groups, [group.id]: open } },
     headingsOf(group),
   );
+}
+
+/**
+ * Expand all or Collapse all: every group shows (or hides) its Skills, and every overview is open
+ * (or closed). The subgroup headings follow by the rule, so they end open or closed with them.
+ */
+export function allSet(
+  state: OverviewsState,
+  groups: readonly OverviewGroup[],
+  open: boolean,
+): OverviewsState {
+  const opened = { ...state.groups };
+  const skills = { ...state.skills };
+  for (const group of groups) {
+    opened[group.id] = open;
+    for (const skill of skillsOf(group)) skills[skill.id] = open;
+  }
+  return followSkills({ ...state, groups: opened, skills }, groups.flatMap(headingsOf));
 }

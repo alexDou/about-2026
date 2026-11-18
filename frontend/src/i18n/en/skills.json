@@ -71,6 +71,18 @@
       "value": "LLM Engineering: Master AI, Large Language Models & Agents"
     }
   ],
+  "skills.collapseAll": [
+    {
+      "type": 0,
+      "value": "Collapse all"
+    }
+  ],
+  "skills.expandAll": [
+    {
+      "type": 0,
+      "value": "Expand all"
+    }
+  ],
   "skills.group.ai.name": [
     {
       "type": 0,

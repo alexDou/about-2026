@@ -24,7 +24,7 @@ describe("SkillSubgroup stylesheet", () => {
   it("changes only the name's background: a step darker, and another when expanded", () => {
     expect(rule(".skill-subgroup__toggle")).toMatch(/background:\s*var\(--skills-heading\)/);
     expect(rule(".skill-subgroup--open .skill-subgroup__toggle")).toMatch(
-      /background:\s*var\(--skills-heading-open\)/,
+      /background:\s*var\(--skills-subgroup-heading-open\)/,
     );
     expect(css).not.toMatch(/\.skill-subgroup(--open)?\s*{[^}]*background/);
     expect(rule(".skill-subgroup__heading")).toMatch(/font-weight:\s*400/);

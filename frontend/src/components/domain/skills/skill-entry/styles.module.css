@@ -37,7 +37,7 @@
 
 .skill-entry__name {
   padding-inline-start: 0.4rem;
-  text-shadow: .2px 0 var(--panel-about);
+  text-shadow: 0.2px 0 var(--panel-about);
 }
 
 /*
