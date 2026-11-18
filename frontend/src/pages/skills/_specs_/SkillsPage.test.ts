@@ -184,12 +184,29 @@ describe("SkillsPage", () => {
       }
     });
 
-    it("keeps the position the Visitor gave it: opening everything by hand leaves it off", () => {
+    it("goes on when everything is opened by hand, and back off when it is all closed by hand", () => {
       renderPage();
-      for (const band of screen.getAllByRole("heading", { level: 2 })) {
-        fireEvent.click(within(band).getByRole("button"));
-      }
+      const bands = screen.getAllByRole("heading", { level: 2 });
+      for (const band of bands) fireEvent.click(within(band).getByRole("button"));
+      expect(screen.getByRole("button", { name: "Collapse all" })).toBeInTheDocument();
+      for (const band of bands) fireEvent.click(within(band).getByRole("button"));
       expect(screen.getByRole("button", { name: "Expand all" })).toBeInTheDocument();
+    });
+
+    it("stays off while some is still closed", () => {
+      renderPage();
+      const bands = screen.getAllByRole("heading", { level: 2 });
+      for (const band of bands.slice(1)) fireEvent.click(within(band).getByRole("button"));
+      expect(screen.getByRole("button", { name: "Expand all" })).toBeInTheDocument();
+    });
+
+    it("goes on when the last closed overview is opened by hand", () => {
+      const { container } = renderPage();
+      walk(container, "Expand all");
+      fireEvent.click(screen.getByRole("button", { name: "Overview of TypeScript" }));
+      expect(screen.getByRole("button", { name: "Collapse all" })).toBeInTheDocument();
+      fireEvent.click(screen.getByRole("button", { name: "Overview of TypeScript" }));
+      expect(screen.getByRole("button", { name: "Collapse all" })).toBeInTheDocument();
     });
 
     it("keeps it on when some is closed by hand", () => {

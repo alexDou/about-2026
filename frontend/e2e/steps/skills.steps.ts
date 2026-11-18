@@ -101,8 +101,12 @@ Then("every overview is collapsed", async function (this: PortfolioWorld) {
   await expectAllExpanded(this, OVERVIEW_BUTTONS, false);
 });
 
-When("I open every Skill group by hand", async function (this: PortfolioWorld) {
+When("I click every Skill group", async function (this: PortfolioWorld) {
   for (const button of await this.page.locator(GROUP_BUTTONS).all()) await button.click();
+});
+
+When("I click every overview arrow", async function (this: PortfolioWorld) {
+  for (const button of await this.page.locator(OVERVIEW_BUTTONS).all()) await button.click();
 });
 
 Then("{string} is expanded", async function (this: PortfolioWorld, name: string) {

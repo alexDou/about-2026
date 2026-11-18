@@ -1,16 +1,18 @@
-import { fireEvent, render, screen } from "@octanejs/testing-library";
+import { act, fireEvent, render, screen } from "@octanejs/testing-library";
 import { describe, expect, it, vi } from "vitest";
 import { WalkingToggle } from "../WalkingToggle.tsrx";
 
 /** What a click does in each position; the page passes them from its messages. */
 const LABELS = { off: "Expand all", on: "Collapse all" };
 
-function setup() {
+function setup(position?: boolean) {
   const onChange = vi.fn<(on: boolean) => void>();
-  const { container } = render(WalkingToggle, { props: { labels: LABELS, onChange } });
+  const { container, rerender } = render(WalkingToggle, {
+    props: { labels: LABELS, onChange, position },
+  });
   const toggle = screen.getByRole("button", { name: LABELS.off });
   const handle = container.querySelector("svg")!;
-  return { onChange, toggle, handle, container };
+  return { onChange, toggle, handle, container, rerender };
 }
 
 describe("WalkingToggle", () => {
@@ -94,6 +96,68 @@ describe("WalkingToggle", () => {
     fireEvent.animationEnd(handle);
     fireEvent.transitionEnd(handle);
     expect(onChange).not.toHaveBeenCalled();
+  });
+
+  describe("following a position from outside", () => {
+    it("moves to the position the page gives it, and walks there", async () => {
+      const { rerender, handle, container } = setup(false);
+      expect(handle.getAttribute("class")).not.toMatch(/walking-toggle__handle--walking/);
+      await act(async () =>
+        rerender({
+          props: { labels: LABELS, onChange: vi.fn<(on: boolean) => void>(), position: true },
+        }),
+      );
+      const toggle = screen.getByRole("button", { name: LABELS.on });
+      expect(toggle.getAttribute("class")).toMatch(/walking-toggle__track--on/);
+      expect(container.querySelector("svg")!.getAttribute("class")).toMatch(
+        /walking-toggle__handle--walking/,
+      );
+    });
+
+    it("moves back when the page gives it the other position", async () => {
+      const { rerender } = render(WalkingToggle, {
+        props: { labels: LABELS, onChange: vi.fn<(on: boolean) => void>(), position: true },
+      });
+      expect(screen.getByRole("button", { name: LABELS.on })).toBeInTheDocument();
+      await act(async () =>
+        rerender({
+          props: { labels: LABELS, onChange: vi.fn<(on: boolean) => void>(), position: false },
+        }),
+      );
+      expect(screen.getByRole("button", { name: LABELS.off })).toBeInTheDocument();
+    });
+
+    it("reports nothing when the move came from outside, only a click's arrival", async () => {
+      const onChange = vi.fn<(on: boolean) => void>();
+      const { container, rerender } = render(WalkingToggle, {
+        props: { labels: LABELS, onChange, position: false },
+      });
+      await act(async () => rerender({ props: { labels: LABELS, onChange, position: true } }));
+      fireEvent.animationEnd(container.querySelector("svg")!);
+      expect(onChange).not.toHaveBeenCalled();
+    });
+
+    it("stays where it is when the page has no position to give (a mix)", async () => {
+      const { toggle, rerender } = setup(false);
+      fireEvent.click(toggle);
+      await act(async () =>
+        rerender({
+          props: { labels: LABELS, onChange: vi.fn<(on: boolean) => void>(), position: undefined },
+        }),
+      );
+      expect(screen.getByRole("button", { name: LABELS.on })).toBeInTheDocument();
+    });
+
+    it("reports a click's arrival after a followed move, and its own click moves it back", async () => {
+      const onChange = vi.fn<(on: boolean) => void>();
+      const { container, rerender } = render(WalkingToggle, {
+        props: { labels: LABELS, onChange, position: false },
+      });
+      await act(async () => rerender({ props: { labels: LABELS, onChange, position: true } }));
+      fireEvent.click(screen.getByRole("button", { name: LABELS.on }));
+      fireEvent.animationEnd(container.querySelector("svg")!);
+      expect(onChange).toHaveBeenCalledExactlyOnceWith(false);
+    });
   });
 
   it("draws a head and legs, without a face", () => {

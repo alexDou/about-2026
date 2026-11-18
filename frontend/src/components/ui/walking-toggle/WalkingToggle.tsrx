@@ -1,27 +1,42 @@
 import cx from "classnames";
-import { useId, useState } from "octane";
+import { useEffect, useId, useState } from "octane";
 import styles from "./styles.module.css";
 import type { WalkingToggleProps } from "./types";
 
 /**
  * A switch whose handle gets up on two legs and walks across its track, after the "toggle switch
  * with legs" (`support_files/skills/toogle/`), without the face and the dirt. It keeps the position
- * the Visitor gives it and reports it once the handle has arrived. It has no visible label: a
+ * the Visitor gives it and reports it once the handle has arrived; a `position` from outside moves
+ * it too, with the same walk, without a report. It has no visible label: a
  * button named by what a click does ("Expand all", then "Collapse all"), shown as a hint to its
  * right on hover or keyboard focus, in CSS alone. No switch role: an action for a name and an
  * on/off state would contradict each other ("Collapse all, on").
  */
-export function WalkingToggle({ labels, onChange }: WalkingToggleProps) @{
+export function WalkingToggle({ labels, position, onChange }: WalkingToggleProps) @{
   const [on, setOn] = useState(false);
+  // Whether the last move was the Visitor's click: only that is reported when the handle arrives.
+  const [clicked, setClicked] = useState(false);
   const label = on ? labels.on : labels.off;
   // The walk plays only after the first change, so nothing moves on load.
   const [toggled, setToggled] = useState(false);
   // Only word characters: the id goes into `url(#…)`, the legs' clip.
   const id = useId().replace(/[^\w-]/g, "");
 
+  // A position from outside moves the switch, with the walk, and it reports nothing for it.
+  useEffect(() => {
+    if (position === undefined) return;
+    setOn(position);
+    setClicked(false);
+    // The first possible move is to on, so a position of off on load walks nothing.
+    setToggled((walked) => walked || position);
+  }, [position]);
+
   const arrived = (event: Event) => {
     // The handle's own move or slide, not the legs' and feet's animations inside it.
-    if (toggled && event.target === event.currentTarget) onChange(on);
+    if (toggled && clicked && event.target === event.currentTarget) {
+      setClicked(false);
+      onChange(on);
+    }
   };
 
   <span class={styles["walking-toggle"]}>
@@ -31,6 +46,7 @@ export function WalkingToggle({ labels, onChange }: WalkingToggleProps) @{
       aria-label={label}
       onClick={() => {
         setOn(!on);
+        setClicked(true);
         setToggled(true);
       }}
     />

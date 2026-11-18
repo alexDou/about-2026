@@ -78,7 +78,7 @@ Feature: Skills
     And every Skill group is collapsed
     And every overview is collapsed
 
-  Scenario: Expand all keeps its position while Skills are opened and closed by hand
+  Scenario: Expand all stays where it is while only some Skills are changed by hand
     When I open "/skills"
     And I click the button "Expand all"
     Then the button "Collapse all" is shown
@@ -87,6 +87,25 @@ Feature: Skills
     And the button "Collapse all" is shown
     When I close the Skill group "Programming languages"
     Then the button "Collapse all" is shown
+
+  Scenario: Opening every group by hand turns Expand all on, and closing every group turns it off
+    When I open "/skills"
+    And I click every Skill group
+    Then every Skill group is expanded
+    And every overview is expanded
+    And the button "Collapse all" is shown
+    When I click every Skill group
+    Then every Skill group is collapsed
+    And the button "Expand all" is shown
+
+  Scenario: Closing every overview by hand turns Expand all off, the groups staying open
+    When I open "/skills"
+    And I click the button "Expand all"
+    Then the button "Collapse all" is shown
+    When I click every overview arrow
+    Then every overview is collapsed
+    And every Skill group is expanded
+    And the button "Expand all" is shown
 
   Scenario: A Certificate opens in its view and Escape closes only the view
     When I open "/skills"
@@ -117,9 +136,3 @@ Feature: Skills
     And the clipboard has the line "Engineering practice"
     And the clipboard has the line "  APIs & services"
     And the clipboard has the line "    Certified: TypeScript, TestDome, Jul 2020, Top 10%"
-
-  Scenario: Opening every group by hand leaves Expand all off
-    When I open "/skills"
-    And I open every Skill group by hand
-    Then every Skill group is expanded
-    And the button "Expand all" is shown
