@@ -1,5 +1,6 @@
 .skill-entry {
   display: grid;
+  font-size: calc(1rem + 0.0625rem * progress(100vw, 22.5rem, 80rem));
 }
 
 .skill-entry__row {
@@ -36,6 +37,7 @@
 
 .skill-entry__name {
   padding-inline-start: 0.4rem;
+  text-shadow: .2px 0 var(--panel-about);
 }
 
 /*

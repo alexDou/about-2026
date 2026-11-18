@@ -20,6 +20,8 @@
    */
   --skills-heading: #b8c9c4;
   --skills-heading-open: #9db4ae;
+  --skills-subgroup-heading-open: #d0f4ea;
+  --skills-subgroup-heading-open-hover: #b3c8c2;
   /* The left room of a subgroup's name and Skills: more than a group name's. */
   --skills-subgroup-indent: 3.2rem;
 

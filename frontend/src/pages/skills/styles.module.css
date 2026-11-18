@@ -18,13 +18,12 @@
 
 /*
  * One accordion for all the groups, after the CodePen "CSS Responsive animated Accordion": the
- * bands stacked in one wrapper, a strip of the darkest tone above and below them. Square corners.
+ * bands stacked in one wrapper, a strip of the darkest tone below them. Square corners.
  */
 .skills-page__accordion {
   display: grid;
 }
 
-.skills-page__accordion::before,
 .skills-page__accordion::after {
   content: "";
   height: 1rem;

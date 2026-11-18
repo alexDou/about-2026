@@ -98,13 +98,9 @@ describe("SkillsPage", () => {
     expect(stylesheet).not.toMatch(/border-radius/);
   });
 
-  it("puts a strip before and after the accordion's bands", () => {
-    expect(stylesheet).toMatch(
-      /\.skills-page__accordion::before,\s*\.skills-page__accordion::after\s*{[^}]*content:\s*""/,
-    );
-    expect(stylesheet).toMatch(
-      /\.skills-page__accordion::before,\s*\.skills-page__accordion::after\s*{[^}]*height:/,
-    );
+  it("ends the accordion's bands with a strip, and has none above them", () => {
+    expect(stylesheet).toMatch(/\.skills-page__accordion::after\s*{[^}]*content:\s*""[^}]*height:/);
+    expect(stylesheet).not.toMatch(/\.skills-page__accordion::before/);
   });
 
   it("opens one Skill's overview with its arrow", () => {
