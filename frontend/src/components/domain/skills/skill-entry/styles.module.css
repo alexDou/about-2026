@@ -1,0 +1,81 @@
+.skill-entry {
+  display: grid;
+}
+
+.skill-entry__row {
+  display: flex;
+  align-items: center;
+}
+
+/* The target is 24px or more (WCAG 2.2) around a smaller arrow. */
+.skill-entry__arrow {
+  display: grid;
+  place-items: center;
+  flex: none;
+  min-width: 1.5rem;
+  min-height: 1.5rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+/* A filled triangle pointing right; it turns to point down when the overview is open. */
+.skill-entry__arrow-shape {
+  width: 0.7rem;
+  height: 0.7rem;
+  background: currentcolor;
+  clip-path: polygon(15% 0, 100% 50%, 15% 100%);
+  transition: rotate var(--overview-duration) ease;
+}
+
+.skill-entry__arrow--open .skill-entry__arrow-shape {
+  rotate: 90deg;
+}
+
+.skill-entry__name {
+  padding-inline-start: 0.4rem;
+}
+
+/*
+ * A closed overview takes no room: its grid row is 0fr, and the text inside is clipped. It opens
+ * to the text's height and fades in. `visibility` keeps the closed text out of reach of the
+ * keyboard, find-in-page and screen readers once the row has closed.
+ */
+.skill-entry__overview {
+  display: grid;
+  grid-template-rows: 0fr;
+  visibility: hidden;
+  opacity: 0;
+  transition:
+    grid-template-rows var(--overview-duration) ease,
+    opacity var(--overview-duration) ease,
+    visibility 0s var(--overview-duration);
+}
+
+.skill-entry__overview--open {
+  grid-template-rows: 1fr;
+  visibility: visible;
+  opacity: 1;
+  transition:
+    grid-template-rows var(--overview-duration) ease,
+    opacity var(--overview-duration) ease,
+    visibility 0s;
+}
+
+.skill-entry__overview-text {
+  min-height: 0;
+  margin: 0;
+  /* Indented under the name, past the arrow. */
+  padding-inline-start: 1.9rem;
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skill-entry__arrow-shape,
+  .skill-entry__overview,
+  .skill-entry__overview--open {
+    transition: none;
+  }
+}

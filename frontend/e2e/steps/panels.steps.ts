@@ -193,7 +193,8 @@ Then(
       expect(box!.width).toBeGreaterThan(box!.height);
       await expect(stripe).toHaveCSS("writing-mode", "horizontal-tb");
     }
-    await expect(this.page.locator("p")).toHaveCount(0);
+    // The Sublabels are paragraphs; the Expanded panel's page may hold paragraphs of its own.
+    await expect(stripes(this).locator("p")).toHaveCount(0);
     const top = await stripes(this).first().boundingBox();
     await this.page.evaluate(() => window.scrollTo(0, 40));
     // Not sticky: scrolling moves them (if the page can scroll at all, it is checked below).
