@@ -143,6 +143,16 @@
       "value": "Udemy"
     }
   ],
+  "skills.overviewToggle": [
+    {
+      "type": 0,
+      "value": "Overview of "
+    },
+    {
+      "type": 1,
+      "value": "name"
+    }
+  ],
   "skills.skill.actix.name": [
     {
       "type": 0,

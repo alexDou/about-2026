@@ -1,6 +1,22 @@
 .skills-page {
+  display: grid;
+  gap: var(--element-distance-standard);
   max-width: 60rem;
   margin: 0 auto;
   /* The room at the top clears the Expanded panel's close corner, which lies over the page. */
   padding: 4rem var(--element-distance-standard);
+}
+
+/* Expand all on the left, Copy skills on the right: both as tall as --control-height. */
+.skills-page__header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--element-distance-standard);
+  min-height: var(--control-height);
+}
+
+.skills-page__groups {
+  display: grid;
+  gap: var(--element-distance-standard);
 }

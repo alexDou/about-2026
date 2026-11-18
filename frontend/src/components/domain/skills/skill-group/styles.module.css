@@ -1,0 +1,7 @@
+.skill-group__skills {
+  display: grid;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}

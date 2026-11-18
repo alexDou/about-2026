@@ -1,0 +1,12 @@
+.skill-subgroup {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.skill-subgroup__skills {
+  display: grid;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
