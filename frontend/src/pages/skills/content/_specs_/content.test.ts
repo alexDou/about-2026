@@ -53,7 +53,11 @@ function referencedIds(value: unknown): string[] {
  * The `skills.*` messages the Skills components read by id, so the content never refers to them.
  * Their text has values to fill (`{name}`), checked where they show (the components' tests).
  */
-const COMPONENT_MESSAGES: readonly string[] = ["skills.overviewToggle"];
+const COMPONENT_MESSAGES: readonly string[] = [
+  "skills.collapseAll",
+  "skills.expandAll",
+  "skills.overviewToggle",
+];
 
 const SKILLS_IDS = Object.keys(enMessages).filter(
   (id) => id.startsWith("skills.") && !COMPONENT_MESSAGES.includes(id),

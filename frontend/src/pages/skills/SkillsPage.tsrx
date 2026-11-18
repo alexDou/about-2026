@@ -1,6 +1,7 @@
 import { useEffect } from "octane";
 import { Heading } from "../../components/ui/heading";
-import { reset } from "../../components/domain/skills/overviews";
+import { WalkingToggle } from "../../components/ui/walking-toggle";
+import { reset, setAll } from "../../components/domain/skills/overviews";
 import { SkillGroup } from "../../components/domain/skills/skill-group";
 import { useIntl } from "../../hooks/use-intl";
 import { SKILLS_CONTENT } from "./content";
@@ -17,7 +18,15 @@ export function SkillsPage() @{
 
   <section class={styles["skills-page"]}>
     <Heading text={intl.formatMessage({ id: "explore.panel.skills.title" })} />
-    <div class={styles["skills-page__header-row"]} />
+    <div class={styles["skills-page__header-row"]}>
+      <WalkingToggle
+        labels={{
+          off: intl.formatMessage({ id: "skills.expandAll" }),
+          on: intl.formatMessage({ id: "skills.collapseAll" }),
+        }}
+        onChange={(open) => setAll(SKILLS_CONTENT.groups, open)}
+      />
+    </div>
     <div class={styles["skills-page__accordion"]}>
       @for (const group of SKILLS_CONTENT.groups; key group.id) {
         <SkillGroup group={group} />;

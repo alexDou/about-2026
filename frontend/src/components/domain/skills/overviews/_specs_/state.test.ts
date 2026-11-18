@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   ALL_CLOSED,
+  allSet,
   groupOpen,
   groupToggled,
   headingOpen,
@@ -191,5 +192,39 @@ describe("headingToggled", () => {
 
   it("changes nothing for a heading it does not know", () => {
     expect(headingToggled(ALL_CLOSED, headings, "nope")).toBe(ALL_CLOSED);
+  });
+});
+
+describe("allSet", () => {
+  const groups = [DATABASES, FLAT];
+
+  it("opens every group, every Skill's overview and every subgroup heading", () => {
+    const state = allSet(ALL_CLOSED, groups, true);
+    expect(groupOpen(state, "databases")).toBe(true);
+    expect(groupOpen(state, "testing")).toBe(true);
+    for (const skill of ["postgres", "sqlite", "redis", "jest", "pytest"]) {
+      expect(skillOpen(state, skill)).toBe(true);
+    }
+    expect(headingOpen(state, "sql")).toBe(true);
+    expect(headingOpen(state, "nosql")).toBe(true);
+  });
+
+  it("closes every group, overview and heading, whatever was opened by hand", () => {
+    let state = allSet(ALL_CLOSED, groups, true);
+    state = skillToggled(state, headingsOf(DATABASES), "redis");
+    state = allSet(state, groups, false);
+    expect(groupOpen(state, "databases")).toBe(false);
+    expect(groupOpen(state, "testing")).toBe(false);
+    expect(skillOpen(state, "redis")).toBe(false);
+    expect(skillOpen(state, "jest")).toBe(false);
+    expect(headingOpen(state, "sql")).toBe(false);
+    expect(headingOpen(state, "nosql")).toBe(false);
+  });
+
+  it("opens everything over a state where some was already open by hand", () => {
+    const some = groupToggled(ALL_CLOSED, FLAT);
+    const state = allSet(some, groups, true);
+    expect(groupOpen(state, "databases")).toBe(true);
+    expect(skillOpen(state, "postgres")).toBe(true);
   });
 });

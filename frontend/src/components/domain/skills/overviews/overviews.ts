@@ -1,5 +1,5 @@
 import { createScope } from "octane/signals";
-import { ALL_CLOSED, groupToggled, headingToggled, skillToggled } from "./state";
+import { ALL_CLOSED, allSet, groupToggled, headingToggled, skillToggled } from "./state";
 import type { OverviewGroup, OverviewHeading, OverviewsState } from "./types";
 
 /**
@@ -21,5 +21,8 @@ export const toggleHeading = (headings: readonly OverviewHeading[], heading: str
 /** A group's heading was clicked. */
 export const toggleGroup = (group: OverviewGroup) =>
   state$.set((state) => groupToggled(state, group));
+/** Expand all (`open`) or Collapse all was turned on or off, over every group of the page. */
+export const setAll = (groups: readonly OverviewGroup[], open: boolean) =>
+  state$.set((state) => allSet(state, groups, open));
 /** The Skills Panel is gone: the next one starts closed. */
 export const reset = () => state$.set(ALL_CLOSED);
