@@ -13,6 +13,16 @@
   --panel-chat: #4c839f;
   --panel-contact: #5c8b70;
 
+  /*
+   * Skills' accordion: the Contact green in steps, each darker than the one before. The open band
+   * and the boxes under it carry light text: 4.6:1 or better.
+   */
+  --skills-band-open: #40664f;
+  --skills-subgroup: #2f4b3c;
+  --skills-subgroup-open: #243a2d;
+  /* The room round the boxes inside an open band. */
+  --skills-gap: 1rem;
+
   /* The corner close button's red: a muted vermilion, the warm counterpart to the cool panels. */
   --color-accent: #e4572e;
 

@@ -103,8 +103,15 @@ export const SKILLS_CONTENT: SkillsContent = {
     ]),
     group(
       "frontend",
-      [skill("react"), skill("nextjs"), skill("preact"), skill("vue"), skill("svelte")],
+      [],
       [
+        subgroup("frameworksLibraries", [
+          skill("react"),
+          skill("nextjs"),
+          skill("preact"),
+          skill("vue"),
+          skill("svelte"),
+        ]),
         subgroup("architectureEcosystem", [
           skill("frontendArchitecture"),
           skill("buildTooling"),
@@ -116,24 +123,24 @@ export const SKILLS_CONTENT: SkillsContent = {
           skill("seo"),
           skill("frontendPerformance"),
           skill("css", [certificate("modernCssWizard", "modernCss", { year: 2026 })]),
-          skill("frontendLibraries"),
+          skill("frontendPackages"),
         ]),
       ],
     ),
     group(
       "backend",
+      [],
       [
-        skill("nodejs"),
-        skill("expressKoa"),
-        skill("socketIo"),
-        skill("apollo"),
-        skill("elysia"),
-        skill("nestHapiSails"),
-        skill("fastapi"),
-        skill("actix"),
-        skill("phpFrameworks"),
-      ],
-      [
+        subgroup("runtimesFrameworks", [
+          skill("nodejs"),
+          skill("expressKoa"),
+          skill("elysia"),
+          skill("nestHapiSails"),
+          skill("apollo"),
+          skill("fastapi"),
+          skill("actix"),
+          skill("phpFrameworks"),
+        ]),
         subgroup("apisServices", [
           skill("rest"),
           skill("graphql"),
@@ -142,34 +149,35 @@ export const SKILLS_CONTENT: SkillsContent = {
           skill("webrtc"),
           skill("openapi"),
           skill("kafka"),
-          skill("communicationProtocols"),
+          skill("grpcAmqpMqtt"),
         ]),
       ],
     ),
     group(
       "ai",
+      [],
       [
-        skill("openaiSdk", [
-          certificate(
-            "udemyLlmEngineering",
-            "udemy",
-            { year: 2025, month: 7 },
-            { verifyUrl: "https://ude.my/UC-7d2da67c-8d0e-4da8-973c-e291442941eb" },
-          ),
+        subgroup("sdksAgents", [
+          skill("openaiSdk", [
+            certificate(
+              "udemyLlmEngineering",
+              "udemy",
+              { year: 2025, month: 7 },
+              { verifyUrl: "https://ude.my/UC-7d2da67c-8d0e-4da8-973c-e291442941eb" },
+            ),
+          ]),
+          skill("crewai"),
+          skill("langgraph"),
+          skill("mcp", [
+            certificate(
+              "udemyAgenticAi",
+              "udemy",
+              { year: 2026, month: 1 },
+              { verifyUrl: "https://ude.my/UC-a7efde5a-28b4-450e-bbfb-eb00ae6d5269" },
+            ),
+          ]),
+          skill("agentCreation"),
         ]),
-        skill("crewai"),
-        skill("langgraph"),
-        skill("mcp", [
-          certificate(
-            "udemyAgenticAi",
-            "udemy",
-            { year: 2026, month: 1 },
-            { verifyUrl: "https://ude.my/UC-a7efde5a-28b4-450e-bbfb-eb00ae6d5269" },
-          ),
-        ]),
-        skill("agentCreation"),
-      ],
-      [
         subgroup("aiDevelopment", [
           skill("claudeCodex"),
           skill("antigravity"),

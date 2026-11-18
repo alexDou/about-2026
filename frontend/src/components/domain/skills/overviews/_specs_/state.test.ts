@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import {
   ALL_CLOSED,
+  groupOpen,
+  groupToggled,
   headingOpen,
   headingToggled,
   headingsOf,
@@ -19,39 +21,100 @@ const DATABASES: OverviewGroup = {
   ],
 };
 
-/** Frontend-like: Skills of its own and one subgroup. */
-const FRONTEND: OverviewGroup = {
+/** Testing-like: a plain list of Skills, no subgroups. */
+const FLAT: OverviewGroup = {
+  id: "testing",
+  skills: [{ id: "jest" }, { id: "pytest" }],
+  subgroups: [],
+};
+
+/** A group that mixes both, which the content does not have but the rules must still survive. */
+const MIXED: OverviewGroup = {
   id: "frontend",
-  skills: [{ id: "react" }, { id: "vue" }],
+  skills: [{ id: "react" }],
   subgroups: [{ id: "ecosystem", skills: [{ id: "css" }, { id: "seo" }] }],
 };
 
-const FLAT: OverviewGroup = { id: "testing", skills: [{ id: "jest" }], subgroups: [] };
-
 describe("headingsOf", () => {
-  it("gives a group heading every Skill beneath it, its subgroups' included, then each subgroup", () => {
-    expect(headingsOf(FRONTEND)).toEqual([
-      { id: "frontend", skills: ["react", "vue", "css", "seo"] },
-      { id: "ecosystem", skills: ["css", "seo"] },
-    ]);
+  it("gives each subgroup a heading over its own Skills, and a group none", () => {
     expect(headingsOf(DATABASES)).toEqual([
-      { id: "databases", skills: ["postgres", "sqlite", "redis"] },
       { id: "sql", skills: ["postgres", "sqlite"] },
       { id: "nosql", skills: ["redis"] },
     ]);
-    expect(headingsOf(FLAT)).toEqual([{ id: "testing", skills: ["jest"] }]);
+    expect(headingsOf(FLAT)).toEqual([]);
+    expect(headingsOf(MIXED)).toEqual([{ id: "ecosystem", skills: ["css", "seo"] }]);
   });
 });
 
 describe("the start", () => {
-  it("has every overview and every heading closed", () => {
-    expect(skillOpen(ALL_CLOSED, "react")).toBe(false);
-    expect(headingOpen(ALL_CLOSED, "frontend")).toBe(false);
+  it("has every group, heading and overview closed", () => {
+    expect(groupOpen(ALL_CLOSED, "databases")).toBe(false);
+    expect(headingOpen(ALL_CLOSED, "sql")).toBe(false);
+    expect(skillOpen(ALL_CLOSED, "postgres")).toBe(false);
+  });
+});
+
+describe("groupToggled", () => {
+  it("opens the group, every overview in it and every subgroup heading", () => {
+    const state = groupToggled(ALL_CLOSED, DATABASES);
+    expect(groupOpen(state, "databases")).toBe(true);
+    for (const id of ["postgres", "sqlite", "redis"]) expect(skillOpen(state, id)).toBe(true);
+    for (const id of ["sql", "nosql"]) expect(headingOpen(state, id)).toBe(true);
+  });
+
+  it("closes the group, every overview and every subgroup heading on the next click", () => {
+    const closed = groupToggled(groupToggled(ALL_CLOSED, DATABASES), DATABASES);
+    expect(groupOpen(closed, "databases")).toBe(false);
+    for (const id of ["postgres", "sqlite", "redis"]) expect(skillOpen(closed, id)).toBe(false);
+    for (const id of ["sql", "nosql"]) expect(headingOpen(closed, id)).toBe(false);
+  });
+
+  it("opens the Skills of a group with no subgroups", () => {
+    const state = groupToggled(ALL_CLOSED, FLAT);
+    expect(groupOpen(state, "testing")).toBe(true);
+    expect(skillOpen(state, "jest")).toBe(true);
+    expect(skillOpen(state, "pytest")).toBe(true);
+  });
+
+  it("acts on its own group only", () => {
+    const state = groupToggled(ALL_CLOSED, FLAT);
+    expect(groupOpen(state, "databases")).toBe(false);
+    expect(skillOpen(state, "postgres")).toBe(false);
+  });
+
+  it("opens a closed group that has some overviews open by hand, all of them", () => {
+    const some = skillToggled(ALL_CLOSED, headingsOf(DATABASES), "postgres");
+    expect(groupOpen(some, "databases")).toBe(false);
+    const state = groupToggled(some, DATABASES);
+    expect(skillOpen(state, "sqlite")).toBe(true);
+    expect(groupOpen(state, "databases")).toBe(true);
+  });
+
+  it("keeps the group's own Skills with a subgroup's in a mixed group", () => {
+    const state = groupToggled(ALL_CLOSED, MIXED);
+    for (const id of ["react", "css", "seo"]) expect(skillOpen(state, id)).toBe(true);
+    expect(headingOpen(state, "ecosystem")).toBe(true);
+  });
+});
+
+describe("a group's state is whether it shows", () => {
+  const headings = headingsOf(DATABASES);
+
+  it("stays open when every overview in it is closed by hand", () => {
+    let state = groupToggled(ALL_CLOSED, DATABASES);
+    for (const id of ["postgres", "sqlite", "redis"]) state = skillToggled(state, headings, id);
+    expect(groupOpen(state, "databases")).toBe(true);
+  });
+
+  it("stays closed when every overview in it is opened by hand", () => {
+    let state = ALL_CLOSED;
+    for (const id of ["postgres", "sqlite", "redis"]) state = skillToggled(state, headings, id);
+    expect(groupOpen(state, "databases")).toBe(false);
   });
 });
 
 describe("skillToggled", () => {
-  const headings = headingsOf(FRONTEND);
+  const headings = headingsOf(MIXED);
 
   it("opens a closed overview and closes an open one", () => {
     const opened = skillToggled(ALL_CLOSED, headings, "react");
@@ -59,50 +122,30 @@ describe("skillToggled", () => {
     expect(skillOpen(skillToggled(opened, headings, "react"), "react")).toBe(false);
   });
 
-  it("leaves the other overviews alone", () => {
-    const opened = skillToggled(ALL_CLOSED, headings, "react");
-    expect(skillOpen(opened, "vue")).toBe(false);
-  });
-
-  it("leaves the headings' states alone while the Skills beneath them differ", () => {
-    const opened = skillToggled(ALL_CLOSED, headings, "react");
-    expect(headingOpen(opened, "frontend")).toBe(false);
+  it("leaves the other overviews and the headings alone while the Skills beneath differ", () => {
+    const opened = skillToggled(ALL_CLOSED, headings, "css");
+    expect(skillOpen(opened, "seo")).toBe(false);
     expect(headingOpen(opened, "ecosystem")).toBe(false);
   });
 
-  it("opens a heading when its last Skill is opened by hand, and only that heading", () => {
+  it("opens a subgroup heading when its last Skill is opened by hand", () => {
     let state = ALL_CLOSED;
     for (const id of ["css", "seo"]) state = skillToggled(state, headings, id);
     expect(headingOpen(state, "ecosystem")).toBe(true);
-    expect(headingOpen(state, "frontend")).toBe(false);
-    for (const id of ["react", "vue"]) state = skillToggled(state, headings, id);
-    expect(headingOpen(state, "frontend")).toBe(true);
   });
 
-  it("closes a heading when its last open Skill is closed by hand", () => {
-    let state = headingToggled(ALL_CLOSED, headings, "frontend");
-    expect(headingOpen(state, "frontend")).toBe(true);
-    for (const id of ["react", "vue", "css"]) state = skillToggled(state, headings, id);
-    // One is still open: both headings keep their state.
-    expect(headingOpen(state, "frontend")).toBe(true);
+  it("closes a subgroup heading when its last open Skill is closed by hand", () => {
+    let state = groupToggled(ALL_CLOSED, MIXED);
+    state = skillToggled(state, headings, "css");
+    // One is still open: the heading keeps its state.
     expect(headingOpen(state, "ecosystem")).toBe(true);
     state = skillToggled(state, headings, "seo");
     expect(headingOpen(state, "ecosystem")).toBe(false);
-    expect(headingOpen(state, "frontend")).toBe(false);
   });
 
   it("keeps an open heading open while one of its Skills is closed by hand", () => {
-    let state = headingToggled(ALL_CLOSED, headings, "frontend");
-    state = skillToggled(state, headings, "react");
-    expect(headingOpen(state, "frontend")).toBe(true);
+    const state = skillToggled(headingToggled(ALL_CLOSED, headings, "ecosystem"), headings, "css");
     expect(headingOpen(state, "ecosystem")).toBe(true);
-  });
-
-  it("does not touch another group's state", () => {
-    const state = skillToggled(ALL_CLOSED, headingsOf(FLAT), "jest");
-    expect(headingOpen(state, "testing")).toBe(true);
-    expect(headingOpen(state, "frontend")).toBe(false);
-    expect(skillOpen(state, "react")).toBe(false);
   });
 });
 
@@ -116,27 +159,17 @@ describe("headingToggled", () => {
     expect(headingOpen(state, "sql")).toBe(true);
   });
 
-  it("acts on its own subgroup only", () => {
+  it("acts on its own subgroup only, and leaves the group's state alone", () => {
     const state = headingToggled(ALL_CLOSED, headings, "sql");
     expect(skillOpen(state, "redis")).toBe(false);
     expect(headingOpen(state, "nosql")).toBe(false);
-    expect(headingOpen(state, "databases")).toBe(false);
+    expect(groupOpen(state, "databases")).toBe(false);
   });
 
   it("closes every Skill again on the next click", () => {
-    const opened = headingToggled(ALL_CLOSED, headings, "sql");
-    const closed = headingToggled(opened, headings, "sql");
+    const closed = headingToggled(headingToggled(ALL_CLOSED, headings, "sql"), headings, "sql");
     expect(skillOpen(closed, "postgres")).toBe(false);
     expect(headingOpen(closed, "sql")).toBe(false);
-  });
-
-  it("lets a group heading cover the Skills of every subgroup, and the subgroup headings follow", () => {
-    const state = headingToggled(ALL_CLOSED, headings, "databases");
-    for (const id of ["postgres", "sqlite", "redis"]) expect(skillOpen(state, id)).toBe(true);
-    for (const id of ["databases", "sql", "nosql"]) expect(headingOpen(state, id)).toBe(true);
-    const closed = headingToggled(state, headings, "databases");
-    for (const id of ["postgres", "sqlite", "redis"]) expect(skillOpen(closed, id)).toBe(false);
-    for (const id of ["databases", "sql", "nosql"]) expect(headingOpen(closed, id)).toBe(false);
   });
 
   it("opens the rest when some are open by hand: a closed heading's click always opens", () => {

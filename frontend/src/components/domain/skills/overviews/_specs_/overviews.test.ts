@@ -1,32 +1,37 @@
 import { afterEach, describe, expect, it } from "vitest";
-import { headingOpen, headingsOf, skillOpen } from "../state";
-import { overviews$, reset, toggleHeading, toggleSkill } from "../overviews";
+import { groupOpen, headingOpen, headingsOf, skillOpen } from "../state";
+import { overviews$, reset, toggleGroup, toggleHeading, toggleSkill } from "../overviews";
 
-const headings = headingsOf({
-  id: "sql-group",
-  skills: [{ id: "a" }, { id: "b" }],
-  subgroups: [],
-});
+const GROUP = {
+  id: "databases",
+  skills: [],
+  subgroups: [{ id: "sql", skills: [{ id: "a" }, { id: "b" }] }],
+};
+const headings = headingsOf(GROUP);
 
 afterEach(reset);
 
 describe("overviews", () => {
   it("starts with everything closed", () => {
+    expect(groupOpen(overviews$.get(), "databases")).toBe(false);
+    expect(headingOpen(overviews$.get(), "sql")).toBe(false);
     expect(skillOpen(overviews$.get(), "a")).toBe(false);
-    expect(headingOpen(overviews$.get(), "sql-group")).toBe(false);
   });
 
-  it("changes through the Skill's arrow and the heading, as the rules say", () => {
+  it("changes through the Skill's arrow, the subgroup heading and the group, as the rules say", () => {
     toggleSkill(headings, "a");
     expect(skillOpen(overviews$.get(), "a")).toBe(true);
-    toggleHeading(headings, "sql-group");
+    toggleHeading(headings, "sql");
     expect(skillOpen(overviews$.get(), "b")).toBe(true);
-    expect(headingOpen(overviews$.get(), "sql-group")).toBe(true);
+    expect(headingOpen(overviews$.get(), "sql")).toBe(true);
+    toggleGroup(GROUP);
+    expect(groupOpen(overviews$.get(), "databases")).toBe(true);
   });
 
   it("starts from scratch after reset", () => {
-    toggleHeading(headings, "sql-group");
+    toggleGroup(GROUP);
     reset();
+    expect(groupOpen(overviews$.get(), "databases")).toBe(false);
     expect(skillOpen(overviews$.get(), "a")).toBe(false);
   });
 });

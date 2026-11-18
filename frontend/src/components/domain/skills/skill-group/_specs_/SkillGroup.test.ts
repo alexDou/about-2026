@@ -1,9 +1,9 @@
-import { fireEvent, render, screen, within } from "@octanejs/testing-library";
+import { act, fireEvent, render, screen, within } from "@octanejs/testing-library";
 import { afterEach, describe, expect, it } from "vitest";
 import { intlWrapper } from "../../../../../i18n";
-import { reset } from "../../overviews";
-import { SkillGroup } from "../SkillGroup.tsrx";
+import { reset, toggleSkill } from "../../overviews";
 import type { SkillEntrySkill } from "../../skill-entry";
+import { SkillGroup } from "../SkillGroup.tsrx";
 import type { SkillGroupData } from "../types";
 
 type TestSkillId = "react" | "vue" | "css" | "seo" | "postgresMysql" | "redis" | "mongodb";
@@ -14,12 +14,17 @@ const skill = (id: TestSkillId): SkillEntrySkill => ({
   overview: `skills.skill.${id}.overview`,
 });
 
-/** Frontend-like: Skills of its own and a subgroup. */
+/** Frontend-like: two subgroups, no Skills of its own. */
 const FRONTEND = {
   id: "frontend",
   name: "skills.group.frontend.name",
-  skills: [skill("react"), skill("vue")],
+  skills: [],
   subgroups: [
+    {
+      id: "frameworksLibraries",
+      name: "skills.subgroup.frameworksLibraries.name",
+      skills: [skill("react"), skill("vue")],
+    },
     {
       id: "architectureEcosystem",
       name: "skills.subgroup.architectureEcosystem.name",
@@ -28,82 +33,57 @@ const FRONTEND = {
   ],
 } satisfies SkillGroupData;
 
-/** Databases-like: no Skills of its own, two subgroups. */
-const DATABASES = {
-  id: "databases",
-  name: "skills.group.databases.name",
-  skills: [],
-  subgroups: [
-    { id: "sql", name: "skills.subgroup.sql.name", skills: [skill("postgresMysql")] },
-    { id: "nosql", name: "skills.subgroup.nosql.name", skills: [skill("redis"), skill("mongodb")] },
-  ],
+/** Testing-like: a plain list, no subgroups. */
+const FLAT = {
+  id: "testing",
+  name: "skills.group.testing.name",
+  skills: [skill("postgresMysql"), skill("redis")],
+  subgroups: [],
 } satisfies SkillGroupData;
 
 const renderGroup = (group: SkillGroupData) =>
   render(SkillGroup, { props: { group }, wrapper: intlWrapper() });
 
+const toggle = () => screen.getByRole("button", { name: /^(Frontend|Testing & quality)$/ });
 const arrows = () => screen.getAllByRole("button", { name: /^Overview of / });
 const openArrows = () => arrows().filter((a) => a.getAttribute("aria-expanded") === "true");
 
 afterEach(reset);
 
 describe("SkillGroup", () => {
-  it("is a block with the group name as a heading, then its Skills, then its subgroups", () => {
+  it("is a section whose heading is a button named by the group, closed at first", () => {
     const { container } = renderGroup(FRONTEND);
-    expect(container.firstElementChild?.tagName).toBe("ARTICLE");
-    const headings = screen.getAllByRole("heading").map((h) => h.textContent);
-    expect(headings).toEqual(["Frontend", "Architecture & ecosystem"]);
-    expect(screen.getByRole("heading", { level: 2 })).toHaveTextContent("Frontend");
-    expect(screen.getByRole("heading", { level: 3 })).toHaveTextContent("Architecture & ecosystem");
-    const text = container.textContent ?? "";
-    const order = ["React", "Vue", "Architecture & ecosystem", "CSS", "SEO"].map((name) =>
-      text.indexOf(name),
-    );
-    expect(order).toEqual(order.toSorted((a, b) => a - b));
-    expect(order).not.toContain(-1);
+    expect(container.firstElementChild?.tagName).toBe("SECTION");
+    const heading = screen.getByRole("heading", { level: 2 });
+    expect(heading).toContainElement(toggle());
+    expect(toggle()).toHaveAttribute("type", "button");
+    expect(toggle()).toHaveAttribute("aria-expanded", "false");
   });
 
-  it("shows every Skill name with every overview hidden", () => {
+  it("keeps what is inside out of reach while closed, and points the button at it", () => {
     renderGroup(FRONTEND);
-    expect(arrows()).toHaveLength(4);
-    expect(openArrows()).toHaveLength(0);
-    for (const name of ["React", "Vue", "CSS", "SEO"]) {
-      expect(screen.getByText(name)).toBeInTheDocument();
+    const panel = document.getElementById(toggle().getAttribute("aria-controls") ?? "");
+    expect(panel).toHaveAttribute("inert");
+    expect(panel).toContainElement(screen.getByText("React"));
+  });
+
+  it("opens on a click: the group shows, with every overview and every subgroup open", () => {
+    renderGroup(FRONTEND);
+    fireEvent.click(toggle());
+    expect(toggle()).toHaveAttribute("aria-expanded", "true");
+    const panel = document.getElementById(toggle().getAttribute("aria-controls") ?? "");
+    expect(panel).not.toHaveAttribute("inert");
+    expect(openArrows()).toHaveLength(4);
+    for (const name of ["Frameworks & libraries", "Architecture & ecosystem"]) {
+      expect(screen.getByRole("button", { name })).toHaveAttribute("aria-expanded", "true");
     }
   });
 
-  it("lists the Skills of a subgroup inside it", () => {
+  it("closes on the next click, with every overview and subgroup", () => {
     renderGroup(FRONTEND);
-    const subgroup = screen.getByRole("heading", { level: 3 }).closest("section")!;
-    expect(within(subgroup).getAllByRole("listitem")).toHaveLength(2);
-  });
-
-  it("has no list of its own where the group holds no Skills of its own", () => {
-    const { container } = renderGroup(DATABASES);
-    expect(container.querySelectorAll(":scope > article > ul")).toHaveLength(0);
-    expect(arrows()).toHaveLength(3);
-  });
-
-  it("opens one overview with its arrow and leaves the rest closed", () => {
-    renderGroup(FRONTEND);
-    fireEvent.click(screen.getByRole("button", { name: "Overview of Vue" }));
-    expect(openArrows().map((a) => a.getAttribute("aria-label"))).toEqual(["Overview of Vue"]);
-    expect(screen.getByRole("button", { name: "Frontend" })).toHaveAttribute(
-      "aria-expanded",
-      "false",
-    );
-  });
-
-  it("opens and closes all its Skills from the group heading, subgroups' included", () => {
-    renderGroup(FRONTEND);
-    const heading = screen.getByRole("button", { name: "Frontend" });
-    fireEvent.click(heading);
-    expect(openArrows()).toHaveLength(4);
-    expect(screen.getByRole("button", { name: "Architecture & ecosystem" })).toHaveAttribute(
-      "aria-expanded",
-      "true",
-    );
-    fireEvent.click(heading);
+    fireEvent.click(toggle());
+    fireEvent.click(toggle());
+    expect(toggle()).toHaveAttribute("aria-expanded", "false");
     expect(openArrows()).toHaveLength(0);
     expect(screen.getByRole("button", { name: "Architecture & ecosystem" })).toHaveAttribute(
       "aria-expanded",
@@ -111,35 +91,63 @@ describe("SkillGroup", () => {
     );
   });
 
-  it("lets a subgroup heading act on its own Skills only", () => {
-    renderGroup(DATABASES);
-    fireEvent.click(screen.getByRole("button", { name: "NoSQL" }));
-    expect(openArrows().map((a) => a.getAttribute("aria-label"))).toEqual([
-      "Overview of Redis",
-      "Overview of MongoDB",
+  it("shows its subgroups, each with its heading and its Skills in order", () => {
+    renderGroup(FRONTEND);
+    expect(screen.getAllByRole("heading", { level: 3 }).map((h) => h.textContent)).toEqual([
+      "Frameworks & libraries",
+      "Architecture & ecosystem",
     ]);
-    expect(screen.getByRole("button", { name: "SQL" })).toHaveAttribute("aria-expanded", "false");
-    expect(screen.getByRole("button", { name: "Databases & search" })).toHaveAttribute(
+    const first = screen.getByRole("heading", { level: 3, name: "Frameworks & libraries" });
+    const subgroup = first.closest("section")!;
+    expect(within(subgroup).getAllByRole("listitem")).toHaveLength(2);
+    expect(within(subgroup).getByText("Vue")).toBeInTheDocument();
+  });
+
+  it("lists the Skills of a group with no subgroups directly, with no subgroup heading", () => {
+    renderGroup(FLAT);
+    expect(screen.queryAllByRole("heading", { level: 3 })).toHaveLength(0);
+    expect(screen.getAllByRole("listitem")).toHaveLength(2);
+    fireEvent.click(toggle());
+    expect(openArrows()).toHaveLength(2);
+  });
+
+  it("lets a subgroup heading act on its own Skills only, leaving the group as it is", () => {
+    renderGroup(FRONTEND);
+    fireEvent.click(screen.getByRole("button", { name: "Architecture & ecosystem" }));
+    expect(openArrows().map((a) => a.getAttribute("aria-label"))).toEqual([
+      "Overview of CSS",
+      "Overview of SEO",
+    ]);
+    expect(screen.getByRole("button", { name: "Frameworks & libraries" })).toHaveAttribute(
       "aria-expanded",
       "false",
     );
+    expect(toggle()).toHaveAttribute("aria-expanded", "false");
   });
 
-  it("opens the group heading too once every Skill is open by hand", () => {
-    renderGroup(DATABASES);
+  it("opens the subgroup heading once every Skill in it is opened by hand", () => {
+    renderGroup(FRONTEND);
+    fireEvent.click(screen.getByRole("button", { name: "Overview of React" }));
+    const heading = screen.getByRole("button", { name: "Frameworks & libraries" });
+    expect(heading).toHaveAttribute("aria-expanded", "false");
+    fireEvent.click(screen.getByRole("button", { name: "Overview of Vue" }));
+    expect(heading).toHaveAttribute("aria-expanded", "true");
+  });
+
+  it("stays open when every overview in it is closed by hand", () => {
+    renderGroup(FRONTEND);
+    fireEvent.click(toggle());
     for (const arrow of arrows()) fireEvent.click(arrow);
-    expect(screen.getByRole("button", { name: "Databases & search" })).toHaveAttribute(
+    expect(openArrows()).toHaveLength(0);
+    expect(toggle()).toHaveAttribute("aria-expanded", "true");
+  });
+
+  it("follows the shared state, so an overview opened elsewhere shows open", () => {
+    renderGroup(FRONTEND);
+    act(() => toggleSkill([{ id: "frameworksLibraries", skills: ["react", "vue"] }], "react"));
+    expect(screen.getByRole("button", { name: "Overview of React" })).toHaveAttribute(
       "aria-expanded",
       "true",
     );
-  });
-
-  it("closes the heading again when the last open Skill is closed by hand", () => {
-    renderGroup(DATABASES);
-    const heading = screen.getByRole("button", { name: "Databases & search" });
-    fireEvent.click(heading);
-    for (const arrow of arrows()) fireEvent.click(arrow);
-    expect(heading).toHaveAttribute("aria-expanded", "false");
-    expect(openArrows()).toHaveLength(0);
   });
 });
