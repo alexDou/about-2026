@@ -199,7 +199,7 @@ Reference: the expanded menu of codepen `fluxus/gPWvZm` (local copy in git-ignor
   - While the backend is down, the form is disabled beside Unit 1's offline note; the links and the Contact notice stay.
 - **Human check**: ALTCHA (self-hosted proof of work, MIT; `altcha` on PyPI and npm), solved on submit, invisible, no third party, no cookies. Plus a hidden honeypot field (`website`): a filled honeypot gets a silent `204` and nothing is sent.
 - **Contract**:
-  - `GET /api/contact/challenge`: an ALTCHA challenge signed with `ALTCHA_HMAC_KEY`.
+  - `GET /api/contact/challenge`: an ALTCHA challenge signed with `ALTCHA_HMAC_KEY`. The key is a random secret the Owner generates (`openssl rand -hex 32`). ALTCHA self-hosted has no account and no provider key, so the backend signs the challenge and checks the signature with this key. Changing the key only makes challenges already out fail.
   - `POST /api/contact`, JSON `{ name, company, position?, contact?, altcha, website? }`.
   - Responses: `204` sent, `422` invalid fields, `400` failed human check, `429` limit reached, `502` the email could not be sent.
   - The zod schema lives in `services/contact/` and the `ContactRequest` type is derived from it; the backend's Pydantic model mirrors fields and limits. Contract tests on both sides.
@@ -207,8 +207,8 @@ Reference: the expanded menu of codepen `fluxus/gPWvZm` (local copy in git-ignor
   - Sent through Gmail SMTP (`smtp.gmail.com:587`, STARTTLS) from a dedicated Gmail account with an app password, to the Owner's mailbox. No confirmation email to the Visitor, no phone push.
   - Subject "Contact request: {name}, {company}" (CR/LF stripped).
   - Plain-text body: each field and the time in Europe/Berlin. `Reply-To` is the contact field when it parses as an email address.
-  - Settings come from the environment: `GOOGLE_APP_PASSWORD`, `MAIL_FROM`, `MAIL_TO`, `SMTP_HOST`, `SMTP_PORT`. Locally they're in the git-ignored `backend/.env`; in Unit 8 they move to Secret Manager. Addresses never go into the repo.
-  - The SMTP login and a test email to the Owner were proved from local on 2026-11-19. End-to-end proof is the first email sent from the deployed site (Unit 8).
+  - Settings come from the environment: `GOOGLE_APP_PASSWORD`, `MAIL_FROM`, `MAIL_TO`, `SMTP_HOST`, `SMTP_PORT`, plus `ALTCHA_HMAC_KEY` for the human check. Locally they're in the git-ignored `backend/.env` (the list is in `backend/README.md`); in Unit 8 they move to Secret Manager. Addresses and secrets never go into the repo.
+  - Proved from local on 2026-11-19: the SMTP login worked, and the test email from the mailer account reached the Owner's inbox, not spam. End-to-end proof is the first email sent from the deployed site (Unit 8).
 - **Rate limit**, in the FastAPI app, free tier:
   - Cloud Run's front end (Google Front End) has no configurable rate limiting, and Cloud Armor needs a paid load balancer.
   - On `/api/contact`, 5 requests per 15 minutes per IP, plus 100 a day site-wide, which protects the Gmail sending quota. Both answer `429`.
