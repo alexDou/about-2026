@@ -170,21 +170,55 @@ Reference: the expanded menu of codepen `fluxus/gPWvZm` (local copy in git-ignor
 
 ## Unit 4: Contact
 
-**Objective**: the Contact Panel: GitHub and LinkedIn links, the Contact request form, the Legal notice and the Privacy policy.
+**Objective**: the Contact Panel: "Remote, worldwide", the LinkedIn and Xing links, the Contact notice and the Contact request form. A sent Contact request reaches the Owner by email and is never stored (ADR 0005).
 
-**Design**
-- Form fields: name (optional), company, position (optional, short), contact (any channel: email, phone, social). Consent checkboxes.
-- Legal notice (name + postal address, §18 MStV) and Privacy policy beside or before the form.
-- The backend stores each Contact request and emails the Owner (phone push later).
-- Invisible human check on submit, plus per-IP rate limiting.
-- Body text (form, Legal notice, Privacy policy) sits on a `#d1dcd9` surface: on the Panel's `#5c8b70`, palette text reaches only about 3:1 (Unit 1).
-- While the backend is down, the form is disabled beside Unit 1's offline note. The Legal notice, the Privacy policy and the links stay available.
+**Decided** (grilling 2026-11-19):
+- **No Legal notice, no Privacy policy, no consent checkbox.** Only the Contact notice beside the form. No extra page or route: everything stays in the Contact Panel.
+- **Layout** (the Skills pattern; `support_files/contact/` is a reference for layout and feel only, not a look to copy):
+  - The heading sits on the Panel's `#5c8b70`. Below it, one `#d1dcd9` band (What I do's color) holds both columns, because body text on `#5c8b70` reaches only about 3:1 (Unit 1).
+  - Desktop: left column "Remote, worldwide" (globe icon), then the profile links (LinkedIn, Xing) between two rules, then the Contact notice; right column the form.
+  - Below 840px: one CSS grid reorders the same markup: "Remote, worldwide" and the links, then the form fields, then the Contact notice right above the submit button.
+  - Fonts: Amethysta for content, Playfair Display for headings and the field labels. Palette colors only.
+- **Profile links**: `ProfileLinks` moves from About's top card to `components/ui/profile-links/` (second consumer) and gains Xing (Simple Icons, CC0) and a `look` prop: About stays plain, Contact gets round icons with a hover ring. LinkedIn `https://www.linkedin.com/in/a-doo/`, Xing `https://www.xing.com/profile/Alexander_Doo`. About keeps LinkedIn and GitHub.
+- **Contact notice** (an `en` message, translatable): "I use these details only to reply to your request. They reach me by email and are not stored on this site or passed on to anyone."
+- **Form fields**, visible labels above each field (Playfair Display), required marked "*" with a "* required" line:
+  - name: required, at most 80 characters;
+  - company: required, at most 100;
+  - position: optional, one line, at most 120;
+  - contact ("How to reach you", hint "email, phone, LinkedIn, …"): optional, at most 200, free text in any channel, no format check.
+  - Values are trimmed and stripped of control characters; whitespace only counts as empty. zod checks them in the browser; the backend checks the same rules again.
+- **Form state shown to the Visitor**:
+  - A field is checked when it loses focus and again on submit, never on every keystroke. The error shows as text under the field (`aria-invalid`, `aria-describedby`).
+  - A character counter ("87 / 120") shows once a field passes 80% of its limit.
+  - Submit with errors moves focus to the first invalid field.
+  - While sending, the form is disabled and the button reads "Sending…".
+  - Success hides the form and shows "Thank you, {name}. I'll get back to you soon." A reload brings the form back.
+  - Any failure (422, failed human check, server or email error, network) brings the form back with its values and a generic "Your request wasn't sent. Please try again in {seconds} s.": submit stays locked for 10 s with a visible countdown.
+  - 429: "Too many requests from your connection. Please try again in a few minutes."
+  - Field errors: "Please enter your name.", "Please enter your company.", "At most {max} characters."
+  - While the backend is down, the form is disabled beside Unit 1's offline note; the links and the Contact notice stay.
+- **Human check**: ALTCHA (self-hosted proof of work, MIT; `altcha` on PyPI and npm), solved on submit, invisible, no third party, no cookies. Plus a hidden honeypot field (`website`): a filled honeypot gets a silent `204` and nothing is sent.
+- **Contract**:
+  - `GET /api/contact/challenge`: an ALTCHA challenge signed with `ALTCHA_HMAC_KEY`.
+  - `POST /api/contact`, JSON `{ name, company, position?, contact?, altcha, website? }`.
+  - Responses: `204` sent, `422` invalid fields, `400` failed human check, `429` limit reached, `502` the email could not be sent.
+  - The zod schema lives in `services/contact/` and the `ContactRequest` type is derived from it; the backend's Pydantic model mirrors fields and limits. Contract tests on both sides.
+- **Email**:
+  - Sent through Gmail SMTP (`smtp.gmail.com:587`, STARTTLS) from a dedicated Gmail account with an app password, to the Owner's mailbox. No confirmation email to the Visitor, no phone push.
+  - Subject "Contact request: {name}, {company}" (CR/LF stripped).
+  - Plain-text body: each field and the time in Europe/Berlin. `Reply-To` is the contact field when it parses as an email address.
+  - Settings come from the environment: `GOOGLE_APP_PASSWORD`, `MAIL_FROM`, `MAIL_TO`, `SMTP_HOST`, `SMTP_PORT`. Locally they're in the git-ignored `backend/.env`; in Unit 8 they move to Secret Manager. Addresses never go into the repo.
+  - The SMTP login and a test email to the Owner were proved from local on 2026-11-19. End-to-end proof is the first email sent from the deployed site (Unit 8).
+- **Rate limit**, in the FastAPI app, free tier:
+  - Cloud Run's front end (Google Front End) has no configurable rate limiting, and Cloud Armor needs a paid load balancer.
+  - On `/api/contact`, 5 requests per 15 minutes per IP, plus 100 a day site-wide, which protects the Gmail sending quota. Both answer `429`.
+  - The client IP is the last `X-Forwarded-For` entry. Counters live in memory only, so Cloud Run runs at most one instance (a Unit 8 note). Unit 7 sets its own limit for `/api/chat`.
+- **Region**: `europe-west3` (Frankfurt) for the Cloud Run service (Unit 8).
+- **Tests**: no test sends real email. The pytest suite and the E2E backend point `SMTP_HOST`/`SMTP_PORT` at a local fake SMTP server (`aiosmtpd`) and check what arrived.
 
-**Sub-unit breakdown**: 4.0 `ContactRequest` Pydantic model ↔ TS type + contract tests; 4.x form, `POST /api/contact`, storage module over Firestore (emulator locally, ADR 0002), email notification, human check + rate limit, legal texts; 4.N E2E submitting a request against the running backend.
+**Sub-unit breakdown**: 4.0 contracts: the zod schema ↔ Pydantic model, the challenge response and the status codes, contract tests on both sides; 4.1 `ProfileLinks` to `components/ui/` with Xing and the ring look; 4.2 Contact layout: heading, band, columns, the mobile grid order, the Contact notice, offline state; 4.3 the form component: fields, labels, zod rules, errors and counters, the sending / success / failure-with-countdown states, against a mocked service; 4.4 `services/contact`: challenge and submit client; 4.5 backend `POST /api/contact`: validation, honeypot, ALTCHA challenge and verification; 4.6 backend mailer module (Gmail SMTP) and the email format; 4.7 backend rate limit (per IP and site-wide); 4.N E2E submitting a request against the running backend with the fake SMTP server, plus the 429 and failure paths. Order: 4.0 and 4.1 first; 4.2 after 4.1; 4.3 and 4.4 after 4.0; 4.5 and 4.6 after 4.0; 4.7 after 4.5; 4.N after all.
 
-**Definition of Done**: a submitted request is stored and the Owner gets an email; bots and floods are rejected.
-
-**Open**: human-check provider (it goes into the Privacy policy); email sending service.
+**Definition of Done**: a sent Contact request reaches the Owner by email and nothing is stored; bots (failed human check, filled honeypot) and floods (429) are rejected; E2E green.
 
 ## Unit 5: What I do
 
@@ -212,6 +246,6 @@ Reference: the expanded menu of codepen `fluxus/gPWvZm` (local copy in git-ignor
 
 ## Unit 8: Deploy
 
-**Objective**: run the site on Google Cloud: the SPA, the FastAPI backend, Firestore and the Agent.
+**Objective**: run the site on Google Cloud: the SPA, the FastAPI backend and the Agent. Unit 4 needs: `europe-west3`, at most one Cloud Run instance (in-memory rate limit), the mail settings in Secret Manager, and a first email sent from the deployed site.
 
 **Open**: hosting services, domain, secrets, CI/CD.

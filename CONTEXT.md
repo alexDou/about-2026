@@ -96,17 +96,13 @@ _Avoid_: interest, passion
 ### Contact
 
 **Contact request**:
-What a Visitor leaves for the Owner: an optional name, a company, an optional short position
-description and a way to reach them.
+What a Visitor sends the Owner: a name and a company, and optionally a short position
+description and a way to reach them. It reaches the Owner by email and is never kept by the site.
 _Avoid_: lead, message, inquiry
 
-**Legal notice**:
-The Owner's name and postal address that German law requires the site to show.
-_Avoid_: Impressum, imprint
-
-**Privacy policy**:
-The statement of which personal data the site collects, why, and for how long.
-_Avoid_: Datenschutz, data policy
+**Contact notice**:
+The line beside the Contact request form that tells the Visitor how their details are used.
+_Avoid_: privacy policy, consent, disclaimer
 
 ### Chat
 
