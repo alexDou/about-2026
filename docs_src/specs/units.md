@@ -197,12 +197,12 @@ Reference: the expanded menu of codepen `fluxus/gPWvZm` (local copy in git-ignor
   - 429: "Too many requests from your connection. Please try again in a few minutes."
   - Field errors: "Please enter your name.", "Please enter your company.", "At most {max} characters."
   - While the backend is down, the form is disabled beside Unit 1's offline note; the links and the Contact notice stay.
-- **Human check**: ALTCHA (self-hosted proof of work, MIT; `altcha` on PyPI and npm), solved on submit, invisible, no third party, no cookies. Plus a hidden honeypot field (`website`): a filled honeypot gets a silent `204` and nothing is sent.
+- **Human check**: ALTCHA (self-hosted proof of work, MIT): the `altcha` widget from npm in the form, the `altcha` library from PyPI on the backend. Solved on submit, invisible, no third party, no cookies. Plus a hidden honeypot field (`website`): a filled honeypot gets a silent `204` and nothing is sent.
 - **Contract**:
   - `GET /api/contact/challenge`: an ALTCHA challenge signed with `ALTCHA_HMAC_KEY`. The key is a random secret the Owner generates (`openssl rand -hex 32`). ALTCHA self-hosted has no account and no provider key, so the backend signs the challenge and checks the signature with this key. Changing the key only makes challenges already out fail.
   - `POST /api/contact`, JSON `{ name, company, position?, contact?, altcha, website? }`.
   - Responses: `204` sent, `422` invalid fields, `400` failed human check, `429` limit reached, `502` the email could not be sent.
-  - The zod schema lives in `services/contact/` and the `ContactRequest` type is derived from it; the backend's Pydantic model mirrors fields and limits. Contract tests on both sides.
+  - The Contact client sits in the existing API service beside the health check, with a POST helper next to its GET helper. The zod schema lives there and the `ContactRequest` type is derived from it; the backend's Pydantic model mirrors fields and limits. Contract tests on both sides.
 - **Email**:
   - Sent through Gmail SMTP (`smtp.gmail.com:587`, STARTTLS) from a dedicated Gmail account with an app password, to the Owner's mailbox. No confirmation email to the Visitor, no phone push.
   - Subject "Contact request: {name}, {company}" (CR/LF stripped).
@@ -214,11 +214,15 @@ Reference: the expanded menu of codepen `fluxus/gPWvZm` (local copy in git-ignor
   - On `/api/contact`, 5 requests per 15 minutes per IP, plus 100 a day site-wide, which protects the Gmail sending quota. Both answer `429`.
   - The client IP is the last `X-Forwarded-For` entry. Counters live in memory only, so Cloud Run runs at most one instance (a Unit 8 note). Unit 7 sets its own limit for `/api/chat`.
 - **Region**: `europe-west3` (Frankfurt) for the Cloud Run service (Unit 8).
-- **Tests**: no test sends real email. The pytest suite and the E2E backend point `SMTP_HOST`/`SMTP_PORT` at a local fake SMTP server (`aiosmtpd`) and check what arrived.
+- **Tests**: no test starts a server or a fake service (no fake SMTP, no fake mailbox, no fake store). Every module is tested against the contracts of what it depends on, with those dependencies mocked:
+  - Backend: endpoint tests call the app in process (FastAPI's test client) with the mailer, the human check and the clock replaced through dependency overrides. The mailer's own tests mock the SMTP client and check the message it is handed.
+  - Frontend: component tests mock the API client (or `fetch`) and the ALTCHA widget; the countdown runs on fake timers.
+  - E2E (Unit 4 deviates from the AGENTS.md Stage Final here, by the Owner's decision): the frontend build with `/api/*` stubbed by Playwright routes along the contract, as `offline.feature` already does. No running backend.
+  - Being hard to test is never a reason to drop or bend a feature: the test mocks the dependency instead.
 
-**Sub-unit breakdown**: 4.0 contracts: the zod schema ↔ Pydantic model, the challenge response and the status codes, contract tests on both sides; 4.1 `ProfileLinks` to `components/ui/` with Xing and the ring look; 4.2 Contact layout: heading, band, columns, the mobile grid order, the Contact notice, offline state; 4.3 the form component: fields, labels, zod rules, errors and counters, the sending / success / failure-with-countdown states, against a mocked service; 4.4 `services/contact`: challenge and submit client; 4.5 backend `POST /api/contact`: validation, honeypot, ALTCHA challenge and verification; 4.6 backend mailer module (Gmail SMTP) and the email format; 4.7 backend rate limit (per IP and site-wide); 4.N E2E submitting a request against the running backend with the fake SMTP server, plus the 429 and failure paths. Order: 4.0 and 4.1 first; 4.2 after 4.1; 4.3 and 4.4 after 4.0; 4.5 and 4.6 after 4.0; 4.7 after 4.5; 4.N after all.
+**Sub-unit breakdown**: 4.0 contracts: the zod schema ↔ Pydantic model, the challenge response and the status codes, contract tests on both sides; 4.1 `ProfileLinks` to `components/ui/` with Xing and the ring look; 4.2 Contact layout: heading, band, columns, the mobile grid order, the Contact notice, offline state; 4.3 the form component: fields, labels, zod rules, errors and counters, the sending / success / failure-with-countdown states, against a mocked service; 4.4 the Contact client in the API service: challenge and submit; 4.5 backend `POST /api/contact`: validation, honeypot, ALTCHA challenge and verification; 4.6 backend mailer module (Gmail SMTP) and the email format; 4.7 backend rate limit (per IP and site-wide); 4.N E2E on the frontend build with the backend stubbed along the contract: sending, field errors, 429, failure with the countdown, offline. Order: 4.0 and 4.1 first; 4.2 after 4.1; 4.3 and 4.4 after 4.0; 4.5 and 4.6 after 4.0; 4.7 after 4.5; 4.N after all.
 
-**Definition of Done**: a sent Contact request reaches the Owner by email and nothing is stored; bots (failed human check, filled honeypot) and floods (429) are rejected; E2E green.
+**Definition of Done**: a sent Contact request reaches the Owner by email and nothing is stored; bots (failed human check, filled honeypot) and floods (429) are rejected; unit, component and E2E tests green.
 
 ## Unit 5: What I do
 
