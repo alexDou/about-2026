@@ -11,6 +11,6 @@ export type ContactPanelContent = {
 
 export type ContactPanelProps = {
   content: ContactPanelContent;
-  /** The form column. */
+  /** The form: it places itself in the grid's `fields` and `submit` areas. */
   children?: OctaneNode;
 };

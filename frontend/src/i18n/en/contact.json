@@ -1,4 +1,66 @@
 {
+  "contact.form.company.label": [
+    {
+      "type": 0,
+      "value": "Company"
+    }
+  ],
+  "contact.form.contact.hint": [
+    {
+      "type": 0,
+      "value": "email, phone, LinkedIn, …"
+    }
+  ],
+  "contact.form.contact.label": [
+    {
+      "type": 0,
+      "value": "How to reach you"
+    }
+  ],
+  "contact.form.name.label": [
+    {
+      "type": 0,
+      "value": "Name"
+    }
+  ],
+  "contact.form.position.label": [
+    {
+      "type": 0,
+      "value": "Position"
+    }
+  ],
+  "contact.form.required": [
+    {
+      "type": 0,
+      "value": "* required"
+    }
+  ],
+  "contact.form.send": [
+    {
+      "type": 0,
+      "value": "Send"
+    }
+  ],
+  "contact.form.sending": [
+    {
+      "type": 0,
+      "value": "Sending…"
+    }
+  ],
+  "contact.form.thanks": [
+    {
+      "type": 0,
+      "value": "Thank you, "
+    },
+    {
+      "type": 1,
+      "value": "name"
+    },
+    {
+      "type": 0,
+      "value": ". I'll get back to you soon."
+    }
+  ],
   "contact.notice": [
     {
       "type": 0,

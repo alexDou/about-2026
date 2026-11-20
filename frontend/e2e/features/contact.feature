@@ -10,7 +10,18 @@ Feature: Contact Panel layout
     And the Contact band says "I use these details only to reply to your request."
     And the Contact left column stands beside the form column
 
-  Scenario: On a phone the remote line, the links, the form and the notice stack in that order
+  Scenario: On a phone the remote line, the links, the form and the notice stack in that order, the notice right above the button
     Given the window is 390 by 800
     When I open "/contact"
-    Then the Contact items stack down the page in the order "remote, links, form, notice"
+    Then the Contact items stack down the page in the order "remote, links, form, notice, submit"
+
+  Scenario: A Visitor sends a Contact request
+    Given the backend is up
+    And the backend accepts Contact requests
+    When I open "/contact"
+    And I fill in "Name" with "Ada Lovelace"
+    And I fill in "Company" with "Analytical Engines"
+    And I press "Send"
+    Then the Contact form says "Thank you, Ada Lovelace. I'll get back to you soon."
+    And the form is gone
+    And the backend received a Contact request from "Ada Lovelace" at "Analytical Engines"

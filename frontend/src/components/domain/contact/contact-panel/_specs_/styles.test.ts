@@ -36,4 +36,16 @@ describe("contact-panel stylesheet", () => {
     expect(narrow).toMatch(/grid-template-columns:\s*1fr\b/);
     expect(narrow).toMatch(/grid-template-areas:/);
   });
+
+  it("puts the notice right above the button on a phone", () => {
+    const narrow = css.slice(css.indexOf("@media (width < 840px)"));
+    const areas = narrow.match(/grid-template-areas:([^;]*);/)?.[1] ?? "";
+    expect([...areas.matchAll(/"([^"]+)"/g)].map((match) => match[1])).toEqual([
+      "remote",
+      "links",
+      "fields",
+      "notice",
+      "submit",
+    ]);
+  });
 });

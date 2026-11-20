@@ -12,4 +12,16 @@ export const CONTACT_CONTENT: ContactContent = {
   remote: "contact.remote",
   profiles: [profile("linkedin"), profile("xing")],
   notice: "contact.notice",
+  form: {
+    fields: {
+      name: { label: "contact.form.name.label" },
+      company: { label: "contact.form.company.label" },
+      position: { label: "contact.form.position.label" },
+      contact: { label: "contact.form.contact.label", hint: "contact.form.contact.hint" },
+    },
+    required: "contact.form.required",
+    send: "contact.form.send",
+    sending: "contact.form.sending",
+    thanks: "contact.form.thanks",
+  },
 };

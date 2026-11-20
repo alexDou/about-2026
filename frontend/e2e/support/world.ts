@@ -43,6 +43,8 @@ export class PortfolioWorld extends World {
   transition?: RecordedTransition;
   /** How many times the stubbed backend has answered (`offline.steps.ts`). */
   apiAnswers = 0;
+  /** The bodies of the Contact requests the stubbed backend received (`contact.steps.ts`). */
+  contactRequests: unknown[] = [];
 
   url(path = "/"): string {
     return new URL(path, baseUrl).href;

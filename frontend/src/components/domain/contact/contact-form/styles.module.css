@@ -1,0 +1,52 @@
+/*
+ * The form's box disappears so that its fields and its button are items of the panel's grid, which
+ * places them (ContactPanel's stylesheet).
+ */
+.contact-form {
+  display: contents;
+}
+
+/* A fieldset is only the group that disables its fields in one go: no border, no inset. */
+.contact-form__fields {
+  display: grid;
+  align-content: start;
+  gap: var(--element-distance-standard);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.contact-form__required {
+  margin: 0;
+  font-size: 0.875em;
+}
+
+.contact-form__send {
+  justify-self: start;
+  padding: 0.75rem 2rem;
+  border: 0.125rem solid var(--text-on-light);
+  border-radius: 999rem;
+  background: var(--panel-about);
+  color: var(--text-on-dark);
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.contact-form__send:focus-visible {
+  outline: 0.125rem solid var(--panel-contact);
+  outline-offset: 0.125rem;
+}
+
+.contact-form__send:disabled {
+  cursor: progress;
+  opacity: 0.7;
+}
+
+.contact-form__thanks {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+}

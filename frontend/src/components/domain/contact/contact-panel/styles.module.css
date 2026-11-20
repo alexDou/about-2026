@@ -1,15 +1,19 @@
 /*
  * One band with the items in a grid. The markup runs in the order of a phone; a wide screen places
- * the same items in two columns, the form beside the other three.
+ * the same items in two columns, the form beside the other three. The form is `display: contents`;
+ * the panel puts its fieldset (or the thank-you note that replaces the form) in the `fields` area
+ * and its button in `submit`, so on a phone the notice sits right above the button. Grid area names
+ * are local to a stylesheet, hence the panel picks the form's elements by type.
  */
 .contact-panel {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-areas:
-    "remote form"
-    "links form"
-    "notice form";
-  grid-template-rows: auto auto 1fr;
+    "remote fields"
+    "links fields"
+    "notice fields"
+    ". submit";
+  grid-template-rows: auto auto 1fr auto;
   gap: var(--element-distance-standard) 3rem;
   padding: 2rem 3rem;
   border-radius: 1.75rem;
@@ -42,8 +46,18 @@
   border-block: 0.0625rem solid currentColor;
 }
 
+/* The form's wrapper has no box of its own either. */
 .contact-panel__form {
-  grid-area: form;
+  display: contents;
+}
+
+.contact-panel__form > form > fieldset,
+.contact-panel__form > output {
+  grid-area: fields;
+}
+
+.contact-panel__form > form > button {
+  grid-area: submit;
 }
 
 .contact-panel__notice {
@@ -57,8 +71,9 @@
     grid-template-areas:
       "remote"
       "links"
-      "form"
-      "notice";
+      "fields"
+      "notice"
+      "submit";
     grid-template-rows: none;
     padding: var(--element-distance-standard);
   }

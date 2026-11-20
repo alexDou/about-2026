@@ -11,3 +11,10 @@ export const CONTACT_STATUS = {
   limitReached: 429,
   emailNotSent: 502,
 } as const;
+
+/** What a Contact request came to, as the form shows it. */
+export const CONTACT_OUTCOME = {
+  sent: "sent",
+  invalidFields: "invalidFields",
+  failed: "failed",
+} as const;

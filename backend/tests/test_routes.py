@@ -1,12 +1,17 @@
 import asyncio
 import json
+from datetime import UTC, datetime
+from unittest.mock import AsyncMock
 
+from app.dependencies import Dependencies
 from app.http import ApiRequest, ApiResponse
 from app.routes import dispatch
 
+DEPENDENCIES = Dependencies(mailer=AsyncMock(), clock=lambda: datetime(2026, 11, 20, tzinfo=UTC))
+
 
 def call(method: str, path: str) -> ApiResponse:
-    return asyncio.run(dispatch(ApiRequest(method=method, path=path)))
+    return asyncio.run(dispatch(ApiRequest(method=method, path=path), DEPENDENCIES))
 
 
 def test_health_answers_ok_as_json() -> None:
