@@ -5,7 +5,7 @@
 Decoupled frontend/backend architecture following Clean Architecture & Ousterhout Deep Modules:
 
 - **Frontend (`frontend/`)**: Octane SPA (React-style, compiled) · components in TSRX (`.tsrx`) · TypeScript 7 type-checked by tsrs · Rspack bundler · Oxc for TS stripping, minify, lint (`oxlint`) and format (`oxfmt`), both served by `@tsrx/oxc` · CSS Modules · Vitest · Cucumber + Playwright. Package manager: pnpm only.
-- **Backend (`backend/`)**: Python 3.13 · FastAPI · uv · pytest · ruff. All routes under `/api`; the frontend dev server proxies `/api` to `:8000`.
+- **Backend (`backend/`)**: a Python Worker on Cloudflare (Python 3.14 on Pyodide, ADR 0006) · no web framework, a plain route table · Pydantic · uv + `pywrangler` · pytest · ruff. All routes under `/api`; the frontend dev server proxies `/api` to `:8787` (`uv run pywrangler dev`).
 - **Contract**: JSON over HTTP. No codegen: each side owns its types and they match field for field (`.claude/rules/api-contract.md`).
 
 ## Development Methodology

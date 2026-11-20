@@ -30,7 +30,7 @@ rules:
           - pattern: $APP.add_api_websocket_route(...)
     paths:
       include:
-        - /backend/app/
+        - /backend/src/
 
   - id: backend-exception-text-in-response
     languages: [python]
@@ -55,7 +55,7 @@ rules:
           - pattern: return <... $ERR ...>
     paths:
       include:
-        - /backend/app/
+        - /backend/src/
 
   - id: backend-cors-wildcard
     languages: [python]
@@ -74,7 +74,7 @@ rules:
               regex: ^\^?\.[*+]\$?$
     paths:
       include:
-        - /backend/app/
+        - /backend/src/
 
   - id: backend-request-data-in-outbound-url
     languages: [python]
@@ -113,4 +113,4 @@ rules:
           - focus-metavariable: $URL
     paths:
       include:
-        - /backend/app/
+        - /backend/src/

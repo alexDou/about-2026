@@ -22,7 +22,7 @@ Never write production code before the design is in the bean and the user has ap
 
 ## Phase 1: Grilling
 
-Check the bean against the code in `frontend/src/` and `backend/app/`:
+Check the bean against the code in `frontend/src/` and `backend/src/app/`:
 
 1. **Boundaries:**
    - New or changed `/api` endpoint? Then the contract changes on both sides (`.claude/rules/api-contract.md`).

@@ -15,7 +15,7 @@ Opengrep (https://github.com/opengrep/opengrep, LGPL-2.1, Semgrep-compatible rul
 
 - One rules file per area, each with a fixture file of the same base name next to it: `frontend.yml` + `frontend.tsx`, `backend.yml` + `backend.py`. `opengrep test .opengrep/rules` checks them in the gate.
 - Every rule has a `# ruleid:` case for each pattern and at least one `# ok:` case for the closest safe code. A rule without fixtures can match nothing and still pass.
-- Each rule's `paths.include` names the code it guards (`/frontend/src/`, `/backend/app/`), so the fixtures themselves are never scanned as project code.
+- Each rule's `paths.include` names the code it guards (`/frontend/src/`, `/backend/src/`), so the fixtures themselves are never scanned as project code.
 - Messages say what to do instead, in one or two sentences.
 - Generic Python checks (eval, pickle, `yaml.load`, `shell=True`, hardcoded passwords) are ruff's `S` rules (`backend/pyproject.toml`). Write Opengrep rules only for what is specific to this app.
 - A false positive is fixed in the rule, with an `# ok:` fixture for it. A `noopengrep` comment needs the user's OK.

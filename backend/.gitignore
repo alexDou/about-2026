@@ -2,3 +2,8 @@
 __pycache__
 .pytest_cache
 .ruff_cache
+# pywrangler / wrangler
+.venv-workers
+python_modules
+.wrangler
+.dev.vars*
