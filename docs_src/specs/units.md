@@ -1,6 +1,6 @@
 # Portfolio Units (Vertical Walking Skeletons)
 
-Each unit is a complete, test-verified end-to-end slice: the Octane frontend (`frontend/`), plus the FastAPI backend (`backend/`) where the unit needs one. Vocabulary: `CONTEXT.md`. Decisions: `docs/adr/`.
+Each unit is a complete, test-verified end-to-end slice: the Octane frontend (`frontend/`), plus the Python backend (`backend/`, a Cloudflare Worker, ADR 0006) where the unit needs one. Vocabulary: `CONTEXT.md`. Decisions: `docs/adr/`.
 
 ## Objectives
 
@@ -19,7 +19,7 @@ All unit specifications, task matrices, and ticket breakdowns follow a strict 3-
    - Where content is static frontend JSON (About, Skills, What I do): lock the TS type of the content and a `vitest` test that validates the JSON against it, including invariants such as 36 Takeovers.
    - Contract tests pass before any feature code starts.
 2. **Stage 1..N: Subsystem Modules in Isolation (`Unit X.1`, `X.2`, `X.3`, ...)**:
-   - Develop each module (FastAPI route, service, hook, component) against mocks built on the contracts.
+   - Develop each module (API route, service, hook, component) against mocks built on the contracts.
    - No running backend needed for frontend work and vice versa.
    - Verified hermetically with offline unit/component tests (`pytest`, `vitest`).
 3. **Stage Final: Connect Everything Together (`Unit X.N`)**:
@@ -170,9 +170,9 @@ Reference: the expanded menu of codepen `fluxus/gPWvZm` (local copy in git-ignor
 
 ## Unit 4: Contact
 
-**Objective**: the Contact Panel: "Remote, worldwide", the LinkedIn and Xing links, the Contact notice and the Contact request form. A sent Contact request reaches the Owner by email and is never stored (ADR 0005).
+**Objective**: the Contact Panel: "Remote, worldwide", the LinkedIn and Xing links, the Contact notice and the Contact request form. A sent Contact request reaches the Owner by email and is never stored (ADR 0005). The API runs as a Python Worker on Cloudflare (ADR 0006).
 
-**Decided** (grilling 2026-11-19):
+**Decided** (grilling 2026-11-19, amended 2026-11-20 for Cloudflare Workers):
 - **No Legal notice, no Privacy policy, no consent checkbox.** Only the Contact notice beside the form. No extra page or route: everything stays in the Contact Panel.
 - **Layout** (the Skills pattern; `support_files/contact/` is a reference for layout and feel only, not a look to copy):
   - The heading sits on the Panel's `#5c8b70`. Below it, one `#d1dcd9` band (What I do's color) holds both columns, because body text on `#5c8b70` reaches only about 3:1 (Unit 1).
@@ -204,23 +204,38 @@ Reference: the expanded menu of codepen `fluxus/gPWvZm` (local copy in git-ignor
   - Responses: `204` sent, `422` invalid fields, `400` failed human check, `429` limit reached, `502` the email could not be sent.
   - The Contact client sits in the existing API service beside the health check, with a POST helper next to its GET helper. The zod schema lives there and the `ContactRequest` type is derived from it; the backend's Pydantic model mirrors fields and limits. Contract tests on both sides.
 - **Email**:
-  - Sent through Gmail SMTP (`smtp.gmail.com:587`, STARTTLS) from a dedicated Gmail account with an app password, to the Owner's mailbox. No confirmation email to the Visitor, no phone push.
+  - Sent through the `send_email` binding of Cloudflare Email Service, to the Owner's mailbox. That mailbox is the account's only verified destination, so the binding cannot reach anyone else. No confirmation email to the Visitor, no phone push.
+  - The sender address is on the Owner's domain, added to Cloudflare with Email Routing in Unit 8.
+  - The binding is declared without a fixed address; the recipient and sender come from secrets, so no address goes into the repo.
   - Subject "Contact request: {name}, {company}" (CR/LF stripped).
   - Plain-text body: each field and the time in Europe/Berlin. `Reply-To` is the contact field when it parses as an email address.
-  - Settings come from the environment: `GOOGLE_APP_PASSWORD`, `MAIL_FROM`, `MAIL_TO`, `SMTP_HOST`, `SMTP_PORT`, plus `ALTCHA_HMAC_KEY` for the human check. Locally they're in the git-ignored `backend/.env` (the list is in `backend/README.md`); in Unit 8 they move to Secret Manager. Addresses and secrets never go into the repo.
-  - Proved from local on 2026-11-19: the SMTP login worked, and the test email from the mailer account reached the Owner's inbox, not spam. End-to-end proof is the first email sent from the deployed site (Unit 8).
-- **Rate limit**, in the FastAPI app, free tier:
-  - Cloud Run's front end (Google Front End) has no configurable rate limiting, and Cloud Armor needs a paid load balancer.
-  - On `/api/contact`, 5 requests per 15 minutes per IP, plus 100 a day site-wide, which protects the Gmail sending quota. Both answer `429`.
-  - The client IP is the last `X-Forwarded-For` entry. Counters live in memory only, so Cloud Run runs at most one instance (a Unit 8 note). Unit 7 sets its own limit for `/api/chat`.
-- **Region**: `europe-west3` (Frankfurt) for the Cloud Run service (Unit 8).
+  - Secrets: `MAIL_FROM`, `MAIL_TO`, `ALTCHA_HMAC_KEY`. Locally they're in the Worker's git-ignored secrets file (the list is in `backend/README.md`); deployed, they're Worker secrets (Unit 8).
+  - The Gmail account and its app password from 2026-11-19 are retired: the local SMTP proof no longer applies. End-to-end proof is the first email sent from the deployed site (Unit 8).
+- **Rate limit**, on Cloudflare's free plan:
+  - On `/api/contact`, 5 requests per 15 minutes per client IP, plus 100 a day site-wide. Both answer `429`.
+  - Durable Objects keep the exact counts: one object per hashed client IP (`CF-Connecting-IP`, set by Cloudflare) and one site-wide object. Each request first deletes the timestamps older than the window with one SQL statement, then counts. There are no alarms (not documented for Python Workers).
+  - In front of the Worker: Cloudflare's automatic DDoS protection, and the free plan's one WAF rate-limiting rule on `/api/*` per IP over 10 seconds (Unit 8, needs the domain).
+  - The free plan never bills. Past 100k Worker requests a day, `/api` answers errors until 00:00 UTC, while the SPA (static assets, free and unlimited) stays up and shows the offline note. The Owner accepts that remaining case.
+  - Unit 7 sets its own limit for `/api/chat`.
 - **Tests**: no test starts a server or a fake service (no fake SMTP, no fake mailbox, no fake store). Every module is tested against the contracts of what it depends on, with those dependencies mocked:
-  - Backend: endpoint tests call the app in process (FastAPI's test client) with the mailer, the human check and the clock replaced through dependency overrides. The mailer's own tests mock the SMTP client and check the message it is handed.
+  - Backend: pytest in plain CPython. The handlers, the human check, the mailer and the rate limiter are plain Python modules. Only a thin entry module imports the Workers runtime (`workers`). Endpoint tests call the route table in process with the env bindings (email, Durable Objects), the human check and the clock mocked along their contracts. The mailer's own tests check the message it hands the `send_email` binding.
   - Frontend: component tests mock the API client (or `fetch`) and the ALTCHA widget; the countdown runs on fake timers.
   - E2E (Unit 4 deviates from the AGENTS.md Stage Final here, by the Owner's decision): the frontend build with `/api/*` stubbed by Playwright routes along the contract, as `offline.feature` already does. No running backend.
   - Being hard to test is never a reason to drop or bend a feature: the test mocks the dependency instead.
 
-**Sub-unit breakdown**: 4.0 contracts: the zod schema ↔ Pydantic model, the challenge response and the status codes, contract tests on both sides; 4.1 `ProfileLinks` to `components/ui/` with Xing and the ring look; 4.2 Contact layout: heading, band, columns, the mobile grid order, the Contact notice, offline state; 4.3 the form component: fields, labels, zod rules, errors and counters, the sending / success / failure-with-countdown states, against a mocked service; 4.4 the Contact client in the API service: challenge and submit; 4.5 backend `POST /api/contact`: validation, honeypot, ALTCHA challenge and verification; 4.6 backend mailer module (Gmail SMTP) and the email format; 4.7 backend rate limit (per IP and site-wide); 4.N E2E on the frontend build with the backend stubbed along the contract: sending, field errors, 429, failure with the countdown, offline. Order: 4.0 and 4.1 first; 4.2 after 4.1; 4.3 and 4.4 after 4.0; 4.5 and 4.6 after 4.0; 4.7 after 4.5; 4.N after all.
+**Sub-unit breakdown** (tickets, vertical slices):
+- 4.0a (portfolio-1b3v), the backend becomes a Python Worker: the route table, `/api/health`, `pywrangler dev`, the rules and AGENTS.md.
+- 4.0, contracts: the zod schema ↔ Pydantic model, the challenge response and the status codes.
+- 4.1, shared profile links with Xing.
+- 4.2, the Contact Panel layout.
+- 4.3, sending a Contact request (the tracer bullet: form, `POST /api/contact`, mailer).
+- 4.4, field feedback.
+- 4.5, failure and offline states.
+- 4.6, the human check and the honeypot.
+- 4.7, the rate limit in Durable Objects.
+- 4.N, Contact E2E and the Definition of Done.
+
+Order: 4.0a and 4.1 first; 4.0 after 4.0a; 4.2 after 4.1; 4.3 after 4.0 and 4.2; 4.4, 4.5 and 4.7 after 4.3; 4.6 after 4.3 and 4.5; 4.N after all. Beans: portfolio-tn1x (spec), the stage beans are children of portfolio-yxux.
 
 **Definition of Done**: a sent Contact request reaches the Owner by email and nothing is stored; bots (failed human check, filled honeypot) and floods (429) are rejected; unit, component and E2E tests green.
 
@@ -242,7 +257,7 @@ Reference: the expanded menu of codepen `fluxus/gPWvZm` (local copy in git-ignor
 
 ## Unit 7: Chat
 
-**Objective**: the Chat with me Panel: an Agent that answers Visitors about the Owner from its Knowledge (Panel content, Vault, Interview answers) and keeps a Memory of Visitors and their conversations. The browser talks only to the backend (`/api/chat`); the backend talks to the Agent, hosted on Google's agent platform (free tier).
+**Objective**: the Chat with me Panel: an Agent that answers Visitors about the Owner from its Knowledge (Panel content, Vault, Interview answers) and keeps a Memory of Visitors and their conversations. The browser talks only to the backend (`/api/chat`, the Worker of ADR 0006); the Worker talks to the Agent, built with Google ADK and run on Cloud Run's free tier (decided in Unit 4's grilling: ADK for the experience of it, plus its guardrails, governance and token management). The Worker → Cloud Run lock is designed here.
 
 **Design**: the chat sits on a `#d1dcd9` surface, because palette text reaches only about 3:1 on the Panel's `#4c839f` (Unit 1). While the backend is down, Unit 1's offline note takes the chat's place.
 
@@ -250,6 +265,18 @@ Reference: the expanded menu of codepen `fluxus/gPWvZm` (local copy in git-ignor
 
 ## Unit 8: Deploy
 
-**Objective**: run the site on Google Cloud: the SPA, the FastAPI backend and the Agent. Unit 4 needs: `europe-west3`, at most one Cloud Run instance (in-memory rate limit), the mail settings in Secret Manager, and a first email sent from the deployed site.
+**Objective**: run the site: the SPA as static assets and the API as a Python Worker on Cloudflare's free plan (ADR 0006), the Agent on Google Cloud (Unit 7).
 
-**Open**: hosting services, domain, secrets, CI/CD.
+**From Unit 4**:
+- The Owner's domain on Cloudflare, with Email Routing and the Owner's mailbox verified as a destination.
+- The Worker secrets (`MAIL_FROM`, `MAIL_TO`, `ALTCHA_HMAC_KEY`).
+- The WAF rate-limiting rule on `/api/*`.
+- Checks and prototypes, all here:
+  - CPU time per request under the free plan's 10 ms (fallback: the same design as a TypeScript Worker);
+  - `altcha` and Pydantic under Pyodide;
+  - Durable Object SQL counting;
+  - `send_email` from the Worker;
+  - WAF-blocked requests not counting toward the Worker's daily quota;
+  - the first email sent from the deployed site.
+
+**Open**: the domain name, CI/CD, and the Agent's Google Cloud setup (Unit 7).

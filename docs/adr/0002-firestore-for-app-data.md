@@ -1,5 +1,5 @@
 ---
-status: superseded by ADR-0005 for Contact requests; Agent storage is decided in Unit 7
+status: superseded by ADR-0005 (Contact requests are not stored) and ADR-0006 (the API runs on Cloudflare Workers); Agent storage is decided in Unit 7
 ---
 
 # Firestore for app data

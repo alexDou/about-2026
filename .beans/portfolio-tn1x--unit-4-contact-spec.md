@@ -10,7 +10,7 @@ updated_at: 2026-11-19T13:36:34Z
 parent: portfolio-yxux
 ---
 
-Full design: the Unit 4 section of `docs_src/specs/units.md` (grilling 2026-11-19). Vocabulary: `CONTEXT.md`. Decision: ADR 0005 (Contact requests are emailed, not stored).
+Full design: the Unit 4 section of `docs_src/specs/units.md` (grilling 2026-11-19). Vocabulary: `CONTEXT.md`. Decisions: ADR 0005 (Contact requests are emailed, not stored), ADR 0006 (the API runs as a Python Worker on Cloudflare's free plan). Amended 2026-11-20 for ADR 0006.
 
 ## Problem Statement
 
@@ -60,14 +60,15 @@ The Contact Panel shows "Remote, worldwide", the Owner's LinkedIn and Xing profi
 36. As the Owner, I want bots that fail the human check rejected (`400`), so that my inbox gets only real requests.
 37. As the Owner, I want a filled honeypot answered with a silent `204` and nothing sent, so that bots believe they succeeded and don't adapt.
 38. As the Owner, I want 5 requests per 15 minutes per IP, so that a real Visitor can retry but one source can't flood me.
-39. As the Owner, I want a site-wide cap of 100 requests a day, so that a flood from many IPs can't use up the mailer's Gmail quota.
-40. As the Owner, I want the client IP taken from the last `X-Forwarded-For` entry, so that a client can't forge its way past the limit.
+39. As the Owner, I want a site-wide cap of 100 requests a day, so that a flood from many IPs can't fill my inbox or use up the free plan's quotas.
+40. As the Owner, I want the client IP taken from `CF-Connecting-IP`, which Cloudflare sets, so that a client can't forge its way past the limit.
 41. As the Owner, I want CR/LF stripped from anything that goes into an email header, so that no one can inject headers.
 42. As the Owner, I want the backend to check every field rule again, so that a crafted request can't bypass the browser's checks.
 43. As the Owner, I want invalid fields answered with `422`, so that the API says clearly what it rejects.
-44. As the Owner, I want the mail settings and the ALTCHA key read from the environment, so that no address or secret ever lands in the repo.
+44. As the Owner, I want the mail addresses and the ALTCHA key kept as Worker secrets, so that no address or secret ever lands in the repo.
 45. As the Owner, I want the human check self-hosted with no third party and no cookies, so that the Contact notice stays true.
 46. As the Owner, I want About to keep its LinkedIn and GitHub links unchanged when the profile links become shared, so that About doesn't regress.
+47. As the Owner, I want the site to stay on Cloudflare's free plan and never be billed, so that a spike can at worst take `/api` down until midnight UTC while the site stays up with the offline note.
 
 ## Implementation Decisions
 
@@ -84,19 +85,19 @@ The Contact Panel shows "Remote, worldwide", the Owner's LinkedIn and Xing profi
   - The Contact page holds its content (the profile list, the message ids) and lays out the heading, the band and the two columns. Below 840px one CSS grid reorders the same markup.
   - All text is FormatJS messages in a Contact message file (`en`).
   - Fonts: Amethysta for content, Playfair Display for headings and labels. The palette tokens: heading on `#5c8b70`, the band `#d1dcd9`, text `#25363a`.
-- **Backend modules** (one package for the Contact area):
-  - The router: challenge and submit, with the order honeypot → field validation → rate limit → human check → mail.
+- **Backend modules** (a Python Worker with no framework, ADR 0006; one package for the Contact area):
+  - The route table hands each request to a handler, passing it the mailer, the human check, the rate limiter, the secrets and the clock. Only a thin entry module imports the Workers runtime.
+  - The Contact handlers: challenge and submit, with the order honeypot → field validation → rate limit → human check → mail.
   - A human-check module wrapping the `altcha` library: create a challenge and verify a payload.
-  - A mailer module: builds the message (subject, plain-text body, Europe/Berlin time, conditional Reply-To, header sanitizing) and sends it through SMTP with STARTTLS and a login. The settings come from the environment: `GOOGLE_APP_PASSWORD`, `MAIL_FROM`, `MAIL_TO`, `SMTP_HOST`, `SMTP_PORT`.
-  - A rate-limit module: in-memory sliding windows, 5 per 15 minutes per IP and 100 per day site-wide, with the clock injected. The client IP is the last `X-Forwarded-For` entry.
-  - Mailer, human check, rate limiter and clock reach the router as FastAPI dependencies, so tests replace them.
-- **Architecture**: no storage of any kind (ADR 0005, superseding ADR 0002 for Contact requests). Rate limiting lives in the app, because Cloud Run's front end has none and Cloud Armor needs a paid load balancer. So Cloud Run runs at most one instance (a Unit 8 note), in `europe-west3`.
+  - A mailer module: builds the message (subject, plain-text body, Europe/Berlin time, conditional Reply-To, header sanitizing) and sends it through the `send_email` binding. `MAIL_FROM` (on the Owner's domain) and `MAIL_TO` (the Owner's mailbox, the account's only verified destination) are Worker secrets.
+  - A rate-limit module: exact sliding windows in Durable Objects, 5 per 15 minutes per hashed client IP (`CF-Connecting-IP`) and 100 per day site-wide. Each request first deletes expired timestamps with one SQL statement, then counts; no alarms. The counting logic is a plain class; a thin Durable Object wrapper binds it to SQL storage.
+- **Architecture**: no storage of Contact requests (ADR 0005). The API, `/api/health` included, is a Python Worker on Cloudflare's free plan, and the SPA is its static assets (ADR 0006). In front of the Worker sit Cloudflare's DDoS protection and one WAF rate-limiting rule on `/api/*` (Unit 8). The Agent (Unit 7) is Google ADK on Cloud Run, called by the Worker.
 
 ## Testing Decisions
 
 - A good test checks external behaviour against a contract: what a module returns, renders, sends or refuses, given what its dependencies return. It never checks internals, exact paddings, margins or gaps (`.claude/rules/testing.md`). No test starts a server or builds a fake service (no fake SMTP, no fake mailbox, no fake store): each dependency is mocked along its contract. Being hard to test is never a reason to drop or bend a feature.
-- **Backend** (pytest, in process through FastAPI's test client, as `test_health.py` does):
-  - Endpoint tests replace the mailer, the human check, the limiter's clock and the settings through dependency overrides. They assert:
+- **Backend** (pytest in plain CPython; the Workers runtime is never imported by tested code):
+  - Endpoint tests call the route table in process with the mailer, the human check, the Durable Object stubs, the secrets and the clock mocked along their contracts. They assert:
     - the exact JSON of the challenge;
     - `204` with the mailer called once with the cleaned fields;
     - the silent `204` with the mailer not called for a honeypot;
@@ -104,7 +105,7 @@ The Contact Panel shows "Remote, worldwide", the Owner's LinkedIn and Xing profi
     - `400` when the human check rejects;
     - `429` on the 6th request in 15 minutes and on the 101st of a day, then passing again when the clock moves on;
     - `502` when the mailer raises.
-  - Mailer tests mock the SMTP client class and check STARTTLS, the login, the From/To/Subject/Reply-To headers, the CR/LF stripping, the body fields and the Berlin time.
+  - Mailer tests mock the `send_email` binding and check what it is handed: the From/To/Subject/Reply-To headers, the CR/LF stripping, the body fields and the Berlin time.
   - Human-check tests verify a payload solved with the `altcha` library's own solver, and reject a tampered or expired one.
   - Rate-limit tests drive the windows with an injected clock.
 - **Frontend** (Vitest with the Octane testing library):
@@ -128,14 +129,14 @@ The Contact Panel shows "Remote, worldwide", the Owner's LinkedIn and Xing profi
 - A Legal notice, a Privacy policy, a consent checkbox, or any extra page or route.
 - Storing Contact requests anywhere (database, bucket, logs of the fields).
 - A confirmation email to the Visitor; a phone push to the Owner.
-- Cloud Armor, a load balancer, an nginx sidecar.
+- Cloud Run for the API, Cloud Armor, a load balancer, an nginx sidecar, FastAPI or any web framework.
 - A free-text message field.
-- Deploying: Secret Manager, the one-instance setting, the region and the first email from the deployed site are Unit 8.
+- Deploying is Unit 8: the domain on Cloudflare with Email Routing, the Worker secrets, the WAF rule, and every check and prototype. That includes CPU time per request under 10 ms (fallback: a TypeScript Worker), `altcha` and Pydantic under Pyodide, Durable Object SQL, `send_email`, WAF-blocked requests not counting toward the quota, and the first email from the deployed site.
 - Chat's rate limit and storage (Unit 7).
 - Fixing the Cloud Skill overview that still names Firestore (a separate bean once Unit 7 decides storage).
 
 ## Further Notes
 
-- On 2026-11-19 the SMTP login worked locally and a test email from the mailer account reached the Owner's inbox, not spam. The local `backend/.env` holds all six settings (listed in `backend/README.md`).
-- Gmail's sending limit is about 500 a day; the site-wide cap of 100 keeps well under it.
+- The Gmail SMTP setup proved on 2026-11-19 is retired by ADR 0006. The secrets are listed in `backend/README.md`.
+- Ticket 4.0a turns the backend into a Python Worker before 4.0.
 - Profile URLs: LinkedIn `https://www.linkedin.com/in/a-doo/`, Xing `https://www.xing.com/profile/Alexander_Doo`.

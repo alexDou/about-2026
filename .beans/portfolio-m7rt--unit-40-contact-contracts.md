@@ -3,11 +3,14 @@
 title: 'Unit 4.0: Contact contracts'
 status: todo
 type: task
+priority: normal
 tags:
     - ready-for-agent
 created_at: 2026-11-19T13:42:25Z
-updated_at: 2026-11-19T13:42:25Z
+updated_at: 2026-11-20T12:30:26Z
 parent: portfolio-yxux
+blocked_by:
+    - portfolio-1b3v
 ---
 
 ## Parent
@@ -30,4 +33,4 @@ The Contact request and challenge contracts, locked on both sides before any fea
 
 ## Blocked by
 
-- None (can start immediately)
+- portfolio-1b3v Unit 4.0a: Backend becomes a Python Worker
