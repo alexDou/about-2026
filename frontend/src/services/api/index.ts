@@ -1,3 +1,12 @@
-export { ApiError, getJson } from "./client";
+export { ApiError, getJson, postJson } from "./client";
+export { CONTACT_LIMITS, CONTACT_STATUS } from "./config";
+export { contactRequestSchema } from "./contact-schema";
 export { fetchHealth } from "./health";
-export type { HealthResponse } from "./types";
+export type {
+  ChallengeParameters,
+  ChallengeResponse,
+  ContactRequest,
+  ContactStatus,
+  ErrorResponse,
+  HealthResponse,
+} from "./types";

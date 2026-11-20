@@ -24,8 +24,8 @@ The API is a Python Worker (Pyodide) with no web framework (ADR 0006). FastAPI, 
 ## API shape
 
 - Every route is a row in `ROUTES` (`src/app/routes.py`), keyed by method and exact path, and the path starts with `/api/`. An unknown path answers 404, a known path with another method 405.
-- A handler is `async def handler(request: ApiRequest) -> ApiResponse`. What it needs from the runtime (secrets, bindings, the clock) reaches it as plain arguments the route table passes, never as an import of the runtime.
-- Request and response bodies are Pydantic models, sent with `json_response(model)`. Never hand-build JSON strings or return untyped dicts.
+- A handler is `async def handler(request: ApiRequest) -> ApiResponse`. What it needs from the runtime (secrets, bindings, the clock) is handed over by `entry.py` as plain Python values and bound to the handler where the route table is built (a closure or `functools.partial`), never imported from the runtime. The first such handler (Unit 4.3) settles the exact shape.
+- Request and response bodies are Pydantic models, sent with `json_response(model)` (by alias, `None` fields left out: `api-contract.md`). Never hand-build JSON strings or return untyped dicts.
 - Errors: `error_response(status, detail)` with a stable, static `detail`. Never put raw exception text or tracebacks in a response. Log the detail server-side.
 - A response with an empty body is sent with no body (204 must have none).
 

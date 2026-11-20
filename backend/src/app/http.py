@@ -36,7 +36,8 @@ def json_response(
 ) -> ApiResponse:
     return ApiResponse(
         status=status,
-        body=model.model_dump_json(),
+        # Fields set to None are left out, as an optional `field?` is on the frontend.
+        body=model.model_dump_json(by_alias=True, exclude_none=True),
         headers={"content-type": "application/json", **(headers or {})},
     )
 
