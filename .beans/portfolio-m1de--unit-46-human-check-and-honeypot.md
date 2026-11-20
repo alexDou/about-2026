@@ -25,7 +25,7 @@ Bots are stopped without bothering the Visitor. GET /api/contact/challenge hands
 
 - [ ] GET /api/contact/challenge returns a challenge matching the contract
 - [ ] ALTCHA widget (npm altcha) in the form: invisible, solves on submit, no third party, no cookies
-- [ ] Backend verifies the payload with the altcha library behind a human-check dependency; 400 on a failed, tampered or expired payload
+- [ ] Backend verifies the payload with the altcha library (pure Python, loads in Pyodide) behind a human-check module passed to the handler; 400 on a failed, tampered or expired payload
 - [ ] 400 shown as the generic failure with the countdown
 - [ ] Honeypot field hidden from Visitors and assistive tech; filled → silent 204, mailer not called
 - [ ] Order in the router: honeypot, field validation, rate limit slot reserved for 4.7, human check, mail

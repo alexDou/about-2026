@@ -1,6 +1,6 @@
 # Contact requests are emailed, not stored
 
-A Contact request goes straight from `POST /api/contact` to the Owner's mailbox through Gmail SMTP. The backend keeps nothing: no database, no file, no log of the fields. The Owner only needs to read and answer requests, and email already does that. A site that keeps no Visitor data also needs no storage module, no retention rule and no Privacy policy, only the Contact notice beside the form. This supersedes ADR 0002 for Contact requests. Storage for the Agent is decided in Unit 7.
+A Contact request goes straight from `POST /api/contact` to the Owner's mailbox by email (the `send_email` binding, ADR 0006). The backend keeps nothing: no database, no file, no log of the fields. The Owner only needs to read and answer requests, and email already does that. A site that keeps no Visitor data also needs no storage module, no retention rule and no Privacy policy, only the Contact notice beside the form. This supersedes ADR 0002 for Contact requests. Storage for the Agent is decided in Unit 7.
 
 ## Considered Options
 
@@ -11,4 +11,4 @@ A Contact request goes straight from `POST /api/contact` to the Owner's mailbox 
 ## Consequences
 
 - If the email fails, the request is lost. The Visitor sees the failure (`502`) and sends again after a 10-second countdown, so nothing is silently dropped.
-- The rate limit keeps its counters in memory and holds no IP beyond them, so Cloud Run runs at most one instance.
+- The rate limit's counts (Durable Objects keyed by a hashed client IP, ADR 0006) are not Contact requests. They hold only timestamps inside their window and drop older ones on every request.
