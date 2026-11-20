@@ -16,10 +16,37 @@ beforeEach(() => {
 afterEach(resetHealth);
 
 describe("ContactPage", () => {
-  it("shows only its heading, titled by the Panel's message", () => {
-    const { container } = render(ContactPage, { props: {}, wrapper: intlWrapper() });
+  it("opens with its heading, titled by the Panel's message", () => {
+    render(ContactPage, { props: {}, wrapper: intlWrapper() });
     expect(screen.getByRole("heading", { level: 1, name: "Contact" })).toBeInTheDocument();
-    expect(container).toHaveTextContent(/^Contact$/);
+  });
+
+  it("says the Owner works remotely, worldwide, under the heading", () => {
+    render(ContactPage, { props: {}, wrapper: intlWrapper() });
+    const heading = screen.getByRole("heading", { level: 1 });
+    expect(heading.compareDocumentPosition(screen.getByText("Remote, worldwide"))).toBe(
+      Node.DOCUMENT_POSITION_FOLLOWING,
+    );
+  });
+
+  it("links LinkedIn and Xing in that order", () => {
+    render(ContactPage, { props: {}, wrapper: intlWrapper() });
+    const links = screen.getAllByRole("link");
+    expect(
+      links.map((link) => [link.getAttribute("aria-label"), link.getAttribute("href")]),
+    ).toEqual([
+      ["LinkedIn", "https://www.linkedin.com/in/a-doo/"],
+      ["Xing", "https://www.xing.com/profile/Alexander_Doo"],
+    ]);
+  });
+
+  it("shows the Contact notice", () => {
+    render(ContactPage, { props: {}, wrapper: intlWrapper() });
+    expect(
+      screen.getByText(
+        "I use these details only to reply to your request. They reach me by email and are not stored on this site or passed on to anyone.",
+      ),
+    ).toBeInTheDocument();
   });
 
   it("takes the heading from the messages", () => {

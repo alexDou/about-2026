@@ -1,0 +1,26 @@
+{
+  "contact.notice": [
+    {
+      "type": 0,
+      "value": "I use these details only to reply to your request. They reach me by email and are not stored on this site or passed on to anyone."
+    }
+  ],
+  "contact.profile.linkedin.label": [
+    {
+      "type": 0,
+      "value": "LinkedIn"
+    }
+  ],
+  "contact.profile.xing.label": [
+    {
+      "type": 0,
+      "value": "Xing"
+    }
+  ],
+  "contact.remote": [
+    {
+      "type": 0,
+      "value": "Remote, worldwide"
+    }
+  ]
+}
