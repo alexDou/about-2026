@@ -26,6 +26,8 @@ export const CONTACT_CONTENT: ContactContent = {
     tooLong: "contact.form.tooLong",
     counter: "contact.form.counter",
     invalid: "contact.form.invalid",
+    failed: "contact.form.failed",
+    failedNow: "contact.form.failedNow",
     send: "contact.form.send",
     sending: "contact.form.sending",
     thanks: "contact.form.thanks",

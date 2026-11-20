@@ -63,3 +63,34 @@ Feature: Contact Panel layout
     And I press "Send"
     Then the page says "Some details were not accepted. Please check the form and try again."
     And the field "Name" holds "Ada Lovelace"
+
+  Scenario: When the email is not sent the form comes back with a countdown before Send works again
+    Given the backend is up
+    And the backend refuses Contact requests with 502
+    When I open "/contact"
+    And I fill in "Name" with "Ada Lovelace"
+    And I fill in "Company" with "Analytical Engines"
+    And I press "Send"
+    Then the failure notice counts down from 10 s
+    And the Send button is disabled
+    And the field "Name" holds "Ada Lovelace"
+    And the field "Company" holds "Analytical Engines"
+
+  Scenario: A network failure is handled in the same way
+    Given the backend is up
+    And Contact requests cannot reach the backend
+    When I open "/contact"
+    And I fill in "Name" with "Ada Lovelace"
+    And I fill in "Company" with "Analytical Engines"
+    And I press "Send"
+    Then the failure notice counts down from 10 s
+    And the Send button is disabled
+    And the field "Company" holds "Analytical Engines"
+
+  Scenario: With the backend down the form is disabled while the links and the notice stay
+    Given the backend is unreachable
+    When I open "/contact"
+    Then the offline note is shown
+    And the Contact form is disabled
+    And the Contact profile links are "LinkedIn, Xing"
+    And the Contact band says "I use these details only to reply to your request."

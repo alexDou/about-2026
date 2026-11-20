@@ -86,6 +86,13 @@ Given(
   },
 );
 
+Given("Contact requests cannot reach the backend", async function (this: PortfolioWorld) {
+  await this.page.route("**/api/contact", async (route) => {
+    this.contactRequests.push(route.request().postDataJSON());
+    await route.abort("connectionrefused");
+  });
+});
+
 When(
   "I fill in {string} with {string}",
   async function (this: PortfolioWorld, label: string, value: string) {
@@ -142,4 +149,26 @@ Then(
 
 Then("the backend received no Contact request", async function (this: PortfolioWorld) {
   expect(this.contactRequests).toHaveLength(0);
+});
+
+Then(
+  "the failure notice counts down from {int} s",
+  async function (this: PortfolioWorld, from: number) {
+    const notice = this.page.getByRole("alert");
+    await expect(notice).toHaveText(/^Your request wasn't sent\. Please try again in \d+ s\.$/);
+    const seconds = Number(/in (\d+) s/.exec((await notice.textContent()) ?? "")?.[1]);
+    expect(seconds).toBeLessThanOrEqual(from);
+    expect(seconds).toBeGreaterThan(0);
+  },
+);
+
+Then("the Send button is disabled", async function (this: PortfolioWorld) {
+  await expect(this.page.getByRole("button", { name: "Send" })).toBeDisabled();
+});
+
+Then("the Contact form is disabled", async function (this: PortfolioWorld) {
+  await expect(this.page.getByRole("button", { name: "Send" })).toBeDisabled();
+  for (const input of await this.page.getByRole("textbox").all()) {
+    await expect(input).toBeDisabled();
+  }
 });

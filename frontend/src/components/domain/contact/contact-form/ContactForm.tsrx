@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "octane";
+import { API_HEALTH, useApiHealth } from "../../api-status";
 import { useIntl } from "../../../../hooks/use-intl";
 import { CONTACT_LIMITS } from "../../../../services/api";
 import { ContactField } from "./contact-field";
@@ -14,9 +15,21 @@ import { characterCount, showsCounter } from "./utils";
  */
 export function ContactForm({ content }: ContactFormProps) @{
   const intl = useIntl();
-  const { values, status, errors, notice, focusRequest, sentName, setValue, leaveField, submit } =
-    useContactForm();
+  const {
+    values,
+    status,
+    errors,
+    notice,
+    retryIn,
+    focusRequest,
+    sentName,
+    setValue,
+    leaveField,
+    submit,
+  } = useContactForm();
   const sending = status === FORM_STATUS.sending;
+  // With the backend down nothing can be sent: the form waits, keeping what was typed.
+  const offline = useApiHealth() === API_HEALTH.down;
   // After a failed attempt to send, the first invalid field takes the focus.
   const inputs = useRef<Partial<Record<ContactFieldName, HTMLInputElement | null>>>({});
   useEffect(() => {
@@ -38,7 +51,7 @@ export function ContactForm({ content }: ContactFormProps) @{
     </output>;
   } @else {
     <form class={styles["contact-form"]} onSubmit={submit} noValidate>
-      <fieldset class={styles["contact-form__fields"]} disabled={sending}>
+      <fieldset class={styles["contact-form__fields"]} disabled={sending || offline}>
         @for (const field of CONTACT_FIELDS; key field.name) {
           <ContactField
             name={field.name}
@@ -79,7 +92,18 @@ export function ContactForm({ content }: ContactFormProps) @{
           {intl.formatMessage({ id: content.invalid })}
         </p>;
       }
-      <button class={styles["contact-form__send"]} type="submit" disabled={sending}>
+      @if (notice === FORM_NOTICE.failed) {
+        <p class={styles["contact-form__notice"]} role="alert">
+          {retryIn > 0
+            ? intl.formatMessage({ id: content.failed }, { seconds: retryIn })
+            : intl.formatMessage({ id: content.failedNow })}
+        </p>;
+      }
+      <button
+        class={styles["contact-form__send"]}
+        type="submit"
+        disabled={sending || offline || retryIn > 0}
+      >
         {intl.formatMessage({ id: sending ? content.sending : content.send })}
       </button>
     </form>;

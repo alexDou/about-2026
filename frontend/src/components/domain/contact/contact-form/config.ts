@@ -39,4 +39,8 @@ export const COUNTER_FROM = 0.8;
 /** What the form tells the Visitor about the last attempt, above the Send button. */
 export const FORM_NOTICE = {
   invalidFields: "invalidFields",
+  failed: "failed",
 } as const;
+
+/** After a request fails, Send stays locked this many seconds. */
+export const RETRY_SECONDS = 10;

@@ -34,6 +34,10 @@ export type ContactFormContent = {
   counter: MessageId;
   /** The notice for a request the backend refused as invalid. */
   invalid: MessageId;
+  /** The notice for a request that was not sent. Takes the `{seconds}` left before a retry. */
+  failed: MessageId;
+  /** The same, once the countdown is over. */
+  failedNow: MessageId;
   send: MessageId;
   sending: MessageId;
   /** Takes the `{name}`. */
