@@ -50,3 +50,8 @@
   font-family: var(--font-heading);
   font-size: 1.25rem;
 }
+
+.contact-form__notice {
+  margin: 0;
+  font-weight: 700;
+}
