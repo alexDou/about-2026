@@ -1,13 +1,13 @@
 ---
 # portfolio-m7rt
 title: 'Unit 4.0: Contact contracts'
-status: todo
+status: in-progress
 type: task
 priority: normal
 tags:
     - ready-for-agent
 created_at: 2026-11-19T13:42:25Z
-updated_at: 2026-11-20T12:30:26Z
+updated_at: 2026-11-20T12:53:14Z
 parent: portfolio-yxux
 blocked_by:
     - portfolio-1b3v

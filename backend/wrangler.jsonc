@@ -1,0 +1,11 @@
+{
+  // The API: a Python Worker with no web framework (ADR 0006).
+  "$schema": "https://unpkg.com/wrangler/config-schema.json",
+  "name": "portfolio-api",
+  "main": "src/entry.py",
+  // The date also picks the Python version (3.14 from 2026-09-08); keep .python-version in step.
+  "compatibility_date": "2026-11-20",
+  "compatibility_flags": ["python_workers"],
+  // `uv run pywrangler dev`; the frontend dev server proxies /api here.
+  "dev": { "ip": "127.0.0.1", "port": 8787 },
+}

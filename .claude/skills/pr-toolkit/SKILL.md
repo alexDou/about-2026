@@ -16,7 +16,7 @@ Use `gh` for all GitHub interactions. Commits and PRs are authored by the human 
    - `git status --porcelain` is empty.
    - `scripts/verify.sh` prints `verify: GREEN`.
    - UI-visible change → `pnpm --dir frontend e2e` passes.
-   - **Contract check:** if a route or Pydantic model in `backend/app/` changed, the matching types in `frontend/src/services/` changed in the same branch, and vice versa. Removing or renaming a field the frontend reads is breaking.
+   - **Contract check:** if a route or Pydantic model in `backend/src/app/` changed, the matching types in `frontend/src/services/` changed in the same branch, and vice versa. Removing or renaming a field the frontend reads is breaking.
 4. `git push -u origin HEAD`.
 5. `gh pr create --title "<type>(<scope>): <summary>" --body "<body>"`, body built from the beans (template below).
 6. Return the PR URL.

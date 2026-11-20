@@ -1,0 +1,33 @@
+lock-version = "1.0"
+created-by = "uv"
+requires-python = ">=3.14.2"
+
+[[packages]]
+name = "annotated-types"
+version = "0.8.0"
+wheels = [{ url = "https://files.pythonhosted.org/packages/99/91/8acff4f5e50511b911bbccb72b8628a49c68ce14148cd9f6431094859a90/annotated_types-0.8.0-py3-none-any.whl", upload-time = 2026-07-23T20:16:12Z, size = 13427, hashes = { sha256 = "f072f4d804ea359e4eaf198b1af7a8b0943881a87f31bb764f8bf219bb9419e0" } }]
+
+[[packages]]
+name = "pydantic"
+version = "2.14.4"
+wheels = [{ url = "https://files.pythonhosted.org/packages/8a/8c/824a686c4ba815ddb0722f9e66272088bccd4e1ae1d2f7015375e4a4fc7f/pydantic-2.14.4-py3-none-any.whl", upload-time = 2026-11-19T12:57:37Z, size = 494865, hashes = { sha256 = "653a2ad9f6d8858529c77c72717d0ea991d6c6837fe683246b2f4b2bbfc3fadc" } }]
+
+[[packages]]
+name = "pydantic-core"
+version = "2.50.5"
+wheels = [{ url = "https://files.pythonhosted.org/packages/83/47/375ab34f3907a0f40cebe2c3cea3e2c25dcf58e0f591991b85604b7258fc/pydantic_core-2.50.5-cp314-cp314-pyemscripten_2026_0_wasm32.whl", upload-time = 2026-11-19T12:55:05Z, size = 1496394, hashes = { sha256 = "b2910ec0fa5aeb9bef70156f2b79f4783978fdcfaa7b2f1b5d1814458d2e79a1" } }]
+
+[[packages]]
+name = "typing-extensions"
+version = "4.16.0"
+wheels = [{ url = "https://files.pythonhosted.org/packages/49/d3/b8441a820a491ddfc024b0b0cf0393375b75ea13866d9c66727e54c2fc80/typing_extensions-4.16.0-py3-none-any.whl", upload-time = 2026-07-02T08:40:04Z, size = 45571, hashes = { sha256 = "481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8" } }]
+
+[[packages]]
+name = "typing-inspection"
+version = "0.4.5"
+wheels = [{ url = "https://files.pythonhosted.org/packages/de/0c/ea2544850a7c135e15033a5c7a8e7211136184b7ae63e2239d557c2b3019/typing_inspection-0.4.5-py3-none-any.whl", upload-time = 2026-11-04T14:13:22Z, size = 14874, hashes = { sha256 = "bc210535442b39e1bf2805e0c7a17dfd6a4ace760c84c7f7d16245d23a6b1c39" } }]
+
+[[packages]]
+name = "workers-runtime-sdk"
+version = "1.9.6"
+wheels = [{ url = "https://files.pythonhosted.org/packages/58/e4/fffa3f6b3eb91b34dcc06f0b9de016cb90c156ae2a2e944054b02618e981/workers_runtime_sdk-1.9.6-py3-none-any.whl", upload-time = 2026-11-04T07:04:34Z, size = 41483, hashes = { sha256 = "f343880a9c1380dd9b340808df93d584ff3c77428f932e14f4a23c36b7bd1bdc" } }]

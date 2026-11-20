@@ -71,7 +71,7 @@ export default defineConfig((_env, argv) => {
     devServer: {
       port: 5173,
       historyApiFallback: true,
-      proxy: [{ context: ["/api"], target: "http://127.0.0.1:8000" }],
+      proxy: [{ context: ["/api"], target: "http://127.0.0.1:8787" }],
     },
   };
 });

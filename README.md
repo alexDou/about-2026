@@ -5,13 +5,13 @@ Portfolio site representing my abilities.
 | Part        | Stack |
 |-------------|-------|
 | `frontend/` | **Octane** SPA (React-style, compiled) · **TSRX** components (`.tsrx`) · TypeScript 7 checked by **tsrs** · **Rspack** bundler · Oxc for TS stripping + minify · CSS Modules · Vitest · Oxlint + Oxfmt via `@tsrx/oxc` · Playwright + Cucumber-js |
-| `backend/`  | Python 3.13 · FastAPI · uv · pytest · ruff |
+| `backend/`  | Python Worker on Cloudflare (Python 3.14, no framework) · Pydantic · uv + pywrangler · pytest · ruff |
 
 ## Run
 
 ```sh
-cd backend  && uv sync && uv run fastapi dev   # :8000
-cd frontend && pnpm install && pnpm dev        # Rspack dev server :5173, proxies /api -> :8000
+cd backend  && uv sync && uv run pywrangler dev   # :8787
+cd frontend && pnpm install && pnpm dev          # Rspack dev server :5173, proxies /api -> :8787
 ```
 
 ## Check

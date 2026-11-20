@@ -65,8 +65,8 @@ components/domain/project-card/
 - Unit tests sit in the chunk's `_specs_/` folder: `_specs_/<Name>.test.ts` or `_specs_/<file>.test.ts` (`.test.tsx` only when the test itself needs JSX). The same holds in `frontend/tools/`.
 - Media files (images, icons, videos) sit in the chunk's `media/` folder.
 - Frontend E2E (Cucumber + Playwright) lives in `frontend/e2e/{features,steps,support}/`.
-- Backend tests live in `backend/tests/`, mirroring `backend/app/` (`app/routes/projects.py` → `tests/routes/test_projects.py`).
+- Backend tests live in `backend/tests/`, mirroring `backend/src/app/` (`app/routes.py` → `tests/test_routes.py`, `app/contact/mailer.py` → `tests/contact/test_mailer.py`).
 
-## Backend layout (`backend/app/`)
+## Backend layout (`backend/src/app/`)
 
-Same colocation rule, Python-style: one module or package per feature area. A helper used by one router lives in that router's package. Shared code moves up to a shared module only when a second area needs it.
+Same colocation rule, Python-style: one module or package per feature area. A helper used by one handler's area lives in that area's package. `backend/src/entry.py` is the Worker's entry, outside `app/` (`.claude/rules/backend.md`). Shared code moves up to a shared module only when a second area needs it.
