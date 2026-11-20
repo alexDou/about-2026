@@ -1,12 +1,13 @@
 import type { MessageFormatElement } from "@formatjs/icu-messageformat-parser";
 import about from "./about.json";
+import contact from "./contact.json";
 import explore from "./explore.json";
 import landing from "./landing.json";
 import offline from "./offline.json";
 import site from "./site.json";
 import skills from "./skills.json";
 
-const files = { ...site, ...landing, ...explore, ...offline, ...about, ...skills };
+const files = { ...site, ...landing, ...explore, ...offline, ...about, ...skills, ...contact };
 
 /**
  * The English messages, one file per area, as FormatJS ASTs (`formatjs compile --ast`). They are the

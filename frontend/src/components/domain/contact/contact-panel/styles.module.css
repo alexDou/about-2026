@@ -1,0 +1,65 @@
+/*
+ * One band with the items in a grid. The markup runs in the order of a phone; a wide screen places
+ * the same items in two columns, the form beside the other three.
+ */
+.contact-panel {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas:
+    "remote form"
+    "links form"
+    "notice form";
+  grid-template-rows: auto auto 1fr;
+  gap: var(--element-distance-standard) 3rem;
+  padding: 2rem 3rem;
+  border-radius: 1.75rem;
+  background: var(--panel-what-i-do);
+  color: var(--text-on-light);
+}
+
+.contact-panel__remote {
+  grid-area: remote;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.contact-panel__globe {
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+}
+
+/* The links sit between two rules. */
+.contact-panel__links {
+  grid-area: links;
+  display: flex;
+  padding: 1rem 0;
+  border-block: 0.0625rem solid currentColor;
+}
+
+.contact-panel__form {
+  grid-area: form;
+}
+
+.contact-panel__notice {
+  grid-area: notice;
+  margin: 0;
+}
+
+@media (width < 840px) {
+  .contact-panel {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "remote"
+      "links"
+      "form"
+      "notice";
+    grid-template-rows: none;
+    padding: var(--element-distance-standard);
+  }
+}

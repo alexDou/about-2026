@@ -1,4 +1,6 @@
 .contact-page {
+  display: grid;
+  gap: var(--element-distance-standard);
   max-width: 60rem;
   margin: 0 auto;
   /* The room at the top clears the Expanded panel's close corner, which lies over the page. */
