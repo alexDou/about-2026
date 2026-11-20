@@ -5,7 +5,10 @@ import { intlWrapper } from "../../../i18n";
 import { fetchHealth } from "../../../services/api";
 import { ContactPage } from "../ContactPage.tsrx";
 
-vi.mock("../../../services/api", () => ({ fetchHealth: vi.fn<typeof fetchHealth>() }));
+vi.mock("../../../services/api", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("../../../services/api")>()),
+  fetchHealth: vi.fn<typeof fetchHealth>(),
+}));
 const fetchHealthMock = vi.mocked(fetchHealth);
 
 const NOTE = /backend is not reachable/i;

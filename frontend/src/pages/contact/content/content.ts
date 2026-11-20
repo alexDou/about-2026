@@ -14,12 +14,18 @@ export const CONTACT_CONTENT: ContactContent = {
   notice: "contact.notice",
   form: {
     fields: {
-      name: { label: "contact.form.name.label" },
-      company: { label: "contact.form.company.label" },
+      name: { label: "contact.form.name.label", requiredError: "contact.form.name.error" },
+      company: {
+        label: "contact.form.company.label",
+        requiredError: "contact.form.company.error",
+      },
       position: { label: "contact.form.position.label" },
       contact: { label: "contact.form.contact.label", hint: "contact.form.contact.hint" },
     },
     required: "contact.form.required",
+    tooLong: "contact.form.tooLong",
+    counter: "contact.form.counter",
+    invalid: "contact.form.invalid",
     send: "contact.form.send",
     sending: "contact.form.sending",
     thanks: "contact.form.thanks",

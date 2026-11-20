@@ -26,3 +26,17 @@ export const FORM_STATUS = {
  * backend does not check it yet.
  */
 export const HUMAN_CHECK_PENDING = "pending-unit-4.6";
+
+/** What can be wrong with a field. */
+export const FIELD_ERROR = {
+  required: "required",
+  tooLong: "tooLong",
+} as const;
+
+/** The counter shows once a field holds more than this share of its limit. */
+export const COUNTER_FROM = 0.8;
+
+/** What the form tells the Visitor about the last attempt, above the Send button. */
+export const FORM_NOTICE = {
+  invalidFields: "invalidFields",
+} as const;

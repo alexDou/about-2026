@@ -76,6 +76,16 @@ Given("the backend accepts Contact requests", async function (this: PortfolioWor
   });
 });
 
+Given(
+  "the backend refuses Contact requests with {int}",
+  async function (this: PortfolioWorld, status: number) {
+    await this.page.route("**/api/contact", async (route) => {
+      this.contactRequests.push(route.request().postDataJSON());
+      await route.fulfill({ status, json: { detail: "refused" } });
+    });
+  },
+);
+
 When(
   "I fill in {string} with {string}",
   async function (this: PortfolioWorld, label: string, value: string) {
@@ -102,3 +112,34 @@ Then(
     expect(this.contactRequests[0]).toMatchObject({ name, company });
   },
 );
+
+Then("the page says {string}", async function (this: PortfolioWorld, text: string) {
+  await expect(this.page.getByText(text)).toBeVisible();
+});
+
+Then("the page does not say {string}", async function (this: PortfolioWorld, text: string) {
+  await expect(this.page.getByText(text)).toBeHidden();
+});
+
+Then("the field {string} is in error", async function (this: PortfolioWorld, label: string) {
+  await expect(this.page.getByLabel(label)).toHaveAttribute("aria-invalid", "true");
+});
+
+Then("the field {string} has focus", async function (this: PortfolioWorld, label: string) {
+  await expect(this.page.getByLabel(label)).toBeFocused();
+});
+
+When("I leave the field {string}", async function (this: PortfolioWorld, label: string) {
+  await this.page.getByLabel(label).blur();
+});
+
+Then(
+  "the field {string} holds {string}",
+  async function (this: PortfolioWorld, label: string, value: string) {
+    await expect(this.page.getByLabel(label)).toHaveValue(value);
+  },
+);
+
+Then("the backend received no Contact request", async function (this: PortfolioWorld) {
+  expect(this.contactRequests).toHaveLength(0);
+});

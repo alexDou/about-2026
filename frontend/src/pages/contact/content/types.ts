@@ -16,12 +16,16 @@ export type ContactFormFieldKind = "name" | "company" | "position" | "contact";
 export type ContactFormField = {
   label: MessageId;
   hint?: MessageId;
+  requiredError?: MessageId;
 };
 
 /** What the form says: the labels of its fields and its buttons' texts. */
 export type ContactFormMessages = {
   fields: Record<ContactFormFieldKind, ContactFormField>;
   required: MessageId;
+  tooLong: MessageId;
+  counter: MessageId;
+  invalid: MessageId;
   send: MessageId;
   sending: MessageId;
   thanks: MessageId;

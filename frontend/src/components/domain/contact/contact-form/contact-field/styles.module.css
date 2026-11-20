@@ -25,3 +25,16 @@
 .contact-field__hint {
   font-size: 0.875em;
 }
+
+.contact-field__error {
+  font-weight: 700;
+}
+
+.contact-field__input[aria-invalid="true"] {
+  border-style: dashed;
+}
+
+.contact-field__counter {
+  justify-self: end;
+  font-size: 0.875em;
+}

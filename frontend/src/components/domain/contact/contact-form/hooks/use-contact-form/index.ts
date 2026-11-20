@@ -1,2 +1,2 @@
 export { useContactForm } from "./useContactForm";
-export type { ContactFormState } from "./types";
+export type { ContactFormState, FocusRequest } from "./types";

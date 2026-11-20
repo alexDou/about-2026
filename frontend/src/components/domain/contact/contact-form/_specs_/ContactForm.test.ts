@@ -13,12 +13,15 @@ const submitContactMock = vi.mocked(submitContact);
 
 const content: ContactFormProps["content"] = {
   fields: {
-    name: { label: "contact.form.name.label" },
-    company: { label: "contact.form.company.label" },
+    name: { label: "contact.form.name.label", requiredError: "contact.form.name.error" },
+    company: { label: "contact.form.company.label", requiredError: "contact.form.company.error" },
     position: { label: "contact.form.position.label" },
     contact: { label: "contact.form.contact.label", hint: "contact.form.contact.hint" },
   },
   required: "contact.form.required",
+  tooLong: "contact.form.tooLong",
+  counter: "contact.form.counter",
+  invalid: "contact.form.invalid",
   send: "contact.form.send",
   sending: "contact.form.sending",
   thanks: "contact.form.thanks",
@@ -135,4 +138,113 @@ describe("ContactForm", () => {
       expect(screen.getByLabelText(/^How to reach you/)).toHaveValue("ada@example.com");
     },
   );
+});
+
+const blur = (label: string | RegExp) => fireEvent.blur(screen.getByLabelText(label));
+
+describe("ContactForm field feedback", () => {
+  it("says nothing about a field while it is typed in", () => {
+    renderForm();
+    type(/^Name/, "   ");
+    expect(screen.queryByText("Please enter your name.")).not.toBeInTheDocument();
+    expect(screen.getByLabelText("Name *")).not.toBeInvalid();
+  });
+
+  it("names the missing field under it when it loses focus empty, and links the two", () => {
+    renderForm();
+    blur(/^Name/);
+    const input = screen.getByLabelText("Name *");
+    expect(input).toBeInvalid();
+    expect(input).toHaveAccessibleDescription("Please enter your name.");
+    expect(screen.getByText("Please enter your name.")).toBeInTheDocument();
+  });
+
+  it("asks for the company in its own words", () => {
+    renderForm();
+    blur(/^Company/);
+    expect(screen.getByText("Please enter your company.")).toBeInTheDocument();
+  });
+
+  it("counts whitespace only as empty", () => {
+    renderForm();
+    type(/^Name/, "   \t ");
+    blur(/^Name/);
+    expect(screen.getByText("Please enter your name.")).toBeInTheDocument();
+  });
+
+  it("accepts a field with spaces around the value", () => {
+    renderForm();
+    type(/^Name/, "  Ada ");
+    blur(/^Name/);
+    expect(screen.getByLabelText("Name *")).not.toBeInvalid();
+  });
+
+  it("leaves an optional field empty without a word", () => {
+    renderForm();
+    blur("Position");
+    expect(screen.getByLabelText("Position")).not.toBeInvalid();
+  });
+
+  it("names the limit of a field that is too long when it loses focus", () => {
+    renderForm();
+    type("Position", "x".repeat(121));
+    blur("Position");
+    expect(screen.getByText("At most 120 characters.")).toBeInTheDocument();
+    expect(screen.getByLabelText("Position")).toBeInvalid();
+  });
+
+  it("shows a counter once a field is past 80% of its limit", () => {
+    renderForm();
+    type(/^Name/, "x".repeat(64));
+    expect(screen.queryByText(/ \/ 80$/)).not.toBeInTheDocument();
+    type(/^Name/, "x".repeat(65));
+    expect(screen.getByText("65 / 80")).toBeInTheDocument();
+  });
+
+  it("counts characters as people see them, in code points", () => {
+    renderForm();
+    type(/^Name/, "😀".repeat(70));
+    expect(screen.getByText("70 / 80")).toBeInTheDocument();
+  });
+
+  it("on Send shows every error, sends nothing and focuses the first invalid field", async () => {
+    renderForm();
+    send();
+    expect(await screen.findByText("Please enter your name.")).toBeInTheDocument();
+    expect(screen.getByText("Please enter your company.")).toBeInTheDocument();
+    expect(submitContactMock).not.toHaveBeenCalled();
+    expect(screen.getByLabelText("Name *")).toHaveFocus();
+  });
+
+  it("focuses the company when only the company is missing, and again on the next try", async () => {
+    renderForm();
+    type(/^Name/, "Ada");
+    send();
+    await waitFor(() => expect(screen.getByLabelText("Company *")).toHaveFocus());
+    screen.getByRole("button", { name: "Send" }).focus();
+    send();
+    await waitFor(() => expect(screen.getByLabelText("Company *")).toHaveFocus());
+  });
+
+  it("answers a 422 with a generic notice and keeps what was typed", async () => {
+    submitContactMock.mockResolvedValue(CONTACT_OUTCOME.invalidFields);
+    renderForm();
+    fillRequired();
+    send();
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      "Some details were not accepted. Please check the form and try again.",
+    );
+    expect(screen.getByLabelText("Company *")).toHaveValue("Analytical Engines");
+  });
+
+  it("takes the notice away when the next try is on its way", async () => {
+    submitContactMock.mockResolvedValueOnce(CONTACT_OUTCOME.invalidFields);
+    renderForm();
+    fillRequired();
+    send();
+    await screen.findByRole("alert");
+    submitContactMock.mockReturnValue(new Promise(() => {}));
+    send();
+    await waitFor(() => expect(screen.queryByRole("alert")).not.toBeInTheDocument());
+  });
 });

@@ -1,9 +1,12 @@
+import { useEffect, useRef } from "octane";
 import { useIntl } from "../../../../hooks/use-intl";
+import { CONTACT_LIMITS } from "../../../../services/api";
 import { ContactField } from "./contact-field";
-import { CONTACT_FIELDS, FORM_STATUS } from "./config";
+import { CONTACT_FIELDS, FIELD_ERROR, FORM_NOTICE, FORM_STATUS } from "./config";
 import { useContactForm } from "./hooks/use-contact-form";
 import styles from "./styles.module.css";
-import type { ContactFormProps } from "./types";
+import type { ContactFieldName, ContactFormProps } from "./types";
+import { characterCount, showsCounter } from "./utils";
 
 /**
  * The Contact request form. While it sends, the fields and the button are disabled; once it is
@@ -11,8 +14,23 @@ import type { ContactFormProps } from "./types";
  */
 export function ContactForm({ content }: ContactFormProps) @{
   const intl = useIntl();
-  const { values, status, sentName, setValue, submit } = useContactForm();
+  const { values, status, errors, notice, focusRequest, sentName, setValue, leaveField, submit } =
+    useContactForm();
   const sending = status === FORM_STATUS.sending;
+  // After a failed attempt to send, the first invalid field takes the focus.
+  const inputs = useRef<Partial<Record<ContactFieldName, HTMLInputElement | null>>>({});
+  useEffect(() => {
+    if (focusRequest) inputs.current[focusRequest.field]?.focus();
+  }, [focusRequest]);
+
+  const errorText = (field: ContactFieldName) => {
+    const error = errors[field];
+    if (error === FIELD_ERROR.tooLong) {
+      return intl.formatMessage({ id: content.tooLong }, { max: CONTACT_LIMITS[field] });
+    }
+    const required = content.fields[field].requiredError;
+    return error && required ? intl.formatMessage({ id: required }) : undefined;
+  };
 
   @if (status === FORM_STATUS.sent) {
     <output class={styles["contact-form__thanks"]}>
@@ -32,14 +50,35 @@ export function ContactForm({ content }: ContactFormProps) @{
             }
             required={field.required}
             autoComplete={field.autoComplete}
+            error={errorText(field.name)}
+            counter={
+              showsCounter(field.name, values[field.name])
+                ? intl.formatMessage(
+                    { id: content.counter },
+                    {
+                      count: characterCount(values[field.name]),
+                      max: CONTACT_LIMITS[field.name],
+                    },
+                  )
+                : undefined
+            }
             value={values[field.name]}
             onValueInput={(value) => setValue(field.name, value)}
+            onLeave={() => leaveField(field.name)}
+            inputRef={(input) => {
+              inputs.current[field.name] = input;
+            }}
           />;
         }
         <p class={styles["contact-form__required"]}>
           {intl.formatMessage({ id: content.required })}
         </p>
       </fieldset>
+      @if (notice === FORM_NOTICE.invalidFields) {
+        <p class={styles["contact-form__notice"]} role="alert">
+          {intl.formatMessage({ id: content.invalid })}
+        </p>;
+      }
       <button class={styles["contact-form__send"]} type="submit" disabled={sending}>
         {intl.formatMessage({ id: sending ? content.sending : content.send })}
       </button>
