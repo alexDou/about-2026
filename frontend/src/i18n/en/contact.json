@@ -37,6 +37,26 @@
       "value": "max"
     }
   ],
+  "contact.form.failed": [
+    {
+      "type": 0,
+      "value": "Your request wasn't sent. Please try again in "
+    },
+    {
+      "type": 1,
+      "value": "seconds"
+    },
+    {
+      "type": 0,
+      "value": " s."
+    }
+  ],
+  "contact.form.failedNow": [
+    {
+      "type": 0,
+      "value": "Your request wasn't sent. Please try again."
+    }
+  ],
   "contact.form.invalid": [
     {
       "type": 0,

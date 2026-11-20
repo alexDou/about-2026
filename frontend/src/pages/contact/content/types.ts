@@ -26,6 +26,8 @@ export type ContactFormMessages = {
   tooLong: MessageId;
   counter: MessageId;
   invalid: MessageId;
+  failed: MessageId;
+  failedNow: MessageId;
   send: MessageId;
   sending: MessageId;
   thanks: MessageId;

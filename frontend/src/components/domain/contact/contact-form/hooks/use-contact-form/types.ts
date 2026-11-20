@@ -14,6 +14,8 @@ export type ContactFormState = {
   status: FormStatus;
   errors: ContactFieldErrors;
   notice: FormNotice | undefined;
+  /** Whole seconds before Send works again after a failure; 0 when it is free. */
+  retryIn: number;
   focusRequest: FocusRequest | undefined;
   /** The name the Visitor gave, once the request is sent. */
   sentName: string;

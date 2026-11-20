@@ -1,15 +1,18 @@
 import { act, fireEvent, render, screen, waitFor } from "@octanejs/testing-library";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { intlWrapper } from "../../../../../i18n";
-import { CONTACT_OUTCOME, submitContact } from "../../../../../services/api";
+import { CONTACT_OUTCOME, fetchHealth, submitContact } from "../../../../../services/api";
+import { resetHealth } from "../../../api-status";
 import { ContactForm } from "../ContactForm.tsrx";
 import type { ContactFormProps } from "../types";
 
 vi.mock("../../../../../services/api", async (importOriginal) => ({
   ...(await importOriginal<typeof import("../../../../../services/api")>()),
   submitContact: vi.fn<typeof submitContact>(),
+  fetchHealth: vi.fn<typeof fetchHealth>(),
 }));
 const submitContactMock = vi.mocked(submitContact);
+const fetchHealthMock = vi.mocked(fetchHealth);
 
 const content: ContactFormProps["content"] = {
   fields: {
@@ -22,6 +25,8 @@ const content: ContactFormProps["content"] = {
   tooLong: "contact.form.tooLong",
   counter: "contact.form.counter",
   invalid: "contact.form.invalid",
+  failed: "contact.form.failed",
+  failedNow: "contact.form.failedNow",
   send: "contact.form.send",
   sending: "contact.form.sending",
   thanks: "contact.form.thanks",
@@ -41,8 +46,13 @@ const send = () => fireEvent.click(screen.getByRole("button", { name: "Send" }))
 
 beforeEach(() => {
   submitContactMock.mockResolvedValue(CONTACT_OUTCOME.sent);
+  fetchHealthMock.mockResolvedValue({ status: "ok" });
 });
-afterEach(() => vi.clearAllMocks());
+afterEach(() => {
+  vi.clearAllMocks();
+  vi.useRealTimers();
+  resetHealth();
+});
 
 describe("ContactForm", () => {
   it("labels every field and marks the required ones with an asterisk", () => {
@@ -124,20 +134,17 @@ describe("ContactForm", () => {
     expect(screen.queryByRole("textbox")).not.toBeInTheDocument();
   });
 
-  it.each([CONTACT_OUTCOME.failed, CONTACT_OUTCOME.invalidFields])(
-    "brings the form back with the typed values when the outcome is %s",
-    async (outcome) => {
-      submitContactMock.mockResolvedValue(outcome);
-      renderForm();
-      fillRequired();
-      type(/^How to reach you/, "ada@example.com");
-      send();
-      const button = await screen.findByRole("button", { name: "Send" });
-      expect(button).toBeEnabled();
-      expect(screen.getByLabelText("Name *")).toHaveValue("  Ada Lovelace ");
-      expect(screen.getByLabelText(/^How to reach you/)).toHaveValue("ada@example.com");
-    },
-  );
+  it("brings the form back with the typed values, ready to send again, when the backend refuses the fields", async () => {
+    submitContactMock.mockResolvedValue(CONTACT_OUTCOME.invalidFields);
+    renderForm();
+    fillRequired();
+    type(/^How to reach you/, "ada@example.com");
+    send();
+    const button = await screen.findByRole("button", { name: "Send" });
+    expect(button).toBeEnabled();
+    expect(screen.getByLabelText("Name *")).toHaveValue("  Ada Lovelace ");
+    expect(screen.getByLabelText(/^How to reach you/)).toHaveValue("ada@example.com");
+  });
 });
 
 const blur = (label: string | RegExp) => fireEvent.blur(screen.getByLabelText(label));
@@ -246,5 +253,87 @@ describe("ContactForm field feedback", () => {
     submitContactMock.mockReturnValue(new Promise(() => {}));
     send();
     await waitFor(() => expect(screen.queryByRole("alert")).not.toBeInTheDocument());
+  });
+});
+
+/** Lets seconds pass one at a time: each tick is scheduled after the render of the one before. */
+const passSeconds = async (seconds: number) => {
+  for (let second = 0; second < seconds; second += 1) {
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(1000);
+    });
+  }
+};
+
+describe("ContactForm when sending fails", () => {
+  const fail = async () => {
+    submitContactMock.mockResolvedValueOnce(CONTACT_OUTCOME.failed);
+    fillRequired();
+    type("Position", "Staff engineer");
+    send();
+    return screen.findByRole("alert");
+  };
+
+  it("brings the form back with everything typed, a generic reason and a 10 s countdown", async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    renderForm();
+    const alert = await fail();
+    expect(alert).toHaveTextContent("Your request wasn't sent. Please try again in 10 s.");
+    expect(screen.getByLabelText("Name *")).toHaveValue("  Ada Lovelace ");
+    expect(screen.getByLabelText("Position")).toHaveValue("Staff engineer");
+  });
+
+  it("locks Send while the countdown runs, counting down each second", async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    renderForm();
+    const alert = await fail();
+    expect(screen.getByRole("button", { name: "Send" })).toBeDisabled();
+    await passSeconds(3);
+    expect(alert).toHaveTextContent("Please try again in 7 s.");
+    expect(screen.getByRole("button", { name: "Send" })).toBeDisabled();
+  });
+
+  it("lets the Visitor try again once the countdown is over, with the fields still theirs", async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    renderForm();
+    const alert = await fail();
+    await passSeconds(10);
+    expect(alert).toHaveTextContent("Your request wasn't sent. Please try again.");
+    expect(alert).not.toHaveTextContent(" s.");
+    expect(screen.getByRole("button", { name: "Send" })).toBeEnabled();
+    send();
+    expect(await screen.findByText(/^Thank you, Ada Lovelace/)).toBeInTheDocument();
+  });
+
+  it("keeps the fields editable during the countdown", async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    renderForm();
+    await fail();
+    expect(screen.getByLabelText("Name *")).toBeEnabled();
+  });
+
+  it("does not send during the countdown, even when the form is submitted", async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    renderForm();
+    await fail();
+    fireEvent.submit(screen.getByRole("button", { name: "Send" }).closest("form") as HTMLElement);
+    await act(async () => {});
+    expect(submitContactMock).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe("ContactForm while the backend is down", () => {
+  it("disables the fields and Send, keeping what is typed", async () => {
+    fetchHealthMock.mockRejectedValue(new TypeError("network"));
+    renderForm();
+    await waitFor(() => expect(screen.getByRole("button", { name: "Send" })).toBeDisabled());
+    for (const input of screen.getAllByRole("textbox")) expect(input).toBeDisabled();
+  });
+
+  it("is usable again once the backend answers", async () => {
+    fetchHealthMock.mockResolvedValue({ status: "ok" });
+    renderForm();
+    await act(async () => {});
+    expect(screen.getByRole("button", { name: "Send" })).toBeEnabled();
   });
 });

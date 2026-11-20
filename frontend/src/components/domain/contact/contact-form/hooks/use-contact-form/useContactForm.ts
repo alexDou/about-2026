@@ -10,9 +10,11 @@ import {
   FORM_NOTICE,
   FORM_STATUS,
   HUMAN_CHECK_PENDING,
+  RETRY_SECONDS,
 } from "../../config";
 import type { ContactFieldErrors, ContactFieldName, ContactFormValues } from "../../types";
 import { fieldError } from "../../utils";
+import { useCountdown } from "../use-countdown";
 import type { ContactFormState, FocusRequest } from "./types";
 
 const EMPTY_VALUES: ContactFormValues = {
@@ -30,6 +32,7 @@ export function useContactForm(): ContactFormState {
   const [notice, setNotice] = useState<ContactFormState["notice"]>(undefined);
   const [focusRequest, setFocusRequest] = useState<FocusRequest | undefined>(undefined);
   const [sentName, setSentName] = useState("");
+  const retry = useCountdown();
 
   function setValue(field: ContactFieldName, value: string) {
     setValues((current) => ({ ...current, [field]: value }));
@@ -41,7 +44,7 @@ export function useContactForm(): ContactFormState {
 
   async function submit(event: Event) {
     event.preventDefault();
-    if (status !== FORM_STATUS.editing) return;
+    if (status !== FORM_STATUS.editing || retry.remaining > 0) return;
     const found: ContactFieldErrors = {};
     for (const { name } of CONTACT_FIELDS) found[name] = fieldError(name, values[name]);
     setErrors(found);
@@ -60,9 +63,25 @@ export function useContactForm(): ContactFormState {
       setStatus(FORM_STATUS.sent);
       return;
     }
-    if (outcome === CONTACT_OUTCOME.invalidFields) setNotice(FORM_NOTICE.invalidFields);
+    if (outcome === CONTACT_OUTCOME.invalidFields) {
+      setNotice(FORM_NOTICE.invalidFields);
+    } else {
+      setNotice(FORM_NOTICE.failed);
+      retry.start(RETRY_SECONDS);
+    }
     setStatus(FORM_STATUS.editing);
   }
 
-  return { values, status, errors, notice, focusRequest, sentName, setValue, leaveField, submit };
+  return {
+    values,
+    status,
+    errors,
+    notice,
+    retryIn: retry.remaining,
+    focusRequest,
+    sentName,
+    setValue,
+    leaveField,
+    submit,
+  };
 }
