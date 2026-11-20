@@ -25,7 +25,8 @@
     "@tanstack/router-core": "1.171.34",
     "@tsrx/oxc": "0.23.0",
     "classnames": "2.5.1",
-    "octane": "0.16.7"
+    "octane": "0.16.7",
+    "zod": "4.6.7"
   },
   "devDependencies": {
     "@cucumber/cucumber": "^13.3.0",
