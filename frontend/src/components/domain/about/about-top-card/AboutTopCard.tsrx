@@ -1,6 +1,6 @@
 import { useIntl } from "../../../../hooks/use-intl";
 import { Portrait } from "./portrait";
-import { ProfileLinks } from "./profile-links";
+import { ProfileLinks } from "../../../ui/profile-links";
 import styles from "./styles.module.css";
 import type { AboutTopCardProps } from "./types";
 

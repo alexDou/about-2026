@@ -1,6 +1,6 @@
 import type { MessageId } from "../../../../i18n";
 import type { PortraitPhoto } from "./portrait";
-import type { Profile } from "./profile-links";
+import type { Profile } from "../../../ui/profile-links";
 
 /** What the card says, as message ids. */
 export type AboutTopCardContent = {
