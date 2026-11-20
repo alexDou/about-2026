@@ -1,5 +1,5 @@
 import type { z } from "zod";
-import type { CONTACT_STATUS } from "./config";
+import type { CONTACT_OUTCOME, CONTACT_STATUS } from "./config";
 import type { contactRequestSchema } from "./contact-schema";
 
 export type HealthResponse = {
@@ -13,6 +13,8 @@ export type ErrorResponse = {
 
 /** A cleaned Contact request, as `POST /api/contact` takes it. */
 export type ContactRequest = z.output<typeof contactRequestSchema>;
+
+export type ContactOutcome = (typeof CONTACT_OUTCOME)[keyof typeof CONTACT_OUTCOME];
 
 export type ContactStatus = (typeof CONTACT_STATUS)[keyof typeof CONTACT_STATUS];
 

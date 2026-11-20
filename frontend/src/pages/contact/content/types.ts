@@ -10,9 +10,27 @@ export type ContactProfile = {
   url: string;
 };
 
+export type ContactFormFieldKind = "name" | "company" | "position" | "contact";
+
+/** A form field's label, and its hint when it has one. */
+export type ContactFormField = {
+  label: MessageId;
+  hint?: MessageId;
+};
+
+/** What the form says: the labels of its fields and its buttons' texts. */
+export type ContactFormMessages = {
+  fields: Record<ContactFormFieldKind, ContactFormField>;
+  required: MessageId;
+  send: MessageId;
+  sending: MessageId;
+  thanks: MessageId;
+};
+
 /** What the Contact page says: which message each piece of it reads. */
 export type ContactContent = {
   remote: MessageId;
   profiles: readonly ContactProfile[];
   notice: MessageId;
+  form: ContactFormMessages;
 };

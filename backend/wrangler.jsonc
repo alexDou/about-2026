@@ -8,4 +8,6 @@
   "compatibility_flags": ["python_workers"],
   // `uv run pywrangler dev`; the frontend dev server proxies /api here.
   "dev": { "ip": "127.0.0.1", "port": 8787 },
+  // Contact request emails (ADR 0006). MAIL_FROM, MAIL_TO and ALTCHA_HMAC_KEY are secrets.
+  "send_email": [{ "name": "EMAIL" }],
 }

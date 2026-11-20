@@ -1,4 +1,4 @@
-import { Then } from "@cucumber/cucumber";
+import { Given, Then, When } from "@cucumber/cucumber";
 import { expect } from "@playwright/test";
 import type { PortfolioWorld } from "../support/world.ts";
 
@@ -12,8 +12,9 @@ const item = (world: PortfolioWorld, name: string) => {
   const items = {
     remote: band(world).getByText("Remote, worldwide"),
     links: band(world).getByRole("list"),
-    form: band(world).locator(":scope > *").nth(2),
+    form: band(world).locator("fieldset"),
     notice: band(world).getByText("I use these details only"),
+    submit: band(world).getByRole("button", { name: "Send" }),
   } as const;
   return items[name as keyof typeof items];
 };
@@ -64,5 +65,40 @@ Then(
       const next = boxes[i + 1];
       if (next) expect(current.y + current.height).toBeLessThanOrEqual(next.y + 1);
     }
+  },
+);
+
+Given("the backend accepts Contact requests", async function (this: PortfolioWorld) {
+  // Registered after the health stub, so it answers first for this path.
+  await this.page.route("**/api/contact", async (route) => {
+    this.contactRequests.push(route.request().postDataJSON());
+    await route.fulfill({ status: 204 });
+  });
+});
+
+When(
+  "I fill in {string} with {string}",
+  async function (this: PortfolioWorld, label: string, value: string) {
+    await this.page.getByLabel(label).fill(value);
+  },
+);
+
+When("I press {string}", async function (this: PortfolioWorld, name: string) {
+  await this.page.getByRole("button", { name }).click();
+});
+
+Then("the Contact form says {string}", async function (this: PortfolioWorld, text: string) {
+  await expect(this.page.getByRole("status").filter({ hasText: text })).toBeVisible();
+});
+
+Then("the form is gone", async function (this: PortfolioWorld) {
+  await expect(this.page.getByRole("button", { name: "Send" })).toHaveCount(0);
+});
+
+Then(
+  "the backend received a Contact request from {string} at {string}",
+  async function (this: PortfolioWorld, name: string, company: string) {
+    expect(this.contactRequests).toHaveLength(1);
+    expect(this.contactRequests[0]).toMatchObject({ name, company });
   },
 );

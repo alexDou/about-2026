@@ -7,6 +7,7 @@ import type { ContactPanelProps } from "./types";
  * The Contact Panel's band. Left: where the Owner works from, the profile links between two rules,
  * and the Contact notice. Right: the form, which the page passes in. The markup runs in the order
  * of a phone (remote line, links, form, notice); a wide screen places the same items in two columns.
+ * What it is given joins the panel's grid: its fieldset or note in `fields`, its button in `submit`.
  */
 export function ContactPanel({ content, children }: ContactPanelProps) @{
   const intl = useIntl();
