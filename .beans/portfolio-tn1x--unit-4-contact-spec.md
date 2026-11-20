@@ -1,12 +1,13 @@
 ---
 # portfolio-tn1x
 title: 'Unit 4: Contact spec'
-status: todo
+status: in-progress
 type: feature
+priority: normal
 tags:
     - ready-for-agent
 created_at: 2026-11-19T13:36:34Z
-updated_at: 2026-11-19T13:36:34Z
+updated_at: 2026-11-20T13:35:05Z
 parent: portfolio-yxux
 ---
 

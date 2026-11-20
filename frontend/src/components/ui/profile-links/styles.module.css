@@ -1,0 +1,60 @@
+/* A row of icon links, after the reference's social icons. */
+.profile-links {
+  display: flex;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.profile-links__link {
+  display: grid;
+  color: var(--text-on-light);
+}
+
+.profile-links__icon {
+  fill: currentColor;
+}
+
+/* Plain: the bare icon, which takes the Chat colour on hover (About). */
+.profile-links__link--plain {
+  padding: 0.25rem;
+  border-radius: 0.375rem;
+  transition: color 150ms ease;
+}
+
+.profile-links__link--plain:hover {
+  color: var(--panel-chat);
+}
+
+.profile-links__link--plain:focus-visible {
+  outline: 0.125rem solid var(--panel-chat);
+  outline-offset: 0.125rem;
+}
+
+.profile-links--plain .profile-links__icon {
+  width: 1.75rem;
+  height: 1.75rem;
+}
+
+/* Ring: a round icon that gets a ring in the Contact colour on hover and on keyboard focus. */
+.profile-links__link--ring {
+  padding: 0.625rem;
+  border-radius: 50%;
+  box-shadow: 0 0 0 0.125rem transparent;
+  transition: box-shadow 150ms ease;
+}
+
+.profile-links__link--ring:hover {
+  box-shadow: 0 0 0 0.125rem var(--panel-contact);
+}
+
+.profile-links__link--ring:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 0.125rem var(--panel-contact);
+}
+
+.profile-links--ring .profile-links__icon {
+  width: 1.5rem;
+  height: 1.5rem;
+}

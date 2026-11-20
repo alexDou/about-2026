@@ -13,11 +13,7 @@ const rule = (text: string, selector: string) =>
     new RegExp(`(?:^|\\n)${selector.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s*\\{([^}]*)\\}`),
   )?.[1] ?? "";
 
-const STYLESHEETS = [
-  "styles.module.css",
-  "portrait/styles.module.css",
-  "profile-links/styles.module.css",
-];
+const STYLESHEETS = ["styles.module.css", "portrait/styles.module.css"];
 
 describe("about-top-card stylesheets", () => {
   it.each(STYLESHEETS)("%s sizes nothing in px", (path) => {
