@@ -26,7 +26,7 @@ Feature: Landing and Explore routing
     Then I am on "/explore"
     When I go back
     Then I am on "/contact"
-    And the page heading reads "Contact"
+    And the page heading reads "Contact me"
     When I go back
     Then I am on "/skills"
     And the page heading reads "Skills"

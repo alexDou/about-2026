@@ -21,11 +21,17 @@ describe("profile-links stylesheet", () => {
     expect(list).toMatch(/gap:\s*[\d.]+rem/);
   });
 
-  it("makes the ring look round, with a ring on hover and on keyboard focus", () => {
+  it("makes the ring look a round icon whose colours swap on hover and on keyboard focus", () => {
     expect(rule(".profile-links__link--ring")).toMatch(/border-radius:\s*50%/);
-    expect(css).toMatch(/\.profile-links__link--ring:hover\s*\{[^}]*(?:box-shadow|outline|border)/);
     expect(css).toMatch(
-      /\.profile-links__link--ring:focus-visible\s*\{[^}]*(?:box-shadow|outline|border)/,
+      /\.profile-links__link--ring:hover,\s*\.profile-links__link--ring:focus-visible\s*\{[^}]*background/,
+    );
+  });
+
+  it("springs a ring out around the round icon on hover and on keyboard focus", () => {
+    expect(rule(".profile-links__link--ring::after")).toMatch(/opacity:\s*0/);
+    expect(css).toMatch(
+      /\.profile-links__link--ring:hover::after,\s*\.profile-links__link--ring:focus-visible::after\s*\{[^}]*opacity:\s*1[^}]*scale/,
     );
   });
 

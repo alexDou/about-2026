@@ -21,7 +21,6 @@ const content: ContactFormProps["content"] = {
     position: { label: "contact.form.position.label" },
     contact: { label: "contact.form.contact.label", hint: "contact.form.contact.hint" },
   },
-  required: "contact.form.required",
   tooLong: "contact.form.tooLong",
   counter: "contact.form.counter",
   invalid: "contact.form.invalid",
@@ -32,7 +31,9 @@ const content: ContactFormProps["content"] = {
   thanks: "contact.form.thanks",
 };
 
-const renderForm = () => render(ContactForm, { props: { content }, wrapper: intlWrapper() });
+const media: ContactFormProps["media"] = { send: "send.svg" };
+
+const renderForm = () => render(ContactForm, { props: { content, media }, wrapper: intlWrapper() });
 
 const type = (label: string | RegExp, value: string) =>
   fireEvent.input(screen.getByLabelText(label), { target: { value } });
@@ -63,12 +64,26 @@ describe("ContactForm", () => {
     expect(screen.getByLabelText(/^How to reach you/)).not.toBeRequired();
   });
 
-  it("says what the asterisk means and hints at the ways to reach the Visitor", () => {
+  it("hints at the ways to reach the Visitor", () => {
     renderForm();
-    expect(screen.getByText("* required")).toBeInTheDocument();
     expect(screen.getByLabelText(/^How to reach you/)).toHaveAccessibleDescription(
       "email, phone, LinkedIn, …",
     );
+  });
+
+  it("draws a paper plane in the Send button, which stays named by its text", () => {
+    renderForm();
+    const button = screen.getByRole("button", { name: "Send" });
+    expect(button.querySelector("use")?.getAttribute("href")).toBe("send.svg#icon");
+    expect(button.querySelector("svg")?.getAttribute("aria-hidden")).toBe("true");
+  });
+
+  it("puts every label beside its input, in the dark look of the Panel", () => {
+    renderForm();
+    for (const input of screen.getAllByRole("textbox")) {
+      expect(input.parentElement?.className).toContain("input-field--inline");
+      expect(input.parentElement?.className).toContain("input-field--dark");
+    }
   });
 
   it("lists the fields in order and ends with the Send button", () => {

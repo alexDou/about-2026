@@ -9,7 +9,7 @@ Feature: Offline note in Chat with me and Contact
     Examples:
       | path     | title        |
       | /chat    | Chat with me |
-      | /contact | Contact      |
+      | /contact | Contact me   |
 
   Scenario: The note shows when the Panel opens from Explore
     Given the backend is unreachable

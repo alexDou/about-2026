@@ -1,0 +1,32 @@
+/* An icon's file draws in currentColor, so the colour of the icon is the colour of its text. */
+.icon {
+  flex: none;
+  fill: currentColor;
+}
+
+.icon--small {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+.icon--medium {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.icon--large {
+  width: 1.75rem;
+  height: 1.75rem;
+}
+
+.icon--inherit {
+  color: inherit;
+}
+
+.icon--light {
+  color: var(--text-on-dark);
+}
+
+.icon--dark {
+  color: var(--text-on-light);
+}

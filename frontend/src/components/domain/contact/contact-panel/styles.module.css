@@ -1,28 +1,33 @@
 /*
- * One band with the items in a grid. The markup runs in the order of a phone; a wide screen places
- * the same items in two columns, the form beside the other three. The form is `display: contents`;
- * the panel puts its fieldset (or the thank-you note that replaces the form) in the `fields` area
- * and its button in `submit`, so on a phone the notice sits right above the button. Grid area names
+ * The form and the info block in a grid, centred on the page and no wider than their columns. A
+ * wide screen puts the form on the left, its button under it, and the info block on the right.
+ * The info block spans three rows around the fields' row (`1fr auto 1fr`, the button in the last),
+ * so that it stays centred against the fields however tall it is. On a narrow screen one column
+ * reorders the same markup: the info block's box disappears so that its items take their place
+ * among the form's. The form is `display: contents` too; the panel puts its fieldset (or the
+ * thank-you note that replaces the form) in `fields` and its button in `submit`. Grid area names
  * are local to a stylesheet, hence the panel picks the form's elements by type.
  */
 .contact-panel {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 34rem) minmax(0, 22rem);
+  grid-template-rows: 1fr auto 1fr;
   grid-template-areas:
-    "remote fields"
-    "links fields"
-    "notice fields"
-    ". submit";
-  grid-template-rows: auto auto 1fr auto;
-  gap: var(--element-distance-standard) 3rem;
-  padding: 2rem 3rem;
-  border-radius: 1.75rem;
-  background: var(--panel-what-i-do);
-  color: var(--text-on-light);
+    ". info"
+    "fields info"
+    "submit info";
+  justify-content: center;
+  gap: 0.9375rem 4rem;
+}
+
+.contact-panel__info {
+  grid-area: info;
+  align-self: center;
+  display: grid;
+  gap: var(--element-distance-standard);
 }
 
 .contact-panel__remote {
-  grid-area: remote;
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -30,20 +35,20 @@
   font-size: 1.25rem;
 }
 
-.contact-panel__globe {
-  width: 1.5rem;
-  height: 1.5rem;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.5;
+.contact-panel__notice {
+  margin: 0;
 }
 
 /* The links sit between two rules. */
 .contact-panel__links {
-  grid-area: links;
   display: flex;
   padding: 1rem 0;
   border-block: 0.0625rem solid currentColor;
+}
+
+.contact-panel__required {
+  margin: 0;
+  font-size: 0.875em;
 }
 
 /* The form's wrapper has no box of its own either. */
@@ -60,21 +65,38 @@
   grid-area: submit;
 }
 
-.contact-panel__notice {
-  grid-area: notice;
-  margin: 0;
-}
-
 @media (width < 840px) {
   .contact-panel {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 28rem);
     grid-template-areas:
       "remote"
-      "links"
       "fields"
+      "submit"
       "notice"
-      "submit";
+      "required"
+      "links";
     grid-template-rows: none;
-    padding: var(--element-distance-standard);
+    gap: var(--element-distance-standard);
+  }
+
+  .contact-panel__info {
+    display: contents;
+  }
+
+  /* The areas apply only here: on a wide screen the info block lays its own items out in a column. */
+  .contact-panel__remote {
+    grid-area: remote;
+  }
+
+  .contact-panel__notice {
+    grid-area: notice;
+  }
+
+  .contact-panel__links {
+    grid-area: links;
+  }
+
+  .contact-panel__required {
+    grid-area: required;
   }
 }

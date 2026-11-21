@@ -30,6 +30,14 @@
 
   --element-distance-standard: 1.8rem;
 
+  /*
+   * An input field with its label beside it (InputField): the label's column and the gap between
+   * the label and the input. A button under such fields lines up with their inputs by both. They
+   * are global because a CSS Module keeps its own custom properties to itself.
+   */
+  --input-field-label-size: 10.5rem;
+  --input-field-gap: 1rem;
+
   /* The height of a row's controls side by side (Skills: Expand all and Copy skills), 35px. */
   --control-height: 2.1875rem;
 
@@ -67,12 +75,15 @@
   --seq-stripe-fade: 400ms;
   --seq-expanded-fade: 150ms;
 
-  /* The Panels' and Stripes' titles. */
   --font-panel: "Overused Grotesk", system-ui, sans-serif;
-  /* The site's text. */
   --font-site: "Amethysta", serif;
-  /* About's greeting and section headings. */
   --font-heading: "Playfair Display", Georgia, serif;
+  --font-site-size: 1rem;
+  /*
+   * The site's text starting to progress() from 448px to 1280px
+  */
+  --font-site-size-progress: calc(var(--font-site-size) + 0.06rem * progress(100vw, 28rem, 80rem));
+
   --line-height-site: 1.4;
   --line-height-heading: 1.28;
 }

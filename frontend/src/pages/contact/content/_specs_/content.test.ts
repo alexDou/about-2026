@@ -11,8 +11,11 @@ describe("CONTACT_CONTENT", () => {
 
   it("reads every text from the Contact messages", () => {
     const ids = [
+      CONTACT_CONTENT.title,
+      CONTACT_CONTENT.subtitle,
       CONTACT_CONTENT.remote,
       CONTACT_CONTENT.notice,
+      CONTACT_CONTENT.required,
       ...CONTACT_CONTENT.profiles.map(({ label }) => label),
     ];
     expect(ids.every((id) => id.startsWith("contact."))).toBe(true);

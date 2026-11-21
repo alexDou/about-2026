@@ -2,8 +2,8 @@ import { Given, Then, When } from "@cucumber/cucumber";
 import { expect } from "@playwright/test";
 import type { PortfolioWorld } from "../support/world.ts";
 
-const BAND_BACKGROUND = "rgb(209, 220, 217)";
-const BAND_TEXT = "rgb(37, 54, 58)";
+const TRANSPARENT = "rgba(0, 0, 0, 0)";
+const LIGHT_TEXT = "rgb(209, 220, 217)";
 
 const band = (world: PortfolioWorld) => world.page.locator("main section > div").first();
 
@@ -15,6 +15,8 @@ const item = (world: PortfolioWorld, name: string) => {
     form: band(world).locator("fieldset"),
     notice: band(world).getByText("I use these details only"),
     submit: band(world).getByRole("button", { name: "Send" }),
+    required: band(world).getByText("* required"),
+    info: band(world).locator("> div").first(),
   } as const;
   return items[name as keyof typeof items];
 };
@@ -25,9 +27,9 @@ const box = async (world: PortfolioWorld, name: string) => {
   return found;
 };
 
-Then("the Contact band is light with dark text", async function (this: PortfolioWorld) {
-  await expect(band(this)).toHaveCSS("background-color", BAND_BACKGROUND);
-  await expect(band(this)).toHaveCSS("color", BAND_TEXT);
+Then("the Contact page has no band and its text is light", async function (this: PortfolioWorld) {
+  await expect(band(this)).toHaveCSS("background-color", TRANSPARENT);
+  await expect(item(this, "remote")).toHaveCSS("color", LIGHT_TEXT);
 });
 
 Then("the Contact band says {string}", async function (this: PortfolioWorld, text: string) {
@@ -45,28 +47,89 @@ Then(
   },
 );
 
+Then("the Contact form stands left of the other items", async function (this: PortfolioWorld) {
+  const form = await box(this, "form");
+  for (const name of ["remote", "links", "notice"]) {
+    const right = await box(this, name);
+    expect(form.x + form.width).toBeLessThanOrEqual(right.x + 1);
+  }
+});
+
 Then(
-  "the Contact left column stands beside the form column",
+  "the Contact info block is centred against the form's inputs",
   async function (this: PortfolioWorld) {
-    const form = await box(this, "form");
-    for (const name of ["remote", "links", "notice"]) {
-      const left = await box(this, name);
-      expect(left.x + left.width).toBeLessThanOrEqual(form.x + 1);
-    }
+    // The fields' block is as tall as the inputs with the hint under the last one; it has a row of its own.
+    const info = await box(this, "info");
+    const fields = await box(this, "form");
+    expect(info.y + info.height / 2).toBeCloseTo(fields.y + fields.height / 2, 0);
   },
 );
+
+const stack = async (world: PortfolioWorld, order: string) => {
+  const names = order.split(", ");
+  const boxes = await Promise.all(names.map((name) => box(world, name)));
+  for (const [i, current] of boxes.entries()) {
+    const next = boxes[i + 1];
+    if (next) expect(current.y + current.height).toBeLessThanOrEqual(next.y + 1);
+  }
+};
 
 Then(
   "the Contact items stack down the page in the order {string}",
   async function (this: PortfolioWorld, order: string) {
-    const names = order.split(", ");
-    const boxes = await Promise.all(names.map((name) => box(this, name)));
-    for (const [i, current] of boxes.entries()) {
-      const next = boxes[i + 1];
-      if (next) expect(current.y + current.height).toBeLessThanOrEqual(next.y + 1);
-    }
+    await stack(this, order);
   },
 );
+
+/** Every label of the form with the input it names. */
+const labelled = async (world: PortfolioWorld) => {
+  const labels = world.page.locator("form label");
+  const count = await labels.count();
+  expect(count).toBeGreaterThan(0);
+  return Promise.all(
+    Array.from({ length: count }, async (_, i) => {
+      const label = labels.nth(i);
+      const input = world.page.locator(`[id="${await label.getAttribute("for")}"]`);
+      const [labelBox, inputBox] = await Promise.all([label.boundingBox(), input.boundingBox()]);
+      if (!labelBox || !inputBox) throw new Error("A label or its input is not on screen");
+      return { labelBox, inputBox };
+    }),
+  );
+};
+
+Then("every Contact label stands beside its input", async function (this: PortfolioWorld) {
+  for (const { labelBox, inputBox } of await labelled(this)) {
+    expect(labelBox.x + labelBox.width).toBeLessThanOrEqual(inputBox.x + 1);
+    expect(labelBox.y).toBeLessThan(inputBox.y + inputBox.height);
+    expect(labelBox.y + labelBox.height).toBeGreaterThan(inputBox.y);
+  }
+});
+
+Then("every Contact label stands above its input", async function (this: PortfolioWorld) {
+  for (const { labelBox, inputBox } of await labelled(this)) {
+    expect(labelBox.y + labelBox.height).toBeLessThanOrEqual(inputBox.y + 1);
+  }
+});
+
+Then(
+  "the Send button stands under the inputs, as wide as they are",
+  async function (this: PortfolioWorld) {
+    const inputs = this.page.locator("form input");
+    const last = await inputs.last().boundingBox();
+    const submit = await box(this, "submit");
+    if (!last) throw new Error("The last input is not on screen");
+    expect(submit.y).toBeGreaterThanOrEqual(last.y + last.height - 1);
+    expect(submit.x).toBeCloseTo(last.x, 0);
+    expect(submit.width).toBeCloseTo(last.width, 0);
+  },
+);
+
+Then("the page heading is in capitals", async function (this: PortfolioWorld) {
+  await expect(this.page.getByRole("heading", { level: 1 })).toHaveCSS(
+    "text-transform",
+    "uppercase",
+  );
+});
 
 Given("the backend accepts Contact requests", async function (this: PortfolioWorld) {
   // Registered after the health stub, so it answers first for this path.

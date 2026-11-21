@@ -1,19 +1,39 @@
 Feature: Contact Panel layout
 
-  Scenario: On a desktop the links and the notice stand left of the form column
+  Scenario: On a desktop the form stands left of the info block, which is centred against the inputs
     Given the window is 1280 by 800
     When I open "/contact"
-    Then the page heading reads "Contact"
-    And the Contact band is light with dark text
+    Then the page heading reads "Contact me"
+    And the page heading is in capitals
+    And the page says "Let me know you're interested"
+    And the Contact page has no band and its text is light
     And the Contact band says "Remote, worldwide"
     And the Contact profile links are "LinkedIn, Xing"
     And the Contact band says "I use these details only to reply to your request."
-    And the Contact left column stands beside the form column
+    And the Contact band says "* required"
+    And the Contact form stands left of the other items
+    And the Contact info block is centred against the form's inputs
+    And the Contact items stack down the page in the order "remote, notice, links, required"
 
-  Scenario: On a phone the remote line, the links, the form and the notice stack in that order, the notice right above the button
+  Scenario: On a phone the remote line, the form with its button, the notice, the required line and the links stack in that order
     Given the window is 390 by 800
     When I open "/contact"
-    Then the Contact items stack down the page in the order "remote, links, form, notice, submit"
+    Then the Contact items stack down the page in the order "remote, form, submit, notice, required, links"
+
+  Scenario: On a desktop a label stands beside its input
+    Given the window is 1280 by 800
+    When I open "/contact"
+    Then every Contact label stands beside its input
+
+  Scenario: Under 568px a label stands above its input
+    Given the window is 560 by 800
+    When I open "/contact"
+    Then every Contact label stands above its input
+
+  Scenario: The Send button stands under the last input and is as wide as the inputs
+    Given the window is 1280 by 800
+    When I open "/contact"
+    Then the Send button stands under the inputs, as wide as they are
 
   Scenario: A Visitor sends a Contact request
     Given the backend is up

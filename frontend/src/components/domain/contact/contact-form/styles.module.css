@@ -1,6 +1,7 @@
 /*
  * The form's box disappears so that its fields and its button are items of the panel's grid, which
- * places them (ContactPanel's stylesheet).
+ * places them (ContactPanel's stylesheet). The button lines up under the inputs by the width of
+ * the label column and the gap that InputField takes from the global tokens.
  */
 .contact-form {
   display: contents;
@@ -10,33 +11,48 @@
 .contact-form__fields {
   display: grid;
   align-content: start;
-  gap: var(--element-distance-standard);
+  gap: 1.25rem;
   min-width: 0;
   margin: 0;
   padding: 0;
   border: 0;
 }
 
-.contact-form__required {
-  margin: 0;
-  font-size: 0.875em;
+/*
+ * The reference's button: as wide as the inputs and under them, a short, solid bar that swaps its
+ * colours on hover. On a narrow screen the labels sit above the inputs and the button takes the full width.
+ */
+.contact-form__send {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  justify-self: stretch;
+  gap: 0.625rem;
+  min-height: 2.125rem;
+  margin-inline-start: calc(var(--input-field-label-size) + var(--input-field-gap));
+  padding: 0.375rem 1rem;
+  border: 0.0625rem solid var(--text-on-dark);
+  border-radius: 0.25rem;
+  background: var(--text-on-dark);
+  color: var(--text-on-light);
+  font-family: var(--font-heading);
+  font-size: inherit;
+  font-weight: 700;
+  letter-spacing: 0.125rem;
+  cursor: pointer;
+  transition:
+    background-color 200ms ease-in-out,
+    color 200ms ease-in-out;
 }
 
-.contact-form__send {
-  justify-self: start;
-  padding: 0.75rem 2rem;
-  border: 0.125rem solid var(--text-on-light);
-  border-radius: 999rem;
-  background: var(--panel-about);
+.contact-form__send:hover:not(:disabled),
+.contact-form__send:focus-visible {
+  background: var(--text-on-light);
   color: var(--text-on-dark);
-  font-family: var(--font-heading);
-  font-size: 1rem;
-  font-weight: 700;
-  cursor: pointer;
 }
 
 .contact-form__send:focus-visible {
-  outline: 0.125rem solid var(--panel-contact);
+  outline: 0.125rem solid var(--text-on-dark);
   outline-offset: 0.125rem;
 }
 
@@ -45,10 +61,21 @@
   opacity: 0.7;
 }
 
+@media (width < 35.5rem) {
+  .contact-form__send {
+    margin-inline-start: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contact-form__send {
+    transition: none;
+  }
+}
+
 .contact-form__thanks {
   margin: 0;
   font-family: var(--font-heading);
-  font-size: 1.25rem;
 }
 
 .contact-form__notice {

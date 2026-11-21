@@ -26,8 +26,6 @@ export type ContactFieldContent = {
 /** What the form says, as message ids. */
 export type ContactFormContent = {
   fields: Record<ContactFieldName, ContactFieldContent>;
-  /** The line that explains the asterisk. */
-  required: MessageId;
   /** Takes the `{max}`. */
   tooLong: MessageId;
   /** Takes the `{count}` and the `{max}`. */
@@ -44,6 +42,13 @@ export type ContactFormContent = {
   thanks: MessageId;
 };
 
+/** The files the form draws from: the page owns them and passes them down. */
+export type ContactFormMedia = {
+  /** The Send button's icon. */
+  send: string;
+};
+
 export type ContactFormProps = {
   content: ContactFormContent;
+  media: ContactFormMedia;
 };

@@ -172,16 +172,23 @@ Reference: the expanded menu of codepen `fluxus/gPWvZm` (local copy in git-ignor
 
 **Objective**: the Contact Panel: "Remote, worldwide", the LinkedIn and Xing links, the Contact notice and the Contact request form. A sent Contact request reaches the Owner by email and is never stored (ADR 0005). The API runs as a Python Worker on Cloudflare (ADR 0006).
 
+**Problem**: A Visitor (a hiring manager or recruiter) who likes what they see on the site has no way to reach the Owner from it. The Contact Panel is an empty shell with only its heading and the offline note. The Owner wants to be reached without publishing a phone number or an email address, without keeping Visitor data on the site, and without paying for anything beyond the free tier. The form must not become a spam channel.
+
+**Solution**: The Contact Panel shows "Remote, worldwide", the Owner's LinkedIn and Xing profiles, a Contact notice and a short Contact request form: name, company, an optional position description and an optional way to reach the Visitor. On submit, an invisible proof-of-work human check runs in the browser, and the backend emails the Contact request to the Owner's mailbox. Nothing is stored. The Visitor always knows the state of the form: what is wrong with a field, that it is sending, that it was sent, or that it failed and when they can try again. Bots are stopped by the human check and a honeypot; floods are stopped by a per-IP and a site-wide rate limit.
+
 **Decided** (grilling 2026-11-19, amended 2026-11-20 for Cloudflare Workers):
 - **No Legal notice, no Privacy policy, no consent checkbox.** Only the Contact notice beside the form. No extra page or route: everything stays in the Contact Panel.
-- **Layout** (the Skills pattern; `support_files/contact/` is a reference for layout and feel only, not a look to copy):
-  - The heading sits on the Panel's `#5c8b70`. Below it, one `#d1dcd9` band (What I do's color) holds both columns, because body text on `#5c8b70` reaches only about 3:1 (Unit 1).
-  - Desktop: left column "Remote, worldwide" (globe icon), then the profile links (LinkedIn, Xing) between two rules, then the Contact notice; right column the form.
-  - Below 840px: one CSS grid reorders the same markup: "Remote, worldwide" and the links, then the form fields, then the Contact notice right above the submit button.
-  - Fonts: Amethysta for content, Playfair Display for headings and the field labels. Palette colors only.
+- **Layout** (after the Responsive Contact Form pen in `support_files/contact/`, for layout and feel only, not a look to copy; amended 2026-11-21, portfolio-653r):
+  - The page opens with the heading "Contact me" (capitals, its own message; Explore's tile keeps "Contact") and the subtitle "Let me know you're interested". The offline note follows.
+  - No band: the form and the info block stand on the Panel's `#5c8b70`, centred on the page in columns of limited width, in the light `--panel-what-i-do` colour. This drops the earlier `#d1dcd9` band, which was there because body text on `#5c8b70` reaches only about 3:1. The Owner decided for the light text anyway; it measures 2.78:1. The inputs and the button carry their own contrast (light on dark, 8.97:1).
+  - Desktop: the form on the left, its button under it; the info block on the right, centred vertically against the form's inputs (the button's row is not counted): 1 "Remote, worldwide" (globe icon), 2 the Contact notice, 3 the profile links (LinkedIn, Xing) between two rules, 4 "* required".
+  - Below 840px one column reorders the same markup: "Remote, worldwide", the form fields with the submit button, the notice, "* required", the links.
+  - A field's label stands beside its input from 568px up and above it below 568px. The inputs and the button follow the pen's sizes: short boxes (about 34px) with a thin light border on a dark fill, the button as wide as the inputs and directly under them; no textarea.
+  - Fonts: Amethysta for content, Playfair Display for headings, labels and the button. Palette colours only.
+  - Every icon (the globe, the paper plane in the button, the profile icons) is drawn by the shared `Icon` component from an SVG file in a `media/` folder.
 - **Profile links**: `ProfileLinks` moves from About's top card to `components/ui/profile-links/` (second consumer) and gains Xing (Simple Icons, CC0) and a `look` prop: About stays plain, Contact gets round icons with a hover ring. LinkedIn `https://www.linkedin.com/in/a-doo/`, Xing `https://www.xing.com/profile/Alexander_Doo`. About keeps LinkedIn and GitHub.
 - **Contact notice** (an `en` message, translatable): "I use these details only to reply to your request. They reach me by email and are not stored on this site or passed on to anyone."
-- **Form fields**, visible labels above each field (Playfair Display), required marked "*" with a "* required" line:
+- **Form fields**, visible labels (Playfair Display) beside or above each field, required marked "*" with a "* required" line:
   - name: required, at most 80 characters;
   - company: required, at most 100;
   - position: optional, one line, at most 120;
@@ -223,6 +230,67 @@ Reference: the expanded menu of codepen `fluxus/gPWvZm` (local copy in git-ignor
   - E2E (Unit 4 deviates from the AGENTS.md Stage Final here, by the Owner's decision): the frontend build with `/api/*` stubbed by Playwright routes along the contract, as `offline.feature` already does. No running backend.
   - Being hard to test is never a reason to drop or bend a feature: the test mocks the dependency instead.
 
+**User stories**:
+
+1. As a Visitor, I want to open the Contact Panel from Explore, so that I can get in touch with the Owner.
+2. As a Visitor, I want to see the Contact heading in the Panel's own colour, as on the other Panels, so that the site feels consistent.
+3. As a Visitor, I want to read "Remote, worldwide", so that I know the Owner works remotely from anywhere.
+4. As a Visitor, I want to see the Owner's LinkedIn and Xing profiles as icon links, so that I can reach them on the network I use.
+5. As a Visitor using a screen reader, I want each profile link named ("LinkedIn", "Xing"), so that I know where it leads.
+6. As a Visitor, I want a visible ring when I hover or focus a profile icon, so that I can tell it is a link.
+7. As a Visitor, I want the Contact notice beside the form, so that I know my details are used only to reply, reach the Owner by email, and are not stored or passed on.
+8. As a Visitor, I want no consent checkbox to tick, so that sending a request takes no extra step.
+9. As a Visitor, I want a visible label above every field, so that I still know what a field is after I start typing.
+10. As a Visitor, I want required fields marked with "*" and a "* required" line, so that I know what I must fill in.
+11. As a Visitor, I want to give only my name and company if I prefer, so that I don't have to share a phone number or email.
+12. As a Visitor, I want an optional position field, so that I can say which role I am writing about.
+13. As a Visitor, I want an optional "How to reach you" field with the hint "email, phone, LinkedIn, …", so that I can pick my own channel.
+14. As a Visitor, I want a field checked when I leave it, not on every keystroke, so that I'm not scolded while typing.
+15. As a Visitor, I want an error to appear as text under the field it belongs to, so that I know what to fix.
+16. As a Visitor using a screen reader, I want an invalid field announced with its error, so that I can fix it without seeing the screen.
+17. As a Visitor, I want a character counter once I near a field's limit, so that I'm not cut off by surprise.
+18. As a Visitor, I want leading and trailing spaces ignored and a whitespace-only value treated as empty, so that a stray space doesn't cause an error or an empty request.
+19. As a Visitor, I want focus to move to the first invalid field when I submit with errors, so that I can correct it at once.
+20. As a Visitor, I want the form disabled and the button to read "Sending…" while my request is on its way, so that I don't send it twice.
+21. As a Visitor, I want the human check to happen without a puzzle or a click, so that sending feels like any other form.
+22. As a Visitor, I want the form replaced by "Thank you, {name}. I'll get back to you soon." when it is sent, so that I know it worked.
+23. As a Visitor whose request failed, I want the form back with everything I typed, so that I don't have to type it again.
+24. As a Visitor whose request failed, I want a generic reason and a 10-second countdown before I can retry, so that I know when to try again.
+25. As a Visitor who sent too many requests, I want "Too many requests from your connection. Please try again in a few minutes.", so that I understand why it was refused.
+26. As a Visitor, I want the form disabled beside the offline note while the backend is down, while the links and the Contact notice stay, so that I can still reach the Owner another way.
+27. As a Visitor on a phone, I want "Remote, worldwide" and the links first, then the fields, then the Contact notice right above the submit button, so that the notice is where I decide to send.
+28. As a Visitor on a desktop, I want the links and the Contact notice on the left and the form on the right, so that I see everything at once.
+29. As a Visitor, I want the texts in the site's language through its translations, so that a future locale translates them too.
+30. As the Owner, I want each Contact request emailed to my own mailbox, so that I read requests where I already read mail.
+31. As the Owner, I want the subject "Contact request: {name}, {company}", so that I can sort requests in my inbox.
+32. As the Owner, I want a plain-text body with each field and the time in Europe/Berlin, so that I can read it on any mail client.
+33. As the Owner, I want Reply-To set to the Visitor's contact when it is an email address, so that I can just hit reply.
+34. As the Owner, I want nothing stored on the site, so that I have no Visitor data to protect, keep or delete.
+35. As the Owner, I want a failed email reported to the Visitor (`502`), so that no request is lost silently.
+36. As the Owner, I want bots that fail the human check rejected (`400`), so that my inbox gets only real requests.
+37. As the Owner, I want a filled honeypot answered with a silent `204` and nothing sent, so that bots believe they succeeded and don't adapt.
+38. As the Owner, I want 5 requests per 15 minutes per IP, so that a real Visitor can retry but one source can't flood me.
+39. As the Owner, I want a site-wide cap of 100 requests a day, so that a flood from many IPs can't fill my inbox or use up the free plan's quotas.
+40. As the Owner, I want the client IP taken from `CF-Connecting-IP`, which Cloudflare sets, so that a client can't forge its way past the limit.
+41. As the Owner, I want CR/LF stripped from anything that goes into an email header, so that no one can inject headers.
+42. As the Owner, I want the backend to check every field rule again, so that a crafted request can't bypass the browser's checks.
+43. As the Owner, I want invalid fields answered with `422`, so that the API says clearly what it rejects.
+44. As the Owner, I want the mail addresses and the ALTCHA key kept as Worker secrets, so that no address or secret ever lands in the repo.
+45. As the Owner, I want the human check self-hosted with no third party and no cookies, so that the Contact notice stays true.
+46. As the Owner, I want About to keep its LinkedIn and GitHub links unchanged when the profile links become shared, so that About doesn't regress.
+47. As the Owner, I want the site to stay on Cloudflare's free plan and never be billed, so that a spike can at worst take `/api` down until midnight UTC while the site stays up with the offline note.
+
+**Out of scope**:
+
+- A Legal notice, a Privacy policy, a consent checkbox, or any extra page or route.
+- Storing Contact requests anywhere (database, bucket, logs of the fields).
+- A confirmation email to the Visitor; a phone push to the Owner.
+- Cloud Run for the API, Cloud Armor, a load balancer, an nginx sidecar, FastAPI or any web framework.
+- A free-text message field.
+- Deploying is Unit 8: the domain on Cloudflare with Email Routing, the Worker secrets, the WAF rule, and every check and prototype. That includes CPU time per request under 10 ms (fallback: a TypeScript Worker), `altcha` and Pydantic under Pyodide, Durable Object SQL, `send_email`, WAF-blocked requests not counting toward the quota, and the first email from the deployed site.
+- Chat's rate limit and storage (Unit 7).
+- Fixing the Cloud Skill overview that still names Firestore (a separate bean once Unit 7 decides storage).
+
 **Sub-unit breakdown** (tickets, vertical slices):
 - 4.0a (portfolio-1b3v), the backend becomes a Python Worker: the route table, `/api/health`, `pywrangler dev`, the rules and AGENTS.md.
 - 4.0, contracts: the zod schema ↔ Pydantic model, the challenge response and the status codes.
@@ -235,7 +303,7 @@ Reference: the expanded menu of codepen `fluxus/gPWvZm` (local copy in git-ignor
 - 4.7, the rate limit in Durable Objects.
 - 4.N, Contact E2E and the Definition of Done.
 
-Order: 4.0a and 4.1 first; 4.0 after 4.0a; 4.2 after 4.1; 4.3 after 4.0 and 4.2; 4.4, 4.5 and 4.7 after 4.3; 4.6 after 4.3 and 4.5; 4.N after all. Beans: portfolio-tn1x (spec), the stage beans are children of portfolio-yxux.
+Order: 4.0a and 4.1 first; 4.0 after 4.0a; 4.2 after 4.1; 4.3 after 4.0 and 4.2; 4.4, 4.5 and 4.7 after 4.3; 4.6 after 4.3 and 4.5; 4.N after all. Beans: the epic portfolio-yxux and its stages portfolio-1b3v (4.0a), -m7rt (4.0), -trgn (4.1), -0hxh (4.2), -zmw2 (4.3), -8gew (4.4), -dhsr (4.5), -m1de (4.6), -vd9x (4.7), -9pe4 (4.N).
 
 **Definition of Done**: a sent Contact request reaches the Owner by email and nothing is stored; bots (failed human check, filled honeypot) and floods (429) are rejected; unit, component and E2E tests green.
 

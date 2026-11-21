@@ -3,17 +3,17 @@ Feature: Open and close a Panel
   Scenario Outline: A deep link renders that Panel opened
     When I open "<path>"
     Then I am on "<path>"
-    And the page heading reads "<title>"
+    And the page heading reads "<heading>"
     And the other four Panels are Stripes
     And the document title is "<title> · A.Durnev portfolio"
 
     Examples:
-      | path       | title        |
-      | /about     | About        |
-      | /what-i-do | What I do    |
-      | /skills    | Skills       |
-      | /chat      | Chat with me |
-      | /contact   | Contact      |
+      | path       | title        | heading      |
+      | /about     | About        | About        |
+      | /what-i-do | What I do    | What I do    |
+      | /skills    | Skills       | Skills       |
+      | /chat      | Chat with me | Chat with me |
+      | /contact   | Contact      | Contact me   |
 
   Scenario: The default Explore has the site title and no heading
     When I open "/explore"
@@ -32,7 +32,7 @@ Feature: Open and close a Panel
     Given I open "/skills"
     When I click the Panel "Contact"
     Then I am on "/contact"
-    And the page heading reads "Contact"
+    And the page heading reads "Contact me"
     And the page heading has focus
     And the document title is "Contact · A.Durnev portfolio"
 
@@ -48,7 +48,7 @@ Feature: Open and close a Panel
   Scenario: Escape returns to the default Explore and focus to the Panel
     Given I open "/explore"
     And I click the Panel "Contact"
-    And the page heading reads "Contact"
+    And the page heading reads "Contact me"
     When I press Escape
     Then I am on "/explore"
     And the Panel "Contact" has focus
@@ -73,7 +73,7 @@ Feature: Open and close a Panel
     And I click the close button "Close Contact"
     And I go back
     Then I am on "/contact"
-    And the page heading reads "Contact"
+    And the page heading reads "Contact me"
     When I go back
     Then I am on "/skills"
     And the page heading reads "Skills"
@@ -136,7 +136,7 @@ Feature: Open and close a Panel
     And I click the Panel "Contact"
     Then the page is still scrolled down
     And the page is at the top
-    And the page heading reads "Contact"
+    And the page heading reads "Contact me"
 
   Scenario: Mobile Stripes are rows of at least 44px without Sublabels, and scroll away
     Given the window is 375 by 667

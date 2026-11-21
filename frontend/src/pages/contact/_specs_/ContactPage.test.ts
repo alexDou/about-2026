@@ -19,9 +19,12 @@ beforeEach(() => {
 afterEach(resetHealth);
 
 describe("ContactPage", () => {
-  it("opens with its heading, titled by the Panel's message", () => {
+  it("opens with its heading, with the subtitle under it", () => {
     render(ContactPage, { props: {}, wrapper: intlWrapper() });
-    expect(screen.getByRole("heading", { level: 1, name: "Contact" })).toBeInTheDocument();
+    const heading = screen.getByRole("heading", { level: 1, name: "Contact me" });
+    expect(heading).toBeInTheDocument();
+    const subtitle = screen.getByText("Let me know you're interested");
+    expect(heading.compareDocumentPosition(subtitle)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
   });
 
   it("says the Owner works remotely, worldwide, under the heading", () => {
@@ -55,7 +58,7 @@ describe("ContactPage", () => {
   it("takes the heading from the messages", () => {
     render(ContactPage, {
       props: {},
-      wrapper: intlWrapper({ "explore.panel.contact.title": "Titel" }),
+      wrapper: intlWrapper({ "contact.page.title": "Titel" }),
     });
     expect(screen.getByRole("heading", { name: "Titel" })).toBeInTheDocument();
   });

@@ -12,18 +12,22 @@ const content: ContactPanelProps["content"] = {
     { kind: "xing", label: "contact.profile.xing.label", url: "https://xing.test/me" },
   ],
   notice: "contact.notice",
+  required: "contact.required",
 };
+
+const media: ContactPanelProps["media"] = { globe: "globe.svg" };
 
 const MESSAGES = {
   "contact.remote": "Remote, worldwide",
   "contact.profile.linkedin.label": "LinkedIn",
   "contact.profile.xing.label": "Xing",
   "contact.notice": "Used only to reply.",
+  "contact.required": "* required",
 };
 
 const renderPanel = () =>
   render(ContactPanel, {
-    props: { content, children: createElement("p", { "data-testid": "form" }, "the form") },
+    props: { content, media, children: createElement("p", { "data-testid": "form" }, "the form") },
     wrapper: intlWrapper(MESSAGES),
   });
 
@@ -31,10 +35,12 @@ const follows = (a: Node, b: Node) =>
   Boolean(a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING);
 
 describe("ContactPanel", () => {
-  it("says where the Owner works from, with a globe drawn beside it", () => {
+  it("says where the Owner works from, with the globe icon drawn beside it", () => {
     renderPanel();
     const remote = screen.getByText("Remote, worldwide");
-    expect(remote.parentElement?.querySelector("svg")?.getAttribute("aria-hidden")).toBe("true");
+    const globe = remote.parentElement?.querySelector("svg");
+    expect(globe?.getAttribute("aria-hidden")).toBe("true");
+    expect(globe?.querySelector("use")?.getAttribute("href")).toBe("globe.svg#icon");
   });
 
   it("links LinkedIn and then Xing as ring-look icons, each named by its label", () => {
@@ -59,14 +65,21 @@ describe("ContactPanel", () => {
     expect(screen.getByTestId("form")).toBeInTheDocument();
   });
 
-  it("runs the markup in the mobile order: remote line, links, form, notice", () => {
+  it("explains the form's asterisk", () => {
+    renderPanel();
+    expect(screen.getByText("* required")).toBeInTheDocument();
+  });
+
+  it("runs the info block in the order of a wide screen, then the form", () => {
     renderPanel();
     const remote = screen.getByText("Remote, worldwide");
-    const links = screen.getByRole("list");
-    const form = screen.getByTestId("form");
     const notice = screen.getByText("Used only to reply.");
-    expect(follows(remote, links)).toBe(true);
-    expect(follows(links, form)).toBe(true);
-    expect(follows(form, notice)).toBe(true);
+    const links = screen.getByRole("list");
+    const required = screen.getByText("* required");
+    const form = screen.getByTestId("form");
+    expect(follows(remote, notice)).toBe(true);
+    expect(follows(notice, links)).toBe(true);
+    expect(follows(links, required)).toBe(true);
+    expect(follows(required, form)).toBe(true);
   });
 });
