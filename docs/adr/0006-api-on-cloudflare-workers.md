@@ -16,5 +16,6 @@ The backend is a Python Worker on Cloudflare (Pyodide, managed with uv and `pywr
 - Only a thin entry module imports the Workers runtime, so pytest runs the handlers and the Durable Object logic in plain CPython with the bindings mocked.
 - Durable Object alarms are not documented for Python, so each request deletes expired counts itself.
 - The client IP is `CF-Connecting-IP`. A WAF rate-limiting rule (the free plan has one) on `/api/*` stops single-source floods before they reach the Worker. It needs the Owner's domain on Cloudflare (Unit 8).
+- The rate limiter (Durable Objects) ships with the Cloudflare deploy in Unit 8, not with the Contact form in Unit 4 (decided 2026-11-21): it is only checkable on Cloudflare, next to the WAF rule and the Durable Object SQL check. Unit 4 ships without it and keeps the `429` in the contract; Unit 8 builds the limiter, the `429` message in the form and their tests (bean portfolio-vd9x).
 - `send_email` reaches only verified destinations, so the Owner's mailbox is the only address it can mail. The sender is on the Owner's domain. The Gmail account set up for SMTP is retired.
 - Unit 7 adds the Worker → Cloud Run call to the ADK Agent and locks Cloud Run to it.

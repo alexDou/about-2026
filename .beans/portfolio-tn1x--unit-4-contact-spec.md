@@ -19,7 +19,7 @@ A Visitor (a hiring manager or recruiter) who likes what they see on the site ha
 
 ## Solution
 
-The Contact Panel shows "Remote, worldwide", the Owner's LinkedIn and Xing profiles, a Contact notice and a short Contact request form: name, company, an optional position description and an optional way to reach the Visitor. On submit, an invisible proof-of-work human check runs in the browser, and the backend emails the Contact request to the Owner's mailbox. Nothing is stored. The Visitor always knows the state of the form: what is wrong with a field, that it is sending, that it was sent, or that it failed and when they can try again. Bots are stopped by the human check and a honeypot; floods are stopped by a per-IP and a site-wide rate limit.
+The Contact Panel shows "Remote, worldwide", the Owner's LinkedIn and Xing profiles, a Contact notice and a short Contact request form: name, company, an optional position description and an optional way to reach the Visitor. On submit, an invisible proof-of-work human check runs in the browser, and the backend emails the Contact request to the Owner's mailbox. Nothing is stored. The Visitor always knows the state of the form: what is wrong with a field, that it is sending, that it was sent, or that it failed and when they can try again. Bots are stopped by the human check and a honeypot; floods are stopped by a per-IP and a site-wide rate limit, built with the deploy in Unit 8.
 
 ## User Stories
 
@@ -47,7 +47,7 @@ The Contact Panel shows "Remote, worldwide", the Owner's LinkedIn and Xing profi
 22. As a Visitor, I want the form replaced by "Thank you, {name}. I'll get back to you soon." when it is sent, so that I know it worked.
 23. As a Visitor whose request failed, I want the form back with everything I typed, so that I don't have to type it again.
 24. As a Visitor whose request failed, I want a generic reason and a 10-second countdown before I can retry, so that I know when to try again.
-25. As a Visitor who sent too many requests, I want "Too many requests from your connection. Please try again in a few minutes.", so that I understand why it was refused.
+25. As a Visitor who sent too many requests, I want "Too many requests from your connection. Please try again in a few minutes.", so that I understand why it was refused. (Unit 8)
 26. As a Visitor, I want the form disabled beside the offline note while the backend is down, while the links and the Contact notice stay, so that I can still reach the Owner another way.
 27. As a Visitor on a phone, I want "Remote, worldwide" and the links first, then the fields, then the Contact notice right above the submit button, so that the notice is where I decide to send.
 28. As a Visitor on a desktop, I want the links and the Contact notice on the left and the form on the right, so that I see everything at once.
@@ -60,8 +60,8 @@ The Contact Panel shows "Remote, worldwide", the Owner's LinkedIn and Xing profi
 35. As the Owner, I want a failed email reported to the Visitor (`502`), so that no request is lost silently.
 36. As the Owner, I want bots that fail the human check rejected (`400`), so that my inbox gets only real requests.
 37. As the Owner, I want a filled honeypot answered with a silent `204` and nothing sent, so that bots believe they succeeded and don't adapt.
-38. As the Owner, I want 5 requests per 15 minutes per IP, so that a real Visitor can retry but one source can't flood me.
-39. As the Owner, I want a site-wide cap of 100 requests a day, so that a flood from many IPs can't fill my inbox or use up the free plan's quotas.
+38. As the Owner, I want 5 requests per 15 minutes per IP, so that a real Visitor can retry but one source can't flood me. (Unit 8)
+39. As the Owner, I want a site-wide cap of 100 requests a day, so that a flood from many IPs can't fill my inbox or use up the free plan's quotas. (Unit 8)
 40. As the Owner, I want the client IP taken from `CF-Connecting-IP`, which Cloudflare sets, so that a client can't forge its way past the limit.
 41. As the Owner, I want CR/LF stripped from anything that goes into an email header, so that no one can inject headers.
 42. As the Owner, I want the backend to check every field rule again, so that a crafted request can't bypass the browser's checks.
@@ -87,28 +87,26 @@ The Contact Panel shows "Remote, worldwide", the Owner's LinkedIn and Xing profi
   - All text is FormatJS messages in a Contact message file (`en`).
   - Fonts: Amethysta for content, Playfair Display for headings and labels. The palette tokens: heading on `#5c8b70`, the band `#d1dcd9`, text `#25363a`.
 - **Backend modules** (a Python Worker with no framework, ADR 0006; one package for the Contact area):
-  - The route table hands each request to a handler, passing it the mailer, the human check, the rate limiter, the secrets and the clock. Only a thin entry module imports the Workers runtime.
-  - The Contact handlers: challenge and submit, with the order honeypot → field validation → rate limit → human check → mail.
+  - The route table hands each request to a handler, passing it the mailer, the human check, the secrets and the clock. Only a thin entry module imports the Workers runtime.
+  - The Contact handlers: challenge and submit, with the order honeypot → field validation → human check → mail (Unit 8 adds the rate limit before the human check).
   - A human-check module wrapping the `altcha` library: create a challenge and verify a payload.
   - A mailer module: builds the message (subject, plain-text body, Europe/Berlin time, conditional Reply-To, header sanitizing) and sends it through the `send_email` binding. `MAIL_FROM` (on the Owner's domain) and `MAIL_TO` (the Owner's mailbox, the account's only verified destination) are Worker secrets.
-  - A rate-limit module: exact sliding windows in Durable Objects, 5 per 15 minutes per hashed client IP (`CF-Connecting-IP`) and 100 per day site-wide. Each request first deletes expired timestamps with one SQL statement, then counts; no alarms. The counting logic is a plain class; a thin Durable Object wrapper binds it to SQL storage.
+  - A rate-limit module (Unit 8): exact sliding windows in Durable Objects, 5 per 15 minutes per hashed client IP (`CF-Connecting-IP`) and 100 per day site-wide. Each request first deletes expired timestamps with one SQL statement, then counts; no alarms. The counting logic is a plain class; a thin Durable Object wrapper binds it to SQL storage.
 - **Architecture**: no storage of Contact requests (ADR 0005). The API, `/api/health` included, is a Python Worker on Cloudflare's free plan, and the SPA is its static assets (ADR 0006). In front of the Worker sit Cloudflare's DDoS protection and one WAF rate-limiting rule on `/api/*` (Unit 8). The Agent (Unit 7) is Google ADK on Cloud Run, called by the Worker.
 
 ## Testing Decisions
 
 - A good test checks external behaviour against a contract: what a module returns, renders, sends or refuses, given what its dependencies return. It never checks internals, exact paddings, margins or gaps (`.claude/rules/testing.md`). No test starts a server or builds a fake service (no fake SMTP, no fake mailbox, no fake store): each dependency is mocked along its contract. Being hard to test is never a reason to drop or bend a feature.
 - **Backend** (pytest in plain CPython; the Workers runtime is never imported by tested code):
-  - Endpoint tests call the route table in process with the mailer, the human check, the Durable Object stubs, the secrets and the clock mocked along their contracts. They assert:
+  - Endpoint tests call the route table in process with the mailer, the human check, the secrets and the clock mocked along their contracts. They assert:
     - the exact JSON of the challenge;
     - `204` with the mailer called once with the cleaned fields;
     - the silent `204` with the mailer not called for a honeypot;
     - `422` per broken rule;
     - `400` when the human check rejects;
-    - `429` on the 6th request in 15 minutes and on the 101st of a day, then passing again when the clock moves on;
     - `502` when the mailer raises.
   - Mailer tests mock the `send_email` binding and check what it is handed: the From/To/Subject/Reply-To headers, the CR/LF stripping, the body fields and the Berlin time.
   - Human-check tests verify a payload solved with the `altcha` library's own solver, and reject a tampered or expired one.
-  - Rate-limit tests drive the windows with an injected clock.
 - **Frontend** (Vitest with the Octane testing library):
   - The zod schema: each rule, the trimming and the whitespace-only case.
   - The Contact client: with `fetch` mocked, the request body shape and the mapping of every status code (prior art: the health service's tests).
@@ -119,11 +117,10 @@ The Contact Panel shows "Remote, worldwide", the Owner's LinkedIn and Xing profi
     - the disabled form and "Sending…";
     - the thank-you note replacing the form;
     - the failure message with values kept and the 10-second countdown (fake timers);
-    - the 429 message;
     - the disabled form while offline.
     - The look: composition, the palette and the layout mode (grid order below 840px), as in the Skills tests.
   - The profile links in the shared UI: both looks, Xing included, About unchanged (prior art: the About top card's tests).
-- **E2E** (Cucumber + Playwright on the frontend build): `/api/*` is stubbed by Playwright routes along the contract, as `offline.feature` does; no running backend. Covered: sending a request, field errors, the 429 message, a `502` with its countdown, and the offline state. This deviates from the AGENTS.md Stage Final for this unit, by the Owner's decision.
+- **E2E** (Cucumber + Playwright on the frontend build): `/api/*` is stubbed by Playwright routes along the contract, as `offline.feature` does; no running backend. Covered: sending a request, field errors, a `502` with its countdown, and the offline state. This deviates from the AGENTS.md Stage Final for this unit, by the Owner's decision.
 
 ## Out of Scope
 
@@ -133,6 +130,7 @@ The Contact Panel shows "Remote, worldwide", the Owner's LinkedIn and Xing profi
 - Cloud Run for the API, Cloud Armor, a load balancer, an nginx sidecar, FastAPI or any web framework.
 - A free-text message field.
 - Deploying is Unit 8: the domain on Cloudflare with Email Routing, the Worker secrets, the WAF rule, and every check and prototype. That includes CPU time per request under 10 ms (fallback: a TypeScript Worker), `altcha` and Pydantic under Pyodide, Durable Object SQL, `send_email`, WAF-blocked requests not counting toward the quota, and the first email from the deployed site.
+- The rate limiter and its `429` message: Unit 8 (portfolio-vd9x).
 - Chat's rate limit and storage (Unit 7).
 - Fixing the Cloud Skill overview that still names Firestore (a separate bean once Unit 7 decides storage).
 

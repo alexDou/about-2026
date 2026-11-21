@@ -5,7 +5,7 @@ status: draft
 type: epic
 priority: normal
 created_at: 2026-11-06T20:27:21Z
-updated_at: 2026-11-20T12:31:10Z
+updated_at: 2026-11-21T15:57:16Z
 parent: portfolio-4ur0
 blocked_by:
     - portfolio-yxux
@@ -26,3 +26,6 @@ ADR 0006 moves the API to a Python Worker on Cloudflare's free plan, with the SP
 - [ ] Measure CPU time per request against the free plan's 10 ms (fallback: the same design as a TypeScript Worker)
 - [ ] altcha and Pydantic load under Pyodide; Durable Object SQL counting works
 - [ ] send_email from the deployed Worker; the first Contact request email received
+
+
+- [ ] Rate limiter (portfolio-vd9x, moved from Unit 4 on 2026-11-21): Durable Objects per hashed IP and site-wide, the 429 and its message in the form; design in the "Rate limit" decision of Unit 4 in `docs_src/specs/units.md`. Unit 8 has not been grilled yet: this is its first decision, amend after the grilling

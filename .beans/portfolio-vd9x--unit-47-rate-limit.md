@@ -1,20 +1,21 @@
 ---
 # portfolio-vd9x
-title: 'Unit 4.7: Rate limit'
+title: 'Unit 8: Rate limit'
 status: todo
 type: task
+priority: normal
 tags:
     - ready-for-agent
 created_at: 2026-11-19T13:42:26Z
-updated_at: 2026-11-19T13:42:26Z
-parent: portfolio-yxux
+updated_at: 2026-11-21T15:57:16Z
+parent: portfolio-a028
 blocked_by:
     - portfolio-zmw2
 ---
 
 ## Parent
 
-portfolio-yxux Unit 4: Contact. Spec: portfolio-tn1x (Unit 4: Contact spec) and the Unit 4 section of docs_src/specs/units.md. Vocabulary: CONTEXT.md. ADR 0005.
+portfolio-a028 Unit 8: Deploy. Moved here from Unit 4 (portfolio-yxux, where it was 4.7) on 2026-11-21: the limiter is built and checked together with the Cloudflare deploy. Design: the "Rate limit" decision in the Unit 4 section of docs_src/specs/units.md (spec bean portfolio-tn1x). Vocabulary: CONTEXT.md. ADRs 0005 and 0006. Unit 8 is not grilled yet: amend this bean when it is.
 
 ## What to build
 
