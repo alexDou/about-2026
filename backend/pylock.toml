@@ -3,6 +3,11 @@ created-by = "uv"
 requires-python = ">=3.14.2"
 
 [[packages]]
+name = "altcha"
+version = "2.5.0"
+wheels = [{ url = "https://files.pythonhosted.org/packages/56/f9/c512126aa330e3410fc2baf34542a4e7ff0b0954bbafddef5ea9b924ea45/altcha-2.5.0-py3-none-any.whl", upload-time = 2026-11-21T05:43:04Z, size = 27084, hashes = { sha256 = "3358f8d7ff43ba8e038c759dc70c5a90659dd45c6892c8921301c33454622b58" } }]
+
+[[packages]]
 name = "annotated-types"
 version = "0.8.0"
 wheels = [{ url = "https://files.pythonhosted.org/packages/99/91/8acff4f5e50511b911bbccb72b8628a49c68ce14148cd9f6431094859a90/annotated_types-0.8.0-py3-none-any.whl", upload-time = 2026-07-23T20:16:12Z, size = 13427, hashes = { sha256 = "f072f4d804ea359e4eaf198b1af7a8b0943881a87f31bb764f8bf219bb9419e0" } }]

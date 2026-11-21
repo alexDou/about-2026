@@ -3,6 +3,9 @@
 /** The most characters each Contact field may hold, in code points (as zod's `max` counts). */
 export const CONTACT_LIMITS = { name: 80, company: 100, position: 120, contact: 200 } as const;
 
+/** Where the human check's widget fetches its challenge: `GET`, answered with a `ChallengeResponse`. */
+export const CONTACT_CHALLENGE_URL = "/api/contact/challenge";
+
 /** What `POST /api/contact` answers. A filled honeypot gets a silent `sent` too. */
 export const CONTACT_STATUS = {
   sent: 204,

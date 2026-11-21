@@ -54,6 +54,25 @@ Feature: Contact Panel layout
     Then the Contact form says "Thank you, Ada Lovelace. I'll get back to you soon."
     And the form is gone
     And the backend received a Contact request from "Ada Lovelace" at "Analytical Engines"
+    And the Contact request carries a human check the widget solved
+    And the Contact request leaves the honeypot out
+
+  Scenario: The honeypot is a field no Visitor or assistive technology can reach
+    Given the backend is up
+    When I open "/contact"
+    Then the Contact form has a field "website" that no Visitor can reach
+
+  Scenario: What a bot puts in the honeypot goes to the backend with the request
+    Given the backend is up
+    And the backend accepts Contact requests
+    When I open "/contact"
+    And a bot fills the field "website" behind the Visitor's back
+    And I fill in "Your name" with "Ada Lovelace"
+    And I fill in "Company" with "Analytical Engines"
+    And I press "Send"
+    Then the Contact form says "Thank you, Ada Lovelace. I'll get back to you soon."
+    And the backend received a Contact request from "Ada Lovelace" at "Analytical Engines"
+    And the Contact request carries the honeypot "https://spam.example"
 
   Scenario: Pressing Send on an empty form names what is missing and focuses the first field
     Given the backend is up
@@ -104,6 +123,27 @@ Feature: Contact Panel layout
     And the Send button is disabled
     And the field "Your name" holds "Ada Lovelace"
     And the field "Company" holds "Analytical Engines"
+
+  Scenario: A failed human check is the same failure, with the countdown
+    Given the backend is up
+    And the backend refuses Contact requests with 400
+    When I open "/contact"
+    And I fill in "Your name" with "Ada Lovelace"
+    And I fill in "Company" with "Analytical Engines"
+    And I press "Send"
+    Then the failure notice counts down from 10 s
+    And the Send button is disabled
+    And the field "Your name" holds "Ada Lovelace"
+
+  Scenario: A challenge that cannot be fetched is the same failure, and nothing is sent
+    Given the backend is up
+    And the Contact challenge cannot be fetched
+    When I open "/contact"
+    And I fill in "Your name" with "Ada Lovelace"
+    And I fill in "Company" with "Analytical Engines"
+    And I press "Send"
+    Then the failure notice counts down from 10 s
+    And the backend received no Contact request
 
   Scenario: A network failure is handled in the same way
     Given the backend is up

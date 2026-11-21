@@ -24,6 +24,7 @@
     "@octanejs/tanstack-router": "0.3.2",
     "@tanstack/router-core": "1.171.34",
     "@tsrx/oxc": "0.23.0",
+    "altcha": "3.7.0",
     "classnames": "2.5.1",
     "octane": "0.16.7",
     "zod": "4.6.7"

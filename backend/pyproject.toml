@@ -5,6 +5,7 @@ description = "Portfolio API, a Python Worker on Cloudflare"
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
+    "altcha>=2.5.0",
     "pydantic>=2.12",
     "tzdata>=2026.6",
 ]

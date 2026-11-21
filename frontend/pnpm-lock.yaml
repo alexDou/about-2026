@@ -23,6 +23,9 @@ importers:
       '@tsrx/oxc':
         specifier: 0.23.0
         version: 0.23.0
+      altcha:
+        specifier: 3.7.0
+        version: 3.7.0
       classnames:
         specifier: 2.5.1
         version: 2.5.1
@@ -1421,6 +1424,9 @@ packages:
     engines: {node: '>=0.4.0'}
     hasBin: true
 
+  altcha@3.7.0:
+    resolution: {integrity: sha512-YeFKA/gl7Lf83MtjfZ2KtXPxWSyuexUQKqo+HzRLzEspI2rrLFaipFvwys0GOfkmFCU0KQ/cmez9Bk3xM8GQHQ==}
+
   ansi-regex@5.0.1:
     resolution: {integrity: sha512-quJQXlTSUGL2LH9SUXo8VwsY4soanhgo6LNSm84E1LBcE8s3O0wpdiRzyR9z/ZZJMlMWv37qOOb9pdJlMUEKFQ==}
     engines: {node: '>=8'}
@@ -1588,6 +1594,9 @@ packages:
   has-ansi@6.0.2:
     resolution: {integrity: sha512-vAyM+6+jAYwSwz0/M0jYKfU9AvAMCz0kH791RsUhvMKGUHXled/3FjcQB3YiQ4Astj5srHdb6B2FHGIfZkOQNg==}
     engines: {node: '>=18'}
+
+  hash-wasm@4.13.0:
+    resolution: {integrity: sha512-GrWl7wsV46fKIXQZB5ebskLZLAmKL6d9RS0fspCxDeQyjoNu1AfTJTMLPOJyfzaQm0ldFiwFN21/w+sE/kgEFQ==}
 
   hosted-git-info@9.0.3:
     resolution: {integrity: sha512-Hc+ghLoSt6QaYZUv0WBiIvmMDZuZZ7oaDvdH8MbfOO4lOsxdXLEvuC6ePoGs9H1X9oCLyq6+NVN0MKqD+ydxyg==}
@@ -3114,6 +3123,10 @@ snapshots:
 
   acorn@8.19.0: {}
 
+  altcha@3.7.0:
+    dependencies:
+      hash-wasm: 4.13.0
+
   ansi-regex@5.0.1: {}
 
   ansi-regex@6.5.0: {}
@@ -3265,6 +3278,8 @@ snapshots:
   has-ansi@6.0.2:
     dependencies:
       ansi-regex: 6.5.0
+
+  hash-wasm@4.13.0: {}
 
   hosted-git-info@9.0.3:
     dependencies:

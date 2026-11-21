@@ -97,7 +97,7 @@ Then(
 
 /** Every label of the form with the input it names. */
 const labelled = async (world: PortfolioWorld) => {
-  const labels = world.page.locator("form label");
+  const labels = world.page.locator("form label:visible");
   await labels.first().waitFor();
   const count = await labels.count();
   expect(count).toBeGreaterThan(0);
@@ -129,7 +129,7 @@ Then("every Contact label stands above its input", async function (this: Portfol
 Then(
   "the Send button stands under the inputs, as wide as they are",
   async function (this: PortfolioWorld) {
-    const inputs = this.page.locator("form input");
+    const inputs = this.page.locator("form input[type=text]:visible");
     const last = await inputs.last().boundingBox();
     const submit = await box(this, "submit");
     if (!last) throw new Error("The last input is not on screen");
@@ -146,7 +146,31 @@ Then("the page heading is in capitals", async function (this: PortfolioWorld) {
   );
 });
 
+/**
+ * A challenge along the contract (`ChallengeResponse`): one the real widget can solve in the
+ * browser, as the backend does not sign it here.
+ */
+const CHALLENGE = {
+  parameters: {
+    algorithm: "PBKDF2/SHA-256",
+    cost: 1,
+    keyLength: 32,
+    keyPrefix: "00",
+    nonce: "00112233445566778899aabbccddeeff",
+    salt: "ffeeddccbbaa99887766554433221100",
+    expiresAt: 4_102_444_800,
+  },
+  signature: "e2e-stub-signature",
+};
+
+/** Stubs `GET /api/contact/challenge`, which the widget fetches when the form is submitted. */
+const stubChallenge = (world: PortfolioWorld) =>
+  world.page.route("**/api/contact/challenge", async (route) => {
+    await route.fulfill({ json: CHALLENGE });
+  });
+
 Given("the backend accepts Contact requests", async function (this: PortfolioWorld) {
+  await stubChallenge(this);
   // Registered after the health stub, so it answers first for this path.
   await this.page.route("**/api/contact", async (route) => {
     this.contactRequests.push(route.request().postDataJSON());
@@ -157,6 +181,7 @@ Given("the backend accepts Contact requests", async function (this: PortfolioWor
 Given(
   "the backend refuses Contact requests with {int}",
   async function (this: PortfolioWorld, status: number) {
+    await stubChallenge(this);
     await this.page.route("**/api/contact", async (route) => {
       this.contactRequests.push(route.request().postDataJSON());
       await route.fulfill({ status, json: { detail: "refused" } });
@@ -164,7 +189,18 @@ Given(
   },
 );
 
+Given("the Contact challenge cannot be fetched", async function (this: PortfolioWorld) {
+  await this.page.route("**/api/contact/challenge", async (route) => {
+    await route.abort("connectionrefused");
+  });
+  await this.page.route("**/api/contact", async (route) => {
+    this.contactRequests.push(route.request().postDataJSON());
+    await route.fulfill({ status: 204 });
+  });
+});
+
 Given("Contact requests cannot reach the backend", async function (this: PortfolioWorld) {
+  await stubChallenge(this);
   await this.page.route("**/api/contact", async (route) => {
     this.contactRequests.push(route.request().postDataJSON());
     await route.abort("connectionrefused");
@@ -195,6 +231,53 @@ Then(
   async function (this: PortfolioWorld, name: string, company: string) {
     expect(this.contactRequests).toHaveLength(1);
     expect(this.contactRequests[0]).toMatchObject({ name, company });
+  },
+);
+
+Then(
+  "the Contact request carries a human check the widget solved",
+  async function (this: PortfolioWorld) {
+    expect(this.contactRequests).toHaveLength(1);
+    const { altcha } = this.contactRequests[0] as { altcha: string };
+    // The widget's payload: the challenge it was given and the solution it found.
+    const payload = JSON.parse(Buffer.from(altcha, "base64").toString("utf8")) as {
+      challenge: { parameters: unknown; signature: string };
+      solution: { counter: number; derivedKey: string };
+    };
+    expect(payload.challenge).toEqual(CHALLENGE);
+    expect(payload.solution.derivedKey.startsWith(CHALLENGE.parameters.keyPrefix)).toBe(true);
+  },
+);
+
+Then("the Contact request leaves the honeypot out", async function (this: PortfolioWorld) {
+  expect(Object.keys(this.contactRequests[0] as object)).not.toContain("website");
+});
+
+Then(
+  "the Contact form has a field {string} that no Visitor can reach",
+  async function (this: PortfolioWorld, name: string) {
+    const field = this.page.locator(`form input[name="${name}"]`);
+    await expect(field).toHaveCount(1);
+    await expect(field).toBeHidden();
+    await expect(field.locator("xpath=ancestor::*[@aria-hidden='true']")).toHaveCount(1);
+  },
+);
+
+When(
+  "a bot fills the field {string} behind the Visitor's back",
+  async function (this: PortfolioWorld, name: string) {
+    // A Visitor cannot type into a hidden field, a script can.
+    await this.page.locator(`form input[name="${name}"]`).evaluate((input: HTMLInputElement) => {
+      input.value = "https://spam.example";
+      input.dispatchEvent(new Event("input", { bubbles: true }));
+    });
+  },
+);
+
+Then(
+  "the Contact request carries the honeypot {string}",
+  async function (this: PortfolioWorld, value: string) {
+    expect(this.contactRequests[0]).toMatchObject({ website: value });
   },
 );
 

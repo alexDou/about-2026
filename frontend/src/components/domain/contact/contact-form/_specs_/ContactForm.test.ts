@@ -5,6 +5,7 @@ import { CONTACT_OUTCOME, fetchHealth, submitContact } from "../../../../../serv
 import { resetHealth } from "../../../api-status";
 import { ContactForm } from "../ContactForm.tsrx";
 import type { ContactFormProps } from "../types";
+import { resetFakeAltchaWidget, SOLVED_PAYLOAD, solving } from "./fake-altcha-widget";
 
 vi.mock("../../../../../services/api", async (importOriginal) => ({
   ...(await importOriginal<typeof import("../../../../../services/api")>()),
@@ -44,6 +45,7 @@ const fillRequired = () => {
 const send = () => fireEvent.click(screen.getByRole("button", { name: "Send" }));
 
 beforeEach(() => {
+  resetFakeAltchaWidget();
   submitContactMock.mockResolvedValue(CONTACT_OUTCOME.sent);
   fetchHealthMock.mockResolvedValue({ status: "ok" });
 });
@@ -102,7 +104,7 @@ describe("ContactForm", () => {
     expect(submitContactMock).toHaveBeenCalledWith({
       name: "Ada Lovelace",
       company: "Analytical Engines",
-      altcha: expect.any(String),
+      altcha: `${SOLVED_PAYLOAD}-1`,
     });
   });
 
@@ -157,6 +159,139 @@ describe("ContactForm", () => {
     expect(button).toBeEnabled();
     expect(screen.getByLabelText("Your name *")).toHaveValue("  Ada Lovelace ");
     expect(screen.getByLabelText(/^How to reach you/)).toHaveValue("ada@example.com");
+  });
+});
+
+const widget = (container: HTMLElement) => container.querySelector("altcha-widget");
+
+describe("ContactForm human check", () => {
+  it("holds an invisible ALTCHA widget that solves on submit, fetching its challenge from the API", () => {
+    const { container } = renderForm();
+    const element = widget(container);
+    expect(element).toBeInTheDocument();
+    expect(element?.closest("form")).toBe(
+      screen.getByRole("button", { name: "Send" }).closest("form"),
+    );
+    expect(element).toHaveAttribute("challenge", "/api/contact/challenge");
+    expect(element).toHaveAttribute("auto", "onsubmit");
+    expect(element).toHaveAttribute("display", "invisible");
+  });
+
+  it("sends the payload the widget solved", async () => {
+    renderForm();
+    fillRequired();
+    send();
+    await waitFor(() => expect(submitContactMock).toHaveBeenCalledTimes(1));
+    expect(submitContactMock.mock.calls[0]?.[0].altcha).toBe(`${SOLVED_PAYLOAD}-1`);
+  });
+
+  it("sends nothing while the widget is still solving", async () => {
+    solving.next = "never-ends";
+    renderForm();
+    fillRequired();
+    send();
+    await act(async () => {});
+    expect(submitContactMock).not.toHaveBeenCalled();
+  });
+
+  it("does not let a second press of Send through while the widget is solving", async () => {
+    solving.next = "never-ends";
+    renderForm();
+    fillRequired();
+    send();
+    const form = screen.getByRole("button", { name: "Send" }).closest("form") as HTMLElement;
+    fireEvent.submit(form);
+    await act(async () => {});
+    expect(submitContactMock).not.toHaveBeenCalled();
+  });
+
+  it("solves again for every attempt: a payload is used once", async () => {
+    submitContactMock.mockResolvedValueOnce(CONTACT_OUTCOME.invalidFields);
+    renderForm();
+    fillRequired();
+    send();
+    await screen.findByRole("alert");
+    send();
+    await waitFor(() => expect(submitContactMock).toHaveBeenCalledTimes(2));
+    expect(submitContactMock.mock.calls.map(([request]) => request.altcha)).toEqual([
+      `${SOLVED_PAYLOAD}-1`,
+      `${SOLVED_PAYLOAD}-2`,
+    ]);
+  });
+
+  it("does not reuse a payload after the fields were found invalid", async () => {
+    renderForm();
+    type(/^Your name/, "Ada");
+    send();
+    await screen.findByText("Please enter your company.");
+    type(/^Company/, "Analytical Engines");
+    send();
+    await waitFor(() => expect(submitContactMock).toHaveBeenCalledTimes(1));
+    expect(submitContactMock.mock.calls[0]?.[0].altcha).toBe(`${SOLVED_PAYLOAD}-2`);
+  });
+
+  it("shows the generic failure with the countdown when the widget cannot solve, sending nothing", async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    solving.next = "fails";
+    renderForm();
+    fillRequired();
+    send();
+    const alert = await screen.findByRole("alert");
+    expect(alert).toHaveTextContent("Your request wasn't sent. Please try again in 10 s.");
+    expect(screen.getByRole("button", { name: "Send" })).toBeDisabled();
+    expect(submitContactMock).not.toHaveBeenCalled();
+    expect(screen.getByLabelText("Your name *")).toHaveValue("  Ada Lovelace ");
+  });
+
+  it("solves afresh when the Visitor tries again after a failed solve", async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    solving.next = "fails";
+    renderForm();
+    fillRequired();
+    send();
+    const alert = await screen.findByRole("alert");
+    for (let second = 0; second < 10; second += 1) {
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(1000);
+      });
+    }
+    expect(alert).not.toHaveTextContent(" s.");
+    solving.next = "solves";
+    send();
+    expect(await screen.findByText(/^Thank you, Ada Lovelace/)).toBeInTheDocument();
+  });
+});
+
+const trap = (container: HTMLElement) =>
+  container.querySelector<HTMLInputElement>('input[name="website"]');
+
+describe("ContactForm honeypot", () => {
+  it("holds a field named website that no Visitor and no assistive technology reaches", () => {
+    const { container } = renderForm();
+    const field = trap(container);
+    expect(field).toBeInTheDocument();
+    expect(field).not.toBeVisible();
+    expect(field?.closest("[aria-hidden='true']")).not.toBeNull();
+    expect(field).toHaveAttribute("tabindex", "-1");
+    expect(field).toHaveAttribute("autocomplete", "off");
+    expect(screen.queryByRole("textbox", { name: /website/i })).not.toBeInTheDocument();
+  });
+
+  it("sends nothing in it from a Visitor", async () => {
+    renderForm();
+    fillRequired();
+    send();
+    await waitFor(() => expect(submitContactMock).toHaveBeenCalled());
+    expect(submitContactMock.mock.calls[0]?.[0].website).toBeUndefined();
+  });
+
+  it("sends what a bot put in it", async () => {
+    const { container } = renderForm();
+    fillRequired();
+    fireEvent.input(trap(container) as HTMLElement, { target: { value: "https://spam.example" } });
+    send();
+    await waitFor(() => expect(submitContactMock).toHaveBeenCalled());
+    expect(submitContactMock.mock.calls[0]?.[0].website).toBe("https://spam.example");
   });
 });
 

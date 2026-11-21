@@ -1,13 +1,15 @@
 import asyncio
 import json
 from datetime import UTC, datetime
-from unittest.mock import AsyncMock
+from unittest.mock import AsyncMock, Mock
 
 from app.dependencies import Dependencies
 from app.http import ApiRequest, ApiResponse
 from app.routes import dispatch
 
-DEPENDENCIES = Dependencies(mailer=AsyncMock(), clock=lambda: datetime(2026, 11, 20, tzinfo=UTC))
+DEPENDENCIES = Dependencies(
+    mailer=AsyncMock(), human_check=Mock(), clock=lambda: datetime(2026, 11, 20, tzinfo=UTC)
+)
 
 
 def call(method: str, path: str) -> ApiResponse:

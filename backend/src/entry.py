@@ -11,6 +11,7 @@ from js import Object
 from pyodide.ffi import to_js
 from workers import Response, WorkerEntrypoint
 
+from app.contact.human_check import AltchaHumanCheck
 from app.contact.mailer import EmailMailer
 from app.dependencies import Dependencies
 from app.http import ApiRequest
@@ -34,7 +35,12 @@ class Default(WorkerEntrypoint):
             sender=self.env.MAIL_FROM,
             recipient=self.env.MAIL_TO,
         )
-        return Dependencies(mailer=mailer, clock=lambda: datetime.now(UTC))
+
+        def clock() -> datetime:
+            return datetime.now(UTC)
+
+        human_check = AltchaHumanCheck(hmac_key=self.env.ALTCHA_HMAC_KEY, clock=clock)
+        return Dependencies(mailer=mailer, human_check=human_check, clock=clock)
 
     async def fetch(self, request):
         api_request = ApiRequest(

@@ -21,11 +21,18 @@ export const FORM_STATUS = {
   sent: "sent",
 } as const;
 
-/**
- * Stands in for the human check's solved payload until Unit 4.6 adds the ALTCHA widget; the
- * backend does not check it yet.
- */
-export const HUMAN_CHECK_PENDING = "pending-unit-4.6";
+/** The ALTCHA widget's states (its `State`); its `statechange` events carry them. */
+export const HUMAN_CHECK_STATE = {
+  unverified: "unverified",
+  verifying: "verifying",
+  verified: "verified",
+  error: "error",
+  expired: "expired",
+  code: "code",
+} as const;
+
+/** The widget solves the challenge when the form is submitted, and shows nothing of it. */
+export const HUMAN_CHECK_WIDGET = { auto: "onsubmit", display: "invisible" } as const;
 
 /** What can be wrong with a field. */
 export const FIELD_ERROR = {
