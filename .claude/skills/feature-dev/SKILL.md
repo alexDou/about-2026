@@ -41,7 +41,7 @@ Check the bean against the code in `frontend/src/` and `backend/src/app/`:
 Append a `## Design` section to the bean (pipe multi-line text through stdin: `... | beans update <id> --body-append -`):
 
 - **Contract:** exact Pydantic models and the matching TypeScript types, plus each new chunk's `index.ts` exports and props.
-- **Data flow:** FastAPI route → service → hook → component.
+- **Data flow:** route in `ROUTES` → handler → service → hook → component.
 - **Chunk layout:** folders and files to create, following the colocation rule.
 - **Invariants:** what must stay true (e.g. "the logo animation never allocates per frame").
 

@@ -112,7 +112,6 @@ export function ContactForm({ content }: ContactFormProps) @{
             onInput={(event) => setWebsite((event.target as HTMLInputElement).value)}
           />
         </div>
-        ;
         // A used widget is replaced by a new one (a new key), so each attempt gets a new challenge.
         <altcha-widget
           key={humanCheckRound}
@@ -122,7 +121,6 @@ export function ContactForm({ content }: ContactFormProps) @{
           display={HUMAN_CHECK_WIDGET.display}
           onstatechange={changeHumanCheck}
         />
-        ;
         @if (notice === FORM_NOTICE.invalidFields) {
           <p class={styles["contact-form__notice"]} role="alert">
             {intl.formatMessage({ id: content.invalid })}

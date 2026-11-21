@@ -2,7 +2,7 @@ import type { MessageId } from "../../../i18n";
 import { STATUS_TONES } from "../../ui/status-badge";
 import type { StatusTone } from "../../ui/status-badge";
 
-/** Whether the FastAPI backend is reachable, as far as the last health check knows. */
+/** Whether the backend is reachable, as far as the last health check knows. */
 export const API_HEALTH = { checking: "checking", ok: "ok", down: "down" } as const;
 
 /** How long a health request may take before the backend counts as down. */

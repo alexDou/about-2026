@@ -1,84 +1,93 @@
 # Fixtures for backend.yml, run with `opengrep test .opengrep/rules`.
-import httpx
-from fastapi import APIRouter, FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
-from starlette.middleware import Middleware
+import json
 
-app = FastAPI(title="Portfolio API")
-api = APIRouter(prefix="/api")
+from workers import fetch
+
 AGENT_URL = "https://agent.example/v1/chat"
 
+# ok: backend-route-outside-api
+ROUTES: dict[tuple[str, str], object] = {
+    # ok: backend-route-outside-api
+    ("GET", "/api/health"): health,
+    # ok: backend-route-outside-api
+    ("POST", "/api/contact"): contact,
+    # ruleid: backend-route-outside-api
+    ("GET", "/health"): health,
+    # ruleid: backend-route-outside-api
+    ("POST", "/contact"): contact,
+    # ruleid: backend-route-outside-api
+    ("GET", "/apis/contact"): contact,
+}
 
-# ruleid: backend-route-outside-api-router
-@app.get("/health")
-async def bare_health() -> dict[str, str]:
-    return {"status": "ok"}
-
-
-# ruleid: backend-route-outside-api-router
-@app.post("/contact")
-def bare_contact() -> None:
-    return None
-
-
-# ok: backend-route-outside-api-router
-@api.get("/health")
-async def health() -> dict[str, str]:
-    return {"status": "ok"}
-
-
-# ruleid: backend-route-outside-api-router
-app.add_api_route("/x", health)
-# ok: backend-route-outside-api-router
-app.include_router(api)
+# ok: backend-route-outside-api
+OTHER_TABLE = {("GET", "/health"): health}
 
 
-@api.post("/contact")
-async def contact(name: str) -> dict[str, str]:
+async def contact(request: ApiRequest, dependencies: Dependencies) -> ApiResponse:
     try:
-        store(name)
+        store(request.body)
     except ValueError as err:
         # ruleid: backend-exception-text-in-response
-        raise HTTPException(status_code=400, detail=str(err)) from err
+        return error_response(400, str(err))
     except KeyError as err:
         # ruleid: backend-exception-text-in-response
-        raise HTTPException(400, f"bad key {err}") from err
+        return error_response(400, f"bad key {err}")
+    except TypeError as err:
+        # ruleid: backend-exception-text-in-response
+        return error_response(400, detail=repr(err))
     except OSError as err:
         # ruleid: backend-exception-text-in-response
-        return JSONResponse({"error": repr(err)}, status_code=500)
+        return json_response(ErrorResponse(detail=str(err)), 500)
+    except ArithmeticError as err:
+        # ruleid: backend-exception-text-in-response
+        return json_response(ErrorResponse(detail=str(err)), 500)
+    except EOFError as err:
+        # ruleid: backend-exception-text-in-response
+        failure = ErrorResponse(detail=str(err))
+        return json_response(failure, 500)
+    except LookupError as err:
+        # ruleid: backend-exception-text-in-response
+        return ApiResponse(status=500, body=str(err))
     except RuntimeError as err:
         log(err)
         # ok: backend-exception-text-in-response
-        raise HTTPException(status_code=500, detail="Request not stored") from err
-    return {"status": "stored"}
+        return error_response(500, "Request not stored")
+    except UnicodeError as err:
+        log(err)
+        # ok: backend-exception-text-in-response
+        return json_response(ErrorResponse(detail="Request not stored"), 500)
+    except ImportError as err:
+        log(err)
+        # ok: backend-exception-text-in-response
+        return ApiResponse(status=500, body="Request not stored")
+    return ApiResponse(status=204)
 
 
-# ruleid: backend-cors-wildcard
-app.add_middleware(CORSMiddleware, allow_origins=["*"])
-# ruleid: backend-cors-wildcard
-app.add_middleware(CORSMiddleware, allow_origin_regex=".*")
-# ruleid: backend-cors-wildcard
-middleware = [Middleware(CORSMiddleware, allow_origins=["https://a.example", "*"])]
-# ok: backend-cors-wildcard
-app.add_middleware(CORSMiddleware, allow_origins=["https://portfolio.example"])
-
-
-@api.post("/chat")
-async def chat(message: str, callback: str) -> dict[str, str]:
-    async with httpx.AsyncClient() as client:
-        # ok: backend-request-data-in-outbound-url
-        await client.post(AGENT_URL, json={"message": message})
-        # ruleid: backend-request-data-in-outbound-url
-        await client.get(callback)
-        # ruleid: backend-request-data-in-outbound-url
-        httpx.get(f"https://{callback}/hook")
+async def chat(request: ApiRequest, dependencies: Dependencies) -> ApiResponse:
+    callback = json.loads(request.body)["callback"]
+    # ok: backend-request-data-in-outbound-url
+    await fetch(AGENT_URL, method="POST", body=request.body)
     # ruleid: backend-request-data-in-outbound-url
-    httpx.AsyncClient(base_url=callback)
-    return {"status": "sent"}
+    await fetch(request.headers["x-callback"])
+    # ruleid: backend-request-data-in-outbound-url
+    await fetch(f"https://{request.path}/hook")
+    # ruleid: backend-request-data-in-outbound-url
+    await dependencies.agent.fetch(callback)
+    # ruleid: backend-request-data-in-outbound-url
+    urlopen(request.body.decode())
+    # ruleid: backend-request-data-in-outbound-url
+    await dependencies.agent.pyfetch(callback)
+    # ruleid: backend-request-data-in-outbound-url
+    request_module.urlopen(request.path)
+    return ApiResponse(status=204)
 
 
-def store(name: str) -> None: ...
+def sync_chat(request: ApiRequest) -> None:
+    # ruleid: backend-request-data-in-outbound-url
+    pyfetch(request.path)
+
+
+def store(body: bytes) -> None: ...
 
 
 def log(err: Exception) -> None: ...

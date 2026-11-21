@@ -4,7 +4,7 @@ import { LABEL_BY_HEALTH, TONE_BY_HEALTH } from "./config";
 import { useApiHealth } from "./hooks/use-api-health";
 import styles from "./styles.module.css";
 
-/** Shows whether the FastAPI backend is reachable. */
+/** Shows whether the backend is reachable. */
 export function ApiStatus() @{
   const health = useApiHealth();
   const intl = useIntl();

@@ -54,5 +54,5 @@ If your output contradicts an existing ADR, surface it explicitly rather than si
 
 When designing specs or breaking work into tickets:
 1. **Stage 0: Domains, Interfaces & Contracts First (`Unit X.0`)**: Lock the Pydantic models and the matching frontend TS types (`.claude/rules/api-contract.md`), with a contract test on each side.
-2. **Stage 1..N: Subsystems in Isolation (`Unit X.1..N-1`)**: Implement each module (FastAPI route, service, hook, component) against mocks built on the contracts. Modules run and test independently.
+2. **Stage 1..N: Subsystems in Isolation (`Unit X.1..N-1`)**: Implement each module (route handler, service, hook, component) against mocks built on the contracts. Modules run and test independently.
 3. **Stage Final: Connect Everything Together (`Unit X.N`)**: Cucumber + Playwright E2E against the real frontend build and running backend verifies the end-to-end flow and the latency budget (<50ms).
