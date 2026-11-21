@@ -2,7 +2,7 @@
 
 from collections.abc import Awaitable, Callable
 
-from app.contact.handlers import submit_contact
+from app.contact.handlers import get_challenge, submit_contact
 from app.dependencies import Dependencies
 from app.health import health
 from app.http import ApiRequest, ApiResponse, error_response
@@ -11,6 +11,7 @@ type Handler = Callable[[ApiRequest, Dependencies], Awaitable[ApiResponse]]
 
 ROUTES: dict[tuple[str, str], Handler] = {
     ("GET", "/api/health"): health,
+    ("GET", "/api/contact/challenge"): get_challenge,
     ("POST", "/api/contact"): submit_contact,
 }
 

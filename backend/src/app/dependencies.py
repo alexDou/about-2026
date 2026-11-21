@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import Protocol
 
-from app.contact.models import ContactRequest
+from app.contact.models import ChallengeResponse, ContactRequest
 
 
 class ContactMailer(Protocol):
@@ -15,8 +15,19 @@ class ContactMailer(Protocol):
     async def send(self, request: ContactRequest, sent_at: datetime) -> None: ...
 
 
+class HumanCheck(Protocol):
+    """Tells Visitors from bots with a proof of work the browser solves."""
+
+    def create_challenge(self) -> ChallengeResponse: ...
+
+    def verify(self, payload: str) -> bool:
+        """Whether `payload` is a solved, signed, unexpired challenge. Never raises."""
+        ...
+
+
 @dataclass(frozen=True)
 class Dependencies:
     mailer: ContactMailer
+    human_check: HumanCheck
     # The current time, timezone-aware.
     clock: Callable[[], datetime]

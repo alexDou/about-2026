@@ -12,7 +12,7 @@ from enum import IntEnum
 from types import MappingProxyType
 from typing import Annotated, Final
 
-from pydantic import BaseModel, BeforeValidator, ConfigDict, Field
+from pydantic import BaseModel, BeforeValidator, ConfigDict, Field, ValidationError
 from pydantic.alias_generators import to_camel
 from pydantic_core import PydanticCustomError
 
@@ -81,6 +81,21 @@ class ContactRequest(BaseModel):
     ] = None
     altcha: Annotated[str, Field(min_length=1), BeforeValidator(_clean)]
     website: Annotated[str | None, BeforeValidator(_clean_optional)] = None
+
+
+class _HoneypotProbe(BaseModel):
+    """Only the honeypot, read the way `ContactRequest` reads it, whatever else the body holds."""
+
+    website: Annotated[str | None, BeforeValidator(_clean_optional)] = None
+
+
+def honeypot_filled(body: bytes) -> bool:
+    """Whether the body has text in the hidden `website` field. A body that cannot be read as
+    that is not a filled honeypot: field validation answers it."""
+    try:
+        return _HoneypotProbe.model_validate_json(body).website is not None
+    except ValidationError:
+        return False
 
 
 class ChallengeParameters(BaseModel):

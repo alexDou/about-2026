@@ -4,12 +4,12 @@ contracts."""
 import asyncio
 import json
 from datetime import UTC, datetime
-from unittest.mock import AsyncMock
+from unittest.mock import AsyncMock, Mock
 
 import pytest
 
 from app.contact.mailer import MailerError
-from app.contact.models import ContactRequest
+from app.contact.models import ChallengeParameters, ChallengeResponse, ContactRequest
 from app.dependencies import Dependencies
 from app.http import ApiRequest, ApiResponse
 from app.routes import dispatch
@@ -18,16 +18,47 @@ NOW = datetime(2026, 11, 20, 13, 5, tzinfo=UTC)
 VALID = {"name": "Ada Lovelace", "company": "Analytical Engines", "altcha": "payload"}
 
 
+CHALLENGE = ChallengeResponse(
+    parameters=ChallengeParameters(
+        algorithm="PBKDF2/SHA-256",
+        cost=1000,
+        keyLength=32,
+        keyPrefix="00",
+        nonce="a" * 32,
+        salt="b" * 32,
+        expiresAt=1_795_000_000,
+    ),
+    signature="c" * 64,
+)
+
+
 @pytest.fixture
 def mailer() -> AsyncMock:
     return AsyncMock()
 
 
-def post(mailer: AsyncMock, body: object) -> ApiResponse:
-    deps = Dependencies(mailer=mailer, clock=lambda: NOW)
+@pytest.fixture
+def human_check() -> Mock:
+    """A human check that passes every payload and hands out one fixed challenge."""
+    mock = Mock()
+    mock.verify.return_value = True
+    mock.create_challenge.return_value = CHALLENGE
+    return mock
+
+
+def post(mailer: AsyncMock, body: object, human_check: Mock | None = None) -> ApiResponse:
+    deps = Dependencies(
+        mailer=mailer, human_check=human_check or passing_human_check(), clock=lambda: NOW
+    )
     raw = body if isinstance(body, bytes) else json.dumps(body).encode()
     request = ApiRequest(method="POST", path="/api/contact", body=raw)
     return asyncio.run(dispatch(request, deps))
+
+
+def passing_human_check() -> Mock:
+    mock = Mock()
+    mock.verify.return_value = True
+    return mock
 
 
 def test_204_with_no_body_after_the_mailer_sent(mailer: AsyncMock) -> None:
@@ -86,7 +117,93 @@ def test_502_when_the_mailer_cannot_send(mailer: AsyncMock) -> None:
 
 
 def test_other_methods_on_the_path_answer_405(mailer: AsyncMock) -> None:
-    deps = Dependencies(mailer=mailer, clock=lambda: NOW)
+    deps = Dependencies(mailer=mailer, human_check=passing_human_check(), clock=lambda: NOW)
     response = asyncio.run(dispatch(ApiRequest(method="GET", path="/api/contact"), deps))
     assert response.status == 405
     assert response.headers["allow"] == "POST"
+
+
+def test_the_human_check_gets_the_widgets_payload(mailer: AsyncMock, human_check: Mock) -> None:
+    post(mailer, VALID, human_check)
+    human_check.verify.assert_called_once_with("payload")
+
+
+def test_400_when_the_human_check_rejects_and_nothing_sent(
+    mailer: AsyncMock, human_check: Mock
+) -> None:
+    human_check.verify.return_value = False
+    response = post(mailer, VALID, human_check)
+    assert response.status == 400
+    assert json.loads(response.body) == {"detail": "Human check failed"}
+    mailer.send.assert_not_awaited()
+
+
+def test_invalid_fields_are_answered_before_the_human_check(
+    mailer: AsyncMock, human_check: Mock
+) -> None:
+    human_check.verify.return_value = False
+    assert post(mailer, {**VALID, "name": ""}, human_check).status == 422
+    human_check.verify.assert_not_called()
+
+
+def test_a_filled_honeypot_gets_a_silent_204_and_nothing_is_sent(
+    mailer: AsyncMock, human_check: Mock
+) -> None:
+    response = post(mailer, {**VALID, "website": "https://spam.example"}, human_check)
+    assert response.status == 204
+    assert response.body == ""
+    mailer.send.assert_not_awaited()
+    human_check.verify.assert_not_called()
+
+
+def test_the_honeypot_is_answered_before_the_fields_are_checked(mailer: AsyncMock) -> None:
+    response = post(mailer, {"name": "", "website": "x"})
+    assert response.status == 204
+    mailer.send.assert_not_awaited()
+
+
+@pytest.mark.parametrize("website", ["", "   ", "\n"])
+def test_an_empty_honeypot_is_a_normal_request(mailer: AsyncMock, website: str) -> None:
+    assert post(mailer, {**VALID, "website": website}).status == 204
+    mailer.send.assert_awaited_once()
+
+
+def test_a_honeypot_that_is_not_text_is_not_a_silent_204(mailer: AsyncMock) -> None:
+    assert post(mailer, {**VALID, "website": None}).status == 422
+    assert post(mailer, {**VALID, "website": 7}).status == 422
+    mailer.send.assert_not_awaited()
+
+
+def challenge(human_check: Mock) -> ApiResponse:
+    deps = Dependencies(mailer=AsyncMock(), human_check=human_check, clock=lambda: NOW)
+    return asyncio.run(dispatch(ApiRequest(method="GET", path="/api/contact/challenge"), deps))
+
+
+def test_the_challenge_is_the_human_checks_challenge_as_json(human_check: Mock) -> None:
+    response = challenge(human_check)
+    assert response.status == 200
+    assert response.headers["content-type"] == "application/json"
+    assert json.loads(response.body) == {
+        "parameters": {
+            "algorithm": "PBKDF2/SHA-256",
+            "cost": 1000,
+            "keyLength": 32,
+            "keyPrefix": "00",
+            "nonce": "a" * 32,
+            "salt": "b" * 32,
+            "expiresAt": 1_795_000_000,
+        },
+        "signature": "c" * 64,
+    }
+
+
+def test_a_challenge_is_never_cached(human_check: Mock) -> None:
+    assert challenge(human_check).headers["cache-control"] == "no-store"
+
+
+def test_the_challenge_path_answers_only_get(mailer: AsyncMock, human_check: Mock) -> None:
+    deps = Dependencies(mailer=mailer, human_check=human_check, clock=lambda: NOW)
+    request = ApiRequest(method="POST", path="/api/contact/challenge")
+    response = asyncio.run(dispatch(request, deps))
+    assert response.status == 405
+    assert response.headers["allow"] == "GET"

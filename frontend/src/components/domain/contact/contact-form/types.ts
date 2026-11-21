@@ -1,5 +1,11 @@
 import type { MessageId } from "../../../../i18n";
-import type { CONTACT_FIELD, FIELD_ERROR, FORM_NOTICE, FORM_STATUS } from "./config";
+import type {
+  CONTACT_FIELD,
+  FIELD_ERROR,
+  FORM_NOTICE,
+  FORM_STATUS,
+  HUMAN_CHECK_STATE,
+} from "./config";
 
 export type ContactFieldName = (typeof CONTACT_FIELD)[keyof typeof CONTACT_FIELD];
 
@@ -45,3 +51,15 @@ export type ContactFormContent = {
 export type ContactFormProps = {
   content: ContactFormContent;
 };
+
+export type HumanCheckState = (typeof HUMAN_CHECK_STATE)[keyof typeof HUMAN_CHECK_STATE];
+
+/** Where the human check stands: the widget's state and its solved payload. */
+export type HumanCheck = {
+  state: HumanCheckState;
+  /** Empty until the widget has solved the challenge. */
+  payload: string;
+};
+
+/** The widget's `statechange` event: `payload` is null until it is solved. */
+export type HumanCheckChange = CustomEvent<{ state: HumanCheckState; payload: string | null }>;

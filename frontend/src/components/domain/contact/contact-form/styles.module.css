@@ -19,6 +19,16 @@
 }
 
 /*
+ * Neither shows nor takes room. The honeypot is for bots only. The widget solves silently on
+ * submit: its markup (a checkbox, "I'm not a robot") stays out of sight and out of the fields'
+ * grid, and its script does not need it on screen.
+ */
+.contact-form__honeypot,
+.contact-form__human-check {
+  display: none;
+}
+
+/*
  * The reference's button: as wide as the inputs and under them, a short, solid bar that swaps its
  * colours on hover. On a narrow screen the labels sit above the inputs and the button takes the full width.
  */
