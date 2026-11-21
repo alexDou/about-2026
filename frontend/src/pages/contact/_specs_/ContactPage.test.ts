@@ -50,7 +50,7 @@ describe("ContactPage", () => {
     render(ContactPage, { props: {}, wrapper: intlWrapper() });
     expect(
       screen.getByText(
-        "I use these details only to reply to your request. They reach me by email and are not stored on this site or passed on to anyone.",
+        "I use these details only to reply to your request. They reach me privately and are not stored or passed on to anyone.",
       ),
     ).toBeInTheDocument();
   });

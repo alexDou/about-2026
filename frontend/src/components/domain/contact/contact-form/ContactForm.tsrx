@@ -2,7 +2,6 @@ import { useEffect, useRef } from "octane";
 import { API_HEALTH, useApiHealth } from "../../api-status";
 import { useIntl } from "../../../../hooks/use-intl";
 import { CONTACT_LIMITS } from "../../../../services/api";
-import { Icon, ICON_SIZES } from "../../../ui/icon";
 import { INPUT_FIELD_LAYOUTS, INPUT_FIELD_TONES, InputField } from "../../../ui/input-field";
 import { CONTACT_FIELDS, FIELD_ERROR, FORM_NOTICE, FORM_STATUS } from "./config";
 import { useContactForm } from "./hooks/use-contact-form";
@@ -14,7 +13,7 @@ import { characterCount, showsCounter } from "./utils";
  * The Contact request form. While it sends, the fields and the button are disabled; once it is
  * sent, a thank-you note replaces it. A request that fails brings the form back as it was.
  */
-export function ContactForm({ content, media }: ContactFormProps) @{
+export function ContactForm({ content }: ContactFormProps) @{
   const intl = useIntl();
   const {
     values,
@@ -104,8 +103,7 @@ export function ContactForm({ content, media }: ContactFormProps) @{
         type="submit"
         disabled={sending || offline || retryIn > 0}
       >
-        <Icon media={media.send} size={ICON_SIZES.small} />
-        <span>{intl.formatMessage({ id: sending ? content.sending : content.send })}</span>
+        {intl.formatMessage({ id: sending ? content.sending : content.send })}
       </button>
     </form>;
   }

@@ -67,4 +67,28 @@ describe("contact-panel stylesheet", () => {
       "links",
     ]);
   });
+
+  it("puts the info block under the form below 1180px", () => {
+    const medium = css.slice(
+      css.indexOf("@media (width < 1180px)"),
+      css.indexOf("@media (width < 840px)"),
+    );
+    expect(medium).toMatch(/grid-template-columns:\s*minmax\(0, [\d.]+rem\);/);
+    const areas = medium.match(/grid-template-areas:([^;]*);/)?.[1] ?? "";
+    expect([...areas.matchAll(/"([^"]+)"/g)].map((match) => match[1])).toEqual([
+      "fields",
+      "submit",
+      "info",
+    ]);
+  });
+
+  it("draws each rule as a line in the About colour and takes the rules away on a phone", () => {
+    expect(rule(css, ".contact-panel__rule")).toMatch(/border-top:[^;]*var\(--panel-about\)/);
+    const phone = css.slice(css.indexOf("@media (width < 840px)"));
+    expect(phone).toMatch(/\.contact-panel__rule\s*\{[^}]*display:\s*none/);
+  });
+
+  it("spaces the info block by the small distance token", () => {
+    expect(rule(css, ".contact-panel__info")).toMatch(/gap:\s*var\(--element-distance-small\)/);
+  });
 });

@@ -3,7 +3,7 @@ import { expect } from "@playwright/test";
 import type { PortfolioWorld } from "../support/world.ts";
 
 const TRANSPARENT = "rgba(0, 0, 0, 0)";
-const LIGHT_TEXT = "rgb(209, 220, 217)";
+const ABOUT_TEXT = "rgb(37, 54, 58)";
 
 const band = (world: PortfolioWorld) => world.page.locator("main section > div").first();
 
@@ -27,10 +27,13 @@ const box = async (world: PortfolioWorld, name: string) => {
   return found;
 };
 
-Then("the Contact page has no band and its text is light", async function (this: PortfolioWorld) {
-  await expect(band(this)).toHaveCSS("background-color", TRANSPARENT);
-  await expect(item(this, "remote")).toHaveCSS("color", LIGHT_TEXT);
-});
+Then(
+  "the Contact page has no band and its text is in the About colour",
+  async function (this: PortfolioWorld) {
+    await expect(band(this)).toHaveCSS("background-color", TRANSPARENT);
+    await expect(item(this, "remote")).toHaveCSS("color", ABOUT_TEXT);
+  },
+);
 
 Then("the Contact band says {string}", async function (this: PortfolioWorld, text: string) {
   await expect(band(this)).toContainText(text);
@@ -65,6 +68,17 @@ Then(
   },
 );
 
+Then("the Contact info block stands under the form", async function (this: PortfolioWorld) {
+  const info = await box(this, "info");
+  const submit = await box(this, "submit");
+  expect(submit.y + submit.height).toBeLessThanOrEqual(info.y + 1);
+});
+
+Then("the Contact info shows {int} rules", async function (this: PortfolioWorld, count: number) {
+  const rules = band(this).getByRole("separator");
+  await expect(rules).toHaveCount(count);
+});
+
 const stack = async (world: PortfolioWorld, order: string) => {
   const names = order.split(", ");
   const boxes = await Promise.all(names.map((name) => box(world, name)));
@@ -84,6 +98,7 @@ Then(
 /** Every label of the form with the input it names. */
 const labelled = async (world: PortfolioWorld) => {
   const labels = world.page.locator("form label");
+  await labels.first().waitFor();
   const count = await labels.count();
   expect(count).toBeGreaterThan(0);
   return Promise.all(

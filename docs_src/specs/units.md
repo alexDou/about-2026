@@ -179,19 +179,20 @@ Reference: the expanded menu of codepen `fluxus/gPWvZm` (local copy in git-ignor
 **Decided** (grilling 2026-11-19, amended 2026-11-20 for Cloudflare Workers):
 - **No Legal notice, no Privacy policy, no consent checkbox.** Only the Contact notice beside the form. No extra page or route: everything stays in the Contact Panel.
 - **Layout** (after the Responsive Contact Form pen in `support_files/contact/`, for layout and feel only, not a look to copy; amended 2026-11-21, portfolio-653r):
-  - The page opens with the heading "Contact me" (capitals, its own message; Explore's tile keeps "Contact") and the subtitle "Let me know you're interested". The offline note follows.
-  - No band: the form and the info block stand on the Panel's `#5c8b70`, centred on the page in columns of limited width, in the light `--panel-what-i-do` colour. This drops the earlier `#d1dcd9` band, which was there because body text on `#5c8b70` reaches only about 3:1. The Owner decided for the light text anyway; it measures 2.78:1. The inputs and the button carry their own contrast (light on dark, 8.97:1).
-  - Desktop: the form on the left, its button under it; the info block on the right, centred vertically against the form's inputs (the button's row is not counted): 1 "Remote, worldwide" (globe icon), 2 the Contact notice, 3 the profile links (LinkedIn, Xing) between two rules, 4 "* required".
-  - Below 840px one column reorders the same markup: "Remote, worldwide", the form fields with the submit button, the notice, "* required", the links.
-  - A field's label stands beside its input from 568px up and above it below 568px. The inputs and the button follow the pen's sizes: short boxes (about 34px) with a thin light border on a dark fill, the button as wide as the inputs and directly under them; no textarea.
+  - The page opens with the heading "Contact me" (capitals, its own message; Explore's tile and the document title keep "Contact") and the subtitle "Let me know you're interested", a step smaller than the heading, in italic. The offline note follows.
+  - No band: the form and the info block stand on the Panel's `#5c8b70`, centred on the page in columns of limited width, in the About colour `--panel-about`. This drops the earlier `#d1dcd9` band, which was there because body text on `#5c8b70` reaches only about 3:1. The Owner decided for the dark text anyway; it measures 3.23:1, which passes the 3:1 of non-text contrast (the rules, the rings) and not the 4.5:1 of body text. The inputs and the button carry their own contrast (light on dark, 8.97:1).
+  - Wide screen (1180px and up): the form on the left, its button under it; the info block on the right, centred vertically against the form's fields. The info block is one `div` per item with a rule (`hr`) between each: 1 "Remote, worldwide" (globe icon, the standard font), 2 the Contact notice (italic), 3 the profile links (LinkedIn, Xing; round icons), 4 "* required".
+  - From 840px to 1180px one column: the form, then the info block under it, rules included.
+  - Below 840px one column reorders the same markup, with no rules: "Remote, worldwide", the form fields with the submit button, the notice, "* required", the links.
+  - A field's label stands beside its input from 568px up and above it below 568px. The inputs and the button follow the pen's sizes: short boxes (about 34px) with a thin light border on a dark fill, the button as wide as the inputs and directly under them, with its text only; no textarea. The gaps are `--element-distance-small` (the fields, the info block) and `--element-distance-standard` (the panel).
   - Fonts: Amethysta for content, Playfair Display for headings, labels and the button. Palette colours only.
-  - Every icon (the globe, the paper plane in the button, the profile icons) is drawn by the shared `Icon` component from an SVG file in a `media/` folder.
+  - Every icon (the globe, the profile icons) is drawn by the shared `Icon` component from an SVG file in a `media/` folder. On Contact the profile icons are 1rem; About's stay as they were.
 - **Profile links**: `ProfileLinks` moves from About's top card to `components/ui/profile-links/` (second consumer) and gains Xing (Simple Icons, CC0) and a `look` prop: About stays plain, Contact gets round icons with a hover ring. LinkedIn `https://www.linkedin.com/in/a-doo/`, Xing `https://www.xing.com/profile/Alexander_Doo`. About keeps LinkedIn and GitHub.
-- **Contact notice** (an `en` message, translatable): "I use these details only to reply to your request. They reach me by email and are not stored on this site or passed on to anyone."
+- **Contact notice** (an `en` message, translatable): "I use these details only to reply to your request. They reach me privately and are not stored or passed on to anyone."
 - **Form fields**, visible labels (Playfair Display) beside or above each field, required marked "*" with a "* required" line:
-  - name: required, at most 80 characters;
+  - name (label "Your name"): required, at most 80 characters;
   - company: required, at most 100;
-  - position: optional, one line, at most 120;
+  - position (label "You're hiring for"): optional, one line, at most 120;
   - contact ("How to reach you", hint "email, phone, LinkedIn, …"): optional, at most 200, free text in any channel, no format check.
   - Values are trimmed and stripped of control characters; whitespace only counts as empty. zod checks them in the browser; the backend checks the same rules again.
 - **Form state shown to the Visitor**:
@@ -238,7 +239,7 @@ Reference: the expanded menu of codepen `fluxus/gPWvZm` (local copy in git-ignor
 4. As a Visitor, I want to see the Owner's LinkedIn and Xing profiles as icon links, so that I can reach them on the network I use.
 5. As a Visitor using a screen reader, I want each profile link named ("LinkedIn", "Xing"), so that I know where it leads.
 6. As a Visitor, I want a visible ring when I hover or focus a profile icon, so that I can tell it is a link.
-7. As a Visitor, I want the Contact notice beside the form, so that I know my details are used only to reply, reach the Owner by email, and are not stored or passed on.
+7. As a Visitor, I want the Contact notice beside the form, so that I know my details are used only to reply, reach the Owner privately, and are not stored or passed on.
 8. As a Visitor, I want no consent checkbox to tick, so that sending a request takes no extra step.
 9. As a Visitor, I want a visible label above every field, so that I still know what a field is after I start typing.
 10. As a Visitor, I want required fields marked with "*" and a "* required" line, so that I know what I must fill in.

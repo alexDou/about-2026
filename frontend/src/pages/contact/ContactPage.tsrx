@@ -5,7 +5,6 @@ import { Heading } from "../../components/ui/heading";
 import { useIntl } from "../../hooks/use-intl";
 import { CONTACT_CONTENT } from "./content";
 import globe from "./media/globe.svg";
-import send from "./media/send.svg";
 import styles from "./styles.module.css";
 
 /**
@@ -24,7 +23,7 @@ export function ContactPage() @{
     </header>
     <OfflineNote />
     <ContactPanel content={CONTACT_CONTENT} media={{ globe }}>
-      <ContactForm content={CONTACT_CONTENT.form} media={{ send }} />
+      <ContactForm content={CONTACT_CONTENT.form} />
     </ContactPanel>
   </section>;
 }

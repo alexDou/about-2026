@@ -72,13 +72,13 @@
   "contact.form.name.label": [
     {
       "type": 0,
-      "value": "Name"
+      "value": "Your name"
     }
   ],
   "contact.form.position.label": [
     {
       "type": 0,
-      "value": "Position"
+      "value": "You're hiring for"
     }
   ],
   "contact.form.send": [
@@ -124,7 +124,7 @@
   "contact.notice": [
     {
       "type": 0,
-      "value": "I use these details only to reply to your request. They reach me by email and are not stored on this site or passed on to anyone."
+      "value": "I use these details only to reply to your request. They reach me privately and are not stored or passed on to anyone."
     }
   ],
   "contact.page.subtitle": [
