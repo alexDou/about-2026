@@ -31,15 +31,13 @@ const content: ContactFormProps["content"] = {
   thanks: "contact.form.thanks",
 };
 
-const media: ContactFormProps["media"] = { send: "send.svg" };
-
-const renderForm = () => render(ContactForm, { props: { content, media }, wrapper: intlWrapper() });
+const renderForm = () => render(ContactForm, { props: { content }, wrapper: intlWrapper() });
 
 const type = (label: string | RegExp, value: string) =>
   fireEvent.input(screen.getByLabelText(label), { target: { value } });
 
 const fillRequired = () => {
-  type(/^Name/, "  Ada Lovelace ");
+  type(/^Your name/, "  Ada Lovelace ");
   type(/^Company/, "Analytical Engines");
 };
 
@@ -58,9 +56,9 @@ afterEach(() => {
 describe("ContactForm", () => {
   it("labels every field and marks the required ones with an asterisk", () => {
     renderForm();
-    expect(screen.getByLabelText("Name *")).toBeRequired();
+    expect(screen.getByLabelText("Your name *")).toBeRequired();
     expect(screen.getByLabelText("Company *")).toBeRequired();
-    expect(screen.getByLabelText("Position")).not.toBeRequired();
+    expect(screen.getByLabelText("You're hiring for")).not.toBeRequired();
     expect(screen.getByLabelText(/^How to reach you/)).not.toBeRequired();
   });
 
@@ -71,11 +69,11 @@ describe("ContactForm", () => {
     );
   });
 
-  it("draws a paper plane in the Send button, which stays named by its text", () => {
+  it("holds only its text in the Send button", () => {
     renderForm();
     const button = screen.getByRole("button", { name: "Send" });
-    expect(button.querySelector("use")?.getAttribute("href")).toBe("send.svg#icon");
-    expect(button.querySelector("svg")?.getAttribute("aria-hidden")).toBe("true");
+    expect(button.querySelector("svg")).toBeNull();
+    expect(button).toHaveTextContent("Send");
   });
 
   it("puts every label beside its input, in the dark look of the Panel", () => {
@@ -98,7 +96,7 @@ describe("ContactForm", () => {
   it("sends the cleaned fields once, leaving out what was not given", async () => {
     renderForm();
     fillRequired();
-    type("Position", "   ");
+    type("You're hiring for", "   ");
     send();
     await waitFor(() => expect(submitContactMock).toHaveBeenCalledTimes(1));
     expect(submitContactMock).toHaveBeenCalledWith({
@@ -111,7 +109,7 @@ describe("ContactForm", () => {
   it("sends the optional fields when they are given", async () => {
     renderForm();
     fillRequired();
-    type("Position", "Staff engineer");
+    type("You're hiring for", "Staff engineer");
     type(/^How to reach you/, "ada@example.com");
     send();
     await waitFor(() => expect(submitContactMock).toHaveBeenCalled());
@@ -157,7 +155,7 @@ describe("ContactForm", () => {
     send();
     const button = await screen.findByRole("button", { name: "Send" });
     expect(button).toBeEnabled();
-    expect(screen.getByLabelText("Name *")).toHaveValue("  Ada Lovelace ");
+    expect(screen.getByLabelText("Your name *")).toHaveValue("  Ada Lovelace ");
     expect(screen.getByLabelText(/^How to reach you/)).toHaveValue("ada@example.com");
   });
 });
@@ -167,15 +165,15 @@ const blur = (label: string | RegExp) => fireEvent.blur(screen.getByLabelText(la
 describe("ContactForm field feedback", () => {
   it("says nothing about a field while it is typed in", () => {
     renderForm();
-    type(/^Name/, "   ");
+    type(/^Your name/, "   ");
     expect(screen.queryByText("Please enter your name.")).not.toBeInTheDocument();
-    expect(screen.getByLabelText("Name *")).not.toBeInvalid();
+    expect(screen.getByLabelText("Your name *")).not.toBeInvalid();
   });
 
   it("names the missing field under it when it loses focus empty, and links the two", () => {
     renderForm();
-    blur(/^Name/);
-    const input = screen.getByLabelText("Name *");
+    blur(/^Your name/);
+    const input = screen.getByLabelText("Your name *");
     expect(input).toBeInvalid();
     expect(input).toHaveAccessibleDescription("Please enter your name.");
     expect(screen.getByText("Please enter your name.")).toBeInTheDocument();
@@ -189,43 +187,43 @@ describe("ContactForm field feedback", () => {
 
   it("counts whitespace only as empty", () => {
     renderForm();
-    type(/^Name/, "   \t ");
-    blur(/^Name/);
+    type(/^Your name/, "   \t ");
+    blur(/^Your name/);
     expect(screen.getByText("Please enter your name.")).toBeInTheDocument();
   });
 
   it("accepts a field with spaces around the value", () => {
     renderForm();
-    type(/^Name/, "  Ada ");
-    blur(/^Name/);
-    expect(screen.getByLabelText("Name *")).not.toBeInvalid();
+    type(/^Your name/, "  Ada ");
+    blur(/^Your name/);
+    expect(screen.getByLabelText("Your name *")).not.toBeInvalid();
   });
 
   it("leaves an optional field empty without a word", () => {
     renderForm();
-    blur("Position");
-    expect(screen.getByLabelText("Position")).not.toBeInvalid();
+    blur("You're hiring for");
+    expect(screen.getByLabelText("You're hiring for")).not.toBeInvalid();
   });
 
   it("names the limit of a field that is too long when it loses focus", () => {
     renderForm();
-    type("Position", "x".repeat(121));
-    blur("Position");
+    type("You're hiring for", "x".repeat(121));
+    blur("You're hiring for");
     expect(screen.getByText("At most 120 characters.")).toBeInTheDocument();
-    expect(screen.getByLabelText("Position")).toBeInvalid();
+    expect(screen.getByLabelText("You're hiring for")).toBeInvalid();
   });
 
   it("shows a counter once a field is past 80% of its limit", () => {
     renderForm();
-    type(/^Name/, "x".repeat(64));
+    type(/^Your name/, "x".repeat(64));
     expect(screen.queryByText(/ \/ 80$/)).not.toBeInTheDocument();
-    type(/^Name/, "x".repeat(65));
+    type(/^Your name/, "x".repeat(65));
     expect(screen.getByText("65 / 80")).toBeInTheDocument();
   });
 
   it("counts characters as people see them, in code points", () => {
     renderForm();
-    type(/^Name/, "😀".repeat(70));
+    type(/^Your name/, "😀".repeat(70));
     expect(screen.getByText("70 / 80")).toBeInTheDocument();
   });
 
@@ -235,12 +233,12 @@ describe("ContactForm field feedback", () => {
     expect(await screen.findByText("Please enter your name.")).toBeInTheDocument();
     expect(screen.getByText("Please enter your company.")).toBeInTheDocument();
     expect(submitContactMock).not.toHaveBeenCalled();
-    expect(screen.getByLabelText("Name *")).toHaveFocus();
+    expect(screen.getByLabelText("Your name *")).toHaveFocus();
   });
 
   it("focuses the company when only the company is missing, and again on the next try", async () => {
     renderForm();
-    type(/^Name/, "Ada");
+    type(/^Your name/, "Ada");
     send();
     await waitFor(() => expect(screen.getByLabelText("Company *")).toHaveFocus());
     screen.getByRole("button", { name: "Send" }).focus();
@@ -284,7 +282,7 @@ describe("ContactForm when sending fails", () => {
   const fail = async () => {
     submitContactMock.mockResolvedValueOnce(CONTACT_OUTCOME.failed);
     fillRequired();
-    type("Position", "Staff engineer");
+    type("You're hiring for", "Staff engineer");
     send();
     return screen.findByRole("alert");
   };
@@ -294,8 +292,8 @@ describe("ContactForm when sending fails", () => {
     renderForm();
     const alert = await fail();
     expect(alert).toHaveTextContent("Your request wasn't sent. Please try again in 10 s.");
-    expect(screen.getByLabelText("Name *")).toHaveValue("  Ada Lovelace ");
-    expect(screen.getByLabelText("Position")).toHaveValue("Staff engineer");
+    expect(screen.getByLabelText("Your name *")).toHaveValue("  Ada Lovelace ");
+    expect(screen.getByLabelText("You're hiring for")).toHaveValue("Staff engineer");
   });
 
   it("locks Send while the countdown runs, counting down each second", async () => {
@@ -324,7 +322,7 @@ describe("ContactForm when sending fails", () => {
     vi.useFakeTimers({ shouldAdvanceTime: true });
     renderForm();
     await fail();
-    expect(screen.getByLabelText("Name *")).toBeEnabled();
+    expect(screen.getByLabelText("Your name *")).toBeEnabled();
   });
 
   it("does not send during the countdown, even when the form is submitted", async () => {

@@ -29,6 +29,7 @@
   --color-accent: #e4572e;
 
   --element-distance-standard: 1.8rem;
+  --element-distance-small: 0.4rem;
 
   /*
    * An input field with its label beside it (InputField): the label's column and the gap between

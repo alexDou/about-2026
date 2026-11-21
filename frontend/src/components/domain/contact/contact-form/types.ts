@@ -42,13 +42,6 @@ export type ContactFormContent = {
   thanks: MessageId;
 };
 
-/** The files the form draws from: the page owns them and passes them down. */
-export type ContactFormMedia = {
-  /** The Send button's icon. */
-  send: string;
-};
-
 export type ContactFormProps = {
   content: ContactFormContent;
-  media: ContactFormMedia;
 };

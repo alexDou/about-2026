@@ -62,7 +62,7 @@
 }
 
 .input-field__input:focus-visible {
-  outline: 0.125rem solid var(--text-on-dark);
+  outline: 0.125rem solid var(--panel-about);
   outline-offset: 0.125rem;
 }
 

@@ -5,7 +5,7 @@ status: completed
 type: task
 priority: normal
 created_at: 2026-11-21T13:12:02Z
-updated_at: 2026-11-21T13:33:38Z
+updated_at: 2026-11-21T15:16:19Z
 parent: portfolio-vqi0
 ---
 
@@ -49,3 +49,25 @@ Raised by the Owner on 2026-11-21 while on Unit 4. The Contact form follows the 
 - **Findings**: a CSS Module keeps its own custom properties to itself, so the label column and gap that the button lines up by are global tokens (`--input-field-label-size`, `--input-field-gap`). Light text on `#5c8b70` measures 2.78:1 (the Owner's decision, recorded in `units.md`); inputs and button are light on dark, 8.97:1.
 - **Docs**: the Unit 4 section of `units.md` carries the spec (problem, solution, user stories, out of scope) and the amended Layout; `portfolio-yxux` lists its stages.
 - **Tests**: unit tests for Icon, InputField, ProfileLinks, the panel, form and page; `tokens.test.ts` follows the font-size tokens; E2E covers the heading, the colours, both layouts, label placement and the button.
+
+
+## Round 2 (Owner review, 2026-11-21), UI first; tests follow once the Owner approves the UI; merge only on approval
+
+- [x] Under a narrow window the inputs shrank while the labels kept their width: the info block goes under the form below 1180px
+- [x] Text colour `--panel-about`
+- [x] The Send button loses its icon (and the send.svg file)
+- [x] Smaller subtitle
+- [x] Remote line, notice and required line are `div`s; the remote line in the standard font
+- [x] The links block loses its border; an `hr` between each block: remote, hr, notice, hr, links, hr, required
+- [x] `--element-distance-standard` for the gaps
+- [x] Phone layout unchanged
+- [x] Owner approves the UI; then tests and E2E follow the changes, `verify` GREEN, merge on approval
+
+
+### Summary of Round 2
+
+- Below 1180px the info block stands under the form, so the inputs no longer shrink beside fixed-width labels; the phone layout is unchanged and drops the rules.
+- Text in `--panel-about` (3.23:1 on the Panel, recorded in `units.md`); the Send button has its text only (the icon and `send.svg` are gone); the subtitle is smaller; the remote line, the notice and the required line are `div`s with `hr`s between the blocks, in the standard font; gaps from `--element-distance-small` and `-standard`; the notice is italic with small padding.
+- Contact's profile icons are 1rem (Icon `small` is now 1rem); About's stay as they were. The ring springs out around the whole circle.
+- Labels: "Your name", "You're hiring for"; the button stays "Send". The notice: "I use these details only to reply to your request. They reach me privately and are not stored or passed on to anyone."
+- Tests: form, panel, page and style tests and the E2E scenarios follow (rules, the medium layout, label wording); `verify` GREEN and E2E 115 of 115. Not merged: waiting for the Owner's approval.

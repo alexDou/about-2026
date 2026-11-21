@@ -82,4 +82,24 @@ describe("ContactPanel", () => {
     expect(follows(links, required)).toBe(true);
     expect(follows(required, form)).toBe(true);
   });
+
+  it("separates the remote line, the notice, the links and the required line by rules", () => {
+    renderPanel();
+    const rules = screen.getAllByRole("separator");
+    expect(rules).toHaveLength(3);
+    const remote = screen.getByText("Remote, worldwide");
+    const notice = screen.getByText("Used only to reply.");
+    const links = screen.getByRole("list");
+    const required = screen.getByText("* required");
+    const [first, second, third] = rules as [HTMLElement, HTMLElement, HTMLElement];
+    expect(follows(remote, first) && follows(first, notice)).toBe(true);
+    expect(follows(notice, second) && follows(second, links)).toBe(true);
+    expect(follows(links, third) && follows(third, required)).toBe(true);
+  });
+
+  it("holds the notice and the required line as blocks of their own, not paragraphs", () => {
+    renderPanel();
+    expect(screen.getByText("Used only to reply.").tagName).toBe("DIV");
+    expect(screen.getByText("* required").tagName).toBe("DIV");
+  });
 });

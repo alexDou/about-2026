@@ -53,8 +53,10 @@
   grid-area: 1 / 1;
   align-self: stretch;
   justify-self: stretch;
+  /* The negative margin takes back the link's padding, so the ring wraps the whole circle. */
+  margin: -1rem;
   border-radius: 50%;
-  box-shadow: 0 0 0 0.0625rem var(--text-on-dark);
+  box-shadow: 0 0 0 0.0625rem var(--panel-about);
   opacity: 0;
   transition:
     opacity 200ms ease-in-out,

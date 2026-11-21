@@ -12,6 +12,7 @@
 - Scope that grows beyond the bean becomes a new bean (`--blocked-by` or `--parent` as fits), not extra work in this one.
 - Done = checklist fully ticked, `scripts/verify.sh` GREEN, `## Summary of Changes` appended, status `completed`, bean file committed with the code.
 - Gotcha in `beans prime`'s examples: `--body-append "## Notes\n\n..."` stores a literal `\n`. Pipe multi-line text through stdin instead: `printf '## Notes\n\n...\n' | beans update <id> --body-append -`.
+- **Report your reading before you act on it, never guess. Never halucinate. Base your work on facts and knowledge, NOT suggestions** When a request can be read more than one way, report how you interpret it and wait on a human input.
 
 ## End-of-task gate
 

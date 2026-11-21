@@ -21,7 +21,7 @@ export function ProfileLinks({
         >
           <Icon
             media={PROFILE_ICONS[profile.kind]}
-            size={look === PROFILE_LOOKS.plain ? ICON_SIZES.large : ICON_SIZES.medium}
+            size={look === PROFILE_LOOKS.plain ? ICON_SIZES.large : ICON_SIZES.small}
           />
         </a>
       </li>;

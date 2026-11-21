@@ -6,7 +6,7 @@ Feature: Contact Panel layout
     Then the page heading reads "Contact me"
     And the page heading is in capitals
     And the page says "Let me know you're interested"
-    And the Contact page has no band and its text is light
+    And the Contact page has no band and its text is in the About colour
     And the Contact band says "Remote, worldwide"
     And the Contact profile links are "LinkedIn, Xing"
     And the Contact band says "I use these details only to reply to your request."
@@ -14,11 +14,20 @@ Feature: Contact Panel layout
     And the Contact form stands left of the other items
     And the Contact info block is centred against the form's inputs
     And the Contact items stack down the page in the order "remote, notice, links, required"
+    And the Contact info shows 3 rules
+
+  Scenario: On a medium screen the info block stands under the form
+    Given the window is 1000 by 800
+    When I open "/contact"
+    Then the Contact info block stands under the form
+    And the Contact items stack down the page in the order "remote, notice, links, required"
+    And the Contact info shows 3 rules
 
   Scenario: On a phone the remote line, the form with its button, the notice, the required line and the links stack in that order
     Given the window is 390 by 800
     When I open "/contact"
     Then the Contact items stack down the page in the order "remote, form, submit, notice, required, links"
+    And the Contact info shows 0 rules
 
   Scenario: On a desktop a label stands beside its input
     Given the window is 1280 by 800
@@ -39,7 +48,7 @@ Feature: Contact Panel layout
     Given the backend is up
     And the backend accepts Contact requests
     When I open "/contact"
-    And I fill in "Name" with "Ada Lovelace"
+    And I fill in "Your name" with "Ada Lovelace"
     And I fill in "Company" with "Analytical Engines"
     And I press "Send"
     Then the Contact form says "Thank you, Ada Lovelace. I'll get back to you soon."
@@ -53,8 +62,8 @@ Feature: Contact Panel layout
     And I press "Send"
     Then the page says "Please enter your name."
     And the page says "Please enter your company."
-    And the field "Name" is in error
-    And the field "Name" has focus
+    And the field "Your name" is in error
+    And the field "Your name" has focus
     And the backend received no Contact request
 
   Scenario: A field is checked when it is left, not while it is typed in
@@ -68,39 +77,39 @@ Feature: Contact Panel layout
   Scenario: A counter appears past 80% of a field's limit, and a value over the limit is refused
     Given the backend is up
     When I open "/contact"
-    And I fill in "Name" with "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    And I fill in "Your name" with "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
     Then the page says "73 / 80"
-    When I fill in "Name" with "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-    And I leave the field "Name"
+    When I fill in "Your name" with "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    And I leave the field "Your name"
     Then the page says "At most 80 characters."
 
   Scenario: The backend refusing the fields shows a generic notice and keeps what was typed
     Given the backend is up
     And the backend refuses Contact requests with 422
     When I open "/contact"
-    And I fill in "Name" with "Ada Lovelace"
+    And I fill in "Your name" with "Ada Lovelace"
     And I fill in "Company" with "Analytical Engines"
     And I press "Send"
     Then the page says "Some details were not accepted. Please check the form and try again."
-    And the field "Name" holds "Ada Lovelace"
+    And the field "Your name" holds "Ada Lovelace"
 
   Scenario: When the email is not sent the form comes back with a countdown before Send works again
     Given the backend is up
     And the backend refuses Contact requests with 502
     When I open "/contact"
-    And I fill in "Name" with "Ada Lovelace"
+    And I fill in "Your name" with "Ada Lovelace"
     And I fill in "Company" with "Analytical Engines"
     And I press "Send"
     Then the failure notice counts down from 10 s
     And the Send button is disabled
-    And the field "Name" holds "Ada Lovelace"
+    And the field "Your name" holds "Ada Lovelace"
     And the field "Company" holds "Analytical Engines"
 
   Scenario: A network failure is handled in the same way
     Given the backend is up
     And Contact requests cannot reach the backend
     When I open "/contact"
-    And I fill in "Name" with "Ada Lovelace"
+    And I fill in "Your name" with "Ada Lovelace"
     And I fill in "Company" with "Analytical Engines"
     And I press "Send"
     Then the failure notice counts down from 10 s
