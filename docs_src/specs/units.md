@@ -174,7 +174,7 @@ Reference: the expanded menu of codepen `fluxus/gPWvZm` (local copy in git-ignor
 
 **Problem**: A Visitor (a hiring manager or recruiter) who likes what they see on the site has no way to reach the Owner from it. The Contact Panel is an empty shell with only its heading and the offline note. The Owner wants to be reached without publishing a phone number or an email address, without keeping Visitor data on the site, and without paying for anything beyond the free tier. The form must not become a spam channel.
 
-**Solution**: The Contact Panel shows "Remote, worldwide", the Owner's LinkedIn and Xing profiles, a Contact notice and a short Contact request form: name, company, an optional position description and an optional way to reach the Visitor. On submit, an invisible proof-of-work human check runs in the browser, and the backend emails the Contact request to the Owner's mailbox. Nothing is stored. The Visitor always knows the state of the form: what is wrong with a field, that it is sending, that it was sent, or that it failed and when they can try again. Bots are stopped by the human check and a honeypot; floods are stopped by a per-IP and a site-wide rate limit.
+**Solution**: The Contact Panel shows "Remote, worldwide", the Owner's LinkedIn and Xing profiles, a Contact notice and a short Contact request form: name, company, an optional position description and an optional way to reach the Visitor. On submit, an invisible proof-of-work human check runs in the browser, and the backend emails the Contact request to the Owner's mailbox. Nothing is stored. The Visitor always knows the state of the form: what is wrong with a field, that it is sending, that it was sent, or that it failed and when they can try again. Bots are stopped by the human check and a honeypot; floods are stopped by a per-IP and a site-wide rate limit, built with the deploy in Unit 8.
 
 **Decided** (grilling 2026-11-19, amended 2026-11-20 for Cloudflare Workers):
 - **No Legal notice, no Privacy policy, no consent checkbox.** Only the Contact notice beside the form. No extra page or route: everything stays in the Contact Panel.
@@ -202,7 +202,7 @@ Reference: the expanded menu of codepen `fluxus/gPWvZm` (local copy in git-ignor
   - While sending, the form is disabled and the button reads "Sending…".
   - Success hides the form and shows "Thank you, {name}. I'll get back to you soon." A reload brings the form back.
   - Any failure (422, failed human check, server or email error, network) brings the form back with its values and a generic "Your request wasn't sent. Please try again in {seconds} s.": submit stays locked for 10 s with a visible countdown.
-  - 429: "Too many requests from your connection. Please try again in a few minutes."
+  - 429: "Too many requests from your connection. Please try again in a few minutes." Built in Unit 8, with the rate limiter.
   - Field errors: "Please enter your name.", "Please enter your company.", "At most {max} characters."
   - While the backend is down, the form is disabled beside Unit 1's offline note; the links and the Contact notice stay.
 - **Human check**: ALTCHA (self-hosted proof of work, MIT): the `altcha` widget from npm in the form, the `altcha` library from PyPI on the backend. Solved on submit, invisible, no third party, no cookies. Plus a hidden honeypot field (`website`): a filled honeypot gets a silent `204` and nothing is sent.
@@ -219,14 +219,14 @@ Reference: the expanded menu of codepen `fluxus/gPWvZm` (local copy in git-ignor
   - Plain-text body: each field and the time in Europe/Berlin. `Reply-To` is the contact field when it parses as an email address.
   - Secrets: `MAIL_FROM`, `MAIL_TO`, `ALTCHA_HMAC_KEY`. Locally they're in the Worker's git-ignored secrets file (the list is in `backend/README.md`); deployed, they're Worker secrets (Unit 8).
   - The Gmail account and its app password from 2026-11-19 are retired: the local SMTP proof no longer applies. End-to-end proof is the first email sent from the deployed site (Unit 8).
-- **Rate limit**, on Cloudflare's free plan:
+- **Rate limit**, on Cloudflare's free plan. Moved to Unit 8 (decided 2026-11-21): the limiter is built and checked together with the Cloudflare deploy, so Unit 4 ships without it and without the `429` message. The design below is unchanged and is Unit 8's starting point (bean portfolio-vd9x); the `429` stays in the contract:
   - On `/api/contact`, 5 requests per 15 minutes per client IP, plus 100 a day site-wide. Both answer `429`.
   - Durable Objects keep the exact counts: one object per hashed client IP (`CF-Connecting-IP`, set by Cloudflare) and one site-wide object. Each request first deletes the timestamps older than the window with one SQL statement, then counts. There are no alarms (not documented for Python Workers).
   - In front of the Worker: Cloudflare's automatic DDoS protection, and the free plan's one WAF rate-limiting rule on `/api/*` per IP over 10 seconds (Unit 8, needs the domain).
   - The free plan never bills. Past 100k Worker requests a day, `/api` answers errors until 00:00 UTC, while the SPA (static assets, free and unlimited) stays up and shows the offline note. The Owner accepts that remaining case.
   - Unit 7 sets its own limit for `/api/chat`.
 - **Tests**: no test starts a server or a fake service (no fake SMTP, no fake mailbox, no fake store). Every module is tested against the contracts of what it depends on, with those dependencies mocked:
-  - Backend: pytest in plain CPython. The handlers, the human check, the mailer and the rate limiter are plain Python modules. Only a thin entry module imports the Workers runtime (`workers`). Endpoint tests call the route table in process with the env bindings (email, Durable Objects), the human check and the clock mocked along their contracts. The mailer's own tests check the message it hands the `send_email` binding.
+  - Backend: pytest in plain CPython. The handlers, the human check and the mailer are plain Python modules (the rate limiter too, in Unit 8). Only a thin entry module imports the Workers runtime (`workers`). Endpoint tests call the route table in process with the env bindings (email; Durable Objects in Unit 8), the human check and the clock mocked along their contracts. The mailer's own tests check the message it hands the `send_email` binding.
   - Frontend: component tests mock the API client (or `fetch`) and the ALTCHA widget; the countdown runs on fake timers.
   - E2E (Unit 4 deviates from the AGENTS.md Stage Final here, by the Owner's decision): the frontend build with `/api/*` stubbed by Playwright routes along the contract, as `offline.feature` already does. No running backend.
   - Being hard to test is never a reason to drop or bend a feature: the test mocks the dependency instead.
@@ -257,7 +257,7 @@ Reference: the expanded menu of codepen `fluxus/gPWvZm` (local copy in git-ignor
 22. As a Visitor, I want the form replaced by "Thank you, {name}. I'll get back to you soon." when it is sent, so that I know it worked.
 23. As a Visitor whose request failed, I want the form back with everything I typed, so that I don't have to type it again.
 24. As a Visitor whose request failed, I want a generic reason and a 10-second countdown before I can retry, so that I know when to try again.
-25. As a Visitor who sent too many requests, I want "Too many requests from your connection. Please try again in a few minutes.", so that I understand why it was refused.
+25. As a Visitor who sent too many requests, I want "Too many requests from your connection. Please try again in a few minutes.", so that I understand why it was refused. (Unit 8)
 26. As a Visitor, I want the form disabled beside the offline note while the backend is down, while the links and the Contact notice stay, so that I can still reach the Owner another way.
 27. As a Visitor on a phone, I want "Remote, worldwide" and the links first, then the fields, then the Contact notice right above the submit button, so that the notice is where I decide to send.
 28. As a Visitor on a desktop, I want the links and the Contact notice on the left and the form on the right, so that I see everything at once.
@@ -270,8 +270,8 @@ Reference: the expanded menu of codepen `fluxus/gPWvZm` (local copy in git-ignor
 35. As the Owner, I want a failed email reported to the Visitor (`502`), so that no request is lost silently.
 36. As the Owner, I want bots that fail the human check rejected (`400`), so that my inbox gets only real requests.
 37. As the Owner, I want a filled honeypot answered with a silent `204` and nothing sent, so that bots believe they succeeded and don't adapt.
-38. As the Owner, I want 5 requests per 15 minutes per IP, so that a real Visitor can retry but one source can't flood me.
-39. As the Owner, I want a site-wide cap of 100 requests a day, so that a flood from many IPs can't fill my inbox or use up the free plan's quotas.
+38. As the Owner, I want 5 requests per 15 minutes per IP, so that a real Visitor can retry but one source can't flood me. (Unit 8)
+39. As the Owner, I want a site-wide cap of 100 requests a day, so that a flood from many IPs can't fill my inbox or use up the free plan's quotas. (Unit 8)
 40. As the Owner, I want the client IP taken from `CF-Connecting-IP`, which Cloudflare sets, so that a client can't forge its way past the limit.
 41. As the Owner, I want CR/LF stripped from anything that goes into an email header, so that no one can inject headers.
 42. As the Owner, I want the backend to check every field rule again, so that a crafted request can't bypass the browser's checks.
@@ -289,6 +289,7 @@ Reference: the expanded menu of codepen `fluxus/gPWvZm` (local copy in git-ignor
 - Cloud Run for the API, Cloud Armor, a load balancer, an nginx sidecar, FastAPI or any web framework.
 - A free-text message field.
 - Deploying is Unit 8: the domain on Cloudflare with Email Routing, the Worker secrets, the WAF rule, and every check and prototype. That includes CPU time per request under 10 ms (fallback: a TypeScript Worker), `altcha` and Pydantic under Pyodide, Durable Object SQL, `send_email`, WAF-blocked requests not counting toward the quota, and the first email from the deployed site.
+- The rate limiter and its `429` message: Unit 8 (portfolio-vd9x).
 - Chat's rate limit and storage (Unit 7).
 - Fixing the Cloud Skill overview that still names Firestore (a separate bean once Unit 7 decides storage).
 
@@ -301,12 +302,11 @@ Reference: the expanded menu of codepen `fluxus/gPWvZm` (local copy in git-ignor
 - 4.4, field feedback.
 - 4.5, failure and offline states.
 - 4.6, the human check and the honeypot.
-- 4.7, the rate limit in Durable Objects.
 - 4.N, Contact E2E and the Definition of Done.
 
-Order: 4.0a and 4.1 first; 4.0 after 4.0a; 4.2 after 4.1; 4.3 after 4.0 and 4.2; 4.4, 4.5 and 4.7 after 4.3; 4.6 after 4.3 and 4.5; 4.N after all. Beans: the epic portfolio-yxux and its stages portfolio-1b3v (4.0a), -m7rt (4.0), -trgn (4.1), -0hxh (4.2), -zmw2 (4.3), -8gew (4.4), -dhsr (4.5), -m1de (4.6), -vd9x (4.7), -9pe4 (4.N).
+Order: 4.0a and 4.1 first; 4.0 after 4.0a; 4.2 after 4.1; 4.3 after 4.0 and 4.2; 4.4 and 4.5 after 4.3; 4.6 after 4.3 and 4.5; 4.N after all. Beans: the epic portfolio-yxux and its stages portfolio-1b3v (4.0a), -m7rt (4.0), -trgn (4.1), -0hxh (4.2), -zmw2 (4.3), -8gew (4.4), -dhsr (4.5), -m1de (4.6), -9pe4 (4.N).
 
-**Definition of Done**: a sent Contact request reaches the Owner by email and nothing is stored; bots (failed human check, filled honeypot) and floods (429) are rejected; unit, component and E2E tests green.
+**Definition of Done**: a sent Contact request reaches the Owner by email and nothing is stored; bots (failed human check, filled honeypot) are rejected (floods: the rate limiter, Unit 8); unit, component and E2E tests green.
 
 ## Unit 5: What I do
 
@@ -340,6 +340,7 @@ Order: 4.0a and 4.1 first; 4.0 after 4.0a; 4.2 after 4.1; 4.3 after 4.0 and 4.2;
 - The Owner's domain on Cloudflare, with Email Routing and the Owner's mailbox verified as a destination.
 - The Worker secrets (`MAIL_FROM`, `MAIL_TO`, `ALTCHA_HMAC_KEY`).
 - The WAF rate-limiting rule on `/api/*`.
+- The rate limiter (portfolio-vd9x): Durable Objects, the `429` and its message in the form, as decided in Unit 4's "Rate limit" (moved here 2026-11-21).
 - Checks and prototypes, all here:
   - CPU time per request under the free plan's 10 ms (fallback: the same design as a TypeScript Worker);
   - `altcha` and Pydantic under Pyodide;

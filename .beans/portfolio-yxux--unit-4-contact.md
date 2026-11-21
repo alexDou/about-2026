@@ -5,7 +5,7 @@ status: todo
 type: epic
 priority: normal
 created_at: 2026-11-06T20:27:21Z
-updated_at: 2026-11-21T12:26:16Z
+updated_at: 2026-11-21T15:57:16Z
 parent: portfolio-4ur0
 blocked_by:
     - portfolio-m9gt
@@ -25,9 +25,10 @@ Child beans, in dependency order (each lists its blockers):
 - portfolio-8gew Unit 4.4: Field feedback
 - portfolio-dhsr Unit 4.5: Failure and offline states
 - portfolio-m1de Unit 4.6: Human check and honeypot
-- portfolio-vd9x Unit 4.7: Rate limit
 - portfolio-9pe4 Unit 4.N: Contact E2E and Definition of Done
 
 Also under this epic: portfolio-pcnc Opengrep backend rules and agent docs follow the Worker.
+
+The rate limiter (was 4.7) moved to Unit 8 on 2026-11-21 (portfolio-vd9x): it is built with the Cloudflare deploy, so this epic ships without it and without the 429 message.
 
 Design decided in the 2026-11-19 grilling, amended 2026-11-20 for ADR 0006 (the Unit 4 section of `docs_src/specs/units.md`). The epic is done when every child bean is completed.

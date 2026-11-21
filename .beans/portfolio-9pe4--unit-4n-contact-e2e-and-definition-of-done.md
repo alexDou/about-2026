@@ -3,10 +3,11 @@
 title: 'Unit 4.N: Contact E2E and Definition of Done'
 status: todo
 type: task
+priority: normal
 tags:
     - ready-for-agent
 created_at: 2026-11-19T13:42:26Z
-updated_at: 2026-11-19T13:42:26Z
+updated_at: 2026-11-21T15:57:21Z
 parent: portfolio-yxux
 blocked_by:
     - portfolio-0hxh
@@ -14,7 +15,6 @@ blocked_by:
     - portfolio-8gew
     - portfolio-dhsr
     - portfolio-m1de
-    - portfolio-vd9x
 ---
 
 ## Parent
@@ -27,8 +27,8 @@ Stage N: the whole Contact feature in one E2E pass on the frontend build, with /
 
 ## Acceptance criteria
 
-- [ ] E2E covers desktop and mobile order, a sent request, field errors, 422, 400, 429, 502 with countdown, offline
-- [ ] Definition of Done checked: a sent Contact request reaches the Owner by email and nothing is stored; bots and floods rejected; unit, component and E2E tests green
+- [ ] E2E covers desktop and mobile order, a sent request, field errors, 422, 400, 502 with countdown, offline
+- [ ] Definition of Done checked: a sent Contact request reaches the Owner by email and nothing is stored; bots rejected (floods: the rate limiter, Unit 8); unit, component and E2E tests green
 - [ ] portfolio-yxux body updated with the stage list
 - [ ] scripts/verify.sh GREEN
 
@@ -39,4 +39,3 @@ Stage N: the whole Contact feature in one E2E pass on the frontend build, with /
 - portfolio-8gew Unit 4.4: Field feedback
 - portfolio-dhsr Unit 4.5: Failure and offline states
 - portfolio-m1de Unit 4.6: Human check and honeypot
-- portfolio-vd9x Unit 4.7: Rate limit
