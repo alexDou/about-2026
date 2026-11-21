@@ -114,15 +114,15 @@ export function ContactForm({ content }: ContactFormProps) @{
         </div>
         ;
         // A used widget is replaced by a new one (a new key), so each attempt gets a new challenge.
-        @for (const round of [humanCheckRound]; key round) {
-          <altcha-widget
-            class={styles["contact-form__human-check"]}
-            challenge={CONTACT_CHALLENGE_URL}
-            auto={HUMAN_CHECK_WIDGET.auto}
-            display={HUMAN_CHECK_WIDGET.display}
-            onstatechange={changeHumanCheck}
-          />;
-        }
+        <altcha-widget
+          key={humanCheckRound}
+          class={styles["contact-form__human-check"]}
+          challenge={CONTACT_CHALLENGE_URL}
+          auto={HUMAN_CHECK_WIDGET.auto}
+          display={HUMAN_CHECK_WIDGET.display}
+          onstatechange={changeHumanCheck}
+        />
+        ;
         @if (notice === FORM_NOTICE.invalidFields) {
           <p class={styles["contact-form__notice"]} role="alert">
             {intl.formatMessage({ id: content.invalid })}
