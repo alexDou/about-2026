@@ -5,12 +5,29 @@ status: todo
 type: epic
 priority: normal
 created_at: 2026-11-06T20:27:21Z
-updated_at: 2026-11-06T20:27:21Z
+updated_at: 2026-11-21T12:26:16Z
 parent: portfolio-4ur0
 blocked_by:
     - portfolio-m9gt
 ---
 
-Contact Panel: GitHub + LinkedIn, Contact request form (name?, company, position?, contact) with consent, Legal notice + Privacy policy, POST /api/contact, Firestore storage module (ADR 0002), email to the Owner, human check + rate limit. Spec: docs_src/specs/units.md#unit-4-contact.
+Contact Panel: "Remote, worldwide", the LinkedIn and Xing links, the Contact notice and the Contact request form. A sent Contact request reaches the Owner by email and is never stored (ADR 0005). The API runs as a Python Worker on Cloudflare's free plan (ADR 0006). Spec: docs_src/specs/units.md#unit-4-contact (problem, solution, 47 user stories, decisions, out of scope).
 
-Open: human-check provider, email sending service.
+## Stages
+
+Child beans, in dependency order (each lists its blockers):
+
+- portfolio-1b3v Unit 4.0a: Backend becomes a Python Worker
+- portfolio-m7rt Unit 4.0: Contact contracts
+- portfolio-trgn Unit 4.1: Shared profile links with Xing
+- portfolio-0hxh Unit 4.2: Contact Panel layout
+- portfolio-zmw2 Unit 4.3: Send a Contact request
+- portfolio-8gew Unit 4.4: Field feedback
+- portfolio-dhsr Unit 4.5: Failure and offline states
+- portfolio-m1de Unit 4.6: Human check and honeypot
+- portfolio-vd9x Unit 4.7: Rate limit
+- portfolio-9pe4 Unit 4.N: Contact E2E and Definition of Done
+
+Also under this epic: portfolio-pcnc Opengrep backend rules and agent docs follow the Worker.
+
+Design decided in the 2026-11-19 grilling, amended 2026-11-20 for ADR 0006 (the Unit 4 section of `docs_src/specs/units.md`). The epic is done when every child bean is completed.

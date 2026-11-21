@@ -9,11 +9,8 @@
 
 .profile-links__link {
   display: grid;
+  place-items: center;
   color: var(--text-on-light);
-}
-
-.profile-links__icon {
-  fill: currentColor;
 }
 
 /* Plain: the bare icon, which takes the Chat colour on hover (About). */
@@ -32,29 +29,55 @@
   outline-offset: 0.125rem;
 }
 
-.profile-links--plain .profile-links__icon {
-  width: 1.75rem;
-  height: 1.75rem;
-}
-
-/* Ring: a round icon that gets a ring in the Contact colour on hover and on keyboard focus. */
+/*
+ * Ring, after the reference's social icons: a dark circle with a light icon; on hover and on
+ * keyboard focus the colours swap and a ring springs out around it. The icon and the ring share
+ * the link's one grid cell.
+ */
 .profile-links__link--ring {
-  padding: 0.625rem;
+  padding: 1rem;
   border-radius: 50%;
-  box-shadow: 0 0 0 0.125rem transparent;
-  transition: box-shadow 150ms ease;
+  background: var(--text-on-light);
+  color: var(--text-on-dark);
+  transition:
+    background-color 200ms ease-in-out,
+    color 200ms ease-in-out;
 }
 
-.profile-links__link--ring:hover {
-  box-shadow: 0 0 0 0.125rem var(--panel-contact);
+.profile-links__link--ring > * {
+  grid-area: 1 / 1;
 }
 
+.profile-links__link--ring::after {
+  content: "";
+  grid-area: 1 / 1;
+  align-self: stretch;
+  justify-self: stretch;
+  border-radius: 50%;
+  box-shadow: 0 0 0 0.0625rem var(--text-on-dark);
+  opacity: 0;
+  transition:
+    opacity 200ms ease-in-out,
+    scale 200ms ease-in-out;
+}
+
+.profile-links__link--ring:hover,
 .profile-links__link--ring:focus-visible {
+  background: var(--text-on-dark);
+  color: var(--text-on-light);
   outline: none;
-  box-shadow: 0 0 0 0.125rem var(--panel-contact);
 }
 
-.profile-links--ring .profile-links__icon {
-  width: 1.5rem;
-  height: 1.5rem;
+.profile-links__link--ring:hover::after,
+.profile-links__link--ring:focus-visible::after {
+  opacity: 1;
+  scale: 1.12;
+  transition-timing-function: cubic-bezier(0.37, 0.74, 0.15, 1.65);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .profile-links__link--ring,
+  .profile-links__link--ring::after {
+    transition: none;
+  }
 }

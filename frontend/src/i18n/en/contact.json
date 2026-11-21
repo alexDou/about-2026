@@ -81,12 +81,6 @@
       "value": "Position"
     }
   ],
-  "contact.form.required": [
-    {
-      "type": 0,
-      "value": "* required"
-    }
-  ],
   "contact.form.send": [
     {
       "type": 0,
@@ -133,6 +127,18 @@
       "value": "I use these details only to reply to your request. They reach me by email and are not stored on this site or passed on to anyone."
     }
   ],
+  "contact.page.subtitle": [
+    {
+      "type": 0,
+      "value": "Let me know you're interested"
+    }
+  ],
+  "contact.page.title": [
+    {
+      "type": 0,
+      "value": "Contact me"
+    }
+  ],
   "contact.profile.linkedin.label": [
     {
       "type": 0,
@@ -149,6 +155,12 @@
     {
       "type": 0,
       "value": "Remote, worldwide"
+    }
+  ],
+  "contact.required": [
+    {
+      "type": 0,
+      "value": "* required"
     }
   ]
 }

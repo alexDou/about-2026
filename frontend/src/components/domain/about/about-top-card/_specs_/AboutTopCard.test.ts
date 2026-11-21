@@ -97,7 +97,7 @@ describe("AboutTopCard", () => {
 
   it("draws the brush stroke from its file, so CSS can colour it", () => {
     renderCard();
-    const use = document.querySelector("use");
+    const use = document.querySelector('use[href^="brush.svg"]');
     expect(use?.getAttribute("href")).toBe("brush.svg#brush");
     expect(use?.closest("svg")?.getAttribute("aria-hidden")).toBe("true");
   });

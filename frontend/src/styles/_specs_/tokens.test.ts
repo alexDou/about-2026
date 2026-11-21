@@ -118,9 +118,15 @@ describe("global.css", () => {
     expect(css("global.css")).toMatch(/font-family:\s*var\(--font-site\)/);
   });
 
-  it("grows the body text with the window from 17px, after a fixed fallback", () => {
+  it("sets the body text from the site's size tokens, the progressing one after a fixed fallback", () => {
     expect(css("global.css")).toMatch(
-      /font-size:\s*1\.0625rem;\s*font-size:\s*calc\(1\.0625rem \+ [\d.]+rem \* progress\(100vw,/,
+      /font-size:\s*var\(--font-site-size\);\s*font-size:\s*var\(--font-site-size-progress\)/,
+    );
+  });
+
+  it("makes the site's text grow with the window through progress()", () => {
+    expect(css("tokens.css")).toMatch(
+      /--font-site-size-progress:\s*calc\(var\(--font-site-size\) \+ [\d.]+rem \* progress\(100vw,/,
     );
   });
 

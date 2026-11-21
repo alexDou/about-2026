@@ -1,0 +1,84 @@
+/*
+ * A labelled text field, after the reference's inputs: a short, dark box with a thin light border
+ * and spaced letters. Stacked puts the label above the input. Inline puts it beside the input from
+ * 35.5rem up (568 CSS pixels), in a column as wide as the `--input-field-label-size` token, and above it
+ * on a narrower screen; the hint, the error and the counter then stand under the input.
+ */
+.input-field {
+  display: grid;
+  align-items: center;
+  gap: 0.375rem var(--input-field-gap);
+}
+
+.input-field--stacked {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.input-field--inline {
+  grid-template-columns: var(--input-field-label-size) minmax(0, 1fr);
+}
+
+.input-field--inline .input-field__hint,
+.input-field--inline .input-field__error,
+.input-field--inline .input-field__counter {
+  grid-column: 2;
+}
+
+@media (width < 35.5rem) {
+  .input-field--inline {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .input-field--inline .input-field__hint,
+  .input-field--inline .input-field__error,
+  .input-field--inline .input-field__counter {
+    grid-column: 1;
+  }
+}
+
+.input-field__label {
+  font-family: var(--font-heading);
+  font-weight: 700;
+}
+
+.input-field__input {
+  box-sizing: border-box;
+  min-height: 2.125rem;
+  padding: 0.375rem 0.75rem;
+  border: 0.0625rem solid currentColor;
+  border-radius: 0.25rem;
+  font: inherit;
+  letter-spacing: 0.0625rem;
+}
+
+.input-field--light .input-field__input {
+  background: var(--color-field);
+  color: var(--text-on-light);
+}
+
+.input-field--dark .input-field__input {
+  background: var(--text-on-light);
+  color: var(--text-on-dark);
+}
+
+.input-field__input:focus-visible {
+  outline: 0.125rem solid var(--text-on-dark);
+  outline-offset: 0.125rem;
+}
+
+.input-field__input[aria-invalid="true"] {
+  border-style: dashed;
+}
+
+.input-field__hint {
+  font-size: 0.875em;
+}
+
+.input-field__error {
+  font-weight: 700;
+}
+
+.input-field__counter {
+  justify-self: end;
+  font-size: 0.875em;
+}

@@ -22,7 +22,6 @@ export type ContactFormField = {
 /** What the form says: the labels of its fields and its buttons' texts. */
 export type ContactFormMessages = {
   fields: Record<ContactFormFieldKind, ContactFormField>;
-  required: MessageId;
   tooLong: MessageId;
   counter: MessageId;
   invalid: MessageId;
@@ -35,8 +34,12 @@ export type ContactFormMessages = {
 
 /** What the Contact page says: which message each piece of it reads. */
 export type ContactContent = {
+  title: MessageId;
+  subtitle: MessageId;
   remote: MessageId;
   profiles: readonly ContactProfile[];
   notice: MessageId;
+  /** The line that explains the form's asterisk. */
+  required: MessageId;
   form: ContactFormMessages;
 };

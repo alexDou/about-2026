@@ -163,17 +163,17 @@ describe("App", () => {
       fireEvent.click(screen.getByRole("link", { name: "Skills" }));
       expect(await screen.findByRole("heading", { name: "Skills" })).toBeInTheDocument();
       fireEvent.click(screen.getByRole("link", { name: "Contact" }));
-      expect(await screen.findByRole("heading", { name: "Contact" })).toBeInTheDocument();
+      expect(await screen.findByRole("heading", { name: "Contact me" })).toBeInTheDocument();
       fireEvent.click(screen.getByRole("button", { name: "Close Contact" }));
       await waitFor(() => expect(window.location.pathname).toBe("/explore"));
       await waitFor(() => expect(screen.queryByRole("heading")).not.toBeInTheDocument());
 
       window.history.back();
-      expect(await screen.findByRole("heading", { name: "Contact" })).toBeInTheDocument();
+      expect(await screen.findByRole("heading", { name: "Contact me" })).toBeInTheDocument();
       window.history.back();
       expect(await screen.findByRole("heading", { name: "Skills" })).toBeInTheDocument();
       window.history.forward();
-      expect(await screen.findByRole("heading", { name: "Contact" })).toBeInTheDocument();
+      expect(await screen.findByRole("heading", { name: "Contact me" })).toBeInTheDocument();
     });
 
     it("moves focus to the Expanded panel's heading on opening and on switching", async () => {
@@ -182,7 +182,7 @@ describe("App", () => {
       await screen.findByRole("heading", { name: "Skills" });
       await waitFor(() => expect(heading()).toHaveFocus());
       fireEvent.click(screen.getByRole("link", { name: "Contact" }));
-      await screen.findByRole("heading", { name: "Contact" });
+      await screen.findByRole("heading", { name: "Contact me" });
       await waitFor(() => expect(heading()).toHaveFocus());
     });
 
@@ -194,7 +194,7 @@ describe("App", () => {
       await waitFor(() => expect(screen.getByRole("link", { name: "Skills" })).toHaveFocus());
 
       fireEvent.click(screen.getByRole("link", { name: "Contact" }));
-      await screen.findByRole("heading", { name: "Contact" });
+      await screen.findByRole("heading", { name: "Contact me" });
       fireEvent.keyDown(document, { key: "Escape" });
       await waitFor(() => expect(screen.getByRole("link", { name: "Contact" })).toHaveFocus());
     });

@@ -44,9 +44,9 @@ describe("ProfileLinks", () => {
     const drawings = links.map((link) => {
       const svg = link.querySelector("svg");
       expect(svg?.getAttribute("aria-hidden")).toBe("true");
-      return svg?.querySelector("path")?.getAttribute("d");
+      return svg?.querySelector("use")?.getAttribute("href");
     });
-    expect(drawings.every(Boolean)).toBe(true);
+    expect(drawings.every((href) => href?.endsWith("#icon"))).toBe(true);
     expect(new Set(drawings).size).toBe(profiles.length);
   });
 

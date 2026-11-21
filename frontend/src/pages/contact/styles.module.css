@@ -5,4 +5,24 @@
   margin: 0 auto;
   /* The room at the top clears the Expanded panel's close corner, which lies over the page. */
   padding: 4rem var(--element-distance-standard);
+  /* The light colour of the palette, on the Panel's colour. */
+  color: var(--text-on-dark);
+}
+
+/* The heading and the subtitle under it, both centred. */
+.contact-page__header {
+  display: grid;
+  gap: 0.75rem;
+  justify-items: center;
+}
+
+/* A line in the heading font's italic, a step larger than the text, spaced out. */
+.contact-page__subtitle {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-style: italic;
+  letter-spacing: 0.06em;
+  text-align: center;
+  text-wrap: balance;
 }

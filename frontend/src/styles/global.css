@@ -13,10 +13,6 @@ body {
   background: var(--color-bg);
   color: var(--color-fg);
   font-family: var(--font-site);
-  /*
-   * The site's text, from 17px on a small phone to 18px on a wide screen, so it reads comfortably
-   * on a phone; a fixed size where progress() is unknown. Smaller text is sized in em from it.
-   */
-  font-size: 1.0625rem;
-  font-size: calc(1.0625rem + 0.0625rem * progress(100vw, 22.5rem, 80rem));
+  font-size: var(--font-site-size);
+  font-size: var(--font-site-size-progress);
 }

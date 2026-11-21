@@ -9,9 +9,12 @@ const profile = (kind: ContactProfileKind) => ({
 
 /** The Contact Panel's content: which message each piece of it reads. */
 export const CONTACT_CONTENT: ContactContent = {
+  title: "contact.page.title",
+  subtitle: "contact.page.subtitle",
   remote: "contact.remote",
   profiles: [profile("linkedin"), profile("xing")],
   notice: "contact.notice",
+  required: "contact.required",
   form: {
     fields: {
       name: { label: "contact.form.name.label", requiredError: "contact.form.name.error" },
@@ -22,7 +25,6 @@ export const CONTACT_CONTENT: ContactContent = {
       position: { label: "contact.form.position.label" },
       contact: { label: "contact.form.contact.label", hint: "contact.form.contact.hint" },
     },
-    required: "contact.form.required",
     tooLong: "contact.form.tooLong",
     counter: "contact.form.counter",
     invalid: "contact.form.invalid",
