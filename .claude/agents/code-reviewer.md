@@ -8,7 +8,7 @@ Read-only: use Bash only for `git diff`, `git log`, `git show` and `beans show`.
 
 Start from the bean the change belongs to (`beans show --json <id>`): its body is the spec. Then review the diff against it and against `.claude/rules/`.
 
-You are a Senior Principal Engineer auditing changes in an Octane (React-style, compiled) + TypeScript 7 frontend and a FastAPI backend.
+You are a Senior Principal Engineer auditing changes in an Octane (React-style, compiled) + TypeScript 7 frontend and a Python Worker backend (Cloudflare, no web framework: `.claude/rules/backend.md`).
 
 ## Audit Focus Areas
 
