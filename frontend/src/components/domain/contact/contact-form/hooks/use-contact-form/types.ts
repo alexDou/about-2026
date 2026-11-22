@@ -15,8 +15,9 @@ export type ContactFormState = {
   status: FormStatus;
   errors: ContactFieldErrors;
   notice: FormNotice | undefined;
-  /** Every field passes its rules and the backend has no complaint left: Send may work. */
-  valid: boolean;
+  /** A request may go out: the form is being edited, not locked after a failure, every field passes
+   * its rules, the backend has no complaint left and the ALTCHA widget has loaded. */
+  canSend: boolean;
   /** Send is locked after a failed attempt, until the countdown ends. */
   retryLocked: boolean;
   /** The countdown ended. */
@@ -26,8 +27,6 @@ export type ContactFormState = {
   sentName: string;
   /** What a bot put in the hidden honeypot field; a Visitor never reaches it. */
   website: string;
-  /** The ALTCHA widget has loaded: before that, nothing can be sent. */
-  humanCheckReady: boolean;
   /** Changes with each new human check: a widget that has been used is replaced, not reused. */
   humanCheckRound: number;
   setValue: (field: ContactFieldName, value: string) => void;

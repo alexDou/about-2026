@@ -57,6 +57,9 @@ export function useContactForm(): ContactFormState {
     errors[name] = refused[name] ?? (touched[name] ? wrong : undefined);
   }
 
+  // Whether a request may go out now; the Send button and `submit` both follow it.
+  const canSend = status === FORM_STATUS.editing && !retryLocked && valid && humanCheckReady;
+
   /** A payload is used once: the next attempt gets a new widget and so a new challenge. */
   function renewHumanCheck() {
     setHumanCheck(NOT_CHECKED);
@@ -104,7 +107,7 @@ export function useContactForm(): ContactFormState {
 
   async function submit(event: Event) {
     event.preventDefault();
-    if (status !== FORM_STATUS.editing || retryLocked || !valid || !humanCheckReady) return;
+    if (!canSend) return;
     // The widget takes the first submit, solves, and submits again. Until then there is nothing to send.
     const humanCheck = getHumanCheck();
     if (humanCheck.state === HUMAN_CHECK_STATE.verifying) return;
@@ -136,13 +139,12 @@ export function useContactForm(): ContactFormState {
     status,
     errors,
     notice,
-    valid,
+    canSend,
     retryLocked,
     endRetryLock: () => setRetryLocked(false),
     focusRequest,
     sentName,
     website,
-    humanCheckReady,
     humanCheckRound,
     setValue,
     setWebsite,

@@ -32,13 +32,12 @@ export function ContactForm({ content }: ContactFormProps) @{
     status,
     errors,
     notice,
-    valid,
+    canSend,
     retryLocked,
     endRetryLock,
     focusRequest,
     sentName,
     website,
-    humanCheckReady,
     humanCheckRound,
     setValue,
     setWebsite,
@@ -161,11 +160,7 @@ export function ContactForm({ content }: ContactFormProps) @{
           </div>;
         }
       </fieldset>
-      <button
-        class={styles["contact-form__send"]}
-        type="submit"
-        disabled={sending || offline || retryLocked || !valid || !humanCheckReady}
-      >
+      <button class={styles["contact-form__send"]} type="submit" disabled={!canSend || offline}>
         {intl.formatMessage({ id: sending ? content.sending : content.send })}
       </button>
     </form>;
