@@ -26,6 +26,8 @@ export type ContactFormState = {
   sentName: string;
   /** What a bot put in the hidden honeypot field; a Visitor never reaches it. */
   website: string;
+  /** The ALTCHA widget has loaded: before that, nothing can be sent. */
+  humanCheckReady: boolean;
   /** Changes with each new human check: a widget that has been used is replaced, not reused. */
   humanCheckRound: number;
   setValue: (field: ContactFieldName, value: string) => void;

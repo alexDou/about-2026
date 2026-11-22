@@ -1,4 +1,3 @@
-import "altcha";
 import { useEffect, useRef } from "octane";
 import { API_HEALTH, useApiHealth } from "../../api-status";
 import { useIntl } from "../../../../hooks/use-intl";
@@ -39,6 +38,7 @@ export function ContactForm({ content }: ContactFormProps) @{
     focusRequest,
     sentName,
     website,
+    humanCheckReady,
     humanCheckRound,
     setValue,
     setWebsite,
@@ -164,7 +164,7 @@ export function ContactForm({ content }: ContactFormProps) @{
       <button
         class={styles["contact-form__send"]}
         type="submit"
-        disabled={sending || offline || retryLocked || !valid}
+        disabled={sending || offline || retryLocked || !valid || !humanCheckReady}
       >
         {intl.formatMessage({ id: sending ? content.sending : content.send })}
       </button>

@@ -5,6 +5,7 @@ import { CONTACT_OUTCOME, fetchHealth, submitContact } from "../../../../../serv
 import type { ContactFieldError, ContactOutcome } from "../../../../../services/api";
 import { resetHealth } from "../../../api-status";
 import { ContactForm } from "../ContactForm.tsrx";
+import { loadHumanCheckWidget } from "../hooks/use-human-check-widget/load";
 import type { ContactFormProps } from "../types";
 import { resetFakeAltchaWidget, SOLVED_PAYLOAD, solving } from "./fake-altcha-widget";
 
@@ -13,6 +14,10 @@ vi.mock("../../../../../services/api", async (importOriginal) => ({
   submitContact: vi.fn<typeof submitContact>(),
   fetchHealth: vi.fn<typeof fetchHealth>(),
 }));
+vi.mock("../hooks/use-human-check-widget/load", () => ({
+  loadHumanCheckWidget: vi.fn<typeof loadHumanCheckWidget>(),
+}));
+const loadWidgetMock = vi.mocked(loadHumanCheckWidget);
 const submitContactMock = vi.mocked(submitContact);
 const fetchHealthMock = vi.mocked(fetchHealth);
 
@@ -41,7 +46,12 @@ const refused = (...fields: ContactFieldError[]): ContactOutcome => ({
   fields,
 });
 
-const renderForm = () => render(ContactForm, { props: { content }, wrapper: intlWrapper() });
+// The widget loads in its own chunk: the form is rendered once it has, as a Visitor meets it.
+const renderForm = async () => {
+  const rendered = render(ContactForm, { props: { content }, wrapper: intlWrapper() });
+  await act(async () => {});
+  return rendered;
+};
 
 const type = (label: string | RegExp, value: string) =>
   fireEvent.input(screen.getByLabelText(label), { target: { value } });
@@ -55,6 +65,7 @@ const send = () => fireEvent.click(screen.getByRole("button", { name: "Send" }))
 
 beforeEach(() => {
   resetFakeAltchaWidget();
+  loadWidgetMock.mockResolvedValue();
   submitContactMock.mockResolvedValue(SENT);
   fetchHealthMock.mockResolvedValue({ status: "ok" });
 });
@@ -65,38 +76,38 @@ afterEach(() => {
 });
 
 describe("ContactForm", () => {
-  it("labels every field and marks the required ones with an asterisk", () => {
-    renderForm();
+  it("labels every field and marks the required ones with an asterisk", async () => {
+    await renderForm();
     expect(screen.getByLabelText("Your name *")).toBeRequired();
     expect(screen.getByLabelText("Company *")).toBeRequired();
     expect(screen.getByLabelText("You're hiring for")).not.toBeRequired();
     expect(screen.getByLabelText(/^How to reach you/)).not.toBeRequired();
   });
 
-  it("hints at the ways to reach the Visitor", () => {
-    renderForm();
+  it("hints at the ways to reach the Visitor", async () => {
+    await renderForm();
     expect(screen.getByLabelText(/^How to reach you/)).toHaveAccessibleDescription(
       "email, phone, LinkedIn, …",
     );
   });
 
-  it("holds only its text in the Send button", () => {
-    renderForm();
+  it("holds only its text in the Send button", async () => {
+    await renderForm();
     const button = screen.getByRole("button", { name: "Send" });
     expect(button.querySelector("svg")).toBeNull();
     expect(button).toHaveTextContent("Send");
   });
 
-  it("puts every label beside its input, in the dark look of the Panel", () => {
-    renderForm();
+  it("puts every label beside its input, in the dark look of the Panel", async () => {
+    await renderForm();
     for (const input of screen.getAllByRole("textbox")) {
       expect(input.parentElement?.className).toContain("input-field--inline");
       expect(input.parentElement?.className).toContain("input-field--dark");
     }
   });
 
-  it("lists the fields in order and ends with the Send button", () => {
-    renderForm();
+  it("lists the fields in order and ends with the Send button", async () => {
+    await renderForm();
     const inputs = screen.getAllByRole("textbox").map((input) => input.getAttribute("name"));
     expect(inputs).toEqual(["name", "company", "position", "contact"]);
     const last = screen.getAllByRole("textbox").at(-1) as HTMLElement;
@@ -105,7 +116,7 @@ describe("ContactForm", () => {
   });
 
   it("sends the cleaned fields once, leaving out what was not given", async () => {
-    renderForm();
+    await renderForm();
     fillRequired();
     type("You're hiring for", "   ");
     send();
@@ -118,7 +129,7 @@ describe("ContactForm", () => {
   });
 
   it("sends the optional fields when they are given", async () => {
-    renderForm();
+    await renderForm();
     fillRequired();
     type("You're hiring for", "Staff engineer");
     type(/^How to reach you/, "ada@example.com");
@@ -129,8 +140,8 @@ describe("ContactForm", () => {
     );
   });
 
-  it("keeps Send disabled until both required fields hold something", () => {
-    renderForm();
+  it("keeps Send disabled until both required fields hold something", async () => {
+    await renderForm();
     const button = screen.getByRole("button", { name: "Send" });
     expect(button).toBeDisabled();
     type(/^Company/, "Analytical Engines");
@@ -141,8 +152,24 @@ describe("ContactForm", () => {
     expect(button).toBeEnabled();
   });
 
-  it("disables Send while a field is over its limit, and frees it when the field fits", () => {
-    renderForm();
+  it("keeps Send disabled and sends nothing until the ALTCHA widget has loaded", async () => {
+    let loaded!: () => void;
+    loadWidgetMock.mockReturnValue(new Promise((resolve) => (loaded = () => resolve())));
+    render(ContactForm, { props: { content }, wrapper: intlWrapper() });
+    fillRequired();
+    const button = screen.getByRole("button", { name: "Send" });
+    expect(button).toBeDisabled();
+    // Enter in a field submits the form without the button.
+    fireEvent.submit(button.closest("form") as HTMLElement);
+    expect(submitContactMock).not.toHaveBeenCalled();
+    await act(async () => loaded());
+    expect(button).toBeEnabled();
+    send();
+    await waitFor(() => expect(submitContactMock).toHaveBeenCalledOnce());
+  });
+
+  it("disables Send while a field is over its limit, and frees it when the field fits", async () => {
+    await renderForm();
     fillRequired();
     type("You're hiring for", "x".repeat(121));
     expect(screen.getByRole("button", { name: "Send" })).toBeDisabled();
@@ -151,7 +178,7 @@ describe("ContactForm", () => {
   });
 
   it("does not send a form that is submitted while it is invalid", async () => {
-    renderForm();
+    await renderForm();
     type(/^Company/, "Analytical Engines");
     fireEvent.submit(screen.getByRole("button", { name: "Send" }).closest("form") as HTMLElement);
     await act(async () => {});
@@ -159,7 +186,7 @@ describe("ContactForm", () => {
   });
   it("is disabled and says 'Sending…' while the request is on its way", async () => {
     submitContactMock.mockReturnValue(new Promise(() => {}));
-    renderForm();
+    await renderForm();
     fillRequired();
     send();
     const button = await screen.findByRole("button", { name: "Sending…" });
@@ -168,7 +195,7 @@ describe("ContactForm", () => {
   });
 
   it("replaces the form with a thank-you note naming the Visitor once it is sent", async () => {
-    renderForm();
+    await renderForm();
     fillRequired();
     send();
     expect(
@@ -179,7 +206,7 @@ describe("ContactForm", () => {
   });
 
   it("moves the focus to the thank-you note, so that it is read out", async () => {
-    renderForm();
+    await renderForm();
     fillRequired();
     send();
     expect(await screen.findByText(/^Thank you, Ada Lovelace/)).toHaveFocus();
@@ -189,8 +216,8 @@ describe("ContactForm", () => {
 const widget = (container: HTMLElement) => container.querySelector("altcha-widget");
 
 describe("ContactForm human check", () => {
-  it("holds an invisible ALTCHA widget that solves on submit, fetching its challenge from the API", () => {
-    const { container } = renderForm();
+  it("holds an invisible ALTCHA widget that solves on submit, fetching its challenge from the API", async () => {
+    const { container } = await renderForm();
     const element = widget(container);
     expect(element).toBeInTheDocument();
     expect(element?.closest("form")).toBe(
@@ -202,7 +229,7 @@ describe("ContactForm human check", () => {
   });
 
   it("sends the payload the widget solved", async () => {
-    renderForm();
+    await renderForm();
     fillRequired();
     send();
     await waitFor(() => expect(submitContactMock).toHaveBeenCalledTimes(1));
@@ -211,7 +238,7 @@ describe("ContactForm human check", () => {
 
   it("sends nothing while the widget is still solving", async () => {
     solving.next = "never-ends";
-    renderForm();
+    await renderForm();
     fillRequired();
     send();
     await act(async () => {});
@@ -220,7 +247,7 @@ describe("ContactForm human check", () => {
 
   it("does not let a second press of Send through while the widget is solving", async () => {
     solving.next = "never-ends";
-    renderForm();
+    await renderForm();
     fillRequired();
     send();
     const form = screen.getByRole("button", { name: "Send" }).closest("form") as HTMLElement;
@@ -231,7 +258,7 @@ describe("ContactForm human check", () => {
 
   it("solves again for every attempt: a payload is used once", async () => {
     submitContactMock.mockResolvedValueOnce(refused({ field: "name", error: "required" }));
-    renderForm();
+    await renderForm();
     fillRequired();
     send();
     await screen.findByText("Please enter your name.");
@@ -246,7 +273,7 @@ describe("ContactForm human check", () => {
   it("shows the generic failure with the countdown when the widget cannot solve, sending nothing", async () => {
     vi.useFakeTimers({ shouldAdvanceTime: true });
     solving.next = "fails";
-    renderForm();
+    await renderForm();
     fillRequired();
     send();
     const alert = await screen.findByRole("alert");
@@ -260,7 +287,7 @@ describe("ContactForm human check", () => {
   it("solves afresh when the Visitor tries again after a failed solve", async () => {
     vi.useFakeTimers({ shouldAdvanceTime: true });
     solving.next = "fails";
-    renderForm();
+    await renderForm();
     fillRequired();
     send();
     await screen.findByRole("alert");
@@ -280,8 +307,8 @@ const trap = (container: HTMLElement) =>
   container.querySelector<HTMLInputElement>('input[name="website"]');
 
 describe("ContactForm honeypot", () => {
-  it("holds a field named website that no Visitor and no assistive technology reaches", () => {
-    const { container } = renderForm();
+  it("holds a field named website that no Visitor and no assistive technology reaches", async () => {
+    const { container } = await renderForm();
     const field = trap(container);
     expect(field).toBeInTheDocument();
     expect(field).not.toBeVisible();
@@ -292,7 +319,7 @@ describe("ContactForm honeypot", () => {
   });
 
   it("sends nothing in it from a Visitor", async () => {
-    renderForm();
+    await renderForm();
     fillRequired();
     send();
     await waitFor(() => expect(submitContactMock).toHaveBeenCalled());
@@ -300,7 +327,7 @@ describe("ContactForm honeypot", () => {
   });
 
   it("sends what a bot put in it", async () => {
-    const { container } = renderForm();
+    const { container } = await renderForm();
     fillRequired();
     fireEvent.input(trap(container) as HTMLElement, { target: { value: "https://spam.example" } });
     send();
@@ -312,15 +339,15 @@ describe("ContactForm honeypot", () => {
 const blur = (label: string | RegExp) => fireEvent.blur(screen.getByLabelText(label));
 
 describe("ContactForm field feedback", () => {
-  it("says nothing about a field the Visitor has not touched", () => {
-    renderForm();
+  it("says nothing about a field the Visitor has not touched", async () => {
+    await renderForm();
     expect(screen.queryByText("Please enter your name.")).not.toBeInTheDocument();
     expect(screen.queryByText("Please enter your company.")).not.toBeInTheDocument();
     expect(screen.getByLabelText("Your name *")).not.toHaveAttribute("aria-invalid", "true");
   });
 
-  it("names a required field the Visitor empties again, while typing", () => {
-    renderForm();
+  it("names a required field the Visitor empties again, while typing", async () => {
+    await renderForm();
     type(/^Your name/, "Ada");
     expect(screen.queryByText("Please enter your name.")).not.toBeInTheDocument();
     type(/^Your name/, "");
@@ -328,8 +355,8 @@ describe("ContactForm field feedback", () => {
     type(/^Your name/, "Ada");
     expect(screen.queryByText("Please enter your name.")).not.toBeInTheDocument();
   });
-  it("names the missing field under it when it loses focus empty, and links the two", () => {
-    renderForm();
+  it("names the missing field under it when it loses focus empty, and links the two", async () => {
+    await renderForm();
     blur(/^Your name/);
     const input = screen.getByLabelText("Your name *");
     expect(input).toBeInvalid();
@@ -337,48 +364,48 @@ describe("ContactForm field feedback", () => {
     expect(screen.getByText("Please enter your name.")).toBeInTheDocument();
   });
 
-  it("asks for the company in its own words", () => {
-    renderForm();
+  it("asks for the company in its own words", async () => {
+    await renderForm();
     blur(/^Company/);
     expect(screen.getByText("Please enter your company.")).toBeInTheDocument();
   });
 
-  it("counts whitespace only as empty", () => {
-    renderForm();
+  it("counts whitespace only as empty", async () => {
+    await renderForm();
     type(/^Your name/, "   \t ");
     blur(/^Your name/);
     expect(screen.getByText("Please enter your name.")).toBeInTheDocument();
   });
 
-  it("accepts a field with spaces around the value", () => {
-    renderForm();
+  it("accepts a field with spaces around the value", async () => {
+    await renderForm();
     type(/^Your name/, "  Ada ");
     blur(/^Your name/);
     expect(screen.getByLabelText("Your name *")).not.toBeInvalid();
   });
 
-  it("leaves an optional field empty without a word", () => {
-    renderForm();
+  it("leaves an optional field empty without a word", async () => {
+    await renderForm();
     blur("You're hiring for");
     expect(screen.getByLabelText("You're hiring for")).not.toBeInvalid();
   });
 
-  it("names the limit of a field as soon as it is too long", () => {
-    renderForm();
+  it("names the limit of a field as soon as it is too long", async () => {
+    await renderForm();
     type("You're hiring for", "x".repeat(121));
     expect(screen.getByText("At most 120 characters.")).toBeInTheDocument();
     expect(screen.getByLabelText("You're hiring for")).toBeInvalid();
   });
-  it("shows a counter once a field is past 80% of its limit", () => {
-    renderForm();
+  it("shows a counter once a field is past 80% of its limit", async () => {
+    await renderForm();
     type(/^Your name/, "x".repeat(64));
     expect(screen.queryByText(/ \/ 80$/)).not.toBeInTheDocument();
     type(/^Your name/, "x".repeat(65));
     expect(screen.getByText("65 / 80")).toBeInTheDocument();
   });
 
-  it("counts characters as people see them, in code points", () => {
-    renderForm();
+  it("counts characters as people see them, in code points", async () => {
+    await renderForm();
     type(/^Your name/, "😀".repeat(70));
     expect(screen.getByText("70 / 80")).toBeInTheDocument();
   });
@@ -387,7 +414,7 @@ describe("ContactForm field feedback", () => {
     submitContactMock.mockResolvedValue(
       refused({ field: "company", error: "tooLong" }, { field: "name", error: "required" }),
     );
-    renderForm();
+    await renderForm();
     fillRequired();
     send();
     expect(await screen.findByText("Please enter your name.")).toBeInTheDocument();
@@ -400,7 +427,7 @@ describe("ContactForm field feedback", () => {
 
   it("locks Send after a 422 until a field is changed, with no countdown and no notice", async () => {
     submitContactMock.mockResolvedValue(refused({ field: "name", error: "required" }));
-    renderForm();
+    await renderForm();
     fillRequired();
     send();
     await screen.findByText("Please enter your name.");
@@ -414,7 +441,7 @@ describe("ContactForm field feedback", () => {
 
   it("tells the Visitor of a refusal that names no field of the form, and keeps what was typed", async () => {
     submitContactMock.mockResolvedValue(refused({ field: "website", error: "tooLong" }));
-    renderForm();
+    await renderForm();
     fillRequired();
     send();
     expect(await screen.findByRole("alert")).toHaveTextContent(
@@ -425,7 +452,7 @@ describe("ContactForm field feedback", () => {
   });
   it("takes the notice away when the Visitor changes a field", async () => {
     submitContactMock.mockResolvedValueOnce(refused());
-    renderForm();
+    await renderForm();
     fillRequired();
     send();
     await screen.findByRole("alert");
@@ -454,7 +481,7 @@ describe("ContactForm when sending fails", () => {
 
   it("brings the form back with everything typed, a generic reason and a 10 s countdown", async () => {
     vi.useFakeTimers({ shouldAdvanceTime: true });
-    renderForm();
+    await renderForm();
     const alert = await fail();
     expect(alert).toHaveTextContent("Your request wasn't sent.");
     expect(screen.getByText("Please try again in 10 s.")).toBeInTheDocument();
@@ -464,7 +491,7 @@ describe("ContactForm when sending fails", () => {
 
   it("locks Send while the countdown runs, counting down each second", async () => {
     vi.useFakeTimers({ shouldAdvanceTime: true });
-    renderForm();
+    await renderForm();
     const alert = await fail();
     expect(screen.getByRole("button", { name: "Send" })).toBeDisabled();
     await passSeconds(3);
@@ -475,7 +502,7 @@ describe("ContactForm when sending fails", () => {
 
   it("lets the Visitor try again once the countdown is over, with the fields still theirs", async () => {
     vi.useFakeTimers({ shouldAdvanceTime: true });
-    renderForm();
+    await renderForm();
     await fail();
     await passSeconds(10);
     expect(screen.getByText("Please try again.")).toBeInTheDocument();
@@ -487,14 +514,14 @@ describe("ContactForm when sending fails", () => {
 
   it("keeps the fields editable during the countdown", async () => {
     vi.useFakeTimers({ shouldAdvanceTime: true });
-    renderForm();
+    await renderForm();
     await fail();
     expect(screen.getByLabelText("Your name *")).toBeEnabled();
   });
 
   it("does not send during the countdown, even when the form is submitted", async () => {
     vi.useFakeTimers({ shouldAdvanceTime: true });
-    renderForm();
+    await renderForm();
     await fail();
     fireEvent.submit(screen.getByRole("button", { name: "Send" }).closest("form") as HTMLElement);
     await act(async () => {});
@@ -505,14 +532,14 @@ describe("ContactForm when sending fails", () => {
 describe("ContactForm while the backend is down", () => {
   it("disables the fields and Send, keeping what is typed", async () => {
     fetchHealthMock.mockRejectedValue(new TypeError("network"));
-    renderForm();
+    await renderForm();
     await waitFor(() => expect(screen.getByRole("button", { name: "Send" })).toBeDisabled());
     for (const input of screen.getAllByRole("textbox")) expect(input).toBeDisabled();
   });
 
   it("is usable again once the backend answers", async () => {
     fetchHealthMock.mockResolvedValue({ status: "ok" });
-    renderForm();
+    await renderForm();
     fillRequired();
     await act(async () => {});
     expect(screen.getByRole("button", { name: "Send" })).toBeEnabled();

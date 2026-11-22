@@ -20,6 +20,7 @@ import type {
   HumanCheckChange,
 } from "../../types";
 import { fieldError } from "../../utils";
+import { useHumanCheckWidget } from "../use-human-check-widget";
 import type { ContactFormState, FocusRequest } from "./types";
 
 const EMPTY_VALUES: ContactFormValues = {
@@ -46,6 +47,7 @@ export function useContactForm(): ContactFormState {
   const [, setHumanCheck, getHumanCheck] = useState<HumanCheck>(NOT_CHECKED);
   const [humanCheckRound, setHumanCheckRound] = useState(0);
   const [retryLocked, setRetryLocked] = useState(false);
+  const humanCheckReady = useHumanCheckWidget();
 
   const errors: ContactFieldErrors = {};
   let valid = true;
@@ -102,7 +104,7 @@ export function useContactForm(): ContactFormState {
 
   async function submit(event: Event) {
     event.preventDefault();
-    if (status !== FORM_STATUS.editing || retryLocked || !valid) return;
+    if (status !== FORM_STATUS.editing || retryLocked || !valid || !humanCheckReady) return;
     // The widget takes the first submit, solves, and submits again. Until then there is nothing to send.
     const humanCheck = getHumanCheck();
     if (humanCheck.state === HUMAN_CHECK_STATE.verifying) return;
@@ -140,6 +142,7 @@ export function useContactForm(): ContactFormState {
     focusRequest,
     sentName,
     website,
+    humanCheckReady,
     humanCheckRound,
     setValue,
     setWebsite,
