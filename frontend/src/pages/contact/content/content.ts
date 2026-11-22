@@ -29,6 +29,7 @@ export const CONTACT_CONTENT: ContactContent = {
     counter: "contact.form.counter",
     invalid: "contact.form.invalid",
     failed: "contact.form.failed",
+    widgetFailed: "contact.form.widgetFailed",
     retryIn: "contact.form.retryIn",
     retryNow: "contact.form.retryNow",
     send: "contact.form.send",

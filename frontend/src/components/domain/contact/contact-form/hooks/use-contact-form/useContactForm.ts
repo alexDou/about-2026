@@ -11,6 +11,7 @@ import {
   FORM_NOTICE,
   FORM_STATUS,
   HUMAN_CHECK_STATE,
+  WIDGET_LOAD,
 } from "../../config";
 import type {
   ContactFieldErrors,
@@ -47,7 +48,7 @@ export function useContactForm(): ContactFormState {
   const [, setHumanCheck, getHumanCheck] = useState<HumanCheck>(NOT_CHECKED);
   const [humanCheckRound, setHumanCheckRound] = useState(0);
   const [retryLocked, setRetryLocked] = useState(false);
-  const humanCheckReady = useHumanCheckWidget();
+  const widgetLoad = useHumanCheckWidget();
 
   const errors: ContactFieldErrors = {};
   let valid = true;
@@ -58,7 +59,8 @@ export function useContactForm(): ContactFormState {
   }
 
   // Whether a request may go out now; the Send button and `submit` both follow it.
-  const canSend = status === FORM_STATUS.editing && !retryLocked && valid && humanCheckReady;
+  const canSend =
+    status === FORM_STATUS.editing && !retryLocked && valid && widgetLoad === WIDGET_LOAD.ready;
 
   /** A payload is used once: the next attempt gets a new widget and so a new challenge. */
   function renewHumanCheck() {
@@ -140,6 +142,7 @@ export function useContactForm(): ContactFormState {
     errors,
     notice,
     canSend,
+    widgetFailed: widgetLoad === WIDGET_LOAD.failed,
     retryLocked,
     endRetryLock: () => setRetryLocked(false),
     focusRequest,

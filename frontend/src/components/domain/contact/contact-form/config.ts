@@ -51,3 +51,10 @@ export const FORM_NOTICE = {
 
 /** After a request fails, Send stays locked this many seconds. */
 export const RETRY_SECONDS = 10;
+
+/** Where the ALTCHA widget stands: it is its own chunk, loaded when the form opens. */
+export const WIDGET_LOAD = {
+  loading: "loading",
+  ready: "ready",
+  failed: "failed",
+} as const;

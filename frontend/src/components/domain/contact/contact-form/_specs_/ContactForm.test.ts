@@ -32,6 +32,7 @@ const content: ContactFormProps["content"] = {
   counter: "contact.form.counter",
   invalid: "contact.form.invalid",
   failed: "contact.form.failed",
+  widgetFailed: "contact.form.widgetFailed",
   retryIn: "contact.form.retryIn",
   retryNow: "contact.form.retryNow",
   send: "contact.form.send",
@@ -71,6 +72,7 @@ beforeEach(() => {
 });
 afterEach(() => {
   vi.clearAllMocks();
+  vi.restoreAllMocks();
   vi.useRealTimers();
   resetHealth();
 });
@@ -166,6 +168,23 @@ describe("ContactForm", () => {
     expect(button).toBeEnabled();
     send();
     await waitFor(() => expect(submitContactMock).toHaveBeenCalledOnce());
+  });
+
+  it("tells the Visitor, and logs the error, when the ALTCHA widget cannot load", async () => {
+    const log = vi.spyOn(console, "error").mockImplementation(() => {});
+    loadWidgetMock.mockRejectedValue(new Error("chunk failed"));
+    await renderForm();
+    fillRequired();
+    expect(screen.getByRole("alert")).toHaveTextContent(
+      "The security check failed to load. Try reloading the page, or feel free to use the social links to contact me.",
+    );
+    expect(screen.getByRole("button", { name: "Send" })).toBeDisabled();
+    expect(log).toHaveBeenCalled();
+  });
+
+  it("says nothing of the widget while it loads or once it has", async () => {
+    await renderForm();
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
   });
 
   it("disables Send while a field is over its limit, and frees it when the field fits", async () => {

@@ -18,6 +18,8 @@ export type ContactFormState = {
   /** A request may go out: the form is being edited, not locked after a failure, every field passes
    * its rules, the backend has no complaint left and the ALTCHA widget has loaded. */
   canSend: boolean;
+  /** The ALTCHA widget could not load: only a reload helps. */
+  widgetFailed: boolean;
   /** Send is locked after a failed attempt, until the countdown ends. */
   retryLocked: boolean;
   /** The countdown ended. */

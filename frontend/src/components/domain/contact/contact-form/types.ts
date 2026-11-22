@@ -5,6 +5,7 @@ import type {
   FORM_NOTICE,
   FORM_STATUS,
   HUMAN_CHECK_STATE,
+  WIDGET_LOAD,
 } from "./config";
 
 export type ContactFieldName = (typeof CONTACT_FIELD)[keyof typeof CONTACT_FIELD];
@@ -12,6 +13,8 @@ export type ContactFieldName = (typeof CONTACT_FIELD)[keyof typeof CONTACT_FIELD
 export type FormStatus = (typeof FORM_STATUS)[keyof typeof FORM_STATUS];
 
 export type FieldError = (typeof FIELD_ERROR)[keyof typeof FIELD_ERROR];
+
+export type WidgetLoad = (typeof WIDGET_LOAD)[keyof typeof WIDGET_LOAD];
 
 export type FormNotice = (typeof FORM_NOTICE)[keyof typeof FORM_NOTICE];
 
@@ -40,6 +43,8 @@ export type ContactFormContent = {
   invalid: MessageId;
   /** The notice for a request that was not sent. Read out when it shows. */
   failed: MessageId;
+  /** The ALTCHA widget could not load: the Visitor is pointed to the social links. */
+  widgetFailed: MessageId;
   /** Under it while Send is locked. Takes the `{seconds}` left. Not read out as they change. */
   retryIn: MessageId;
   /** Under it once Send is free again. */

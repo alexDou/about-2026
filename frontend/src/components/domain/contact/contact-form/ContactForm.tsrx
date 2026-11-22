@@ -33,6 +33,7 @@ export function ContactForm({ content }: ContactFormProps) @{
     errors,
     notice,
     canSend,
+    widgetFailed,
     retryLocked,
     endRetryLock,
     focusRequest,
@@ -135,6 +136,11 @@ export function ContactForm({ content }: ContactFormProps) @{
           display={HUMAN_CHECK_WIDGET.display}
           onstatechange={changeHumanCheck}
         />
+        @if (widgetFailed) {
+          <p class={styles["contact-form__notice"]} role="alert">
+            {intl.formatMessage({ id: content.widgetFailed })}
+          </p>;
+        }
         @if (notice === FORM_NOTICE.invalidFields) {
           <p class={styles["contact-form__notice"]} role="alert">
             {intl.formatMessage({ id: content.invalid })}

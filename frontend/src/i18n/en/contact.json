@@ -127,6 +127,12 @@
       "value": " characters."
     }
   ],
+  "contact.form.widgetFailed": [
+    {
+      "type": 0,
+      "value": "The security check failed to load. Try reloading the page, or feel free to use the social links to contact me."
+    }
+  ],
   "contact.notice": [
     {
       "type": 0,
