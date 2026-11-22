@@ -94,7 +94,7 @@ Syntax: https://tsrx.dev/features.
 
 ### Layout
 
-- Layout is flex or grid. A child fills its parent by being a stretched grid or flex item, not with `position: absolute; inset: 0` or `width/height: 100%`.
+- Layout is flex or grid. A child fills its parent by being a stretched grid or flex item, not with `position: absolute; inset: 0` or `width/height: 100%`. This is a strong preference, not a ban: where stretching cannot reach the element (a rule among auto-width items), `width: 100%` is fine, with a comment saying why.
 - `position: relative | absolute | fixed`, with its offsets and `z-index`, only where flex and grid cannot do the job. A comment says why.
   - To stack two things on top of each other, put them in one grid cell (`grid-area: 1 / 1`).
   - To hang something above or below an element without moving it, make them grid rows around it (`grid-template-rows: 1fr auto 1fr`, the element in the middle row).

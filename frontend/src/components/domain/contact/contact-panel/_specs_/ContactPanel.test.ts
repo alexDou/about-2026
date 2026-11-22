@@ -52,7 +52,7 @@ describe("ContactPanel", () => {
       ["LinkedIn", "https://li.test/me"],
       ["Xing", "https://xing.test/me"],
     ]);
-    expect(screen.getByRole("list").className).toContain("profile-links--ring");
+    expect(screen.getByRole("list").className).toContain("social-links--ring");
   });
 
   it("shows the Contact notice", () => {

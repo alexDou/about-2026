@@ -9,7 +9,7 @@ declare module "octane/jsx-runtime" {
       interface IntrinsicElements {
         "altcha-widget": WidgetAttributes & {
           class?: string;
-          /** Set by the `@for` that replaces a used widget. */
+          /** A new key replaces a used widget with a new one. */
           key?: string | number;
           /** The widget's state changed: its `detail` holds the state and the solved payload. */
           onstatechange?: (event: HumanCheckChange) => void;

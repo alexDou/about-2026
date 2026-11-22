@@ -4,17 +4,21 @@
 
 `POST /api/contact` answers:
   204 sent (and a filled honeypot, silently), 422 invalid fields, 400 failed human check,
-  429 limit reached, 502 email not sent. Errors carry `{"detail": ...}`.
+  429 limit reached, 502 email not sent. Errors carry `{"detail": ...}`; a 422 also carries
+  `"fields"`: one `{"field", "error"}` per invalid field, `error` being `required` or `tooLong`.
 """
 
+import json
 import re
 from enum import IntEnum
 from types import MappingProxyType
-from typing import Annotated, Final
+from typing import Annotated, Final, Literal, NamedTuple
 
-from pydantic import BaseModel, BeforeValidator, ConfigDict, Field, ValidationError
+from pydantic import BaseModel, BeforeValidator, ConfigDict, Field
 from pydantic.alias_generators import to_camel
-from pydantic_core import PydanticCustomError
+from pydantic_core import ErrorDetails, PydanticCustomError
+
+from app.http import ErrorResponse
 
 
 class ContactStatus(IntEnum):
@@ -29,6 +33,11 @@ class ContactStatus(IntEnum):
 CONTACT_LIMITS: Final = MappingProxyType(
     {"name": 80, "company": 100, "position": 120, "contact": 200}
 )
+
+# The most characters the human check payload and the honeypot may hold. A solved payload is about
+# 600 characters; the honeypot is read by bots only, so the longest real field is limit enough.
+ALTCHA_MAX_LENGTH: Final = 2048
+WEBSITE_MAX_LENGTH: Final = CONTACT_LIMITS["contact"]
 
 # Line breaks and tabs become a space, so every value is one line and words stay apart; then the
 # rest of Unicode category Cc goes (`\p{Cc}` in the browser).
@@ -79,23 +88,61 @@ class ContactRequest(BaseModel):
     contact: Annotated[
         str | None, Field(max_length=CONTACT_LIMITS["contact"]), BeforeValidator(_clean_optional)
     ] = None
-    altcha: Annotated[str, Field(min_length=1), BeforeValidator(_clean)]
-    website: Annotated[str | None, BeforeValidator(_clean_optional)] = None
+    altcha: Annotated[
+        str, Field(min_length=1, max_length=ALTCHA_MAX_LENGTH), BeforeValidator(_clean)
+    ]
+    website: Annotated[
+        str | None, Field(max_length=WEBSITE_MAX_LENGTH), BeforeValidator(_clean_optional)
+    ] = None
 
 
-class _HoneypotProbe(BaseModel):
-    """Only the honeypot, read the way `ContactRequest` reads it, whatever else the body holds."""
+class BodyProbe(NamedTuple):
+    """What is read before the fields are: whether the honeypot holds text, and the human check
+    payload, if there is one."""
 
-    website: Annotated[str | None, BeforeValidator(_clean_optional)] = None
+    honeypot_filled: bool
+    altcha: str | None
 
 
-def honeypot_filled(body: bytes) -> bool:
-    """Whether the body has text in the hidden `website` field. A body that cannot be read as
-    that is not a filled honeypot: field validation answers it."""
+def probe_body(body: bytes) -> BodyProbe:
+    """Read the honeypot and the payload the way `ContactRequest` does, but whatever else the body
+    holds. A body that cannot be read has neither, so the human check answers it."""
     try:
-        return _HoneypotProbe.model_validate_json(body).website is not None
-    except ValidationError:
-        return False
+        data = json.loads(body)
+    except ValueError:
+        return BodyProbe(honeypot_filled=False, altcha=None)
+    if not isinstance(data, dict):
+        return BodyProbe(honeypot_filled=False, altcha=None)
+    website, altcha = _clean(data.get("website")), _clean(data.get("altcha"))
+    return BodyProbe(
+        honeypot_filled=isinstance(website, str) and website != "",
+        altcha=altcha if isinstance(altcha, str) and 0 < len(altcha) <= ALTCHA_MAX_LENGTH else None,
+    )
+
+
+class FieldError(BaseModel):
+    """One invalid field of a 422."""
+
+    field: str
+    error: Literal["required", "tooLong"]
+
+
+class InvalidFieldsResponse(ErrorResponse):
+    """`POST /api/contact` answering 422."""
+
+    fields: list[FieldError]
+
+
+def field_errors(errors: list[ErrorDetails]) -> list[FieldError]:
+    """What was wrong with the fields: `tooLong` past a limit, else `required` (empty, missing or
+    not text). Only the first error of a field counts. An unreadable body has no fields."""
+    found: dict[str, Literal["required", "tooLong"]] = {}
+    for error in errors:
+        if not error["loc"]:
+            continue
+        field = str(error["loc"][0])
+        found.setdefault(field, "tooLong" if error["type"] == "string_too_long" else "required")
+    return [FieldError(field=field, error=error) for field, error in found.items()]
 
 
 class ChallengeParameters(BaseModel):

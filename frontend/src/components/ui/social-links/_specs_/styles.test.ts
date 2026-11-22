@@ -10,28 +10,28 @@ const rule = (selector: string) =>
     new RegExp(`(?:^|\\n)${selector.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s*\\{([^}]*)\\}`),
   )?.[1] ?? "";
 
-describe("profile-links stylesheet", () => {
+describe("social-links stylesheet", () => {
   it("sizes nothing in px", () => {
     expect(css).not.toMatch(/\d\s*px\b/);
   });
 
   it("lays the links out in a flex row with a gap", () => {
-    const list = rule(".profile-links");
+    const list = rule(".social-links");
     expect(list).toMatch(/display:\s*flex/);
     expect(list).toMatch(/gap:\s*[\d.]+rem/);
   });
 
   it("makes the ring look a round icon whose colours swap on hover and on keyboard focus", () => {
-    expect(rule(".profile-links__link--ring")).toMatch(/border-radius:\s*50%/);
+    expect(rule(".social-links__link--ring")).toMatch(/border-radius:\s*50%/);
     expect(css).toMatch(
-      /\.profile-links__link--ring:hover,\s*\.profile-links__link--ring:focus-visible\s*\{[^}]*background/,
+      /\.social-links__link--ring:hover,\s*\.social-links__link--ring:focus-visible\s*\{[^}]*background/,
     );
   });
 
   it("springs a ring out around the round icon on hover and on keyboard focus", () => {
-    expect(rule(".profile-links__link--ring::after")).toMatch(/opacity:\s*0/);
+    expect(rule(".social-links__link--ring::after")).toMatch(/opacity:\s*0/);
     expect(css).toMatch(
-      /\.profile-links__link--ring:hover::after,\s*\.profile-links__link--ring:focus-visible::after\s*\{[^}]*opacity:\s*1[^}]*scale/,
+      /\.social-links__link--ring:hover::after,\s*\.social-links__link--ring:focus-visible::after\s*\{[^}]*opacity:\s*1[^}]*scale/,
     );
   });
 

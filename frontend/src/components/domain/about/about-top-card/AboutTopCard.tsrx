@@ -1,6 +1,6 @@
 import { useIntl } from "../../../../hooks/use-intl";
 import { Portrait } from "./portrait";
-import { ProfileLinks } from "../../../ui/profile-links";
+import { SocialLinks } from "../../../ui/social-links";
 import styles from "./styles.module.css";
 import type { AboutTopCardProps } from "./types";
 
@@ -25,7 +25,7 @@ export function AboutTopCard({ content, media }: AboutTopCardProps) @{
       <p class={styles["about-top-card__credo"]}>{intl.formatMessage({ id: content.credo })}</p>
     </div>
     <div class={styles["about-top-card__actions"]}>
-      <ProfileLinks profiles={content.profiles} />
+      <SocialLinks profiles={content.profiles} />
       <a class={styles["about-top-card__cv"]} href={content.cv.url} download>
         {intl.formatMessage({ id: content.cv.label })}
       </a>

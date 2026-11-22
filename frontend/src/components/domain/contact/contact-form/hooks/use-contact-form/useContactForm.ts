@@ -4,13 +4,13 @@ import {
   contactRequestSchema,
   submitContact,
 } from "../../../../../../services/api";
+import type { ContactFieldError } from "../../../../../../services/api";
 import {
   CONTACT_FIELD,
   CONTACT_FIELDS,
   FORM_NOTICE,
   FORM_STATUS,
   HUMAN_CHECK_STATE,
-  RETRY_SECONDS,
 } from "../../config";
 import type {
   ContactFieldErrors,
@@ -20,7 +20,6 @@ import type {
   HumanCheckChange,
 } from "../../types";
 import { fieldError } from "../../utils";
-import { useCountdown } from "../use-countdown";
 import type { ContactFormState, FocusRequest } from "./types";
 
 const EMPTY_VALUES: ContactFormValues = {
@@ -36,14 +35,25 @@ const NOT_CHECKED: HumanCheck = { state: HUMAN_CHECK_STATE.unverified, payload: 
 export function useContactForm(): ContactFormState {
   const [values, setValues] = useState<ContactFormValues>(EMPTY_VALUES);
   const [status, setStatus] = useState<ContactFormState["status"]>(FORM_STATUS.editing);
-  const [errors, setErrors] = useState<ContactFieldErrors>({});
+  // The fields the Visitor has typed in or left: only those show what is wrong with them.
+  const [touched, setTouched] = useState<Partial<Record<ContactFieldName, true>>>({});
+  // What the backend refused. A field's error goes when its value changes.
+  const [refused, setRefused] = useState<ContactFieldErrors>({});
   const [notice, setNotice] = useState<ContactFormState["notice"]>(undefined);
   const [focusRequest, setFocusRequest] = useState<FocusRequest | undefined>(undefined);
   const [sentName, setSentName] = useState("");
   const [website, setWebsite] = useState("");
   const [, setHumanCheck, getHumanCheck] = useState<HumanCheck>(NOT_CHECKED);
   const [humanCheckRound, setHumanCheckRound] = useState(0);
-  const retry = useCountdown();
+  const [retryLocked, setRetryLocked] = useState(false);
+
+  const errors: ContactFieldErrors = {};
+  let valid = true;
+  for (const { name } of CONTACT_FIELDS) {
+    const wrong = fieldError(name, values[name]);
+    if (wrong || refused[name]) valid = false;
+    errors[name] = refused[name] ?? (touched[name] ? wrong : undefined);
+  }
 
   /** A payload is used once: the next attempt gets a new widget and so a new challenge. */
   function renewHumanCheck() {
@@ -53,7 +63,7 @@ export function useContactForm(): ContactFormState {
 
   function failToSend() {
     setNotice(FORM_NOTICE.failed);
-    retry.start(RETRY_SECONDS);
+    setRetryLocked(true);
     renewHumanCheck();
   }
 
@@ -66,27 +76,36 @@ export function useContactForm(): ContactFormState {
 
   function setValue(field: ContactFieldName, value: string) {
     setValues((current) => ({ ...current, [field]: value }));
+    setTouched((current) => ({ ...current, [field]: true }));
+    setRefused((current) => ({ ...current, [field]: undefined }));
+    if (notice === FORM_NOTICE.invalidFields) setNotice(undefined);
   }
 
   function leaveField(field: ContactFieldName) {
-    setErrors((current) => ({ ...current, [field]: fieldError(field, values[field]) }));
+    setTouched((current) => ({ ...current, [field]: true }));
+  }
+
+  /** The backend refused these fields: show each under its field and focus the first. A refusal
+   * that names no field of the form gets a notice, so the Visitor is told something. */
+  function refuseFields(fields: ContactFieldError[]) {
+    const found: ContactFieldErrors = {};
+    for (const { field, error } of fields) {
+      const known = CONTACT_FIELDS.find(({ name }) => name === field);
+      if (known) found[known.name] = error;
+    }
+    const first = CONTACT_FIELDS.find(({ name }) => found[name] !== undefined);
+    setRefused(found);
+    setNotice(first ? undefined : FORM_NOTICE.invalidFields);
+    if (first) setFocusRequest({ field: first.name });
+    renewHumanCheck();
   }
 
   async function submit(event: Event) {
     event.preventDefault();
-    if (status !== FORM_STATUS.editing || retry.remaining > 0) return;
+    if (status !== FORM_STATUS.editing || retryLocked || !valid) return;
     // The widget takes the first submit, solves, and submits again. Until then there is nothing to send.
     const humanCheck = getHumanCheck();
     if (humanCheck.state === HUMAN_CHECK_STATE.verifying) return;
-    const found: ContactFieldErrors = {};
-    for (const { name } of CONTACT_FIELDS) found[name] = fieldError(name, values[name]);
-    setErrors(found);
-    const firstInvalid = CONTACT_FIELDS.find(({ name }) => found[name] !== undefined);
-    if (firstInvalid) {
-      setFocusRequest({ field: firstInvalid.name });
-      renewHumanCheck();
-      return;
-    }
     const request = contactRequestSchema.safeParse({
       ...values,
       website,
@@ -100,17 +119,13 @@ export function useContactForm(): ContactFormState {
     setNotice(undefined);
     setStatus(FORM_STATUS.sending);
     const outcome = await submitContact(request.data);
-    if (outcome === CONTACT_OUTCOME.sent) {
+    if (outcome.kind === CONTACT_OUTCOME.sent) {
       setSentName(request.data.name);
       setStatus(FORM_STATUS.sent);
       return;
     }
-    if (outcome === CONTACT_OUTCOME.invalidFields) {
-      setNotice(FORM_NOTICE.invalidFields);
-      renewHumanCheck();
-    } else {
-      failToSend();
-    }
+    if (outcome.kind === CONTACT_OUTCOME.invalidFields) refuseFields(outcome.fields);
+    else failToSend();
     setStatus(FORM_STATUS.editing);
   }
 
@@ -119,7 +134,9 @@ export function useContactForm(): ContactFormState {
     status,
     errors,
     notice,
-    retryIn: retry.remaining,
+    valid,
+    retryLocked,
+    endRetryLock: () => setRetryLocked(false),
     focusRequest,
     sentName,
     website,

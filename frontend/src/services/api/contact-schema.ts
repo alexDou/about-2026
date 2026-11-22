@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { CONTACT_LIMITS } from "./config";
+import { ALTCHA_MAX_LENGTH, CONTACT_LIMITS, WEBSITE_MAX_LENGTH } from "./config";
 
 // The field rules of a Contact request (Unit 4.0). The backend checks the same rules again
 // (`backend/src/app/contact/models.py`), so the two change together.
@@ -39,6 +39,6 @@ export const contactRequestSchema = z.object({
   company: requiredText(CONTACT_LIMITS.company),
   position: optionalText(CONTACT_LIMITS.position),
   contact: optionalText(CONTACT_LIMITS.contact),
-  altcha: requiredText(),
-  website: optionalText(),
+  altcha: requiredText(ALTCHA_MAX_LENGTH),
+  website: optionalText(WEBSITE_MAX_LENGTH),
 });

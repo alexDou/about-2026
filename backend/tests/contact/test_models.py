@@ -7,7 +7,9 @@ import pytest
 from pydantic import ValidationError
 
 from app.contact.models import (
+    ALTCHA_MAX_LENGTH,
     CONTACT_LIMITS,
+    WEBSITE_MAX_LENGTH,
     ChallengeParameters,
     ChallengeResponse,
     ContactRequest,
@@ -62,6 +64,14 @@ def test_accepts_a_value_at_its_limit(field: str, limit: int) -> None:
 @pytest.mark.parametrize(("field", "limit"), CONTACT_LIMITS.items())
 def test_rejects_a_value_over_its_limit(field: str, limit: int) -> None:
     assert error_types(**{field: "x" * (limit + 1)}) == {field: "string_too_long"}
+
+
+@pytest.mark.parametrize(
+    ("field", "limit"), [("altcha", ALTCHA_MAX_LENGTH), ("website", WEBSITE_MAX_LENGTH)]
+)
+def test_rejects_a_payload_or_a_honeypot_over_its_limit(field: str, limit: int) -> None:
+    assert error_types(**{field: "x" * (limit + 1)}) == {field: "string_too_long"}
+    assert getattr(parse(**{field: "x" * limit}), field) == "x" * limit
 
 
 def test_counts_length_in_code_points_as_zod_does() -> None:

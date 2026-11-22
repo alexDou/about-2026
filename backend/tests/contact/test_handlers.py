@@ -78,34 +78,52 @@ def test_the_mailer_gets_the_cleaned_request_and_the_time(mailer: AsyncMock) -> 
 
 
 @pytest.mark.parametrize(
-    "broken",
+    ("broken", "field", "error"),
     [
-        {"name": ""},
-        {"name": "   "},
-        {"name": "x" * 81},
-        {"company": ""},
-        {"company": "x" * 101},
-        {"position": "x" * 121},
-        {"contact": "x" * 201},
-        {"name": 7},
-        {"contact": None},
+        ({"name": ""}, "name", "required"),
+        ({"name": "   "}, "name", "required"),
+        ({"name": "x" * 81}, "name", "tooLong"),
+        ({"company": ""}, "company", "required"),
+        ({"company": "x" * 101}, "company", "tooLong"),
+        ({"position": "x" * 121}, "position", "tooLong"),
+        ({"contact": "x" * 201}, "contact", "tooLong"),
+        ({"name": 7}, "name", "required"),
+        ({"contact": None}, "contact", "required"),
+        ({"website": 7}, "website", "required"),
     ],
 )
-def test_422_per_broken_rule_and_nothing_sent(mailer: AsyncMock, broken: dict[str, object]) -> None:
+def test_422_names_the_broken_field_and_nothing_is_sent(
+    mailer: AsyncMock, broken: dict[str, object], field: str, error: str
+) -> None:
     response = post(mailer, {**VALID, **broken})
     assert response.status == 422
-    assert json.loads(response.body) == {"detail": "Invalid fields"}
+    assert json.loads(response.body) == {
+        "detail": "Invalid fields",
+        "fields": [{"field": field, "error": error}],
+    }
     mailer.send.assert_not_awaited()
 
 
+def test_422_names_every_broken_field_once_in_the_order_of_the_form(mailer: AsyncMock) -> None:
+    response = post(mailer, {**VALID, "name": "", "company": "x" * 101, "contact": "x" * 201})
+    assert json.loads(response.body)["fields"] == [
+        {"field": "name", "error": "required"},
+        {"field": "company", "error": "tooLong"},
+        {"field": "contact", "error": "tooLong"},
+    ]
+
+
 def test_422_when_a_required_field_is_missing(mailer: AsyncMock) -> None:
-    assert post(mailer, {"company": "Co", "altcha": "x"}).status == 422
+    response = post(mailer, {"company": "Co", "altcha": "x"})
+    assert response.status == 422
+    assert json.loads(response.body)["fields"] == [{"field": "name", "error": "required"}]
 
 
 @pytest.mark.parametrize("body", [b"", b"not json", b"[]", b"null"])
-def test_422_when_the_body_is_not_a_request_object(mailer: AsyncMock, body: bytes) -> None:
+def test_400_when_the_body_is_not_a_request_object(mailer: AsyncMock, body: bytes) -> None:
+    """There is no payload to check, so the human check is what fails."""
     response = post(mailer, body)
-    assert response.status == 422
+    assert response.status == 400
     mailer.send.assert_not_awaited()
 
 
@@ -138,12 +156,23 @@ def test_400_when_the_human_check_rejects_and_nothing_sent(
     mailer.send.assert_not_awaited()
 
 
-def test_invalid_fields_are_answered_before_the_human_check(
+def test_the_human_check_is_answered_before_the_fields_are_checked(
     mailer: AsyncMock, human_check: Mock
 ) -> None:
+    """A bot learns nothing about the field rules."""
     human_check.verify.return_value = False
-    assert post(mailer, {**VALID, "name": ""}, human_check).status == 422
+    assert post(mailer, {**VALID, "name": ""}, human_check).status == 400
+
+
+@pytest.mark.parametrize("altcha", [None, "", "   ", 7, "x" * 2049])
+def test_400_without_a_usable_payload_and_the_human_check_is_not_asked(
+    mailer: AsyncMock, human_check: Mock, altcha: object
+) -> None:
+    body = {key: value for key, value in VALID.items() if key != "altcha"}
+    response = post(mailer, {**body, "altcha": altcha}, human_check)
+    assert response.status == 400
     human_check.verify.assert_not_called()
+    mailer.send.assert_not_awaited()
 
 
 def test_a_filled_honeypot_gets_a_silent_204_and_nothing_is_sent(
@@ -172,6 +201,13 @@ def test_a_honeypot_that_is_not_text_is_not_a_silent_204(mailer: AsyncMock) -> N
     assert post(mailer, {**VALID, "website": None}).status == 422
     assert post(mailer, {**VALID, "website": 7}).status == 422
     mailer.send.assert_not_awaited()
+
+
+def test_the_honeypot_is_answered_before_the_human_check(
+    mailer: AsyncMock, human_check: Mock
+) -> None:
+    human_check.verify.return_value = False
+    assert post(mailer, {**VALID, "website": "x"}, human_check).status == 204
 
 
 def challenge(human_check: Mock) -> ApiResponse:

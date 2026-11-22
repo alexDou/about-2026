@@ -1,6 +1,6 @@
 import type { OctaneNode } from "octane";
 import type { MessageId } from "../../../../i18n";
-import type { Profile } from "../../../ui/profile-links";
+import type { Profile } from "../../../ui/social-links";
 
 /** What the panel says, as message ids, and where the Owner's profiles are. */
 export type ContactPanelContent = {
@@ -20,6 +20,6 @@ export type ContactPanelMedia = {
 export type ContactPanelProps = {
   content: ContactPanelContent;
   media: ContactPanelMedia;
-  /** The form: it places itself in the grid's `fields` and `submit` areas. */
+  /** The form: its fields and its button become items of the grid, in its `fields` and `submit` areas. */
   children?: OctaneNode;
 };

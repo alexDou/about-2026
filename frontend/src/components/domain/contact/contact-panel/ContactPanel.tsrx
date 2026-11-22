@@ -1,6 +1,6 @@
 import { useIntl } from "../../../../hooks/use-intl";
 import { Icon } from "../../../ui/icon";
-import { PROFILE_LOOKS, ProfileLinks } from "../../../ui/profile-links";
+import { PROFILE_LOOKS, SocialLinks } from "../../../ui/social-links";
 import styles from "./styles.module.css";
 import type { ContactPanelProps } from "./types";
 
@@ -27,7 +27,7 @@ export function ContactPanel({ content, media, children }: ContactPanelProps) @{
       </div>
       <hr class={styles["contact-panel__rule"]} />
       <div class={styles["contact-panel__links"]}>
-        <ProfileLinks profiles={content.profiles} look={PROFILE_LOOKS.ring} />
+        <SocialLinks profiles={content.profiles} look={PROFILE_LOOKS.ring} />
       </div>
       <hr class={styles["contact-panel__rule"]} />
       <div class={styles["contact-panel__required"]}>

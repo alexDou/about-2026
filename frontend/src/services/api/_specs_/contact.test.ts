@@ -39,21 +39,62 @@ describe("submitContact", () => {
 
   it("maps 204 to sent", async () => {
     stubFetch(new Response(null, { status: 204 }));
-    await expect(submitContact(request)).resolves.toBe(CONTACT_OUTCOME.sent);
+    await expect(submitContact(request)).resolves.toEqual({ kind: CONTACT_OUTCOME.sent });
   });
 
-  it("maps 422 to invalid fields", async () => {
-    stubFetch(Response.json({ detail: "Invalid fields" }, { status: 422 }));
-    await expect(submitContact(request)).resolves.toBe(CONTACT_OUTCOME.invalidFields);
+  it("maps 422 to the invalid fields the backend names", async () => {
+    stubFetch(
+      Response.json(
+        {
+          detail: "Invalid fields",
+          fields: [
+            { field: "name", error: "required" },
+            { field: "company", error: "tooLong" },
+          ],
+        },
+        { status: 422 },
+      ),
+    );
+    await expect(submitContact(request)).resolves.toEqual({
+      kind: CONTACT_OUTCOME.invalidFields,
+      fields: [
+        { field: "name", error: "required" },
+        { field: "company", error: "tooLong" },
+      ],
+    });
   });
 
-  it.each([400, 429, 502, 500])("maps %i to failed, for now", async (status) => {
+  it("keeps only the field errors that follow the contract", async () => {
+    stubFetch(
+      Response.json(
+        {
+          detail: "Invalid fields",
+          fields: [{ field: "name", error: "weird" }, { field: 7, error: "required" }, null, "x"],
+        },
+        { status: 422 },
+      ),
+    );
+    await expect(submitContact(request)).resolves.toEqual({
+      kind: CONTACT_OUTCOME.invalidFields,
+      fields: [],
+    });
+  });
+
+  it("maps a 422 without a field list to invalid fields with none", async () => {
+    stubFetch(new Response("<html>", { status: 422 }));
+    await expect(submitContact(request)).resolves.toEqual({
+      kind: CONTACT_OUTCOME.invalidFields,
+      fields: [],
+    });
+  });
+
+  it.each([400, 429, 502, 500])("maps %i to failed", async (status) => {
     stubFetch(Response.json({ detail: "no" }, { status }));
-    await expect(submitContact(request)).resolves.toBe(CONTACT_OUTCOME.failed);
+    await expect(submitContact(request)).resolves.toEqual({ kind: CONTACT_OUTCOME.failed });
   });
 
   it("maps a network failure to failed", async () => {
     stubFetch(new TypeError("network"));
-    await expect(submitContact(request)).resolves.toBe(CONTACT_OUTCOME.failed);
+    await expect(submitContact(request)).resolves.toEqual({ kind: CONTACT_OUTCOME.failed });
   });
 });

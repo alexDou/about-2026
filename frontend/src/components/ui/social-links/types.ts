@@ -12,7 +12,7 @@ export type Profile = {
   url: string;
 };
 
-export type ProfileLinksProps = {
+export type SocialLinksProps = {
   profiles: readonly Profile[];
   /** Defaults to the plain look. */
   look?: ProfileLook;

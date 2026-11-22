@@ -7,7 +7,7 @@ priority: normal
 tags:
     - ready-for-agent
 created_at: 2026-11-19T13:42:26Z
-updated_at: 2026-11-21T15:57:16Z
+updated_at: 2026-11-22T06:08:44Z
 parent: portfolio-a028
 blocked_by:
     - portfolio-zmw2
@@ -35,3 +35,9 @@ Floods are refused. POST /api/contact allows 5 requests per 15 minutes per IP an
 ## Blocked by
 
 - portfolio-zmw2 Unit 4.3: Send a Contact request
+
+
+## Review follow-ups (2026-11-22)
+
+- [ ] `backend/src/entry.py` is covered by no test: `request.method.value` and the `IntEnum` status handed to `Response` are proven only by the Pyodide check here
+- [ ] The one-time nonce for ALTCHA payloads (portfolio-kpue) is built together with this limiter

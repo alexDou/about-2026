@@ -1,5 +1,5 @@
 import type { z } from "zod";
-import type { CONTACT_OUTCOME, CONTACT_STATUS } from "./config";
+import type { CONTACT_FIELD_ERROR, CONTACT_OUTCOME, CONTACT_STATUS } from "./config";
 import type { contactRequestSchema } from "./contact-schema";
 
 export type HealthResponse = {
@@ -14,7 +14,17 @@ export type ErrorResponse = {
 /** A cleaned Contact request, as `POST /api/contact` takes it. */
 export type ContactRequest = z.output<typeof contactRequestSchema>;
 
-export type ContactOutcome = (typeof CONTACT_OUTCOME)[keyof typeof CONTACT_OUTCOME];
+/** One invalid field of a `422`: `field` is a field of the request, `error` what is wrong with it. */
+export type ContactFieldError = {
+  field: string;
+  error: (typeof CONTACT_FIELD_ERROR)[keyof typeof CONTACT_FIELD_ERROR];
+};
+
+/** What a Contact request came to: sent, refused for these fields, or failed some other way. */
+export type ContactOutcome =
+  | { kind: typeof CONTACT_OUTCOME.sent }
+  | { kind: typeof CONTACT_OUTCOME.invalidFields; fields: ContactFieldError[] }
+  | { kind: typeof CONTACT_OUTCOME.failed };
 
 export type ContactStatus = (typeof CONTACT_STATUS)[keyof typeof CONTACT_STATUS];
 

@@ -1,21 +1,19 @@
+import cx from "classnames";
 import { useIntl } from "../../../hooks/use-intl";
 import { Icon, ICON_SIZES } from "../icon";
 import { PROFILE_ICONS, PROFILE_LOOKS } from "./config";
 import styles from "./styles.module.css";
-import type { ProfileLinksProps } from "./types";
+import type { SocialLinksProps } from "./types";
 
 /** The Owner's profiles elsewhere, one icon link each, named by its label. */
-export function ProfileLinks({
-  profiles,
-  look = PROFILE_LOOKS.plain,
-}: ProfileLinksProps) @{
+export function SocialLinks({ profiles, look = PROFILE_LOOKS.plain }: SocialLinksProps) @{
   const intl = useIntl();
 
-  <ul class={`${styles["profile-links"]} ${styles[`profile-links--${look}`]}`}>
+  <ul class={cx(styles["social-links"], styles[`social-links--${look}`])}>
     @for (const profile of profiles; key profile.kind) {
       <li>
         <a
-          class={`${styles["profile-links__link"]} ${styles[`profile-links__link--${look}`]}`}
+          class={cx(styles["social-links__link"], styles[`social-links__link--${look}`])}
           href={profile.url}
           aria-label={intl.formatMessage({ id: profile.label })}
         >

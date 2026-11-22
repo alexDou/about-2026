@@ -40,21 +40,7 @@
   "contact.form.failed": [
     {
       "type": 0,
-      "value": "Your request wasn't sent. Please try again in "
-    },
-    {
-      "type": 1,
-      "value": "seconds"
-    },
-    {
-      "type": 0,
-      "value": " s."
-    }
-  ],
-  "contact.form.failedNow": [
-    {
-      "type": 0,
-      "value": "Your request wasn't sent. Please try again."
+      "value": "Your request wasn't sent."
     }
   ],
   "contact.form.invalid": [
@@ -79,6 +65,26 @@
     {
       "type": 0,
       "value": "You're hiring for"
+    }
+  ],
+  "contact.form.retryIn": [
+    {
+      "type": 0,
+      "value": "Please try again in "
+    },
+    {
+      "type": 1,
+      "value": "seconds"
+    },
+    {
+      "type": 0,
+      "value": " s."
+    }
+  ],
+  "contact.form.retryNow": [
+    {
+      "type": 0,
+      "value": "Please try again."
     }
   ],
   "contact.form.send": [

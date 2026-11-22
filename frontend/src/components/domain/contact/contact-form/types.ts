@@ -36,12 +36,14 @@ export type ContactFormContent = {
   tooLong: MessageId;
   /** Takes the `{count}` and the `{max}`. */
   counter: MessageId;
-  /** The notice for a request the backend refused as invalid. */
+  /** The notice for a refusal that names no field of the form. */
   invalid: MessageId;
-  /** The notice for a request that was not sent. Takes the `{seconds}` left before a retry. */
+  /** The notice for a request that was not sent. Read out when it shows. */
   failed: MessageId;
-  /** The same, once the countdown is over. */
-  failedNow: MessageId;
+  /** Under it while Send is locked. Takes the `{seconds}` left. Not read out as they change. */
+  retryIn: MessageId;
+  /** Under it once Send is free again. */
+  retryNow: MessageId;
   send: MessageId;
   sending: MessageId;
   /** Takes the `{name}`. */

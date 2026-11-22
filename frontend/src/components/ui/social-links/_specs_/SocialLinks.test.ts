@@ -1,11 +1,11 @@
 import { render, screen, within } from "@octanejs/testing-library";
 import { describe, expect, it } from "vitest";
 import { intlWrapper } from "../../../../i18n";
-import { ProfileLinks } from "../ProfileLinks.tsrx";
+import { SocialLinks } from "../SocialLinks.tsrx";
 import { PROFILE_KINDS, PROFILE_LOOKS } from "../config";
-import type { ProfileLinksProps } from "../types";
+import type { SocialLinksProps } from "../types";
 
-const profiles: ProfileLinksProps["profiles"] = [
+const profiles: SocialLinksProps["profiles"] = [
   {
     kind: PROFILE_KINDS.linkedin,
     label: "about.profile.linkedin.label",
@@ -22,10 +22,10 @@ const MESSAGES = {
   "about.profile.github.label": "GitHub",
 };
 
-const renderLinks = (look?: ProfileLinksProps["look"]) =>
-  render(ProfileLinks, { props: { profiles, look }, wrapper: intlWrapper(MESSAGES) });
+const renderLinks = (look?: SocialLinksProps["look"]) =>
+  render(SocialLinks, { props: { profiles, look }, wrapper: intlWrapper(MESSAGES) });
 
-describe("ProfileLinks", () => {
+describe("SocialLinks", () => {
   it("links each profile, named by its label, in the order given", () => {
     renderLinks();
     const links = within(screen.getByRole("list")).getAllByRole("link");
@@ -52,7 +52,7 @@ describe("ProfileLinks", () => {
 
   it("has the plain look unless told otherwise", () => {
     renderLinks();
-    expect(screen.getByRole("list").className).toContain("profile-links--plain");
+    expect(screen.getByRole("list").className).toContain("social-links--plain");
   });
 
   it.each(Object.values(PROFILE_LOOKS))(
@@ -60,9 +60,9 @@ describe("ProfileLinks", () => {
     (look) => {
       renderLinks(look);
       const list = screen.getByRole("list");
-      expect(list.className).toContain(`profile-links--${look}`);
+      expect(list.className).toContain(`social-links--${look}`);
       for (const link of within(list).getAllByRole("link")) {
-        expect(link.className).toContain(`profile-links__link--${look}`);
+        expect(link.className).toContain(`social-links__link--${look}`);
       }
     },
   );

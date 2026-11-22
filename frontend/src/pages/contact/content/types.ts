@@ -26,7 +26,8 @@ export type ContactFormMessages = {
   counter: MessageId;
   invalid: MessageId;
   failed: MessageId;
-  failedNow: MessageId;
+  retryIn: MessageId;
+  retryNow: MessageId;
   send: MessageId;
   sending: MessageId;
   thanks: MessageId;

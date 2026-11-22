@@ -2,6 +2,7 @@ import { act, fireEvent, render, screen, waitFor } from "@octanejs/testing-libra
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { intlWrapper } from "../../../../../i18n";
 import { CONTACT_OUTCOME, fetchHealth, submitContact } from "../../../../../services/api";
+import type { ContactFieldError, ContactOutcome } from "../../../../../services/api";
 import { resetHealth } from "../../../api-status";
 import { ContactForm } from "../ContactForm.tsrx";
 import type { ContactFormProps } from "../types";
@@ -26,11 +27,19 @@ const content: ContactFormProps["content"] = {
   counter: "contact.form.counter",
   invalid: "contact.form.invalid",
   failed: "contact.form.failed",
-  failedNow: "contact.form.failedNow",
+  retryIn: "contact.form.retryIn",
+  retryNow: "contact.form.retryNow",
   send: "contact.form.send",
   sending: "contact.form.sending",
   thanks: "contact.form.thanks",
 };
+
+const SENT: ContactOutcome = { kind: CONTACT_OUTCOME.sent };
+const FAILED: ContactOutcome = { kind: CONTACT_OUTCOME.failed };
+const refused = (...fields: ContactFieldError[]): ContactOutcome => ({
+  kind: CONTACT_OUTCOME.invalidFields,
+  fields,
+});
 
 const renderForm = () => render(ContactForm, { props: { content }, wrapper: intlWrapper() });
 
@@ -46,7 +55,7 @@ const send = () => fireEvent.click(screen.getByRole("button", { name: "Send" }))
 
 beforeEach(() => {
   resetFakeAltchaWidget();
-  submitContactMock.mockResolvedValue(CONTACT_OUTCOME.sent);
+  submitContactMock.mockResolvedValue(SENT);
   fetchHealthMock.mockResolvedValue({ status: "ok" });
 });
 afterEach(() => {
@@ -120,14 +129,34 @@ describe("ContactForm", () => {
     );
   });
 
-  it("does not send while a required field is empty", async () => {
+  it("keeps Send disabled until both required fields hold something", () => {
+    renderForm();
+    const button = screen.getByRole("button", { name: "Send" });
+    expect(button).toBeDisabled();
+    type(/^Company/, "Analytical Engines");
+    expect(button).toBeDisabled();
+    type(/^Your name/, "   ");
+    expect(button).toBeDisabled();
+    type(/^Your name/, "Ada");
+    expect(button).toBeEnabled();
+  });
+
+  it("disables Send while a field is over its limit, and frees it when the field fits", () => {
+    renderForm();
+    fillRequired();
+    type("You're hiring for", "x".repeat(121));
+    expect(screen.getByRole("button", { name: "Send" })).toBeDisabled();
+    type("You're hiring for", "x".repeat(120));
+    expect(screen.getByRole("button", { name: "Send" })).toBeEnabled();
+  });
+
+  it("does not send a form that is submitted while it is invalid", async () => {
     renderForm();
     type(/^Company/, "Analytical Engines");
-    send();
+    fireEvent.submit(screen.getByRole("button", { name: "Send" }).closest("form") as HTMLElement);
     await act(async () => {});
     expect(submitContactMock).not.toHaveBeenCalled();
   });
-
   it("is disabled and says 'Sending…' while the request is on its way", async () => {
     submitContactMock.mockReturnValue(new Promise(() => {}));
     renderForm();
@@ -149,16 +178,11 @@ describe("ContactForm", () => {
     expect(screen.queryByRole("textbox")).not.toBeInTheDocument();
   });
 
-  it("brings the form back with the typed values, ready to send again, when the backend refuses the fields", async () => {
-    submitContactMock.mockResolvedValue(CONTACT_OUTCOME.invalidFields);
+  it("moves the focus to the thank-you note, so that it is read out", async () => {
     renderForm();
     fillRequired();
-    type(/^How to reach you/, "ada@example.com");
     send();
-    const button = await screen.findByRole("button", { name: "Send" });
-    expect(button).toBeEnabled();
-    expect(screen.getByLabelText("Your name *")).toHaveValue("  Ada Lovelace ");
-    expect(screen.getByLabelText(/^How to reach you/)).toHaveValue("ada@example.com");
+    expect(await screen.findByText(/^Thank you, Ada Lovelace/)).toHaveFocus();
   });
 });
 
@@ -206,11 +230,12 @@ describe("ContactForm human check", () => {
   });
 
   it("solves again for every attempt: a payload is used once", async () => {
-    submitContactMock.mockResolvedValueOnce(CONTACT_OUTCOME.invalidFields);
+    submitContactMock.mockResolvedValueOnce(refused({ field: "name", error: "required" }));
     renderForm();
     fillRequired();
     send();
-    await screen.findByRole("alert");
+    await screen.findByText("Please enter your name.");
+    type(/^Your name/, "Ada Lovelace");
     send();
     await waitFor(() => expect(submitContactMock).toHaveBeenCalledTimes(2));
     expect(submitContactMock.mock.calls.map(([request]) => request.altcha)).toEqual([
@@ -218,18 +243,6 @@ describe("ContactForm human check", () => {
       `${SOLVED_PAYLOAD}-2`,
     ]);
   });
-
-  it("does not reuse a payload after the fields were found invalid", async () => {
-    renderForm();
-    type(/^Your name/, "Ada");
-    send();
-    await screen.findByText("Please enter your company.");
-    type(/^Company/, "Analytical Engines");
-    send();
-    await waitFor(() => expect(submitContactMock).toHaveBeenCalledTimes(1));
-    expect(submitContactMock.mock.calls[0]?.[0].altcha).toBe(`${SOLVED_PAYLOAD}-2`);
-  });
-
   it("shows the generic failure with the countdown when the widget cannot solve, sending nothing", async () => {
     vi.useFakeTimers({ shouldAdvanceTime: true });
     solving.next = "fails";
@@ -237,7 +250,8 @@ describe("ContactForm human check", () => {
     fillRequired();
     send();
     const alert = await screen.findByRole("alert");
-    expect(alert).toHaveTextContent("Your request wasn't sent. Please try again in 10 s.");
+    expect(alert).toHaveTextContent("Your request wasn't sent.");
+    expect(screen.getByText("Please try again in 10 s.")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Send" })).toBeDisabled();
     expect(submitContactMock).not.toHaveBeenCalled();
     expect(screen.getByLabelText("Your name *")).toHaveValue("  Ada Lovelace ");
@@ -249,13 +263,13 @@ describe("ContactForm human check", () => {
     renderForm();
     fillRequired();
     send();
-    const alert = await screen.findByRole("alert");
+    await screen.findByRole("alert");
     for (let second = 0; second < 10; second += 1) {
       await act(async () => {
         await vi.advanceTimersByTimeAsync(1000);
       });
     }
-    expect(alert).not.toHaveTextContent(" s.");
+    expect(screen.getByText("Please try again.")).toBeInTheDocument();
     solving.next = "solves";
     send();
     expect(await screen.findByText(/^Thank you, Ada Lovelace/)).toBeInTheDocument();
@@ -298,13 +312,22 @@ describe("ContactForm honeypot", () => {
 const blur = (label: string | RegExp) => fireEvent.blur(screen.getByLabelText(label));
 
 describe("ContactForm field feedback", () => {
-  it("says nothing about a field while it is typed in", () => {
+  it("says nothing about a field the Visitor has not touched", () => {
     renderForm();
-    type(/^Your name/, "   ");
     expect(screen.queryByText("Please enter your name.")).not.toBeInTheDocument();
-    expect(screen.getByLabelText("Your name *")).not.toBeInvalid();
+    expect(screen.queryByText("Please enter your company.")).not.toBeInTheDocument();
+    expect(screen.getByLabelText("Your name *")).not.toHaveAttribute("aria-invalid", "true");
   });
 
+  it("names a required field the Visitor empties again, while typing", () => {
+    renderForm();
+    type(/^Your name/, "Ada");
+    expect(screen.queryByText("Please enter your name.")).not.toBeInTheDocument();
+    type(/^Your name/, "");
+    expect(screen.getByText("Please enter your name.")).toBeInTheDocument();
+    type(/^Your name/, "Ada");
+    expect(screen.queryByText("Please enter your name.")).not.toBeInTheDocument();
+  });
   it("names the missing field under it when it loses focus empty, and links the two", () => {
     renderForm();
     blur(/^Your name/);
@@ -340,14 +363,12 @@ describe("ContactForm field feedback", () => {
     expect(screen.getByLabelText("You're hiring for")).not.toBeInvalid();
   });
 
-  it("names the limit of a field that is too long when it loses focus", () => {
+  it("names the limit of a field as soon as it is too long", () => {
     renderForm();
     type("You're hiring for", "x".repeat(121));
-    blur("You're hiring for");
     expect(screen.getByText("At most 120 characters.")).toBeInTheDocument();
     expect(screen.getByLabelText("You're hiring for")).toBeInvalid();
   });
-
   it("shows a counter once a field is past 80% of its limit", () => {
     renderForm();
     type(/^Your name/, "x".repeat(64));
@@ -362,27 +383,37 @@ describe("ContactForm field feedback", () => {
     expect(screen.getByText("70 / 80")).toBeInTheDocument();
   });
 
-  it("on Send shows every error, sends nothing and focuses the first invalid field", async () => {
+  it("shows what the backend refused under each field, keeps the values and focuses the first", async () => {
+    submitContactMock.mockResolvedValue(
+      refused({ field: "company", error: "tooLong" }, { field: "name", error: "required" }),
+    );
     renderForm();
+    fillRequired();
     send();
     expect(await screen.findByText("Please enter your name.")).toBeInTheDocument();
-    expect(screen.getByText("Please enter your company.")).toBeInTheDocument();
-    expect(submitContactMock).not.toHaveBeenCalled();
-    expect(screen.getByLabelText("Your name *")).toHaveFocus();
+    expect(screen.getByText("At most 100 characters.")).toBeInTheDocument();
+    expect(screen.getByLabelText("Your name *")).toBeInvalid();
+    expect(screen.getByLabelText("Your name *")).toHaveValue("  Ada Lovelace ");
+    expect(screen.getByLabelText("Company *")).toHaveValue("Analytical Engines");
+    await waitFor(() => expect(screen.getByLabelText("Your name *")).toHaveFocus());
   });
 
-  it("focuses the company when only the company is missing, and again on the next try", async () => {
+  it("locks Send after a 422 until a field is changed, with no countdown and no notice", async () => {
+    submitContactMock.mockResolvedValue(refused({ field: "name", error: "required" }));
     renderForm();
+    fillRequired();
+    send();
+    await screen.findByText("Please enter your name.");
+    expect(screen.getByRole("button", { name: "Send" })).toBeDisabled();
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+    expect(screen.queryByText(/Please try again/)).not.toBeInTheDocument();
     type(/^Your name/, "Ada");
-    send();
-    await waitFor(() => expect(screen.getByLabelText("Company *")).toHaveFocus());
-    screen.getByRole("button", { name: "Send" }).focus();
-    send();
-    await waitFor(() => expect(screen.getByLabelText("Company *")).toHaveFocus());
+    expect(screen.queryByText("Please enter your name.")).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Send" })).toBeEnabled();
   });
 
-  it("answers a 422 with a generic notice and keeps what was typed", async () => {
-    submitContactMock.mockResolvedValue(CONTACT_OUTCOME.invalidFields);
+  it("tells the Visitor of a refusal that names no field of the form, and keeps what was typed", async () => {
+    submitContactMock.mockResolvedValue(refused({ field: "website", error: "tooLong" }));
     renderForm();
     fillRequired();
     send();
@@ -390,17 +421,16 @@ describe("ContactForm field feedback", () => {
       "Some details were not accepted. Please check the form and try again.",
     );
     expect(screen.getByLabelText("Company *")).toHaveValue("Analytical Engines");
+    expect(screen.getByRole("button", { name: "Send" })).toBeEnabled();
   });
-
-  it("takes the notice away when the next try is on its way", async () => {
-    submitContactMock.mockResolvedValueOnce(CONTACT_OUTCOME.invalidFields);
+  it("takes the notice away when the Visitor changes a field", async () => {
+    submitContactMock.mockResolvedValueOnce(refused());
     renderForm();
     fillRequired();
     send();
     await screen.findByRole("alert");
-    submitContactMock.mockReturnValue(new Promise(() => {}));
-    send();
-    await waitFor(() => expect(screen.queryByRole("alert")).not.toBeInTheDocument());
+    type(/^Company/, "Analytical Engines Ltd");
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
   });
 });
 
@@ -415,7 +445,7 @@ const passSeconds = async (seconds: number) => {
 
 describe("ContactForm when sending fails", () => {
   const fail = async () => {
-    submitContactMock.mockResolvedValueOnce(CONTACT_OUTCOME.failed);
+    submitContactMock.mockResolvedValueOnce(FAILED);
     fillRequired();
     type("You're hiring for", "Staff engineer");
     send();
@@ -426,7 +456,8 @@ describe("ContactForm when sending fails", () => {
     vi.useFakeTimers({ shouldAdvanceTime: true });
     renderForm();
     const alert = await fail();
-    expect(alert).toHaveTextContent("Your request wasn't sent. Please try again in 10 s.");
+    expect(alert).toHaveTextContent("Your request wasn't sent.");
+    expect(screen.getByText("Please try again in 10 s.")).toBeInTheDocument();
     expect(screen.getByLabelText("Your name *")).toHaveValue("  Ada Lovelace ");
     expect(screen.getByLabelText("You're hiring for")).toHaveValue("Staff engineer");
   });
@@ -437,17 +468,18 @@ describe("ContactForm when sending fails", () => {
     const alert = await fail();
     expect(screen.getByRole("button", { name: "Send" })).toBeDisabled();
     await passSeconds(3);
-    expect(alert).toHaveTextContent("Please try again in 7 s.");
+    expect(screen.getByText("Please try again in 7 s.")).toBeInTheDocument();
+    expect(alert).not.toHaveTextContent(/\d+ s\./);
     expect(screen.getByRole("button", { name: "Send" })).toBeDisabled();
   });
 
   it("lets the Visitor try again once the countdown is over, with the fields still theirs", async () => {
     vi.useFakeTimers({ shouldAdvanceTime: true });
     renderForm();
-    const alert = await fail();
+    await fail();
     await passSeconds(10);
-    expect(alert).toHaveTextContent("Your request wasn't sent. Please try again.");
-    expect(alert).not.toHaveTextContent(" s.");
+    expect(screen.getByText("Please try again.")).toBeInTheDocument();
+    expect(screen.queryByText(/ s\.$/)).not.toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Send" })).toBeEnabled();
     send();
     expect(await screen.findByText(/^Thank you, Ada Lovelace/)).toBeInTheDocument();
@@ -481,6 +513,7 @@ describe("ContactForm while the backend is down", () => {
   it("is usable again once the backend answers", async () => {
     fetchHealthMock.mockResolvedValue({ status: "ok" });
     renderForm();
+    fillRequired();
     await act(async () => {});
     expect(screen.getByRole("button", { name: "Send" })).toBeEnabled();
   });

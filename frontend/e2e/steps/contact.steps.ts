@@ -189,6 +189,20 @@ Given(
   },
 );
 
+Given(
+  "the backend refuses Contact requests with 422 for {string} as {string}",
+  async function (this: PortfolioWorld, field: string, error: string) {
+    await stubChallenge(this);
+    await this.page.route("**/api/contact", async (route) => {
+      this.contactRequests.push(route.request().postDataJSON());
+      await route.fulfill({
+        status: 422,
+        json: { detail: "Invalid fields", fields: [{ field, error }] },
+      });
+    });
+  },
+);
+
 Given("the Contact challenge cannot be fetched", async function (this: PortfolioWorld) {
   await this.page.route("**/api/contact/challenge", async (route) => {
     await route.abort("connectionrefused");
@@ -298,7 +312,10 @@ Then("the field {string} has focus", async function (this: PortfolioWorld, label
 });
 
 When("I leave the field {string}", async function (this: PortfolioWorld, label: string) {
-  await this.page.getByLabel(label).blur();
+  // Focused first, so that a field the Visitor never filled is entered and then left.
+  const field = this.page.getByLabel(label);
+  await field.focus();
+  await field.blur();
 });
 
 Then(
@@ -315,9 +332,11 @@ Then("the backend received no Contact request", async function (this: PortfolioW
 Then(
   "the failure notice counts down from {int} s",
   async function (this: PortfolioWorld, from: number) {
-    const notice = this.page.getByRole("alert");
-    await expect(notice).toHaveText(/^Your request wasn't sent\. Please try again in \d+ s\.$/);
-    const seconds = Number(/in (\d+) s/.exec((await notice.textContent()) ?? "")?.[1]);
+    // Only the first sentence is the alert, so the seconds are not read out as they change.
+    await expect(this.page.getByRole("alert")).toHaveText("Your request wasn't sent.");
+    const countdown = this.page.getByText(/^Please try again in \d+ s\.$/);
+    await expect(countdown).toBeVisible();
+    const seconds = Number(/in (\d+) s/.exec((await countdown.textContent()) ?? "")?.[1]);
     expect(seconds).toBeLessThanOrEqual(from);
     expect(seconds).toBeGreaterThan(0);
   },
@@ -325,6 +344,15 @@ Then(
 
 Then("the Send button is disabled", async function (this: PortfolioWorld) {
   await expect(this.page.getByRole("button", { name: "Send" })).toBeDisabled();
+});
+
+Then("the Send button is enabled", async function (this: PortfolioWorld) {
+  await expect(this.page.getByRole("button", { name: "Send" })).toBeEnabled();
+});
+
+Then("no failure notice shows", async function (this: PortfolioWorld) {
+  await expect(this.page.getByRole("alert")).toHaveCount(0);
+  await expect(this.page.getByText(/Please try again/)).toHaveCount(0);
 });
 
 Then("the Contact form is disabled", async function (this: PortfolioWorld) {

@@ -4,12 +4,15 @@ export class ApiError extends Error {
   readonly status: number;
   /** The `detail` of the error body, when the backend sent the contract's `{ detail }`. */
   readonly detail: string | undefined;
+  /** The parsed JSON body of the error, or undefined when it had none. */
+  readonly body: unknown;
 
-  constructor(status: number, message: string, detail?: string) {
+  constructor(status: number, message: string, detail?: string, body?: unknown) {
     super(message);
     this.name = "ApiError";
     this.status = status;
     this.detail = detail;
+    this.body = body;
   }
 }
 
@@ -23,7 +26,7 @@ async function apiError(response: Response, request: string): Promise<ApiError> 
   // A proxy or the platform may answer with HTML or nothing: then there is no detail to read.
   const body: unknown = await response.json().catch(() => undefined);
   const detail = isErrorResponse(body) ? body.detail : undefined;
-  return new ApiError(response.status, `${request} -> ${response.status}`, detail);
+  return new ApiError(response.status, `${request} -> ${response.status}`, detail, body);
 }
 
 /** Fetches JSON from the backend (`/api/*`, proxied to the Worker in dev). */

@@ -3,6 +3,7 @@ import { useEffect, useRef } from "octane";
 import { API_HEALTH, useApiHealth } from "../../api-status";
 import { useIntl } from "../../../../hooks/use-intl";
 import { CONTACT_CHALLENGE_URL, CONTACT_LIMITS } from "../../../../services/api";
+import { Countdown } from "../../../ui/countdown";
 import { INPUT_FIELD_LAYOUTS, INPUT_FIELD_TONES, InputField } from "../../../ui/input-field";
 import {
   CONTACT_FIELDS,
@@ -10,6 +11,7 @@ import {
   FORM_NOTICE,
   FORM_STATUS,
   HUMAN_CHECK_WIDGET,
+  RETRY_SECONDS,
 } from "./config";
 import { useContactForm } from "./hooks/use-contact-form";
 import styles from "./styles.module.css";
@@ -31,7 +33,9 @@ export function ContactForm({ content }: ContactFormProps) @{
     status,
     errors,
     notice,
-    retryIn,
+    valid,
+    retryLocked,
+    endRetryLock,
     focusRequest,
     sentName,
     website,
@@ -45,11 +49,17 @@ export function ContactForm({ content }: ContactFormProps) @{
   const sending = status === FORM_STATUS.sending;
   // With the backend down nothing can be sent: the form waits, keeping what was typed.
   const offline = useApiHealth() === API_HEALTH.down;
-  // After a failed attempt to send, the first invalid field takes the focus.
+  // When the backend refuses a field, the first one it names takes the focus.
   const inputs = useRef<Partial<Record<ContactFieldName, HTMLInputElement | null>>>({});
   useEffect(() => {
     if (focusRequest) inputs.current[focusRequest.field]?.focus();
   }, [focusRequest]);
+
+  // A form that is replaced by its thank-you note takes the focus with it, so the note is read out.
+  const thanks = useRef<HTMLOutputElement | null>(null);
+  useEffect(() => {
+    if (status === FORM_STATUS.sent) thanks.current?.focus();
+  }, [status]);
 
   const errorText = (field: ContactFieldName) => {
     const error = errors[field];
@@ -61,7 +71,13 @@ export function ContactForm({ content }: ContactFormProps) @{
   };
 
   @if (status === FORM_STATUS.sent) {
-    <output class={styles["contact-form__thanks"]}>
+    <output
+      class={styles["contact-form__thanks"]}
+      tabIndex={-1}
+      ref={(element) => {
+        thanks.current = element;
+      }}
+    >
       {intl.formatMessage({ id: content.thanks }, { name: sentName }) as string}
     </output>;
   } @else {
@@ -112,7 +128,6 @@ export function ContactForm({ content }: ContactFormProps) @{
             onInput={(event) => setWebsite((event.target as HTMLInputElement).value)}
           />
         </div>
-        // A used widget is replaced by a new one (a new key), so each attempt gets a new challenge.
         <altcha-widget
           key={humanCheckRound}
           class={styles["contact-form__human-check"]}
@@ -127,17 +142,29 @@ export function ContactForm({ content }: ContactFormProps) @{
           </p>;
         }
         @if (notice === FORM_NOTICE.failed) {
-          <p class={styles["contact-form__notice"]} role="alert">
-            {retryIn > 0
-              ? intl.formatMessage({ id: content.failed }, { seconds: retryIn })
-              : intl.formatMessage({ id: content.failedNow })}
-          </p>;
+          // Only the first sentence is read out. The seconds change every second and are not.
+          <div class={styles["contact-form__notice"]}>
+            <p role="alert">{intl.formatMessage({ id: content.failed })}</p>
+            <p>
+              @if (retryLocked) {
+                <Countdown
+                  from={RETRY_SECONDS}
+                  format={(seconds) =>
+                    intl.formatMessage({ id: content.retryIn }, { seconds })
+                  }
+                  onDone={endRetryLock}
+                />;
+              } @else {
+                <>{intl.formatMessage({ id: content.retryNow })}</>;
+              }
+            </p>
+          </div>;
         }
       </fieldset>
       <button
         class={styles["contact-form__send"]}
         type="submit"
-        disabled={sending || offline || retryIn > 0}
+        disabled={sending || offline || retryLocked || !valid}
       >
         {intl.formatMessage({ id: sending ? content.sending : content.send })}
       </button>

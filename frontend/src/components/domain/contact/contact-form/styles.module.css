@@ -87,3 +87,7 @@
   margin: 0;
   font-weight: 700;
 }
+
+.contact-form__notice p {
+  margin: 0;
+}

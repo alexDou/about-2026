@@ -74,24 +74,27 @@ Feature: Contact Panel layout
     And the backend received a Contact request from "Ada Lovelace" at "Analytical Engines"
     And the Contact request carries the honeypot "https://spam.example"
 
-  Scenario: Pressing Send on an empty form names what is missing and focuses the first field
+  Scenario: Send stays disabled until both required fields hold something
     Given the backend is up
     And the backend accepts Contact requests
     When I open "/contact"
-    And I press "Send"
-    Then the page says "Please enter your name."
-    And the page says "Please enter your company."
-    And the field "Your name" is in error
-    And the field "Your name" has focus
-    And the backend received no Contact request
+    Then the Send button is disabled
+    And the page does not say "Please enter your name."
+    When I fill in "Company" with "Analytical Engines"
+    Then the Send button is disabled
+    When I fill in "Your name" with "Ada Lovelace"
+    Then the Send button is enabled
 
-  Scenario: A field is checked when it is left, not while it is typed in
+  Scenario: A field names what is wrong as soon as it is typed in or left
     Given the backend is up
     When I open "/contact"
     And I fill in "Company" with "   "
-    Then the page does not say "Please enter your company."
-    When I leave the field "Company"
     Then the page says "Please enter your company."
+    And the field "Company" is in error
+    When I fill in "Company" with "Analytical Engines"
+    Then the page does not say "Please enter your company."
+    When I leave the field "Your name"
+    Then the page says "Please enter your name."
 
   Scenario: A counter appears past 80% of a field's limit, and a value over the limit is refused
     Given the backend is up
@@ -102,15 +105,21 @@ Feature: Contact Panel layout
     And I leave the field "Your name"
     Then the page says "At most 80 characters."
 
-  Scenario: The backend refusing the fields shows a generic notice and keeps what was typed
+  Scenario: The backend refusing a field shows its error, keeps what was typed and locks Send until the field changes
     Given the backend is up
-    And the backend refuses Contact requests with 422
+    And the backend refuses Contact requests with 422 for "name" as "required"
     When I open "/contact"
     And I fill in "Your name" with "Ada Lovelace"
     And I fill in "Company" with "Analytical Engines"
     And I press "Send"
-    Then the page says "Some details were not accepted. Please check the form and try again."
+    Then the page says "Please enter your name."
+    And the field "Your name" is in error
+    And the field "Your name" has focus
     And the field "Your name" holds "Ada Lovelace"
+    And the Send button is disabled
+    And no failure notice shows
+    When I fill in "Your name" with "Ada"
+    Then the Send button is enabled
 
   Scenario: When the email is not sent the form comes back with a countdown before Send works again
     Given the backend is up

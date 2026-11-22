@@ -1,7 +1,7 @@
 // Contract test: the zod schema accepts and rejects along the rules the backend's Pydantic model
 // holds (`backend/src/app/contact/models.py`, tested in `backend/tests/contact/test_models.py`).
 import { describe, expect, it } from "vitest";
-import { CONTACT_LIMITS, CONTACT_STATUS } from "../config";
+import { ALTCHA_MAX_LENGTH, CONTACT_LIMITS, CONTACT_STATUS, WEBSITE_MAX_LENGTH } from "../config";
 import { contactRequestSchema } from "../contact-schema";
 
 const VALID = {
@@ -11,7 +11,11 @@ const VALID = {
 };
 const OPTIONAL = ["position", "contact", "website"] as const;
 const REQUIRED = ["name", "company", "altcha"] as const;
-const LIMITED = Object.entries(CONTACT_LIMITS) as [keyof typeof CONTACT_LIMITS, number][];
+const LIMITED = [
+  ...(Object.entries(CONTACT_LIMITS) as [string, number][]),
+  ["altcha", ALTCHA_MAX_LENGTH],
+  ["website", WEBSITE_MAX_LENGTH],
+] as const;
 
 function parse(fields: Record<string, unknown> = {}) {
   return contactRequestSchema.safeParse({ ...VALID, ...fields });
@@ -42,10 +46,14 @@ describe("contactRequestSchema", () => {
 
   it("holds the contract's limits", () => {
     expect(CONTACT_LIMITS).toEqual({ name: 80, company: 100, position: 120, contact: 200 });
+    expect(ALTCHA_MAX_LENGTH).toBe(2048);
+    expect(WEBSITE_MAX_LENGTH).toBe(200);
   });
 
   it.each(LIMITED)("accepts %s at its limit", (field, limit) => {
-    expect(parse({ [field]: "x".repeat(limit) }).data?.[field]).toBe("x".repeat(limit));
+    expect(parse({ [field]: "x".repeat(limit) }).data).toMatchObject({
+      [field]: "x".repeat(limit),
+    });
   });
 
   it.each(LIMITED)("rejects %s over its limit", (field, limit) => {

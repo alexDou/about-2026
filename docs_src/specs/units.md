@@ -187,7 +187,7 @@ Reference: the expanded menu of codepen `fluxus/gPWvZm` (local copy in git-ignor
   - A field's label stands beside its input from 568px up and above it below 568px. The inputs and the button follow the pen's sizes: short boxes (about 34px) with a thin light border on a dark fill, the button as wide as the inputs and directly under them, with its text only; no textarea. The gaps are `--element-distance-small` (the fields, the info block) and `--element-distance-standard` (the panel).
   - Fonts: Amethysta for content, Playfair Display for headings, labels and the button. Palette colours only.
   - Every icon (the globe, the profile icons) is drawn by the shared `Icon` component from an SVG file in a `media/` folder. On Contact the profile icons are 1rem; About's stay as they were.
-- **Profile links**: `ProfileLinks` moves from About's top card to `components/ui/profile-links/` (second consumer) and gains Xing (Simple Icons, CC0) and a `look` prop: About stays plain, Contact gets round icons with a hover ring. LinkedIn `https://www.linkedin.com/in/a-doo/`, Xing `https://www.xing.com/profile/Alexander_Doo`. About keeps LinkedIn and GitHub.
+- **Profile links**: `SocialLinks` moves from About's top card to `components/ui/social-links/` (second consumer) and gains Xing (Simple Icons, CC0) and a `look` prop: About stays plain, Contact gets round icons with a hover ring. LinkedIn `https://www.linkedin.com/in/a-doo/`, Xing `https://www.xing.com/profile/Alexander_Doo`. About keeps LinkedIn and GitHub.
 - **Contact notice** (an `en` message, translatable): "I use these details only to reply to your request. They reach me privately and are not stored or passed on to anyone."
 - **Form fields**, visible labels (Playfair Display) beside or above each field, required marked "*" with a "* required" line:
   - name (label "Your name"): required, at most 80 characters;
@@ -196,12 +196,13 @@ Reference: the expanded menu of codepen `fluxus/gPWvZm` (local copy in git-ignor
   - contact ("How to reach you", hint "email, phone, LinkedIn, …"): optional, at most 200, free text in any channel, no format check.
   - Values are trimmed and stripped of control characters; whitespace only counts as empty. zod checks them in the browser; the backend checks the same rules again.
 - **Form state shown to the Visitor**:
-  - A field is checked when it loses focus and again on submit, never on every keystroke. The error shows as text under the field (`aria-invalid`, `aria-describedby`).
+  - A field shows what is wrong with it once the Visitor has typed in it or left it, and keeps showing it as they type (amended 2026-11-22). The error shows as text under the field (`aria-invalid`, `aria-describedby`).
+  - Send is disabled while any field is wrong, and while the form is empty (a required field is empty): the Visitor cannot submit an invalid form, so the human check is never solved for one.
   - A character counter ("87 / 120") shows once a field passes 80% of its limit.
-  - Submit with errors moves focus to the first invalid field.
+  - When the backend answers `422`, each refused field shows its error under it, the typed values stay, focus moves to the first refused field, and Send stays disabled until a field changes. No countdown. A refusal that names no field of the form shows "Some details were not accepted. Please check the form and try again."
   - While sending, the form is disabled and the button reads "Sending…".
   - Success hides the form and shows "Thank you, {name}. I'll get back to you soon." A reload brings the form back.
-  - Any failure (422, failed human check, server or email error, network) brings the form back with its values and a generic "Your request wasn't sent. Please try again in {seconds} s.": submit stays locked for 10 s with a visible countdown.
+  - Any other failure (failed human check, server or email error, network) brings the form back with its values and a generic "Your request wasn't sent." with "Please try again in {seconds} s." under it: submit stays locked for 10 s with a visible countdown. Only the first sentence is announced to a screen reader; the seconds are a separate `Countdown` component and are not.
   - 429: "Too many requests from your connection. Please try again in a few minutes." Built in Unit 8, with the rate limiter.
   - Field errors: "Please enter your name.", "Please enter your company.", "At most {max} characters."
   - While the backend is down, the form is disabled beside Unit 1's offline note; the links and the Contact notice stay.
@@ -209,7 +210,8 @@ Reference: the expanded menu of codepen `fluxus/gPWvZm` (local copy in git-ignor
 - **Contract**:
   - `GET /api/contact/challenge`: an ALTCHA challenge signed with `ALTCHA_HMAC_KEY`. The key is a random secret the Owner generates (`openssl rand -hex 32`). ALTCHA self-hosted has no account and no provider key, so the backend signs the challenge and checks the signature with this key. Changing the key only makes challenges already out fail.
   - `POST /api/contact`, JSON `{ name, company, position?, contact?, altcha, website? }`.
-  - Responses: `204` sent, `422` invalid fields, `400` failed human check, `429` limit reached, `502` the email could not be sent.
+  - Responses: `204` sent, `422` invalid fields, `400` failed human check, `429` limit reached, `502` the email could not be sent. A `422` body is `{ detail, fields: [{ field, error }] }` with `error` `required` or `tooLong`, one entry per refused field (amended 2026-11-22). `altcha` is at most 2048 characters and `website` at most 200.
+  - The backend answers in the order honeypot, human check, field validation, mail (Unit 8 puts the rate limit before the human check), so a bot learns nothing about the field rules. A body with no readable payload fails the human check (`400`).
   - The Contact client sits in the existing API service beside the health check, with a POST helper next to its GET helper. The zod schema lives there and the `ContactRequest` type is derived from it; the backend's Pydantic model mirrors fields and limits. Contract tests on both sides.
 - **Email**:
   - Sent through the `send_email` binding of Cloudflare Email Service, to the Owner's mailbox. That mailbox is the account's only verified destination, so the binding cannot reach anyone else. No confirmation email to the Visitor, no phone push.
@@ -246,12 +248,12 @@ Reference: the expanded menu of codepen `fluxus/gPWvZm` (local copy in git-ignor
 11. As a Visitor, I want to give only my name and company if I prefer, so that I don't have to share a phone number or email.
 12. As a Visitor, I want an optional position field, so that I can say which role I am writing about.
 13. As a Visitor, I want an optional "How to reach you" field with the hint "email, phone, LinkedIn, …", so that I can pick my own channel.
-14. As a Visitor, I want a field checked when I leave it, not on every keystroke, so that I'm not scolded while typing.
+14. As a Visitor, I want a field I have typed in or left to show what is wrong with it, so that I see a problem at once. (Amended 2026-11-22: it was "checked when I leave it, not on every keystroke".)
 15. As a Visitor, I want an error to appear as text under the field it belongs to, so that I know what to fix.
 16. As a Visitor using a screen reader, I want an invalid field announced with its error, so that I can fix it without seeing the screen.
 17. As a Visitor, I want a character counter once I near a field's limit, so that I'm not cut off by surprise.
 18. As a Visitor, I want leading and trailing spaces ignored and a whitespace-only value treated as empty, so that a stray space doesn't cause an error or an empty request.
-19. As a Visitor, I want focus to move to the first invalid field when I submit with errors, so that I can correct it at once.
+19. As a Visitor, I want Send disabled while the form is invalid or empty, and focus moved to the first field the backend refuses, so that I can correct it at once. (Amended 2026-11-22.)
 20. As a Visitor, I want the form disabled and the button to read "Sending…" while my request is on its way, so that I don't send it twice.
 21. As a Visitor, I want the human check to happen without a puzzle or a click, so that sending feels like any other form.
 22. As a Visitor, I want the form replaced by "Thank you, {name}. I'll get back to you soon." when it is sent, so that I know it worked.
