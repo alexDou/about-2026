@@ -1,13 +1,13 @@
 ---
 # portfolio-tn1x
 title: 'Unit 4: Contact spec'
-status: in-progress
+status: completed
 type: feature
 priority: normal
 tags:
     - ready-for-agent
 created_at: 2026-11-19T13:36:34Z
-updated_at: 2026-11-20T13:35:05Z
+updated_at: 2026-11-22T04:51:01Z
 parent: portfolio-yxux
 ---
 
@@ -139,3 +139,8 @@ The Contact Panel shows "Remote, worldwide", the Owner's LinkedIn and Xing profi
 - The Gmail SMTP setup proved on 2026-11-19 is retired by ADR 0006. The secrets are listed in `backend/README.md`.
 - Ticket 4.0a turns the backend into a Python Worker before 4.0.
 - Profile URLs: LinkedIn `https://www.linkedin.com/in/a-doo/`, Xing `https://www.xing.com/profile/Alexander_Doo`.
+
+
+## Summary of Changes
+
+The spec is carried by `docs_src/specs/units.md#unit-4-contact`, which is newer than this bean (the 653r layout amendments, the 4.0a to 4.N breakdown, the rate limiter moved to Unit 8). Owner decision 2026-11-22: nothing more is ported from this body; it stays as the grilling record. Every stage bean is completed.

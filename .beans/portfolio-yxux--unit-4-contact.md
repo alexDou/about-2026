@@ -1,11 +1,11 @@
 ---
 # portfolio-yxux
 title: 'Unit 4: Contact'
-status: todo
+status: completed
 type: epic
 priority: normal
 created_at: 2026-11-06T20:27:21Z
-updated_at: 2026-11-21T15:57:16Z
+updated_at: 2026-11-22T04:51:01Z
 parent: portfolio-4ur0
 blocked_by:
     - portfolio-m9gt
@@ -32,3 +32,8 @@ Also under this epic: portfolio-pcnc Opengrep backend rules and agent docs follo
 The rate limiter (was 4.7) moved to Unit 8 on 2026-11-21 (portfolio-vd9x): it is built with the Cloudflare deploy, so this epic ships without it and without the 429 message.
 
 Design decided in the 2026-11-19 grilling, amended 2026-11-20 for ADR 0006 (the Unit 4 section of `docs_src/specs/units.md`). The epic is done when every child bean is completed.
+
+
+## Summary of Changes
+
+Contact Panel shipped without the rate limiter and the 429 message (Unit 8, portfolio-vd9x): the shared profile links with Xing, the layout, the Contact request form with field feedback, failure and offline states, the ALTCHA human check and honeypot, the Python Worker backend (route table, handlers, mailer, human check) and the contracts locked on both sides. E2E 119 of 119 and `scripts/verify.sh` GREEN on 2026-11-22.
