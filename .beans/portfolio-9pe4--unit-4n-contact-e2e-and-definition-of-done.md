@@ -1,13 +1,13 @@
 ---
 # portfolio-9pe4
 title: 'Unit 4.N: Contact E2E and Definition of Done'
-status: todo
+status: completed
 type: task
 priority: normal
 tags:
     - ready-for-agent
 created_at: 2026-11-19T13:42:26Z
-updated_at: 2026-11-21T15:57:21Z
+updated_at: 2026-11-22T04:49:10Z
 parent: portfolio-yxux
 blocked_by:
     - portfolio-0hxh
@@ -27,10 +27,10 @@ Stage N: the whole Contact feature in one E2E pass on the frontend build, with /
 
 ## Acceptance criteria
 
-- [ ] E2E covers desktop and mobile order, a sent request, field errors, 422, 400, 502 with countdown, offline
-- [ ] Definition of Done checked: a sent Contact request reaches the Owner by email and nothing is stored; bots rejected (floods: the rate limiter, Unit 8); unit, component and E2E tests green
-- [ ] portfolio-yxux body updated with the stage list
-- [ ] scripts/verify.sh GREEN
+- [x] E2E covers desktop and mobile order, a sent request, field errors, 422, 400, 502 with countdown, offline
+- [x] Definition of Done checked: a sent Contact request reaches the Owner by email and nothing is stored; bots rejected (floods: the rate limiter, Unit 8); unit, component and E2E tests green
+- [x] portfolio-yxux body updated with the stage list
+- [x] scripts/verify.sh GREEN
 
 ## Blocked by
 
@@ -39,3 +39,13 @@ Stage N: the whole Contact feature in one E2E pass on the frontend build, with /
 - portfolio-8gew Unit 4.4: Field feedback
 - portfolio-dhsr Unit 4.5: Failure and offline states
 - portfolio-m1de Unit 4.6: Human check and honeypot
+
+
+## Summary of Changes
+
+No code change was needed: the earlier stages already left `contact.feature` covering the whole flow. Checked on 2026-11-22:
+
+- E2E (`pnpm --dir frontend e2e`): 119 of 119 scenarios pass. Contact covers desktop (1280, 1000) and phone (390) order, a sent request, field errors, 422, 400, 502 with the 10 s countdown, an unfetchable challenge, a network failure, the honeypot and offline.
+- Definition of Done: the backend tests (`backend/tests/contact/`) show a sent request calls the mailer once, 422 per rule, 400 on a failed human check, 502 when the mailer raises, and a filled honeypot gets a silent 204 with nothing sent. No storage exists in `backend/src`. Floods are the rate limiter, Unit 8 (portfolio-vd9x).
+- portfolio-yxux already lists every stage and its Unit 8 move of the rate limiter; no edit needed.
+- `scripts/verify.sh`: GREEN.
