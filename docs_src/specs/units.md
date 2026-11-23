@@ -312,13 +312,13 @@ Order: 4.0a and 4.1 first; 4.0 after 4.0a; 4.2 after 4.1; 4.3 after 4.0 and 4.2;
 
 ## Unit 5: What I do
 
-**Objective**: the 36 Takeovers, in 6 Takeover groups of 6. Each Takeover: title, why the Owner fits, what the Owner does in that regard.
+**Objective**: the 36 Takeovers, in 6 Takeover groups of 6: Frontend, Backend, System design, R&D & teamwork, AI, Cloud & DevOps (2026-11-23). Each Takeover is a card: its group and title on the front; on the back its description (what the Owner does and why the Owner fits, as one text) and, where they fit, its Benefits.
 
-**Input**: the CV's "Core expertise" list (Full Stack Engineering, Technical Leadership, Product Development, Software Architecture, AI Integration, Micro-services & scalable frontends, Frontend Engineering, Backend Engineering, Performance Optimization, Cloud Infrastructure, Application Modernization): kinds of work, so raw material for Takeovers (decided in Unit 3's grilling). Also CQRS, microservices, system design and mentoring, taken off Skills in its content round (3.1).
+**Input**: the CV's "Core expertise" list (Full Stack Engineering, Technical Leadership, Product Development, Software Architecture, AI Integration, Micro-services & scalable frontends, Frontend Engineering, Backend Engineering, Performance Optimization, Cloud Infrastructure, Application Modernization): kinds of work, so raw material for Takeovers (decided in Unit 3's grilling). Also CQRS, microservices, system design and mentoring, taken off Skills in its content round (3.1). The foundation list of all 36, with the Owner's direction verbatim: `docs_src/what-i-do/takeovers.md` (2026-11-23), revisited in a grilling round before it goes into the message file.
 
-**Sub-unit breakdown**: 5.0 Takeover content type + JSON validation test enforcing 36 = 6 × 6; 5.x presentation; 5.N E2E.
+**Sub-unit breakdown**: 5.0 Takeover content type (group, title, description, optional Benefits) + JSON validation test enforcing 36 = 6 × 6; 5.x presentation; 5.N E2E.
 
-**Open**: the presentation. Idea: a dice game (two dice pick a Takeover) and an accordion by group, at the Visitor's choice. Explore it with the `prototype` skill first.
+**Open**: the presentation. The card is a flip card after `support_files/what-i-do/Pure CSS Flip Card.html`. Idea: a dice game (two dice pick a Takeover) and an accordion by group, at the Visitor's choice. Explore it with the `prototype` skill first. The content questions still open are listed at the end of `docs_src/what-i-do/takeovers.md`.
 
 ## Unit 6: Interview
 

@@ -63,9 +63,15 @@ Skill it backs.
 _Avoid_: certification, badge, credential
 
 **Takeover**:
-One of exactly 36 kinds of work the Owner can take over: what it is, why the Owner fits, and what
-the Owner does in that regard.
+One of exactly 36 kinds of work the Owner can take over, shown as a card: its Takeover group and
+title on the front; on the back a description of what the Owner does and why the Owner fits, and
+its Benefits where they fit.
 _Avoid_: service, offering, skill
+
+**Benefits**:
+What a client gains from a Takeover, on the card's back under the description. Optional: only
+where they fit.
+_Avoid_: advantages, perks, value
 
 **Takeover group**:
 One of six groups of six Takeovers. Group and position map onto a throw of two dice.
