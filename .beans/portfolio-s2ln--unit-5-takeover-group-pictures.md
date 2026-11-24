@@ -1,10 +1,11 @@
 ---
 # portfolio-s2ln
-title: 'Unit 5: Takeover group pictures'
+title: 'Unit 5.1: Takeover group pictures'
 status: todo
 type: task
+priority: normal
 created_at: 2026-11-24T12:55:02Z
-updated_at: 2026-11-24T12:55:02Z
+updated_at: 2026-11-24T13:51:42Z
 parent: portfolio-349l
 blocked_by:
     - portfolio-hv6d

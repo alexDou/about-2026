@@ -327,7 +327,7 @@ Order: 4.0a and 4.1 first; 4.0 after 4.0a; 4.2 after 4.1; 4.3 after 4.0 and 4.2;
 
 **Input**: the CV's "Core expertise" list (Full Stack Engineering, Technical Leadership, Product Development, Software Architecture, AI Integration, Micro-services & scalable frontends, Frontend Engineering, Backend Engineering, Performance Optimization, Cloud Infrastructure, Application Modernization): kinds of work, so raw material for Takeovers. Also CQRS, microservices, system design and mentoring, taken off Skills (3.1). The agreed list of Takeovers goes into the message file in 5.1.
 
-**Sub-unit breakdown**: 5.0 Takeover content type (group, title, description, optional Benefits) + JSON validation test (no count); 5.x presentation; 5.N E2E.
+**Sub-unit breakdown**: 5.0 Takeover card prototype; 5.1 group pictures; 5.2 Takeover content contract (group, title, description, optional Benefits) + JSON validation test (no count); 5.3 content: the message JSON, approved by the Owner; 5.4 the Takeover count on Explore; 5.5 Copy takeovers; 5.6 cards that flip on hover; 5.7 holding a card open (pin, keyboard, touch); 5.8 group pictures on the cards; 5.9 Shuffle; 5.N E2E. Order: 5.0 → 5.1 → 5.2; 5.3, 5.4 and 5.5 after 5.2; 5.6 after 5.2 and 5.0; 5.7 after 5.6; 5.8 after 5.6 and 5.1; 5.9 after 5.5 and 5.7; 5.N after 5.3, 5.4, 5.8 and 5.9. Beans: portfolio-hv6d, -s2ln, -ytti, -n5js, -f0ce, -rg5l, -lo13, -xnrf, -7rwq, -mla2, -ii5o.
 
 **Open**: nothing in the design; the prototype settles sizes, colours and the animations. The card is a flip card after `support_files/what-i-do/Pure CSS Flip Card.html`, changed as decided above. The prototype (portfolio-hv6d) and the group pictures (portfolio-s2ln) come first, before the rest of the breakdown.
 
