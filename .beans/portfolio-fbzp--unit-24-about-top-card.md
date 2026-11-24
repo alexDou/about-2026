@@ -27,12 +27,12 @@ The top card, after `support_files/about/about-design.jpg` (no scroll arrow, no 
 - [x] Tests written first and red, then green (TDD)
 - [x] Card on `--panel-what-i-do`, rounded border in a palette colour (`--panel-skills`, radius as in the reference)
 - [x] Left: the greeting "Hello, I'm Alexander Durnev." with the Headline on its own line, in Playfair Display (no location); the credo below, a bit bigger than the reference's line; LinkedIn and GitHub icons; the CV download button (wired in 2.6)
-- [x] Right, centred vertically on the greeting and credo (Owner, 2026-11-14): the photo over the brush stroke, both responsive, its lower edge frayed by the brush outline and faded (no hard corners)
+- [x] Right, centred vertically on the greeting and credo: the photo over the brush stroke, both responsive, its lower edge frayed by the brush outline and faded (no hard corners)
 - [x] ~~One node burst~~: tried under the links and behind them, dropped by the Owner (2026-11-14); `nodes.svg` removed from About
 - [x] Phone: badges (smaller, growing a little with the width, via `progress()`), a gap, then the photo, then the rest
 - [x] All text from the About messages
-- [x] The badge row (built in portfolio-ftdn) overlaps the card's top border on wider screens: the card pulls up under the row with a negative top margin; on phones a gap instead (Owner, 2026-11-14)
-- [x] The "About" `h1` stays for screen readers and focus, visually hidden on this page only (`Heading` `visuallyHidden`, Owner, 2026-11-14)
+- [x] The badge row (built in portfolio-ftdn) overlaps the card's top border on wider screens: the card pulls up under the row with a negative top margin; on phones a gap instead
+- [x] The "About" `h1` stays for screen readers and focus, visually hidden on this page only (`Heading` `visuallyHidden`)
 - [x] `scripts/verify.sh` GREEN
 
 ## Blocked by

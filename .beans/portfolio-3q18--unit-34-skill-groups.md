@@ -25,7 +25,7 @@ The Skills Panel's groups: opening `/skills` shows the "Skills" heading, the hea
 - Light end of the palette (second look, 2026-11-18): the content is always on What I do `#d1dcd9` with the About text colour; only a group's or subgroup's name changes background, a step darker (`#b8c9c4`) and another when open (`#9db4ae`), weight 400. A group is a band with the name left and a "+" on the right that turns into "×" when open, a smaller height than the pen's. All groups start closed, so the Visitor sees all eight without scrolling. No border radius anywhere in the accordion.
 - A click on a group opens it and every overview in it at once: the subgroups appear, each a name the full width of the group (smaller and shorter than a group's, more room on the left) over its Skills, with their overviews open. The Visitor closes what they do not need.
 - Frontend, Backend and AI keep their loose Skills in a new first subgroup (Frontend: "Frameworks & libraries", Backend: "Runtimes & frameworks", AI: "SDKs & agent frameworks"), so no list is left without a bulk control. Groups with no subgroups (Programming languages, Cloud & DevOps, Testing & quality, Engineering practice) are plain lists.
-- Content changes with it (Owner, 2026-11-18): Backend order Node.js, Express & Koa, ElysiaJS, NestJS/Hapi/Sails.js, Apollo, FastAPI, Actix, PHP frameworks; Socket.io joins WebSockets as "WebSockets, Socket.io"; "Communication protocols" becomes "gRPC, AMQP and MQTT" ("Application-level knowledge."); Frontend's "Libraries" Skill becomes "Packages".
+- Content changes with it: Backend order Node.js, Express & Koa, ElysiaJS, NestJS/Hapi/Sails.js, Apollo, FastAPI, Actix, PHP frameworks; Socket.io joins WebSockets as "WebSockets, Socket.io"; "Communication protocols" becomes "gRPC, AMQP and MQTT" ("Application-level knowledge."); Frontend's "Libraries" Skill becomes "Packages".
 
 ## Acceptance criteria
 
@@ -58,7 +58,7 @@ The Skills Panel's groups: opening `/skills` shows the "Skills" heading, the hea
 - Overview: `inert` when closed, grid rows 0fr to 1fr with fade, `--overview-duration` (220ms), none under reduced motion.
 - E2E step "the Stripes are rows at least 44px tall, with no Sublabel" looks for paragraphs inside the Stripes, not the whole page (the Skills page has paragraph overviews).
 
-## Rework (Owner, 2026-11-18, after the first look)
+## Rework
 
 First pass, commit 0120341: separate Card blocks, group headings opening every overview beneath them (subgroups' included), loose Skills over subgroups. The Owner asked for the accordion look above and settled the behaviour in this bean rather than a new one:
 

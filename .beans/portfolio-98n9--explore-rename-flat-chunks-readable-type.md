@@ -10,7 +10,7 @@ updated_at: 2026-11-15T10:43:20Z
 
 Follow-up to the Owner's About and font edits (2026-11-15): review fixes, the Board renamed to Explore everywhere, a flatter chunk layout, and readable type on phones.
 
-## Decisions (Owner, 2026-11-15)
+## Decisions
 
 - The domain term Board becomes Explore everywhere (code, CSS classes, message ids, CONTEXT.md, specs, rules, E2E). The route is already `/explore`. ADRs and closed beans are records and stay as written.
 - Pages stay in `pages/`: Explore gets `pages/explore/ExplorePage.tsrx`; the domain component lives in `components/domain/explore/`.
