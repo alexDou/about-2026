@@ -16,7 +16,7 @@ All unit specifications, task matrices, and ticket breakdowns follow a strict 3-
 
 1. **Stage 0: Domains, Interfaces & Contracts First (`Unit X.0`)**:
    - Where data crosses HTTP (Contact, Chat): lock the Pydantic models and the matching frontend TS types (no codegen, they must match field for field — `.claude/rules/api-contract.md`). Contract tests on both sides (`pytest` response shape, `vitest` service parsing).
-   - Where content is static frontend JSON (About, Skills, What I do): lock the TS type of the content and a `vitest` test that validates the JSON against it, including invariants such as 36 Takeovers.
+   - Where content is static frontend JSON (About, Skills, What I do): lock the TS type of the content and a `vitest` test that validates the JSON against it, including its invariants.
    - Contract tests pass before any feature code starts.
 2. **Stage 1..N: Subsystem Modules in Isolation (`Unit X.1`, `X.2`, `X.3`, ...)**:
    - Develop each module (API route, service, hook, component) against mocks built on the contracts.
@@ -312,17 +312,28 @@ Order: 4.0a and 4.1 first; 4.0 after 4.0a; 4.2 after 4.1; 4.3 after 4.0 and 4.2;
 
 ## Unit 5: What I do
 
-**Objective**: the 36 Takeovers, in 6 Takeover groups of 6: Frontend, Backend, System design, R&D & teamwork, AI, Cloud & DevOps (2026-11-23). Each Takeover is a card: its group and title on the front; on the back its description (what the Owner does and why the Owner fits, as one text) and, where they fit, its Benefits.
+**Objective**: the Takeovers, in six Takeover groups: System design, AI, Frontend, Backend, Cloud & DevOps, R&D & teamwork. Each Takeover is a flip card: its group and title on the front; on the back its description (what the Owner does and why the Owner fits, as one text) and, where they fit, its Benefits.
+
+**Decided** (grilling 2026-11-24, the Owner's answers verbatim in `docs_src/what-i-do/takeovers.md`):
+- No fixed count: the number of Takeovers, their groups' sizes and their text can change. No test checks a count.
+- One view: every card, in random order. No dice game, no accordion by group.
+- The cards are in random order when the page opens; a Shuffle button puts them in a new one, turns every card back to its front, and moves the cards to their new places with View Transitions (instantly where the browser lacks them, and under reduced motion). Shuffle and Copy takeovers share one row above the cards, Shuffle on the left, as on Skills.
+- A copy button, "Copy takeovers", like Copy skills: plain text, two spaces per level: group, title, description and a "Benefits:" line where there are Benefits. Groups in the order System design, AI, Frontend, Backend, Cloud & DevOps, R&D & teamwork; cards in the order of the message file. It uses the global `use-clipboard` hook.
+- Front: the group's name in the top-right corner and the title in the centre (its size found in the prototype), on the group's own background colour (chosen by the agent), with the group's picture behind at an opacity low enough that it never competes with the text. Pictures by group: System design `architecture.png`, AI `ai.png`, Frontend `frontend.png` (the world map), Backend `backend.png`, Cloud & DevOps `cicd.png`, R&D & teamwork `rnd.png`.
+- Group pictures: black-and-white SVGs drawn by the agent after `support_files/what-i-do/categories/`; where an SVG is not practical (the R&D picture), a transparent PNG. Our own work: no licence file.
+- Flip: the card is a button. A click, a tap, Enter or Space flips it; the same again flips it back. No hover flip. Several cards can be open at once. Under reduced motion it fades instead of turning.
+- Back: a lighter shade of the group's colour, no picture, dark text at 4.5:1 or better. The text centred vertically and aligned left, in a smaller font and with smaller padding than the front. Text length is measured in characters (the longest back, AI-driven development process, is 533 with its Benefits). No trimming. The prototype first tries to fit every back in the card's size with these measures alone; only if that fails does a card grow to fit its back when flipped, with an animation, over the row below so nothing shifts.
+- Explore's What I do sublabel counts the Takeovers in the content: "{count} Takeovers" (today "36 Takeovers").
 
 **Input**: the CV's "Core expertise" list (Full Stack Engineering, Technical Leadership, Product Development, Software Architecture, AI Integration, Micro-services & scalable frontends, Frontend Engineering, Backend Engineering, Performance Optimization, Cloud Infrastructure, Application Modernization): kinds of work, so raw material for Takeovers (decided in Unit 3's grilling). Also CQRS, microservices, system design and mentoring, taken off Skills in its content round (3.1). The foundation list of all 36, with the Owner's direction verbatim: `docs_src/what-i-do/takeovers.md` (2026-11-23), revisited in a grilling round before it goes into the message file.
 
-**Sub-unit breakdown**: 5.0 Takeover content type (group, title, description, optional Benefits) + JSON validation test enforcing 36 = 6 × 6; 5.x presentation; 5.N E2E.
+**Sub-unit breakdown**: 5.0 Takeover content type (group, title, description, optional Benefits) + JSON validation test (no count); 5.x presentation; 5.N E2E.
 
-**Open**: the presentation. The card is a flip card after `support_files/what-i-do/Pure CSS Flip Card.html`. Idea: a dice game (two dice pick a Takeover) and an accordion by group, at the Visitor's choice. Explore it with the `prototype` skill first. The content questions still open are listed at the end of `docs_src/what-i-do/takeovers.md`.
+**Open**: what flips a card (hover on desktop and a "See details" hint on touch, or a button everywhere). The card is a flip card after `support_files/what-i-do/Pure CSS Flip Card.html`, changed as decided above. The prototype (portfolio-hv6d) and the group pictures (portfolio-s2ln) come first, before the rest of the breakdown.
 
 ## Unit 6: Interview
 
-**Objective**: build the Agent's Knowledge through a long, thorough, picky text Interview of the Owner, run by Claude Opus 5.5. It covers all 36 Takeovers, the Skills, experience, hobbies: everything (for example: what the Python GIL does, how the Node.js event loop works, which database for write-heavy loads and why, how to start a corporate-scale app from scratch, agentic development).
+**Objective**: build the Agent's Knowledge through a long, thorough, picky text Interview of the Owner, run by Claude Opus 5.5. It covers all the Takeovers, the Skills, experience, hobbies: everything (for example: what the Python GIL does, how the Node.js event loop works, which database for write-heavy loads and why, how to start a corporate-scale app from scratch, agentic development).
 
 **Open**: everything about how it runs and where the answers go. Design in this unit.
 
