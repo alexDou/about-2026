@@ -5,7 +5,7 @@ status: draft
 type: epic
 priority: normal
 created_at: 2026-11-06T20:27:21Z
-updated_at: 2026-11-24T12:55:02Z
+updated_at: 2026-11-24T13:20:08Z
 parent: portfolio-4ur0
 blocked_by:
     - portfolio-m9gt
@@ -15,4 +15,4 @@ The 36 Takeovers in 6 Takeover groups of 6: Frontend, Backend, System design, R&
 
 Foundation list (2026-11-23): docs_src/what-i-do/takeovers.md. A grilling round revisits it, starting from its "Open for the grilling round" list, before the text goes into the message file.
 
-Decided in the grilling of 2026-11-24: see the spec's "Decided". Open: what flips a card. First: the prototype (portfolio-hv6d), then the group pictures (portfolio-s2ln).
+Decided in the grilling of 2026-11-24: see the spec's "Decided". First: the prototype (portfolio-hv6d), then the group pictures (portfolio-s2ln).
