@@ -18,7 +18,7 @@ Owner request (2026-11-18), raised while prototyping the walking toggle (portfol
 ## What to build
 
 - Desktop: the crease under the flap (the line along the arc) takes the tone of the Panel next to the open one, in Explore order (`PANEL_IDS`), wrapping around: About → What I do, What I do → Skills, Skills → Chat with me, Chat with me → Contact, Contact → About. Tones in `styles/tokens.css` (`--panel-*`).
-- Phones (Explore's phone layout, `width < 840px`): a small (x) close button, 24×24, of the kind used before the corner: a round button with a thin ring and an (x) drawn in SVG (see `git show 526b22f^:frontend/src/components/domain/board/components/expanded-panel/ExpandedPanel.tsrx` and its `styles.module.css`), scaled down to 24×24.
+- Phones (Explore's phone layout, `width < 840px`): a small (x) close button, 24×24, of the kind used before the corner: a round button with a thin ring and an (x) drawn in SVG (see `git show e04f3cc^:frontend/src/components/domain/board/components/expanded-panel/ExpandedPanel.tsrx` and its `styles.module.css`), scaled down to 24×24.
 
 ## Acceptance criteria
 

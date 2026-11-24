@@ -44,7 +44,7 @@ Likely from the CSS layout refactor (portfolio-9od8) or the View Transitions ado
 
 ## Correction
 
-- The owner meant: remove the phone dots only at 440px wide or less (e56d5dc removed them on every phone). The phone dots CSS is restored, and `@media (width <= 440px)` drops `.panel__title::before`.
+- The owner meant: remove the phone dots only at 440px wide or less (01a4c3b removed them on every phone). The phone dots CSS is restored, and `@media (width <= 440px)` drops `.panel__title::before`.
 - `board-look.feature`: the phone dots outline runs at 441 and 700 wide, without the "16px before the title" check (owner: the gap is fine), and now accepts motion (with reduced motion the dots never drift; the earlier failures hid that). A new outline checks for no dots at 440, 375 and 320 wide.
 - The rows/columns steps wait for the five Panels before measuring: the route renders after `load`, and one run measured an empty Board.
 - `units.md` says the same. `pnpm --dir frontend e2e`: 77/77, twice.

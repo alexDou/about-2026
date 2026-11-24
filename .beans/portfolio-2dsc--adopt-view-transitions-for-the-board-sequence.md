@@ -48,6 +48,6 @@ Move the prototype into the Board for real, tests first:
 
 ## Summary of Changes
 
-Built in 6d6d13f and 9612ecf: the View Transitions route changes (boardAt, changeKind, transitionTypes, boardViewTransition, the viewTransition option of createAppRouter, the rules in the Slot stylesheet), the staged-sequence helpers and their tests removed (motion/sequence.ts is now motion/state.ts), frontend.md rewritten. The owner confirmed the white blink is gone.
+Built in 0ec0e8d and 4a33917: the View Transitions route changes (boardAt, changeKind, transitionTypes, boardViewTransition, the viewTransition option of createAppRouter, the rules in the Slot stylesheet), the staged-sequence helpers and their tests removed (motion/sequence.ts is now motion/state.ts), frontend.md rewritten. The owner confirmed the white blink is gone.
 
 The one open item, the E2E scenario for open, close and switch with motion on, moved to portfolio-3sox (Board E2E); jsdom has no View Transitions, so it needs the real build. Closed on the owner's call.
