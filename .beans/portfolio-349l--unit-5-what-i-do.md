@@ -13,6 +13,6 @@ blocked_by:
 
 The 36 Takeovers in 6 Takeover groups of 6: Frontend, Backend, System design, R&D & teamwork, AI, Cloud & DevOps. Each Takeover is a flip card: group and title on the front; description and, where they fit, Benefits on the back. Spec: docs_src/specs/units.md#unit-5-what-i-do.
 
-Foundation list (2026-11-23): docs_src/what-i-do/takeovers.md. A grilling round revisits it, starting from its "Open for the grilling round" list, before the text goes into the message file.
+The agreed list of Takeovers goes into the message file in 5.1.
 
-Decided in the grilling of 2026-11-24: see the spec's "Decided". First: the prototype (portfolio-hv6d), then the group pictures (portfolio-s2ln).
+Decisions: the spec's "Decided". First: the prototype (portfolio-hv6d), then the group pictures (portfolio-s2ln).

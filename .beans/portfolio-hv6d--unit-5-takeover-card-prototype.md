@@ -9,7 +9,7 @@ updated_at: 2026-11-24T13:20:08Z
 parent: portfolio-349l
 ---
 
-A throwaway UI prototype (the `prototype` skill, UI branch) of the What I do page, to settle the card's look before the breakdown. Spec: docs_src/specs/units.md#unit-5-what-i-do ("Decided", grilling 2026-11-24). Content: the foundation list in docs_src/what-i-do/takeovers.md. Group pictures: the raw files in support_files/what-i-do/categories/ as placeholders until the pictures bean delivers.
+A throwaway UI prototype (the `prototype` skill, UI branch) of the What I do page, to settle the card's look before the breakdown. Spec: docs_src/specs/units.md#unit-5-what-i-do ("Decided"). Content: the agreed list of Takeovers (kept locally, not in the repo). Group pictures: the raw files in support_files/what-i-do/categories/ as placeholders until the pictures bean delivers.
 
 Questions it answers, each shown to the Owner as variants:
 - Card size and title size; the group's name in the top-right corner.

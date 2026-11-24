@@ -18,7 +18,7 @@ About Panel: photo, bio, education, experience, languages, hobbies, CV download 
 
 Round 1 (2026-11-12), recorded in the Unit 2 spec section and `CONTEXT.md` (Headline, Bio, Role, Hobby):
 
-- First person. Sections: name, Headline*, photo, Bio*, Roles*, education, languages, Hobbies*, citizenship, CV download. (*) = written with the Owner: questionnaire per item at the end of the About rounds, then drafts.
+- First person. Sections: name, Headline*, photo, Bio*, Roles*, education, languages, Hobbies*, citizenship, CV download. (*) = written with the Owner as drafts.
 - Expertise blocks go to Skills, contact details to Contact.
 - All five Roles, each an optional intro plus highlights (what was done, my role). Ukrainian left out.
 - Photo: the 512×512 JPEG embedded in the CV (has a black slanted bar in the bottom-left corner to crop).
@@ -32,7 +32,6 @@ Round 2 (2026-11-12), recorded in the Unit 2 spec section:
 - Look: top section inspired by `about-design.jpg` (greeting sentence, brush-masked photo); other sections in the same style, dark on `#25363a`.
 - Languages as word plus CEFR. Education plus one business-level sentence. Roles newest first with technologies.
 - The CV download moves to its own bean, portfolio-yhih (after Skills, Contact, What I do; before Chat).
-- Questionnaires: one Markdown file per item in `docs_src/about/`, answered in place.
 
 
 Round 3 (2026-11-12), recorded in the Unit 2 spec section:
@@ -60,14 +59,14 @@ Round 5 (2026-11-12): node burst draft approved, to be greyed and dimmed, one on
 Round 5 (2026-11-12): node burst draft approved, to be greyed and dimmed, one only, below the icons on the left. Badges: own SVGs after the references (colours kept, slightly muted), rem-sized, wrapping flex row, one row on desktop clear of the close button, expressive `title` each. Brush `#25363a` at about 10 percent. Photo and brush responsive. Languages and Hobbies two columns, short lists. Bio outline from the Owner recorded in the spec.
 
 
-Round 6 (2026-11-12), recorded in the Unit 2 spec section: Bio text approved; badge labels and titles; Hobbies with a few words each; questionnaires (headline, credo, roles, hobbies, education) grilled in a dedicated content bean after 2.0; stages 2.0 to 2.N as in the spec; the 60×60 node burst goes to the logo (own bean); the 2026 PDF ships with the phone number stripped.
+Recorded in the Unit 2 spec section: Bio text approved; badge labels and titles; Hobbies with a few words each; the content (headline, credo, roles, hobbies, education) written in a dedicated content bean after 2.0; stages 2.0 to 2.N as in the spec; the 60×60 node burst goes to the logo (own bean); the 2026 PDF ships with the phone number stripped.
 
 ## Stages
 
 Child beans, in dependency order (each lists its blockers):
 
 - portfolio-3wkt Unit 2.0: About content contract
-- portfolio-ajvs Unit 2.1: About content from questionnaires (ready-for-human; grilling with the Owner)
+- portfolio-ajvs Unit 2.1: About content (ready-for-human)
 - portfolio-viuq Unit 2.2: About assets
 - portfolio-ftdn Unit 2.3: Availability badges
 - portfolio-fbzp Unit 2.4: About top card

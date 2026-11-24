@@ -58,8 +58,7 @@ const group = (
 
 /**
  * The Skills Panel's content: which message each piece of it reads. The Skills are the ones fixed
- * with the Owner in the questionnaires (`docs_src/skills/`, Unit 3.1). The Certificates are the
- * ones decided in the grilling; TestDome's and CSS Wizard's carry no verification link.
+ * in Unit 3.1. The Certificates are the ones in the spec; TestDome's and CSS Wizard's carry no verification link.
  */
 export const SKILLS_CONTENT: SkillsContent = {
   groups: [

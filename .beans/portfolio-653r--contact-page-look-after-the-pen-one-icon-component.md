@@ -9,7 +9,7 @@ updated_at: 2026-11-21T15:16:19Z
 parent: portfolio-vqi0
 ---
 
-Raised by the Owner on 2026-11-21 while on Unit 4. The Contact form follows the Responsive Contact Form pen (`support_files/contact/`) more closely, and one Icon component draws every icon on the site. Decisions come from the Owner's answers in the session; the Contact layout decision in `docs_src/specs/units.md` (Unit 4, "Layout") is amended with it.
+Raised by the Owner on 2026-11-21 while on Unit 4. The Contact form follows the Responsive Contact Form pen (`support_files/contact/`) more closely, and one Icon component draws every icon on the site. The Contact layout decision in `docs_src/specs/units.md` (Unit 4, "Layout") is amended with it.
 
 ## Kept as they are (Owner's working-tree changes)
 
