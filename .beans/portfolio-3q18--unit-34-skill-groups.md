@@ -60,15 +60,15 @@ The Skills Panel's groups: opening `/skills` shows the "Skills" heading, the hea
 
 ## Rework
 
-First pass, commit 0120341: separate Card blocks, group headings opening every overview beneath them (subgroups' included), loose Skills over subgroups. The Owner asked for the accordion look above and settled the behaviour in this bean rather than a new one:
+First pass, commit 9cf2515: separate Card blocks, group headings opening every overview beneath them (subgroups' included), loose Skills over subgroups. The Owner asked for the accordion look above and settled the behaviour in this bean rather than a new one:
 
 - A group is closed by default and shows a list only when open; a group click still opens every overview, so subgroups expand with it ("click, and all goes visible"; the Visitor hides what they do not need).
 - The group heading no longer follows the Skills by the rule: its state is "the group shows", so closing the last overview by hand never folds the group away. Subgroup headings keep the rule.
 - A closed page no longer lists every Skill name (the 2026-11-16 line "for scanning and Ctrl+F" is replaced): only the group names show until a group opens.
 - First look used the Contact greens; the second look (same day) moved it to the light end of the palette, as above. Contrast: `#25363a` on the names' tones is 5.7:1 or better.
-- The first pass's Summary below describes what 0120341 built.
+- The first pass's Summary below describes what 9cf2515 built.
 
-## Summary of Changes (first pass, 0120341)
+## Summary of Changes (first pass, 9cf2515)
 
 The Skills Panel shows the eight Skill group blocks (Card surface) under the header row: group heading, Skills, subgroups. Each Skill has a filled arrow button (24px target, `aria-expanded`) that opens its overview; the name is plain text. Group and subgroup headings are buttons with their own state, applying open all / close all and following the Skills by the rule. Pure rules and signals module under `components/domain/skills/overviews/`; components `skill-group/` (with `skill-subgroup/`), `skill-heading/`, `skill-entry/`. Tests: rules, module, each component, the page and the entry stylesheet. Not covered here: the E2E (3.N).
 

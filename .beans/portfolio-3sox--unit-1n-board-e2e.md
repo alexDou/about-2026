@@ -57,4 +57,4 @@ Cucumber + Playwright scenarios against the production build prove the Unit 1 fl
 
 ## Summary of Changes
 
-Built in eecc459: `motion.feature` (View Transition types and per-pseudo-element timings, with motion on and reduced), `offline.feature` (the offline note with `/api` stubbed), the full Back/Forward walk, a direct visit to `/`, the entrance after a reload, the default Board after Escape and the mobile Stripe height; `the unfold has ended` waits for the Board first. The last item, `pnpm e2e` green, came with portfolio-2r8j (75/75).
+Built in 9b6da37: `motion.feature` (View Transition types and per-pseudo-element timings, with motion on and reduced), `offline.feature` (the offline note with `/api` stubbed), the full Back/Forward walk, a direct visit to `/`, the entrance after a reload, the default Board after Escape and the mobile Stripe height; `the unfold has ended` waits for the Board first. The last item, `pnpm e2e` green, came with portfolio-2r8j (75/75).
