@@ -25,7 +25,7 @@ The Skills Panel's groups: opening `/skills` shows the "Skills" heading, the hea
 - Light end of the palette (second look, 2026-11-18): the content is always on What I do `#d1dcd9` with the About text colour; only a group's or subgroup's name changes background, a step darker (`#b8c9c4`) and another when open (`#9db4ae`), weight 400. A group is a band with the name left and a "+" on the right that turns into "×" when open, a smaller height than the pen's. All groups start closed, so the Visitor sees all eight without scrolling. No border radius anywhere in the accordion.
 - A click on a group opens it and every overview in it at once: the subgroups appear, each a name the full width of the group (smaller and shorter than a group's, more room on the left) over its Skills, with their overviews open. The Visitor closes what they do not need.
 - Frontend, Backend and AI keep their loose Skills in a new first subgroup (Frontend: "Frameworks & libraries", Backend: "Runtimes & frameworks", AI: "SDKs & agent frameworks"), so no list is left without a bulk control. Groups with no subgroups (Programming languages, Cloud & DevOps, Testing & quality, Engineering practice) are plain lists.
-- Content changes with it (Owner, 2026-11-18): Backend order Node.js, Express & Koa, ElysiaJS, NestJS/Hapi/Sails.js, Apollo, FastAPI, Actix, PHP frameworks; Socket.io joins WebSockets as "WebSockets, Socket.io"; "Communication protocols" becomes "gRPC, AMQP and MQTT" ("Application-level knowledge."); Frontend's "Libraries" Skill becomes "Packages".
+- Content changes with it: Backend order Node.js, Express & Koa, ElysiaJS, NestJS/Hapi/Sails.js, Apollo, FastAPI, Actix, PHP frameworks; Socket.io joins WebSockets as "WebSockets, Socket.io"; "Communication protocols" becomes "gRPC, AMQP and MQTT" ("Application-level knowledge."); Frontend's "Libraries" Skill becomes "Packages".
 
 ## Acceptance criteria
 
@@ -39,7 +39,7 @@ The Skills Panel's groups: opening `/skills` shows the "Skills" heading, the hea
 - [x] Subgroup headings keep a state of their own and the rule: a click flips it and sets all their Skills to match; opening or closing Skills by hand leaves it alone, except all closed → closed, all opened → open; a heading acts on its own subgroup only
 - [x] The group and subgroup rules live in pure functions with their own unit tests
 - [x] One accordion wrapper with a 1rem strip after its bands (none before): content always on What I do with the About text colour; a group's or subgroup's name a step darker and another when open, weight 400; group names left, the "+" turning to "×" on the right; a subgroup's name full width of its group, shorter than a group's, with more left room; square corners; no separate cards, inside the page's max-width and side margin
-- [x] Frontend, Backend and AI hold their Skills in subgroups only; the Backend order, "WebSockets, Socket.io", "gRPC, AMQP and MQTT" and "Packages" are in the content, and the content tests and questionnaires follow
+- [x] Frontend, Backend and AI hold their Skills in subgroups only; the Backend order, "WebSockets, Socket.io", "gRPC, AMQP and MQTT" and "Packages" are in the content, and the content tests follow
 - [x] E2E run for the UI-visible change
 
 ## Blocked by
@@ -58,7 +58,7 @@ The Skills Panel's groups: opening `/skills` shows the "Skills" heading, the hea
 - Overview: `inert` when closed, grid rows 0fr to 1fr with fade, `--overview-duration` (220ms), none under reduced motion.
 - E2E step "the Stripes are rows at least 44px tall, with no Sublabel" looks for paragraphs inside the Stripes, not the whole page (the Skills page has paragraph overviews).
 
-## Rework (Owner, 2026-11-18, after the first look)
+## Rework
 
 First pass, commit 0120341: separate Card blocks, group headings opening every overview beneath them (subgroups' included), loose Skills over subgroups. The Owner asked for the accordion look above and settled the behaviour in this bean rather than a new one:
 
@@ -75,7 +75,7 @@ The Skills Panel shows the eight Skill group blocks (Card surface) under the hea
 
 ## Summary of Changes (rework)
 
-The Skills Panel is one accordion (`skills-page__accordion`, a 1rem strip before and after, in the darker Contact green) of eight bands, all closed. A band is `SkillGroup`: name left, a "+" turning to "×" right, the Contact green closed and `--skills-band-open` open, with a panel that opens in CSS and is `inert` while closed. A click opens the group with every overview in it; its subgroups are padded boxes (`--skills-subgroup`, darker `--skills-subgroup-open` when expanded) whose headings keep the rule. The group's state is whether it shows (`groupOpen`, `groupToggled`, `toggleGroup` in `overviews/`); `headingsOf` now gives subgroups only. `skill-heading/` is gone: each of group and subgroup renders its own heading. Content: Frontend, Backend and AI hold their Skills in subgroups (Frameworks & libraries, Runtimes & frameworks, SDKs & agent frameworks), the Backend order, "WebSockets, Socket.io", "gRPC, AMQP and MQTT", "Packages"; questionnaires, `units.md` and bean 3.5 updated. Tests: the rules, the module, group and subgroup components, their stylesheets, the page and the content.
+The Skills Panel is one accordion (`skills-page__accordion`, a 1rem strip before and after, in the darker Contact green) of eight bands, all closed. A band is `SkillGroup`: name left, a "+" turning to "×" right, the Contact green closed and `--skills-band-open` open, with a panel that opens in CSS and is `inert` while closed. A click opens the group with every overview in it; its subgroups are padded boxes (`--skills-subgroup`, darker `--skills-subgroup-open` when expanded) whose headings keep the rule. The group's state is whether it shows (`groupOpen`, `groupToggled`, `toggleGroup` in `overviews/`); `headingsOf` now gives subgroups only. `skill-heading/` is gone: each of group and subgroup renders its own heading. Content: Frontend, Backend and AI hold their Skills in subgroups (Frameworks & libraries, Runtimes & frameworks, SDKs & agent frameworks), the Backend order, "WebSockets, Socket.io", "gRPC, AMQP and MQTT", "Packages"; `units.md` and bean 3.5 updated. Tests: the rules, the module, group and subgroup components, their stylesheets, the page and the content.
 
 ## Summary of Changes (second look)
 

@@ -18,7 +18,7 @@ Skills Panel: grouped Skills explained in words (no bars) plus Certificates. Con
 Child beans, in dependency order (each lists its blockers):
 
 - portfolio-vg1p Unit 3.0: Skills content contract
-- portfolio-i2yz Unit 3.1: Skills content from questionnaires (Owner)
+- portfolio-i2yz Unit 3.1: Skills content
 - portfolio-k6h6 Unit 3.2: Certificate images and verification links
 - portfolio-r41n Unit 3.3: Walking toggle
 - portfolio-3q18 Unit 3.4: Skill groups

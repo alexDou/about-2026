@@ -10,7 +10,7 @@ updated_at: 2026-11-15T10:43:20Z
 
 Follow-up to the Owner's About and font edits (2026-11-15): review fixes, the Board renamed to Explore everywhere, a flatter chunk layout, and readable type on phones.
 
-## Decisions (Owner, 2026-11-15)
+## Decisions
 
 - The domain term Board becomes Explore everywhere (code, CSS classes, message ids, CONTEXT.md, specs, rules, E2E). The route is already `/explore`. ADRs and closed beans are records and stay as written.
 - Pages stay in `pages/`: Explore gets `pages/explore/ExplorePage.tsrx`; the domain component lives in `components/domain/explore/`.
@@ -28,7 +28,7 @@ Follow-up to the Owner's About and font edits (2026-11-15): review fixes, the Bo
 - [x] Credo: no fallback size needed (inherited size is the fallback); tests follow
 - [x] Hobby names `<h3>`, font size adjusted, no `display: block`
 - [x] Stale tests fixed (body font, languages/hobbies columns, test names)
-- [x] Science Hobby without "These days mostly" (`about.json`, `docs_src/about/hobbies.md`)
+- [x] Science Hobby without "These days mostly" (`about.json`)
 - [x] Amethysta self-hosted, `@font-face` with the Latin `unicode-range`, OFL entry
 - [x] Line heights per the decision
 - [x] Content font size with `progress()`; small text at least 15px on phones

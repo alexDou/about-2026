@@ -50,7 +50,7 @@ Backend
 
 - From the walking toggle prototype (2026-11-18): the button is `--control-height` tall (35px, the same as Expand all) with a 20px border radius.
 
-- Every text on the site comes from the messages (Owner, 2026-11-18): "Copy skills" and "Copied" are `skills` messages.
+- Every text on the site comes from the messages: "Copy skills" and "Copied" are `skills` messages.
 
 
 ## Summary of Changes

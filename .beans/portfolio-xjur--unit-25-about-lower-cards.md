@@ -50,5 +50,5 @@ The cards below the top card, in order: Bio; Roles; Education; Languages and Hob
 
 ## Follow-up corrections (2026-11-14)
 
-- Owner's wording fixes in `about.json` and `docs_src/about/` (Bio line break on its own line, Autodoc, Tipico, Zovolt and Self-employed highlights, Education sentence, Hobbies; half-marathon year 2025).
+- Wording fixes in `about.json` (Bio line break on its own line, Autodoc, Tipico, Zovolt and Self-employed highlights, Education sentence, Hobbies; half-marathon year 2025).
 - Spacing: the gap under the top card and the space under the last card are both 4rem (`--about-page-edge-gap`); the lower cards keep 1.5rem between them.

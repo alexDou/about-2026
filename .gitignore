@@ -30,3 +30,7 @@ support_files/
 
 # Claude Code local overrides
 .claude/settings.local.json
+
+# Conversations with the Owner (questionnaires, grilling notes) stay local; only the specs are shared
+docs_src/*
+!docs_src/specs/

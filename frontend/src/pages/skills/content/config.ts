@@ -24,8 +24,7 @@ export const SKILL_SUBGROUP_IDS = [
 ] as const;
 
 /**
- * The Skills, in the order they show, fixed with the Owner in the questionnaires
- * (`docs_src/skills/`, Unit 3.1).
+ * The Skills, in the order they show (Unit 3.1).
  */
 export const SKILL_IDS = [
   "typescript",
